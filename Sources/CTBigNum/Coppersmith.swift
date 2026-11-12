@@ -73,7 +73,7 @@ public enum Coppersmith {
             guard let inv = shift.inverse(modulo: n) else { return nil }
             f = [BigInt((P * inv) % n), BigInt(1)]
         }
-        let m = h > 0 ? h : 5
+        let m = h > 0 ? h : 6
         let t = m
         for root in smallRoots(f: f, modulus: N, bound: X, m: m, t: t) {
             let p: BigUInt
@@ -165,9 +165,9 @@ public enum Coppersmith {
 
         let reduced = Lattice.reduce(basis)
 
-        // Aus den kürzesten Vektoren je ein Polynom h ablesen und ganzzahlige Nullstellen prüfen.
+        // Aus den reduzierten Vektoren je ein Polynom h ablesen und ganzzahlige Nullstellen prüfen.
         var found: [BigInt] = []
-        for r in 0..<min(reduced.count, 3) {
+        for r in 0..<reduced.count {
             let row = reduced[r]
             var hpoly = [BigInt](repeating: BigInt(0), count: dim)
             var xc = BigInt(1)
@@ -266,7 +266,7 @@ public enum Coppersmith {
         for y in DurandKerner.realRoots(trim(row)) where y.isFinite && abs(y) <= 1.2 {
             seeds.append(scaleUnit(X, by: y))
         }
-        let grid = 40
+        let grid = 64
         for k in 0...grid {
             seeds.append((BigInt(2) * X * BigInt(k)).floorDivided(by: BigInt(grid)) - X)
         }

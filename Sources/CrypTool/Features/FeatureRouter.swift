@@ -13,7 +13,7 @@ enum FeatureRouter {
 
     /// CT1 functions that are not part of the macOS version. The menu items stay active so that
     /// tutorials can be followed: they explain this and show the CT1 help page of the function.
-    static let notIncluded: Set<CTAction> = [.sideChannelAttack]
+    static let notIncluded: Set<CTAction> = []
 
     static func isAvailable(_ action: CTAction) -> Bool { !unavailable.contains(action) }
 
@@ -47,6 +47,9 @@ enum FeatureRouter {
             return
         case .bloemerMay:
             LatticeAttacks.openSmallSecretKey()
+            return
+        case .sideChannelAttack:
+            LatticeAttacks.openSideChannel()
             return
         case .challengeResponse: CT1Visualizations.openChallengeResponse(); return
         case .smime: CT1Visualizations.openSMIME(); return

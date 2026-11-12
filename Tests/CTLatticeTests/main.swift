@@ -107,5 +107,31 @@ section("Kleine geheime Schlüssel (Wiener)") {
     if let r { check(r.p * r.q == N, "p·q ≠ N") }
 }
 
+// MARK: - Seitenkanalangriff auf Textbook-RSA (Kühn)
+
+section("Seitenkanalangriff (Textbook-RSA)") {
+    // RSA-512 wie in CT1 (Bob), significantBits = 128 ⇒ L(N)=512 > 3·128+3 = 387.
+    let p = Primality.randomPrime(bits: 256)
+    let q = Primality.randomPrime(bits: 256)
+    let N = p * q
+    let phi = (p - BigUInt(1)) * (q - BigUInt(1))
+    var e = BigUInt(65537)
+    while e.gcd(phi) != BigUInt(1) { e = e + BigUInt(2) }
+    guard let d = e.inverse(modulo: phi) else { check(false, "kein d"); return }
+    let bits = 128
+    // Sessionkey K ist ein b-Bit-Schlüssel (Textbook-RSA ohne Polsterung), c = K^e mod N
+    let K = BigUInt.random(below: BigUInt(1) << bits)
+    let c = K.power(e, modulus: N)
+    let trueSecret = K % (BigUInt(1) << bits)
+    let start = Date()
+    do {
+        let r = try SideChannel.run(n: N, e: e, d: d, cipher: c, significantBits: bits)
+        print(String(format: "      Laufzeit %.3f s, %d Anfragen", Date().timeIntervalSince(start), r.queries))
+        check(r.secret == trueSecret, "Geheimnis falsch\n  erhalten:  \(r.secret.toString())\n  erwartet:  \(trueSecret.toString())")
+    } catch {
+        check(false, "Angriff warf Ausnahme: \(error)")
+    }
+}
+
 print("\nCTLatticeTests: \(passes) bestanden, \(failures) fehlgeschlagen")
 exit(failures == 0 ? 0 : 1)

@@ -1,65 +1,64 @@
-# Nicht enthaltene Funktionen und Abweichungen
+# Abweichungen von der Windows-Version
 
-Vergleich der macOS-Version (1.2.0) mit CrypTool 1.4.x für Windows (deutsch).
+(Früher: „nicht enthaltene Funktionen“. Seit Version 1.3.0 sind alle CT1-Funktionen vorhanden;
+der Dateiname bleibt aus Gründen stabiler Links erhalten.)
 
-Alle 201 Menüeinträge von CT1 (Text-, Hex-, Diagramm- und 3D-Fenster) gibt es auf dem Mac
-mit demselben Namen an derselben Stelle. Nur 1 Eintrag führt noch zu einem Hinweis (Abschnitt 1).
+Vergleich der macOS-Version (1.3.0) mit CrypTool 1.4.x für Windows (deutsch).
+
+**Alle 201 Menüeinträge** von CT1 (Text-, Hex-, Diagramm- und 3D-Fenster) gibt es auf dem Mac
+mit demselben Namen an derselben Stelle, und **alle sind funktionsfähig** – es gibt keinen
+Menüpunkt mehr, der nur einen „nicht enthalten“-Hinweis zeigt.
+
+Dieses Dokument beschreibt daher nur noch **Abweichungen im Verhalten** (Abschnitt 1) und
+nachgebaute externe Programme (Abschnitt 2 ff.).
 
 ---
 
-## 1. Nicht enthaltene Funktionen
+## 1. Verfahren, die nachgebaut wurden – und wie genau sie CT1 entsprechen
 
-Nicht nachgebaut ist nur der **Seitenkanalangriff auf „Textbook-RSA“**.
+Für den Unterricht wichtig: Bei **deterministischen** Angriffen ist das Ergebnis mathematisch
+eindeutig. Gleiche Eingaben (N, e, c, …) liefern auf Mac und Windows dasselbe Ergebnis,
+**unabhängig vom Rechenweg** – denn gesucht ist jeweils *die* eine Lösung (der Faktor, die
+Nachricht, der Schlüssel).
 
-Der Menüeintrag bleibt **aktiv** (nicht ausgegraut), damit man in einer Anleitung dieselben
-Klicks machen kann. Ein Klick zeigt:
+### Gitterbasierte Angriffe auf RSA
 
-1. ein Hinweisfenster
+Nativ nachgebaut mit LLL-Gitterreduktion und Coppersmith/Howgrave-Graham (Rechenkern in `CTBigNum`,
+getestet in `CTLatticeTests`). Jeder Dialog hat „Beispiel erzeugen“ und „Starten“. Die Einträge
+gibt es wie in CT1 unter *Einzelverfahren ▸ RSA-Kryptosystem* **und** *Analyse ▸ Asymmetrische Verfahren*.
 
-   > **Nicht enthalten**
-   >
-   > Diese Funktion von CrypTool 1 ist in der macOS-Version nicht enthalten.
-   >
-   > Die Beschreibung aus der CT1-Online-Hilfe wird jetzt angezeigt.
-   >
-   > [OK]
+| Menüeintrag | Verfahren | Ergebnis = CT1? |
+|---|---|---|
+| Faktorisieren mit teilweise bekanntem p … | Coppersmith (höchst-/niederstwertige Bits), nötig: ⌈n/4⌉+1 Bit von p | ja (eindeutiger Faktor) |
+| Angriff auf stereotype Nachrichten … | Coppersmith bei kleinem e, unbekannter Teil < N^(1/e) | ja (eindeutige Nachricht) |
+| Angriff auf kleine geheime Schlüssel … | Kettenbruchverfahren nach Wiener | ja, wo anwendbar (s. u.) |
 
-2. danach das Hilfefenster „CrypTool-Hilfe – *Seitentitel*“ mit der Original-Hilfeseite aus CT1.
+**Einzige echte Methodenabweichung – kleiner geheimer Schlüssel:** CT1 nutzt das *Gitterverfahren
+nach Blömer/May* (δ = log(d)/log(N) < 0,290). Die macOS-Version nutzt das *Kettenbruchverfahren
+nach Wiener* (δ < 0,25). Das gefundene d, p, q ist identisch (es ist Bobs eindeutiger privater
+Schlüssel) – nur der abgedeckte δ-Bereich ist etwas kleiner. Für Unterrichtsbeispiele mit kleinem d
+stimmen die Ergebnisse überein; der Dialog weist auf den Unterschied hin.
 
-| Menüeintrag | Angezeigte Hilfeseite |
-|---|---|
-| Analyse ▸ Asymmetrische Verfahren ▸ Seitenkanalangriff auf "Textbook-RSA" … | „Seitenkanalangriff auf "Textbook-RSA"“ (`hid_einzelverfahren_sidechannelattack_on_hybridencryption.html`) |
+### Seitenkanalangriff auf „Textbook-RSA“ (nach Ulrich Kühn)
 
-Weitere Hinweise:
+Der Angriffsalgorithmus ist **1:1 aus CT1 portiert** (`SideChannelAttack.cpp`: Binärsuche über z,
+`computeZ`, finale Berechnung (N/(z+1)) mod 2^b). Bei gleichem öffentlichem Schlüssel (N, e),
+gleichem abgefangenen Chiffrat c und gleicher signifikanter Bitlänge erzeugt der Mac dieselbe
+Folge von Challenges, dieselben Server-Antworten und denselben rekonstruierten Sessionkey wie CT1.
 
-- Klickt man vorher in der Symbolleiste auf das Fragezeichen (Kontexthilfe), erscheint direkt die Hilfeseite, ohne Hinweisfenster.
-- Es fehlen auch alle Dialoge dieser Funktion, z. B. „Vorbereitungen durchführen“,
-  die Fenster von Alice, Bob und Trudy und der Bericht.
-- Die weiteren Hilfeseiten dazu (z. B. „Hinweise zur Durchführung des Seitenkanalangriffs“) lassen sich
-  über Index und Suche öffnen. Sie beschreiben aber die Windows-Funktion.
-- Diese Dateien gehören nur zum Seitenkanalangriff und fehlen:
-  `letterFromAliceToBob-DECRYPTED-de.txt`, `letterFromAliceToBob-ENCRYPTED-de.hex` und der Schlüssel
-  `[SideChannelAttack][Bob][RSA-512][1152179494][PIN=1234]`.
+Eingaben: Bobs (N, e), der private Schlüssel d (den in CT1 der Server in seiner PSE hält – hier
+wird er eingegeben, damit das Orakel rechnen kann; Trudy „kennt“ ihn nicht), das abgefangene
+Chiffrat c und die signifikante Bitlänge (Default 128, Bedingung L(N) > 3·b+3).
 
-### Gitterbasierte Angriffe auf RSA – jetzt enthalten
-
-Die drei gitterbasierten Angriffe sind seit Version 1.2.0 nativ nachgebaut (LLL-Gitterreduktion
-und Coppersmith/Howgrave-Graham, Rechenkern in `CTBigNum`). Jeder Dialog hat „Beispiel erzeugen“,
-um passende Parameter zu füllen, und „Starten“.
-
-| Menüeintrag | Verfahren |
-|---|---|
-| … ▸ Gitterbasierte Angriffe auf RSA ▸ Faktorisieren mit teilweise bekanntem p … | Coppersmith (höchst- oder niederstwertige Bits von p), nötig: ⌈n/4⌉+1 Bit von p |
-| … ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf stereotype Nachrichten … | Coppersmith bei kleinem e (z. B. 3), unbekannter Teil < N^(1/e) |
-| … ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf kleine geheime Schlüssel … | Kettenbruchverfahren nach Wiener |
-
-Die Einträge gibt es wie in CT1 sowohl unter *Einzelverfahren ▸ RSA-Kryptosystem* als auch unter
-*Analyse ▸ Asymmetrische Verfahren*.
-
-**Unterschied beim Angriff auf kleine geheime Schlüssel:** CT1 verwendet das Gitterverfahren nach
-Blömer/May (δ = log(d)/log(N) < 0,290). Die macOS-Version verwendet das Kettenbruchverfahren nach
-Wiener; es ist einfacher und immer zuverlässig, deckt aber nur δ < 0,25 ab. Für Unterrichtsbeispiele
-mit kleinem d genügt das; der Dialog weist darauf hin.
+**Was nicht 1:1 reproduzierbar ist:** CT1s *mitgelieferte* Demo verwendet Bobs fest installierten
+Schlüssel `[SideChannelAttack][Bob][RSA-512][1152179494][PIN=1234]` und die Dateien
+`letterFromAliceToBob-DECRYPTED-de.txt` / `…-ENCRYPTED-de.hex`. Dieser Schlüssel liegt im
+proprietär verschlüsselten SECUDE-PSE-Format vor und lässt sich nicht auslesen. Die macOS-Version
+erzeugt deshalb mit „Beispiel erzeugen“ einen eigenen Bob-Schlüssel samt Sessionkey. Die konkreten
+Zahlen der *eingebauten* Windows-Demo lassen sich damit nicht nachstellen – wohl aber jedes
+Szenario, bei dem man N, e, d und c selbst vorgibt (dann stimmen die Ergebnisse exakt überein).
+Die interaktive Visualisierung (eigene Fenster für Alice, Bob, Trudy, Schritt-für-Schritt-Modus,
+Bericht) ist auf dem Mac durch einen kompakten Angriffsdialog mit Schrittprotokoll ersetzt.
 
 ---
 
