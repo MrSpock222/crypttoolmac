@@ -215,6 +215,7 @@ extension HelpCenter {
         case .helpStart: return HelpBook.startPage                          // ID_HILFE_STARTSEITE (alias)
         case .helpIndex: return HelpBook.indexPage                          // ID_HILFE_INDEX (alias)
         case .helpScenarios: return HelpBook.scenariosPage                  // ID_HILFE_SZENARIEN
+        case .show3DBox: return "hid_popup_opengl_show_box.html"
         case .helpBook: return "hid_script.html"                            // ID_SCRIPT (CT-Buch)
         case .helpPresentation: return "hid_help_presentation.html"         // ID_HELP_PRESENTATION
         case .contextHelp: return "hid_context_help.html"                   // ID_CONTEXT_HELP

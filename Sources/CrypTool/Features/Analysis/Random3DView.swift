@@ -13,7 +13,7 @@ struct Random3DView: View {
     @AppStorage("ct1.3d.density") private var density = CT1Volume.defaultDensity
     @AppStorage("ct1.3d.shift") private var shift = CT1Volume.defaultShift
     @AppStorage("ct1.3d.wordLength") private var wordLength = CT1Volume.defaultWordLength
-    @CTState private var showBox = true
+    @AppStorage("ct1.3d.showBox") private var showBox = true
     @CTState private var showOptions = false
 
     var body: some View {
@@ -22,11 +22,15 @@ struct Random3DView: View {
                 Text("Auflösung \(resolution), Dichte \(density), Verschiebung \(shift) %, Wortlänge \(wordLength) Byte – <\(document.shortName)>")
                     .foregroundStyle(.secondary)
                 Spacer()
-                Toggle("Würfel anzeigen", isOn: $showBox)
+                Toggle("Box (Würfelkanten zeigen)", isOn: $showBox)
                 Button("Optionen …") { showOptions = true }
             }
             PointCloudView(bytes: document.bytes, resolution: resolution, density: density, shift: shift,
                            wordLength: wordLength, showBox: showBox)
+                .contextMenu {
+                    Button("Eigenschaften …") { showOptions = true }
+                    Toggle("Box (Würfelkanten zeigen)", isOn: $showBox)
+                }
             Text("Mit der Maus drehen, mit Scrollen/Pinch zoomen. Je drei aufeinanderfolgende Differenzen benachbarter Wörter ergeben einen Punkt; häufig getroffene Punkte erscheinen heller.")
                 .font(.caption).foregroundStyle(.secondary)
         }

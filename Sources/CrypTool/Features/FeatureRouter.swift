@@ -196,7 +196,7 @@ enum FeatureRouter {
             let v = Statistics.floatingFrequency(doc.bytes, window: 64)
             tool(nil, "Gleitende Häufigkeit von <\(doc.shortName)>", 820, 420) {
                 SeriesChartView(title: "Gleitende Häufigkeit", xLabel: "Position im Dokument", yLabel: "Verschiedene Zeichen im Fenster (64)",
-                                values: v, note: "Anzahl verschiedener Zeichen in einem gleitenden Fenster von 64 Bytes. Verschlüsselte oder komprimierte Bereiche heben sich deutlich von Klartext ab.")
+                                values: v, note: "Anzahl verschiedener Zeichen in einem gleitenden Fenster von 64 Bytes. Verschlüsselte oder komprimierte Bereiche heben sich deutlich von Klartext ab.", parent: doc)
             }
         case .ngram: CT1Analysis.openNGram(document: doc)
         case .autocorrelation:
@@ -205,7 +205,7 @@ enum FeatureRouter {
             let v = relative ? raw.enumerated().map { $0.element * 100 / Double(max(1, doc.bytes.count - $0.offset - 1)) } : raw
             tool(nil, "Autokorrelation von <\(doc.shortName)>", 820, 420) {
                 SeriesChartView(title: "Autokorrelation", xLabel: "Verschiebung", yLabel: relative ? "Übereinstimmungen (%)" : "Übereinstimmungen", values: v, xOffset: 1, bars: true,
-                                note: "Anzahl übereinstimmender Bytes zwischen dem Dokument und seiner um k Positionen verschobenen Kopie. Spitzen bei Vielfachen von k deuten auf eine Periode (Schlüssellänge) hin.")
+                                note: "Anzahl übereinstimmender Bytes zwischen dem Dokument und seiner um k Positionen verschobenen Kopie. Spitzen bei Vielfachen von k deuten auf eine Periode (Schlüssellänge) hin.", parent: doc)
             }
         case .periodicity: CT1Analysis.openPeriodicity(document: doc)
 

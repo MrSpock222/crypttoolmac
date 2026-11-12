@@ -9,7 +9,7 @@ enum CTAction: Hashable {
     case fontLarger, fontSmaller, toggleLineWrap
     case toggleToolbar, toggleStatusBar, viewAlphabet, viewEndOfLine, viewWhitespace
     case font(String, Int)
-    case formatTextDocument, plotAsBars
+    case formatTextDocument, plotAsBars, show3DBox
 
     // Ver-/Entschlüsseln – klassisch
     case caesar, vigenere, hill, substitution, playfair, adfgvx

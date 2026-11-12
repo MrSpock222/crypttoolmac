@@ -57,6 +57,9 @@ struct HistogramView: View {
         }
         .padding()
         .onAppear { byBytes = !document.isText }
+        .contextMenu {
+            Button("Übergeordnetes Fenster") { document.windowControllers.first?.window?.makeKeyAndOrderFront(nil) }
+        }
     }
 }
 
@@ -70,6 +73,8 @@ struct SeriesChartView: View {
     var xOffset = 0
     var bars = false
     var note: String? = nil
+    /// Document the plot was computed from (CT1 plot context menu "Übergeordnetes Fenster").
+    var parent: CTDocument? = nil
     @EnvironmentObject var settings: AppSettings
 
     var body: some View {
@@ -93,6 +98,10 @@ struct SeriesChartView: View {
             .chartYAxisLabel(yLabel)
         }
         .padding()
+        .contextMenu {
+            Button("Übergeordnetes Fenster") { parent?.windowControllers.first?.window?.makeKeyAndOrderFront(nil) }
+                .disabled(parent == nil)
+        }
     }
 }
 

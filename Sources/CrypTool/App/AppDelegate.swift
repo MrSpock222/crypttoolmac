@@ -14,6 +14,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation, 
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.activate(ignoringOtherApps: true)
+        MainMenu.adoptSystemRecentMenu()
+        DispatchQueue.main.async { MainMenu.adoptSystemRecentMenu() }
         if AppSettings.shared.showStartExample, NSDocumentController.shared.documents.isEmpty {
             DocumentFactory.openExample("Startbeispiel-de.txt")
         }

@@ -50,11 +50,17 @@ enum ActionRouter {
         case .helpIndex: HelpLink.index()
         case .helpScenarios: HelpLink.scenarios()
         case .contextHelp: HelpLink.contextHelp()
-        case .about: HelpActions.about()
+        case .about: AboutDialog.show()
         case .helpWebsite: NSWorkspace.shared.open(URL(string: "https://www.cryptool.org/de/ct1/")!)
         case .helpReadme: HelpCenter.show(action: action)
         case .helpLicense: HelpActions.showLicense()
-        case .helpBook, .helpPresentation: HelpCenter.show(action: action)
+        case .helpBook, .helpPresentation:
+            // CT1 opens the PDF documents in the default PDF viewer
+            let file = action == .helpBook ? "Docs/CT-Book-de.pdf" : "Docs/CrypTool1-Presentation-de.pdf"
+            if let url = Resources.url(file) { NSWorkspace.shared.open(url) } else { HelpCenter.show(action: action) }
+        case .show3DBox:
+            let d = UserDefaults.standard
+            d.set(!(d.object(forKey: "ct1.3d.showBox") as? Bool ?? true), forKey: "ct1.3d.showBox")
 
         default:
             lastAction = action
@@ -74,6 +80,7 @@ enum ActionRouter {
         case .viewWhitespace: mark(s.viewWhitespace)
         case .toggleLineWrap: mark(s.lineWrap)
         case .plotAsBars: mark(s.plotAsBars)
+        case .show3DBox: mark(UserDefaults.standard.object(forKey: "ct1.3d.showBox") as? Bool ?? true)
         case .font(let family, let points): mark(s.isCT1Font(family, points: points))
         default: break
         }

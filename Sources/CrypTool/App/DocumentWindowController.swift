@@ -37,6 +37,11 @@ final class CTLayoutManager: NSLayoutManager {
 final class CTTextView: NSTextView {
     var isBinaryDocument: () -> Bool = { false }
 
+    /// CT1 context menu of document windows (IDR_CONTEXT_MENU).
+    override func menu(for event: NSEvent) -> NSMenu? {
+        CT1ContextMenu.make(hexView: false)
+    }
+
     override func copy(_ sender: Any?) {
         guard isBinaryDocument() else { super.copy(sender); return }
         let r = selectedRange()
@@ -76,6 +81,37 @@ final class CTTextView: NSTextView {
         } else {
             super.paste(sender)
         }
+    }
+}
+
+/// CT1's right-click menu for text and hex windows.
+@MainActor
+enum CT1ContextMenu {
+    static func make(hexView: Bool) -> NSMenu {
+        let m = NSMenu(title: "Kontextmenü")
+        func std(_ t: String, _ s: Selector) {
+            m.addItem(FixedTitleMenuItem.isUndoRedo(s) ? FixedTitleMenuItem(title: t, action: s, keyEquivalent: "")
+                                                        : NSMenuItem(title: t, action: s, keyEquivalent: ""))
+        }
+        func ct(_ t: String, _ a: CTAction) {
+            let i = m.addItem(withTitle: t, action: #selector(CTActionHandling.performCTAction(_:)), keyEquivalent: "")
+            i.representedObject = ActionBox(a)
+        }
+        std("Rückgängig", Selector(("undo:")))
+        std("Wiederherstellen", Selector(("redo:")))
+        m.addItem(.separator())
+        std("Ausschneiden", #selector(NSText.cut(_:)))
+        std("Kopieren", #selector(NSText.copy(_:)))
+        std("Einfügen", #selector(NSText.paste(_:)))
+        std("Löschen", #selector(NSText.delete(_:)))
+        m.addItem(.separator())
+        std("Alles markieren", #selector(NSText.selectAll(_:)))
+        m.addItem(.separator())
+        ct("Schlüssel anzeigen …", .showKey)
+        ct("Übergeordnetes Fenster", .gotoParent)
+        m.addItem(.separator())
+        if hexView { ct("Als Text anzeigen", .viewAsText) } else { ct("Als HexDump anzeigen", .viewAsHex) }
+        return m
     }
 }
 

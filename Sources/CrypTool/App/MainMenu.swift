@@ -1,5 +1,27 @@
 import AppKit
 
+/// Menu item whose title AppKit may not change: AppKit renames the items for `undo:`/`redo:` to
+/// "Widerrufen …"/"Wiederholen …"; CT1 shows "Rückgängig"/"Wiederherstellen".
+final class FixedTitleMenuItem: NSMenuItem {
+    private var locked = false
+
+    override init(title: String, action selector: Selector?, keyEquivalent charCode: String) {
+        super.init(title: title, action: selector, keyEquivalent: charCode)
+        locked = true
+    }
+
+    required init(coder: NSCoder) { super.init(coder: coder) }
+
+    override var title: String {
+        get { super.title }
+        set { if !locked { super.title = newValue } }
+    }
+
+    static func isUndoRedo(_ sel: Selector?) -> Bool {
+        sel == Selector(("undo:")) || sel == Selector(("redo:"))
+    }
+}
+
 /// Builds the menu bar exactly following CT1's German menu (IDR_TEXTTYPE in CrypTool.rc).
 /// Only the macOS application menu ("CrypTool") is added in front.
 @MainActor
@@ -37,7 +59,9 @@ enum MainMenu {
             i.representedObject = ActionBox(action)
             return i
         case let .std(title, sel, key, mods, tag):
-            let i = NSMenuItem(title: title, action: sel, keyEquivalent: key)
+            let i = FixedTitleMenuItem.isUndoRedo(sel)
+                ? FixedTitleMenuItem(title: title, action: sel, keyEquivalent: key)
+                : NSMenuItem(title: title, action: sel, keyEquivalent: key)
             i.keyEquivalentModifierMask = mods
             i.tag = tag
             return i
@@ -53,6 +77,23 @@ enum MainMenu {
             i.submenu = m
             return i
         }
+    }
+
+    /// AppKit inserts its own "Open Recent" menu ("Benutzte Dokumente") and only fills that one.
+    /// It is moved to the place of CT1's "Zuletzt geöffnete Dateien" and given CT1's titles.
+    static func adoptSystemRecentMenu() {
+        guard let file = NSApp.mainMenu?.items.first(where: { $0.title == "Datei" })?.submenu,
+              let ours = file.items.first(where: { $0.title == "Zuletzt geöffnete Dateien" }) else { return }
+        let clear = #selector(NSDocumentController.clearRecentDocuments(_:))
+        guard let system = file.items.first(where: { $0 !== ours && $0.submenu?.items.contains { $0.action == clear } == true })
+        else { return }
+        file.removeItem(system)
+        guard let index = file.items.firstIndex(of: ours) else { return }
+        file.removeItem(ours)
+        system.title = "Zuletzt geöffnete Dateien"
+        system.submenu?.title = "Zuletzt geöffnete Dateien"
+        system.submenu?.items.first { $0.action == clear }?.title = "Liste leeren"
+        file.insertItem(system, at: index)
     }
 
     private static func appMenu() -> NSMenu {
@@ -102,7 +143,7 @@ enum MainMenu {
             .std("Öffnen …", #selector(NSDocumentController.openDocument(_:)), key: "o"),
             .std("Schließen", #selector(NSWindow.performClose(_:)), key: "w"),
             .std("Speichern", #selector(NSDocument.save(_:)), key: "s"),
-            .std("Speichern unter …", #selector(NSDocument.saveAs(_:)), key: "s", mods: [.command, .shift]),
+            .std("Speichern als …", #selector(NSDocument.saveAs(_:)), key: "s", mods: [.command, .shift]),
             .sep,
             .item("Dokument-Eigenschaften …", .documentProperties, key: "d"),
             .std("Drucken …", #selector(NSDocument.printDocument(_:)), key: "p"),
@@ -167,6 +208,8 @@ enum MainMenu {
                 .item("Schrift verkleinern", .fontSmaller, key: "-"),
             ]),
             .item("Textdokument formatieren …", .formatTextDocument),
+            .sep,
+            .item("Box (Würfelkanten zeigen)", .show3DBox),
         ]
 
         let crypt: [Node] = [

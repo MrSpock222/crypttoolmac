@@ -22,7 +22,7 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN_DIR/CrypTool" "$APP/Contents/MacOS/CrypTool"
 cp "$ROOT/Resources/Info.plist" "$APP/Contents/Info.plist"
 printf 'APPL????' > "$APP/Contents/PkgInfo"
-cp -R "$ROOT/Resources/Reference" "$ROOT/Resources/Examples" "$ROOT/Resources/Words" "$ROOT/Resources/Help" "$ROOT/Resources/Images" "$APP/Contents/Resources/"
+cp -R "$ROOT/Resources/Reference" "$ROOT/Resources/Examples" "$ROOT/Resources/Words" "$ROOT/Resources/Help" "$ROOT/Resources/Images" "$ROOT/Resources/Docs" "$APP/Contents/Resources/"
 [ -f "$ROOT/README.md" ] && cp "$ROOT/README.md" "$APP/Contents/Resources/README.md"
 [ -f "$ROOT/LICENSE" ] && cp "$ROOT/LICENSE" "$APP/Contents/Resources/LICENSE"
 

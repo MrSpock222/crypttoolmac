@@ -345,6 +345,11 @@ final class HexEditorView: NSView, NSMenuItemValidation {
         if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Löschen") }
     }
 
+    /// CT1 context menu (IDR_CONTEXT_MENU).
+    override func menu(for event: NSEvent) -> NSMenu? {
+        CT1ContextMenu.make(hexView: true)
+    }
+
     override func selectAll(_ sender: Any?) {
         anchor = 0
         cursor = bytes.count
