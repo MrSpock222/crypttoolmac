@@ -41,6 +41,7 @@ let package = Package(
 
         // Test runners (executables, see header comment)
         .executableTarget(name: "CTBigNumTests", dependencies: ["CTCommon", "CTBigNum"], path: "Tests/CTBigNumTests"),
+        .executableTarget(name: "CTLatticeTests", dependencies: ["CTCommon", "CTBigNum"], path: "Tests/CTLatticeTests"),
         .executableTarget(name: "CTModernTests", dependencies: ["CTCommon", "CTModern"], path: "Tests/CTModernTests"),
         .executableTarget(name: "CTClassicTests", dependencies: ["CTCommon", "CTClassic"], path: "Tests/CTClassicTests"),
         .executableTarget(name: "CTAnalysisTests", dependencies: ["CTCommon", "CTAnalysis"], path: "Tests/CTAnalysisTests"),

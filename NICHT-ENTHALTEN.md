@@ -1,18 +1,17 @@
 # Nicht enthaltene Funktionen und Abweichungen
 
-Vergleich der macOS-Version (1.1.1) mit CrypTool 1.4.x für Windows (deutsch).
+Vergleich der macOS-Version (1.2.0) mit CrypTool 1.4.x für Windows (deutsch).
 
 Alle 201 Menüeinträge von CT1 (Text-, Hex-, Diagramm- und 3D-Fenster) gibt es auf dem Mac
-mit demselben Namen an derselben Stelle. 7 davon führen nur zu einem Hinweis (Abschnitt 1).
+mit demselben Namen an derselben Stelle. Nur 1 Eintrag führt noch zu einem Hinweis (Abschnitt 1).
 
 ---
 
 ## 1. Nicht enthaltene Funktionen
 
-Die gitterbasierten Angriffe auf RSA und der Seitenkanalangriff auf „Textbook-RSA“ wurden bei
-der Portierung nicht nachgebaut.
+Nicht nachgebaut ist nur der **Seitenkanalangriff auf „Textbook-RSA“**.
 
-Die Menüeinträge bleiben **aktiv** (nicht ausgegraut), damit man in einer Anleitung dieselben
+Der Menüeintrag bleibt **aktiv** (nicht ausgegraut), damit man in einer Anleitung dieselben
 Klicks machen kann. Ein Klick zeigt:
 
 1. ein Hinweisfenster
@@ -29,24 +28,38 @@ Klicks machen kann. Ein Klick zeigt:
 
 | Menüeintrag | Angezeigte Hilfeseite |
 |---|---|
-| Einzelverfahren ▸ RSA-Kryptosystem ▸ Gitterbasierte Angriffe auf RSA ▸ Faktorisieren mit teilweise bekanntem p … | „Faktorisieren mit teilweise bekanntem p“ (`hid_rsa_factorhint.html`) |
-| Einzelverfahren ▸ RSA-Kryptosystem ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf stereotype Nachrichten … | „Angriff auf stereotype Nachrichten“ (`hid_rsa_stereotyped.html`) |
-| Einzelverfahren ▸ RSA-Kryptosystem ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf kleine geheime Schlüssel … | „Angriff auf kleine geheime Schlüssel“ (`hid_rsa_bloemermay.html`) |
-| Analyse ▸ Asymmetrische Verfahren ▸ Gitterbasierte Angriffe auf RSA ▸ Faktorisieren mit teilweise bekanntem p … | wie oben (`hid_rsa_factorhint.html`) |
-| Analyse ▸ Asymmetrische Verfahren ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf stereotype Nachrichten … | wie oben (`hid_rsa_stereotyped.html`) |
-| Analyse ▸ Asymmetrische Verfahren ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf kleine geheime Schlüssel … | wie oben (`hid_rsa_bloemermay.html`) |
 | Analyse ▸ Asymmetrische Verfahren ▸ Seitenkanalangriff auf "Textbook-RSA" … | „Seitenkanalangriff auf "Textbook-RSA"“ (`hid_einzelverfahren_sidechannelattack_on_hybridencryption.html`) |
 
 Weitere Hinweise:
 
 - Klickt man vorher in der Symbolleiste auf das Fragezeichen (Kontexthilfe), erscheint direkt die Hilfeseite, ohne Hinweisfenster.
-- Es fehlen auch alle Dialoge dieser Funktionen, z. B. beim Seitenkanalangriff „Vorbereitungen durchführen“,
+- Es fehlen auch alle Dialoge dieser Funktion, z. B. „Vorbereitungen durchführen“,
   die Fenster von Alice, Bob und Trudy und der Bericht.
 - Die weiteren Hilfeseiten dazu (z. B. „Hinweise zur Durchführung des Seitenkanalangriffs“) lassen sich
   über Index und Suche öffnen. Sie beschreiben aber die Windows-Funktion.
 - Diese Dateien gehören nur zum Seitenkanalangriff und fehlen:
   `letterFromAliceToBob-DECRYPTED-de.txt`, `letterFromAliceToBob-ENCRYPTED-de.hex` und der Schlüssel
   `[SideChannelAttack][Bob][RSA-512][1152179494][PIN=1234]`.
+
+### Gitterbasierte Angriffe auf RSA – jetzt enthalten
+
+Die drei gitterbasierten Angriffe sind seit Version 1.2.0 nativ nachgebaut (LLL-Gitterreduktion
+und Coppersmith/Howgrave-Graham, Rechenkern in `CTBigNum`). Jeder Dialog hat „Beispiel erzeugen“,
+um passende Parameter zu füllen, und „Starten“.
+
+| Menüeintrag | Verfahren |
+|---|---|
+| … ▸ Gitterbasierte Angriffe auf RSA ▸ Faktorisieren mit teilweise bekanntem p … | Coppersmith (höchst- oder niederstwertige Bits von p), nötig: ⌈n/4⌉+1 Bit von p |
+| … ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf stereotype Nachrichten … | Coppersmith bei kleinem e (z. B. 3), unbekannter Teil < N^(1/e) |
+| … ▸ Gitterbasierte Angriffe auf RSA ▸ Angriff auf kleine geheime Schlüssel … | Kettenbruchverfahren nach Wiener |
+
+Die Einträge gibt es wie in CT1 sowohl unter *Einzelverfahren ▸ RSA-Kryptosystem* als auch unter
+*Analyse ▸ Asymmetrische Verfahren*.
+
+**Unterschied beim Angriff auf kleine geheime Schlüssel:** CT1 verwendet das Gitterverfahren nach
+Blömer/May (δ = log(d)/log(N) < 0,290). Die macOS-Version verwendet das Kettenbruchverfahren nach
+Wiener; es ist einfacher und immer zuverlässig, deckt aber nur δ < 0,25 ab. Für Unterrichtsbeispiele
+mit kleinem d genügt das; der Dialog weist darauf hin.
 
 ---
 
