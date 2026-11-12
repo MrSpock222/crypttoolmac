@@ -441,7 +441,10 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate, NSTe
     func textDidChange(_ notification: Notification) {
         guard viewMode == .text, let doc = ctDocument, !isUpdatingFromDocument else { return }
         isUpdatingFromDocument = true
-        doc.bytes = TextCoding.bytes(from: textView.string)
+        // New/CT1 documents are Windows-1252 like in CT1 (so e.g. a typed Vernam key has CT1's bytes);
+        // a document that is already UTF-8 with non-ASCII characters keeps its encoding.
+        let keepUTF8 = doc.bytes.contains { $0 >= 0x80 } && String(bytes: doc.bytes, encoding: .utf8) != nil
+        doc.bytes = keepUTF8 ? Array(textView.string.utf8) : TextCoding.bytes(from: textView.string)
         isUpdatingFromDocument = false
         doc.updateChangeCount(.changeDone)
         if AppSettings.shared.viewAlphabet { applyAlphabetHighlighting() }

@@ -19,7 +19,7 @@ scripts/build-app.sh        # erzeugt build/CrypTool.app (Xcode Command Line Too
 
 ## Hinweise
 
-Inoffizielle Portierung. Nicht enthalten sind die gitterbasierten Angriffe auf RSA, der Seitenkanalangriff auf Textbook-RSA, „AES (selbstextrahierend)“, der t-adic-NAF-Schlüsselgenerator und das Lernprogramm für Zahlentheorie (im Menü ausgegraut).
+Inoffizielle Portierung. Nicht enthalten sind die gitterbasierten Angriffe auf RSA und der Seitenkanalangriff auf Textbook-RSA (die Menüpunkte zeigen die zugehörige CT1-Hilfe).
 
 ## Lizenz
 

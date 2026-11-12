@@ -8,8 +8,14 @@ import CTCommon
 /// * CBC modes use an all-zero IV (as CT1).
 /// * AES, MARS, RC6, Serpent, Twofish, DESX, DESL, DESXL use CT1's padding (append 0x01, then
 ///   0x00 up to a multiple of 16 bytes) – files are interchangeable with CT1.
-/// * IDEA, RC2 (CBC), DES and Triple DES (CT1 used the proprietary SECUDE library there) use
-///   PKCS#7 padding to their 8-byte block size. Triple DES with a 128-bit key is two-key EDE.
+/// * IDEA, RC2, DES and Triple DES: CT1 used the proprietary SECUDE library there
+///   (SecudeCryptography.cpp `select_algorithm`); modes and paddings as documented in CT1's help:
+///   DES (ECB) `desECB` and Triple DES (ECB) `desEDE`: zero padding up to the block size
+///   (nothing is appended to block aligned data, decryption cannot remove it);
+///   DES (CBC) `desCBC_pad`: zero bytes, the last byte holds the number of message bytes in the
+///   last block – block aligned data get a whole zero block (help page "DES (CBC)");
+///   Triple DES (CBC), RC2 (CBC) and IDEA (ECB): PKCS#7. Triple DES with a 128-bit key is
+///   two-key EDE.
 /// * RC4 is a stream cipher without padding.
 /// * RC2 uses an effective key length of 8 × key length in bits (RFC 2268, at most 1024).
 /// * MARS, RC6, Serpent and Twofish run the original AES submission code exactly as CT1 calls
@@ -58,6 +64,12 @@ public enum SymmetricCipher {
         if alg.usesCT1Padding {
             out.append(0x01)
             while out.count % 16 != 0 { out.append(0) }
+        } else if alg.usesZeroPadding {
+            while out.count % alg.blockSize != 0 { out.append(0) }
+        } else if alg == .desCBC {
+            let r = data.count % 8
+            out.append(contentsOf: [UInt8](repeating: 0, count: 7 - r))
+            out.append(UInt8(r))
         } else {
             let bs = alg.blockSize
             let n = bs - data.count % bs
@@ -76,6 +88,12 @@ public enum SymmetricCipher {
             while i >= 0 && data[i] == 0 { i -= 1 }
             guard i >= 0, data[i] == 0x01, data.count - 1 - i <= 15 else { throw bad }
             return Array(data[0..<i])
+        } else if alg.usesZeroPadding {
+            return data
+        } else if alg == .desCBC {
+            // SECUDE desCBC_pad: last byte = number of message bytes in the last block
+            guard data.count >= 8, let last = data.last, last < 8 else { throw bad }
+            return Array(data[0..<(data.count - 8 + Int(last))])
         } else {
             guard let last = data.last, last >= 1, Int(last) <= alg.blockSize, Int(last) <= data.count else { throw bad }
             let n = Int(last)
@@ -156,7 +174,7 @@ public enum SymmetricCipher {
         case .desxl: return ctc_desxl_cbc(CTC_VARIANT_DESXL, d, kp, kl, nil, ip, op, n) == CTC_OK
         case .idea:
             guard kl == 16 else { return false }
-            return ctc_idea_crypt(d, 1, kp, nil, ip, op, n) == CTC_OK
+            return ctc_idea_crypt(d, 0, kp, nil, ip, op, n) == CTC_OK   // SECUDE idea: ECB
         case .rc2:
             return ctc_rc2_crypt(d, 1, kp, kl, Int32(min(kl * 8, 1024)), nil, ip, op, n) == CTC_OK
         case .rc4:

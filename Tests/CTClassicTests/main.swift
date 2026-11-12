@@ -675,6 +675,7 @@ runCT1ADFGVXAnalysisTests()
 runCT1PlayfairAnalysisTests()
 runCT1SolitaireAnalysisTests()
 runCT1KnownPlaintextTests()
+runCT1TutorialTests()
 
 print("\nCTClassicTests: \(checks) Prüfungen, \(failures) Fehler")
 if failures > 0 { exit(1) }

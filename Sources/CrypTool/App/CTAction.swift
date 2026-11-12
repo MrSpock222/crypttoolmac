@@ -37,7 +37,7 @@ enum CTAction: Hashable {
     case zip, unzip
     case randomGenerator, passwordQuality, passwordEntropy, numberLength
     case numberShark
-    case ecPointAddition, mersenne, tadicNAF
+    case ecPointAddition, mersenne, tadicNAF, numberTheoryLearning
 
     // Analyse
     case entropy, floatingFrequency, histogram, ngram, autocorrelation, periodicity

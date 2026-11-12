@@ -6,36 +6,6 @@
 	<string>de</string>
 	<key>CFBundleDisplayName</key>
 	<string>CrypTool</string>
-	<key>CFBundleExecutable</key>
-	<string>CrypTool</string>
-	<key>CFBundleIconFile</key>
-	<string>AppIcon</string>
-	<key>CFBundleIdentifier</key>
-	<string>local.crypttoolmac.CrypTool</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>CrypTool</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.4.42-mac.1</string>
-	<key>CFBundleVersion</key>
-	<string>1</string>
-	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.education</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>14.0</string>
-	<key>LSArchitecturePriority</key>
-	<array>
-		<string>arm64</string>
-	</array>
-	<key>NSHighResolutionCapable</key>
-	<true/>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>CrypTool 1 © CrypTool-Team, Apache License 2.0. Inoffizielle native macOS-Portierung.</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -69,5 +39,35 @@
 			<string>CTDocument</string>
 		</dict>
 	</array>
+	<key>CFBundleExecutable</key>
+	<string>CrypTool</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>local.crypttoolmac.CrypTool</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>CrypTool</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.1.0</string>
+	<key>CFBundleVersion</key>
+	<string>2</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.education</string>
+	<key>LSArchitecturePriority</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>CrypTool 1 © CrypTool-Team, Apache License 2.0. Inoffizielle native macOS-Portierung.</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
 </dict>
 </plist>

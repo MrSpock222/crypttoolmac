@@ -68,11 +68,14 @@ public enum SymmetricAlgorithm: String, CaseIterable, Codable, Sendable {
         }
     }
 
+    /// True for the SECUDE ECB modes of CT1 (DES and Triple DES): zero padding.
+    public var usesZeroPadding: Bool { self == .desECB || self == .tripleDESECB }
+
     /// Mode of operation as human readable text.
     public var modeDescription: String {
         switch self {
         case .rc4: return "Stromchiffre"
-        case .desECB, .tripleDESECB: return "ECB"
+        case .desECB, .tripleDESECB, .idea: return "ECB"
         default: return "CBC, IV = 0"
         }
     }

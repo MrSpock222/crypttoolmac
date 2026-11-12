@@ -289,7 +289,10 @@ struct HillDialog: View {
         let o = settings.textOptions
         let key = HillKey.string(numbers: m, alphabet: alphabet, offsetOne: offsetOne, multiplication: multiplication)
         do {
-            let h = try HillCipher(matrix: m, options: o, multiplication: multiplication,
+            // CT1 1.4.x: the "Multiplikationsart" radio only goes into the key string/registry
+            // (CKeyHillBase::multType); CHillEncryption always uses the global
+            // iHillMultiplicationType = 0, i.e. (Matrix) * (Vektorspalte). Same results as CT1.
+            let h = try HillCipher(matrix: m, options: o, multiplication: .matrixTimesVector,
                                    paddingCharacter: HillOptionsStore.paddingCharacter(alphabet: alphabet),
                                    firstLetterIsOne: offsetOne)
             let input = document.text

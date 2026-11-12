@@ -144,6 +144,7 @@ extension HelpCenter {
         case .ecPointAddition: return "hid_indiv_pointadditiononellipticcurves.html"
         case .mersenne: return "hid_compute_mersenne_numbers.html"
         case .tadicNAF: return "hid_generation_tadic_naf_keys.html"         // ID_GENERATION_TADIC_NAF_KEYS
+        case .numberTheoryLearning: return "hid_interactive_number_theory.html"
 
         // Analyse ▸ Werkzeuge zur Analyse
         case .entropy: return "hid_entropy.html"

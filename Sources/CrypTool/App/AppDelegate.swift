@@ -1,9 +1,12 @@
 import AppKit
 import CTCommon
+import CTAnalysis
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation, CTActionHandling {
     func applicationWillFinishLaunching(_ notification: Notification) {
+        // Must be the first document controller created (it becomes NSDocumentController.shared).
+        _ = CTDocumentController()
         // Result windows are not file backed; restoring them would yield empty documents.
         UserDefaults.standard.register(defaults: ["NSQuitAlwaysKeepsWindows": false])
         NSApp.mainMenu = MainMenu.build()
@@ -13,6 +16,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation, 
         NSApp.activate(ignoringOtherApps: true)
         if AppSettings.shared.showStartExample, NSDocumentController.shared.documents.isEmpty {
             DocumentFactory.openExample("Startbeispiel-de.txt")
+        }
+        // CT1's cracklib dictionary for the password quality meter (loaded in the background)
+        DispatchQueue.global(qos: .utility).async {
+            if let url = Resources.url("Words/cracklib-words.deflate"), let d = try? Data(contentsOf: url),
+               let raw = try? (d as NSData).decompressed(using: .zlib) {
+                PasswordTools.dictionary = PasswordDictionary(sortedWordList: [UInt8](raw as Data))
+            }
         }
         if AppSettings.shared.showStartDialog {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { StartDialog.show() }
@@ -69,14 +79,13 @@ enum DocumentFactory {
             Alerts.error("Beispieldatei \(name) nicht gefunden.")
             return
         }
-        // Open a copy so the bundled example is never modified.
+        // Open a copy so the bundled example is never modified. Text examples are stored as UTF-8
+        // and loaded as CT1's Windows-1252 bytes; binary examples (.hex, .bmp) stay unchanged.
         let data = (try? Data(contentsOf: url)) ?? Data()
-        var bytes = [UInt8](data)
-        if name.hasSuffix(".hex") == false {
-            bytes = TextCoding.bytes(from: TextCoding.string(from: bytes))
-        }
+        let isText = url.pathExtension.lowercased() == "txt"
+        let bytes = isText ? TextCoding.bytes(from: TextCoding.string(from: [UInt8](data))) : [UInt8](data)
         let doc = CTDocument(bytes: bytes, origin: DocumentOrigin(title: name, method: nil, key: nil, parent: nil),
-                             viewMode: name.hasSuffix(".hex") ? .hex : nil)
+                             viewMode: isText ? nil : .hex)
         NSDocumentController.shared.addDocument(doc)
         doc.makeWindowControllers()
         doc.showWindows()

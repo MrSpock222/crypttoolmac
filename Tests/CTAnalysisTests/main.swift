@@ -525,6 +525,8 @@ runCT1SubstitutionTests()
 runCT1AnalysisToolsTests()
 runCT1ClassicFlowTests()
 runCT1PasswordTests()
+runCT1TutorialTests()
+runCracklibTests()
 
 // MARK: - Summary
 

@@ -323,7 +323,7 @@ public enum PasswordTools {
                     if isPattern(sub) { f |= flagPattern }
                     if isSequence(sub) { f |= flagSerial }
                     if isKeyboardSequence(sub) { f |= flagKeyboard }
-                    if commonWords.contains(String(sub)) { f |= flagDict }
+                    if isDictionaryWord(String(sub)) { f |= flagDict }
                     flags[j][len] = f
                 }
             }
@@ -332,7 +332,7 @@ public enum PasswordTools {
         // shortest "description" of the password (dynamic programming, CT1 PasswordEntropyChecker)
         let space = keePassSpace(pw[...])
         let bitsPerChar = space > 0 ? log2(Double(space)) : 0
-        let dictionaryWordEntropy = 14.0   // CT1: ln(size of the cracklib dictionary), fallback 14
+        let dictionaryWordEntropy = Self.dictionaryWordEntropy   // CT1: ln(size of the cracklib dictionary), fallback 14
         var best = (0...n).map { Double(($0 + 1) * 8) }
         best[0] = 0
         var pred = [(from: Int, kind: Int)](repeating: (0, 0), count: n + 1)

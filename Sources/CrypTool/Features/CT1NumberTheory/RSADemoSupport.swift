@@ -102,10 +102,11 @@ enum RSADemoCodec {
 
     /// Tokens of a number stream (CT1 NUMBER_SEPARATOR " \r\n#,;:"); nil if a token is not a number in `base`.
     static func numberTokens(_ s: String, base: Int) -> [BigUInt]? {
-        let seps = Set(" \r\n#,;:\t")
+        // Unicode scalars: as Characters "\r\n" would be one grapheme and "\n" no separator.
+        let seps = Set(" \r\n#,;:\t".unicodeScalars)
         var out: [BigUInt] = []
-        for tok in s.split(whereSeparator: { seps.contains($0) }) {
-            guard let v = BigUInt(String(tok).uppercased(), radix: base) else { return nil }
+        for tok in s.unicodeScalars.split(whereSeparator: { seps.contains($0) }) {
+            guard let v = BigUInt(String(String.UnicodeScalarView(tok)).uppercased(), radix: base) else { return nil }
             out.append(v)
         }
         return out

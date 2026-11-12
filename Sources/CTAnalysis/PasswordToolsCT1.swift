@@ -127,7 +127,7 @@ extension PasswordTools {
                     if ct1IsPattern(sub) { f |= CT1Flag.pattern }
                     if ct1IsSequence(sub) { f |= CT1Flag.serial }
                     if ct1IsKeyboardSequence(sub) { f |= CT1Flag.keyboard }
-                    if commonWords.contains(String(sub)) { f |= CT1Flag.dict }
+                    if isDictionaryWord(String(sub)) { f |= CT1Flag.dict }
                     flags[j][len] = f
                 }
             }
@@ -180,7 +180,7 @@ extension PasswordTools {
         text += "\nMuster: " + list(CT1Flag.pattern)
         text += "\nFolgen: " + list(CT1Flag.serial)
         text += "\nTastatur-Folgen: " + list(CT1Flag.keyboard)
-        text += "\nWörterbuch-Einträge [\(ct1GroupedNumber(commonWords.count))]: " + list(CT1Flag.dict)
+        text += "\nWörterbuch-Einträge [\(ct1GroupedNumber(dictionarySize))]: " + list(CT1Flag.dict)
 
         let crypTool = min(100, Int(floor(entropy / 128 * 100)))
         return CT1QualityReport(length: full.count,
@@ -209,7 +209,7 @@ extension PasswordTools {
         guard n > 0 else { return (0, "") }
         let space = alphabetSize(of: String(pw))
         let bitsPerChar = space > 0 ? log2(Double(space)) : 0
-        let dictionaryWordEntropy = 14.0   // CT1: ln(size of the cracklib dictionary), fallback 14
+        let dictionaryWordEntropy = Self.dictionaryWordEntropy   // CT1: ln(size of the cracklib dictionary), fallback 14
         var best = (0...n).map { Double(($0 + 1) * 8) }
         best[0] = 0
         var pred = [Int](repeating: 0, count: n + 1)

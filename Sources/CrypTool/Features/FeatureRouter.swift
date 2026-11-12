@@ -9,14 +9,33 @@ import CTAnalysis
 enum FeatureRouter {
     /// Commands of CT1 that are not available in the macOS version (shown greyed out, as CT1 does
     /// for features whose libraries are missing).
-    static let unavailable: Set<CTAction> = [.factorHint, .stereotypedAttack, .bloemerMay, .sideChannelAttack, .aesSelfExtract, .tadicNAF]
+    static let unavailable: Set<CTAction> = []
+
+    /// CT1 functions that are not part of the macOS version. The menu items stay active so that
+    /// tutorials can be followed: they explain this and show the CT1 help page of the function.
+    static let notIncluded: Set<CTAction> = [.factorHint, .stereotypedAttack, .bloemerMay, .sideChannelAttack]
 
     static func isAvailable(_ action: CTAction) -> Bool { !unavailable.contains(action) }
 
     static func perform(_ action: CTAction, document doc: CTDocument?, window: NSWindow?) {
         guard isAvailable(action) else { NSSound.beep(); return }
+        if notIncluded.contains(action) {
+            Alerts.info("Diese Funktion von CrypTool 1 ist in der macOS-Version nicht enthalten.\n\nDie Beschreibung aus der CT1-Online-Hilfe wird jetzt angezeigt.",
+                        title: "Nicht enthalten")
+            HelpCenter.show(action: action)
+            return
+        }
         // Commands that work without a document
         switch action {
+        case .aesSelfExtract:
+            CT1Tools.openAESTool(document: doc)
+            return
+        case .tadicNAF:
+            CT1Tools.openTadicNAF()
+            return
+        case .numberTheoryLearning:
+            CT1NumberTheoryLearning.open()
+            return
         case .signatureAttack:
             SignatureAttackWindows.openAttack()
             return
@@ -77,7 +96,7 @@ enum FeatureRouter {
             tool("shamir", "Secret-Sharing-Demo (nach Shamir)", 680, 680) { ShamirView() }
             return
         case .enigma:
-            tool("enigma", "Enigma", 720, 680) { EnigmaView(sourceDocument: doc) }
+            CT1Games.openEnigma(document: doc)
             return
         case .aesInspector:
             tool("aesinspector", "Rijndael-Inspektor", 760, 560) { AESInspectorView() }
@@ -98,10 +117,10 @@ enum FeatureRouter {
             tool("numlength", "Länge einer Zahl", 560, 440) { NumberLengthView() }
             return
         case .numberShark:
-            tool("numbershark", "Der Zahlenhai", 640, 520) { NumberSharkView() }
+            CT1Games.openNumberShark()
             return
         case .ecPointAddition:
-            tool("ecpoint", "Punktaddition auf Elliptischen Kurven", 820, 560) { EllipticCurveView() }
+            CT1Games.openECCDemo()
             return
         case .mersenne:
             tool("mersenne", "Mersenne-Zahlen berechnen", 560, 480) { MersenneView() }
@@ -166,19 +185,8 @@ enum FeatureRouter {
             }
         case .asn1Decode:
             run(doc) { open(try ASN1.dump(doc.bytes), "ASN.1-Decodierung", doc) }
-        case .zip:
-            run(doc) {
-                let z = try ZipArchive.create(entries: [(name: doc.shortName, data: doc.bytes)])
-                let ratio = doc.bytes.isEmpty ? 0 : 100 - Double(z.count) * 100 / Double(doc.bytes.count)
-                DocumentFactory.openResult(z, title: DocumentFactory.title("Zip-Kompression", of: doc), parent: doc, viewMode: .hex)
-                Alerts.info(String(format: "Originalgröße: %d Bytes\nKomprimiert (ZIP-Archiv): %d Bytes\nErsparnis: %.1f %%", doc.bytes.count, z.count, ratio), title: "Zip")
-            }
-        case .unzip:
-            run(doc) {
-                let entries = try ZipArchive.extract(doc.bytes)
-                if entries.isEmpty { Alerts.info("Das Archiv ist leer."); return }
-                for e in entries { DocumentFactory.openResult(e.data, title: "\(e.name) (entpackt aus <\(doc.shortName)>)", parent: doc) }
-            }
+        case .zip: CT1ZipFeature.zip(doc)
+        case .unzip: CT1ZipFeature.unzip(doc)
 
         // Analyse-Werkzeuge
         case .entropy: CT1Analysis.openEntropy(document: doc)

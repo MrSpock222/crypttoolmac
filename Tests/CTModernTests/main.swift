@@ -289,7 +289,15 @@ do {
                 do {
                     let c = try SymmetricCipher.encrypt(alg, key: key, data: data)
                     if alg.usesCT1Padding { check(c.count == (data.count / 16 + 1) * 16, "\(alg) CT1 padded length") }
-                    else if alg.blockSize > 0 { check(c.count == (data.count / alg.blockSize + 1) * alg.blockSize, "\(alg) PKCS7 length") }
+                    else if alg.usesZeroPadding {
+                        // SECUDE desECB/desEDE: zero padding, cannot be removed
+                        check(c.count == (data.count + 7) / 8 * 8, "\(alg) zero padded length")
+                        if c.isEmpty { continue }
+                        let p = try SymmetricCipher.decrypt(alg, key: key, data: c)
+                        checkEq(p, data + [UInt8](repeating: 0, count: c.count - data.count), "\(alg.displayName) \(bits) bit round trip len \(len)")
+                        continue
+                    }
+                    else if alg.blockSize > 0 { check(c.count == (data.count / alg.blockSize + 1) * alg.blockSize, "\(alg) PKCS7/X.923 length") }
                     else { check(c.count == data.count, "\(alg) stream length") }
                     let p = try SymmetricCipher.decrypt(alg, key: key, data: c)
                     checkEq(p, data, "\(alg.displayName) \(bits) bit round trip len \(len)")
@@ -846,6 +854,10 @@ do {
     }
     check(SignatureAttack.expectedSteps(bits: 16) == 640, "erwartete Schritte 16 Bit")
 }
+
+runAESToolTests()
+
+runCT1TutorialTests()
 
 print("")
 print("CTModernTests: \(passed) passed, \(failed) failed")

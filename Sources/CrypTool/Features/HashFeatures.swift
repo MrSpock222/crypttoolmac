@@ -150,7 +150,8 @@ struct HashDemoView: View {
     private init(bytes: [UInt8], title: String?) {
         let cut = Array(bytes.prefix(Self.maxBytes))
         truncated = bytes.count > Self.maxBytes
-        utf8 = String(bytes: cut, encoding: .utf8) != nil
+        // edits are encoded like CT1 (Windows-1252) unless the document is UTF-8 with non-ASCII text
+        utf8 = cut.contains { $0 >= 0x80 } && String(bytes: cut, encoding: .utf8) != nil
         originalBytes = cut
         originalText = TextCoding.string(from: cut)
         docTitle = title

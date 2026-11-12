@@ -121,7 +121,7 @@ final class KeyStore: ObservableObject {
     }
 
     private static func pinKey(_ pin: String, salt: [UInt8]) throws -> [UInt8] {
-        try PasswordKeyDerivation.pbkdf2(password: TextCoding.bytes(from: pin), salt: salt, iterations: 20_000, keyLength: 32, hash: .sha256)
+        try PasswordKeyDerivation.pbkdf2(password: Array(pin.utf8), salt: salt, iterations: 20_000, keyLength: 32, hash: .sha256)
     }
 
     @discardableResult

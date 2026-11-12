@@ -71,8 +71,10 @@ public extension Data {
     var bytes: [UInt8] { [UInt8](self) }
 }
 
-/// Text <-> bytes conversion used throughout the app: UTF-8 if valid, otherwise ISO-8859-1
-/// (CT1 documents were Windows-1252 encoded).
+/// Text <-> bytes conversion used throughout the app. CT1 documents are Windows-1252 ("ANSI")
+/// byte strings: text is decoded as UTF-8 if valid, otherwise as Windows-1252, and encoded as
+/// Windows-1252 whenever every character is representable (so byte-level results such as hash
+/// values, XOR/ADD/Vernam ciphertexts or file sizes equal CT1's), otherwise as UTF-8.
 public enum TextCoding {
     public static func string(from bytes: [UInt8]) -> String {
         if let s = String(bytes: bytes, encoding: .utf8) { return s }
@@ -80,7 +82,12 @@ public enum TextCoding {
         return String(bytes: bytes, encoding: .isoLatin1) ?? ""
     }
 
-    public static func bytes(from string: String) -> [UInt8] { Array(string.utf8) }
+    public static func bytes(from string: String) -> [UInt8] {
+        let utf8 = string.utf8
+        if utf8.allSatisfy({ $0 < 0x80 }) { return Array(utf8) }
+        if let d = string.data(using: .windowsCP1252) { return [UInt8](d) }
+        return Array(utf8)
+    }
 
     /// Heuristic: true if the bytes look like printable text.
     public static func looksLikeText(_ bytes: [UInt8]) -> Bool {

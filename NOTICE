@@ -18,6 +18,14 @@ Enthaltene Fremdbestandteile
 * Resources/Help: die deutsche Online-Hilfe von CT1 (CrypTool/hlp_de),
   konvertiert nach UTF-8; Resources/Images: CT1-Startbild.
 
+* Resources/Words/cracklib-words.deflate: Wortliste von CrackLib
+  (© Alec Muffett, Artistic-Licence-artige Lizenz), wie in CT1 enthalten.
+* Lernprogramm für Zahlentheorie: Seitentexte aus „ZT“ von Martin Ramberger
+  (Teil der CT1-Distribution); die interaktiven Teile sind neu programmiert.
+* Der Zahlenhai, Punktaddition auf elliptischen Kurven, AES-Tool,
+  t-adic-NAF-Generator (Anastasios Kanakis), Enigma-Hilfe (Frank Spieß):
+  portiert bzw. nachgebaut nach den Quellen und Hilfetexten aus dem CT1-Repository.
+
 Nicht übernommen wurden die proprietären bzw. separat lizenzierten
 Bibliotheken von CT1 (SECUDE, cv cryptovision, Miracl, NTL, GMP/MPIR,
 APFLOAT, OpenSSL) sowie die Flash/Java-Animationen. Die entsprechenden

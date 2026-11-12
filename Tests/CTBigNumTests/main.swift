@@ -856,10 +856,13 @@ if ProcessInfo.processInfo.environment["CTBN_LONG"] != nil {
 }
 
 runCT1RandomGeneratorTests()
+runCT1TutorialTests()
 
 runCT1PKITests()
 
 runCT1AKSTests()
+
+runCT1TadicNAFTests()
 
 print("\nErgebnis: \(passes) bestanden, \(failures) fehlgeschlagen")
 exit(failures == 0 ? 0 : 1)

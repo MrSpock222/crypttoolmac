@@ -117,6 +117,9 @@ enum MainMenu {
                 .item("Probetext (deutsch)", .openExample("probetext-de.txt")),
                 .item("Playfair-verschlüsselt (deutsch)", .openExample("Playfair-enc-de.txt")),
                 .item("Vernam", .openExample("vernam.txt")),
+                .item("Original (Signaturangriff)", .openExample("Original.txt")),
+                .item("Fälschung (Signaturangriff)", .openExample("Faelschung.txt")),
+                .item("CrypTool.bmp", .openExample("CrypTool.bmp")),
                 .sep,
                 .item("psion-de-enc.hex", .openExample("psion-de-enc.hex")),
                 .item("psion-en-enc.hex", .openExample("psion-en-enc.hex")),
@@ -308,6 +311,7 @@ enum MainMenu {
             ]),
             .sep,
             .sub("Zahlentheorie interaktiv", [
+                .item("Lernprogramm für Zahlentheorie …", .numberTheoryLearning),
                 .item("Punktaddition auf Elliptischen Kurven …", .ecPointAddition),
                 .item("Mersenne-Zahlen berechnen …", .mersenne),
                 .item("Generischer t-adic-NAF-Schlüsselgenerator …", .tadicNAF),

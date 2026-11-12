@@ -53,9 +53,8 @@ struct SymmetricDialog: View {
             .frame(width: 320)
             .onChange(of: keyBits) { _, b in adjustKey(to: b) }
             HStack {
-                TextField("", text: $keyHex, axis: .vertical).lineLimit(2...3)
-                    .font(.system(.body, design: .monospaced))
-                    .ct1Filter($keyHex) { CT1KeyInput.hex($0, maxDigits: keyBits / 4) }
+                CT1FixedHexField(text: $keyHex, byteLength: keyBits / 8)
+                    .frame(height: keyBits > 192 ? 52 : 36)
                 CT1PasteKeyButton(method: method) { pasteKey($0) }
             }
             HStack {
@@ -235,12 +234,8 @@ struct BruteForceDialog: View {
             }
             .frame(width: 320)
             .onChange(of: keyBits) { _, _ in pattern = CT1KeyInput.bruteForcePattern(pattern, digits: digitCount) }
-            TextField("", text: $pattern, axis: .vertical).lineLimit(2...3)
-                .font(.system(.body, design: .monospaced))
-                .ct1Filter($pattern) { s in
-                    let f = CT1KeyInput.bruteForcePattern(s, digits: digitCount)
-                    return (f, false)
-                }
+            CT1FixedHexField(text: $pattern, byteLength: keyBits / 8, fill: "*", allowStar: true)
+                .frame(height: keyBits > 192 ? 52 : 36)
         } buttons: {
             Button("Hilfe") { HelpCenter.show(action: .bruteForce(algorithm.rawValue)) }
             Button("Analyseoptionen") { OptionsWindows.showAnalysisOptions() }
