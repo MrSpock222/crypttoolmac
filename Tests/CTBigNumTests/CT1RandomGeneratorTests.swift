@@ -1,0 +1,87 @@
+import Foundation
+import CTCommon
+import CTBigNum
+
+/// CT1 random generator dialog parity (ICG prime, states) – called from main.swift.
+func runCT1RandomGeneratorTests() {
+    section("CT1 Zufallsgeneratoren") {
+        typealias R = RandomGenerators
+        let p = R.CT1Parameters()
+
+        // titles and limits (IDS_STRING_RAND_DATA_PARAM, IDS_RAND_GEN_PARAM, DDV)
+        checkEqual(R.ct1ResultTitle(.x2modN, length: 2500), "Zufallsdaten erzeugt mit dem X^2 (mod N) Generator - Länge 2500 Bytes")
+        checkEqual(R.ct1ResultTitle(.secude, length: 7), "Zufallsdaten erzeugt mit dem SECUDE Generator - Länge 7 Bytes")
+        checkEqual(R.ct1ResultTitle(.icg, length: 1), "Zufallsdaten erzeugt mit dem ICG Generator - Länge 1 Bytes")
+        checkEqual(R.ct1ProgressTitle(.lcg), "LCG Zufallsgenerator")
+        checkEqual(R.ct1ProgressText(percent: 42), "Zufallsdaten zu 42 % erzeugt.")
+        checkEqual(R.ct1ByteRange, 1...1_048_575)
+        checkEqual(p.seed, BigUInt(314159))
+        checkEqual(p.icgPrime, BigUInt(2147483053))
+        check(!R.CT1Generator.secude.hasInternalStates && R.CT1Generator.icg.hasInternalStates)
+
+        // the resumable CT1 driver produces exactly the library output (several chunks)
+        for count in [1, 9, 600, 2500] {
+            checkEqual(R.ct1Generate(.x2modN, parameters: p, count: count, internalStates: false)?.bytes,
+                       R.x2modN(seed: p.seed, modulus: p.x2Modulus, count: count), "x2 \(count)")
+            checkEqual(R.ct1Generate(.lcg, parameters: p, count: count, internalStates: false)?.bytes,
+                       R.lcg(seed: p.seed, a: p.lcgA, b: p.lcgB, modulus: p.lcgModulus, count: count), "lcg \(count)")
+            checkEqual(R.ct1Generate(.icg, parameters: p, count: count, internalStates: false)?.bytes,
+                       R.icg(seed: p.seed, a: p.icgA, b: p.icgC, modulus: p.icgPrime, count: count), "icg \(count)")
+        }
+        // big moduli (no 64-bit fast paths)
+        var big = p
+        big.lcgModulus = (BigUInt(1) << 89) - 1
+        big.lcgA = BigUInt(123456789) * 1_000_000_007
+        big.icgPrime = (BigUInt(1) << 127) - 1
+        big.icgA = BigUInt(987654321) << 40
+        checkEqual(R.ct1Generate(.lcg, parameters: big, count: 300, internalStates: false)?.bytes,
+                   R.lcg(seed: big.seed, a: big.lcgA, b: big.lcgB, modulus: big.lcgModulus, count: 300), "lcg big")
+        checkEqual(R.ct1Generate(.icg, parameters: big, count: 300, internalStates: false)?.bytes,
+                   R.icg(seed: big.seed, a: big.icgA, b: big.icgC, modulus: big.icgPrime, count: 300), "icg big")
+
+        // internal states: seed + one state per bit, each followed by a blank (rndState << s << " ")
+        for g in [R.CT1Generator.x2modN, .lcg, .icg] {
+            var expected: [BigUInt] = []
+            switch g {
+            case .x2modN: _ = R.x2modN(seed: p.seed, modulus: p.x2Modulus, count: 700) { expected.append($0) }
+            case .lcg: _ = R.lcg(seed: p.seed, a: p.lcgA, b: p.lcgB, modulus: p.lcgModulus, count: 700) { expected.append($0) }
+            default: _ = R.icg(seed: p.seed, a: p.icgA, b: p.icgC, modulus: p.icgPrime, count: 700) { expected.append($0) }
+            }
+            let out = R.ct1Generate(g, parameters: p, count: 700, internalStates: true)
+            checkEqual(expected.count, 1 + 8 * 700)
+            checkEqual(out?.states, expected.map { $0.description + " " }.joined(), "states \(g)")
+            check(out?.states?.hasPrefix("314159 ") == true)
+        }
+        // LCG states start like CT1: 314159, 23·314159 mod 100000001, …
+        let lcgStates = R.ct1Generate(.lcg, parameters: p, count: 1, internalStates: true)?.states
+        checkEqual(lcgStates?.split(separator: " ").prefix(3).map(String.init), ["314159", "7225657", "66190110"])
+        // no states for the Secude generator
+        let sec = R.ct1Generate(.secude, parameters: p, count: 100, internalStates: true)
+        checkEqual(sec?.bytes.count, 100)
+        check(sec?.states == nil)
+
+        // progress and cancellation
+        var last = 0
+        _ = R.ct1Generate(.lcg, parameters: p, count: 5000, internalStates: false, progress: { last = $0 })
+        checkEqual(last, 100)
+        let token = CancellationToken()
+        token.cancel()
+        check(R.ct1Generate(.x2modN, parameters: p, count: 5000, internalStates: false, cancel: token) == nil)
+
+        // ICG modulus must be prime (IDS_STRING_MODUL_NOT_PRIME), "Primzahl erzeugen"
+        check(R.ct1IsValidICGPrime(2147483053))
+        check(!R.ct1IsValidICGPrime(BigUInt(2147483053) * 3))
+        check(!R.ct1IsValidICGPrime(1))
+        check(!R.ct1IsValidICGPrime(561))
+        checkEqual(R.ct1DefaultICGPrimeBits, 128)
+        checkEqual(R.ct1EffectiveICGPrimeBits(0), 128)
+        checkEqual(R.ct1EffectiveICGPrimeBits(8), 128)
+        checkEqual(R.ct1EffectiveICGPrimeBits(9), 9)
+        for bits in [9, 16, 128, 256] {
+            let q = R.ct1ICGPrime(bits: bits)
+            checkEqual(q.bitLength, bits, "prime bits \(bits)")
+            check(Primality.isProbablePrime(q), "prime \(bits)")
+        }
+        checkEqual(R.ct1ICGPrime(bits: 3).bitLength, 128)
+    }
+}

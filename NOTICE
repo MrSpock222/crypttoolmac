@@ -1,0 +1,24 @@
+CrypTool für macOS
+Inoffizielle native Apple-Silicon-Portierung von CrypTool 1 (CT1).
+
+Dieses Projekt basiert auf CrypTool 1
+  Copyright (C) 1998-2022 CrypTool-Team, https://www.cryptool.org
+  Quelltext: https://github.com/cryptool-org/cryptool1
+  Lizenz: Apache License 2.0
+
+Enthaltene Fremdbestandteile
+----------------------------
+* Sources/CTCipherC: Optimierte ANSI-C-Referenzimplementierungen der
+  AES-Kandidaten MARS (IBM), RC6 (RSA Laboratories), Serpent (Anderson,
+  Biham, Knudsen) und Twofish (Schneier et al.), wie sie im CT1-Quelltext
+  (Verzeichnis aes/) enthalten sind. Die Copyright-Hinweise der Autoren sind
+  in den jeweiligen Dateien erhalten.
+* Resources/Reference, Resources/Examples, Resources/Words: Referenz-,
+  Beispiel- und Wörterbuchdateien aus dem CT1-Setup, konvertiert nach UTF-8.
+* Resources/Help: die deutsche Online-Hilfe von CT1 (CrypTool/hlp_de),
+  konvertiert nach UTF-8; Resources/Images: CT1-Startbild.
+
+Nicht übernommen wurden die proprietären bzw. separat lizenzierten
+Bibliotheken von CT1 (SECUDE, cv cryptovision, Miracl, NTL, GMP/MPIR,
+APFLOAT, OpenSSL) sowie die Flash/Java-Animationen. Die entsprechenden
+Funktionen wurden in Swift neu implementiert oder sind nicht enthalten.

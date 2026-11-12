@@ -1,0 +1,260 @@
+import Foundation
+import CTCommon
+
+/// CT1 parity layer for the dialog "Zufallsdaten erzeugen" (`DlgRandomGenerator.cpp`,
+/// `DlgICGRandomParamater.cpp`): generator selection, window titles, internal state output,
+/// the ICG prime helpers and a generation driver with progress and cancellation.
+extension RandomGenerators {
+    /// The four CT1 generators (radio buttons of IDD_RANDOM_GENERATOR, registry value "SelGenerator").
+    public enum CT1Generator: Int, CaseIterable, Sendable {
+        case secude = 0, x2modN = 1, lcg = 2, icg = 3
+
+        /// Name CT1 inserts into its titles (%s of IDS_STRING_RAND_DATA_PARAM / IDS_RAND_GEN_PARAM).
+        public var ct1Name: String {
+            switch self {
+            case .secude: return "SECUDE"
+            case .x2modN: return "X^2 (mod N)"
+            case .lcg: return "LCG"
+            case .icg: return "ICG"
+            }
+        }
+
+        /// Label of the radio button in CT1.
+        public var radioLabel: String {
+            switch self {
+            case .secude: return "Zufallsgenerator der Secude-Bibliothek"
+            case .x2modN: return "X^2 (mod N)  Zufallsgenerator"
+            case .lcg: return "Linearer Kongruenz Generator (LCG)"
+            case .icg: return "Inverser Kongruenz Generator (ICG)"
+            }
+        }
+
+        /// CT1 only offers the internal state output for X^2 mod N, LCG and ICG.
+        public var hasInternalStates: Bool { self != .secude }
+    }
+
+    /// CT1 accepts 1 … 1 048 575 bytes (`m_DataSize >= 1 && m_DataSize < 1048576`).
+    public static let ct1ByteRange: ClosedRange<Int> = 1...1_048_575
+    /// Default bit length of "Primzahl erzeugen" in the ICG parameter dialog.
+    public static let ct1DefaultICGPrimeBits = 128
+    /// Allowed bit lengths of the ICG prime field (DDV_MinMaxUInt 0 … 256).
+    public static let ct1ICGPrimeBitRange: ClosedRange<Int> = 0...256
+
+    /// Result window title (IDS_STRING_RAND_DATA_PARAM), used for both the data and the state window.
+    public static func ct1ResultTitle(_ g: CT1Generator, length: Int) -> String {
+        "Zufallsdaten erzeugt mit dem \(g.ct1Name) Generator - Länge \(length) Bytes"
+    }
+
+    /// Title of the progress display (IDS_RAND_GEN_PARAM).
+    public static func ct1ProgressTitle(_ g: CT1Generator) -> String { "\(g.ct1Name) Zufallsgenerator" }
+
+    /// Progress text (IDS_RAND_PROGRESS).
+    public static func ct1ProgressText(percent: Int) -> String { "Zufallsdaten zu \(percent) % erzeugt." }
+
+    /// Parameters of the CT1 dialog including its defaults (registry defaults of `OnInitDialog`).
+    public struct CT1Parameters: Sendable, Equatable {
+        public var seed: BigUInt
+        public var x2Modulus: BigUInt
+        public var lcgA: BigUInt
+        public var lcgB: BigUInt
+        public var lcgModulus: BigUInt
+        public var icgA: BigUInt
+        /// "c" in CT1's ICG dialog.
+        public var icgC: BigUInt
+        /// "Primzahl P" in CT1's ICG dialog.
+        public var icgPrime: BigUInt
+
+        public init(seed: BigUInt = RandomGenerators.defaultSeed,
+                    x2Modulus: BigUInt = RandomGenerators.defaultX2ModNModulus,
+                    lcgA: BigUInt = RandomGenerators.defaultLCGA, lcgB: BigUInt = RandomGenerators.defaultLCGB,
+                    lcgModulus: BigUInt = RandomGenerators.defaultLCGModulus,
+                    icgA: BigUInt = RandomGenerators.defaultICGA, icgC: BigUInt = RandomGenerators.defaultICGB,
+                    icgPrime: BigUInt = RandomGenerators.defaultICGModulus) {
+            self.seed = seed; self.x2Modulus = x2Modulus
+            self.lcgA = lcgA; self.lcgB = lcgB; self.lcgModulus = lcgModulus
+            self.icgA = icgA; self.icgC = icgC; self.icgPrime = icgPrime
+        }
+    }
+
+    /// Generated data and (optionally) the text of CT1's internal state window: every state in
+    /// decimal followed by a blank, starting with the seed (`randIntStr` … `rndState << s << " "`).
+    public struct CT1Output: Sendable {
+        public let bytes: [UInt8]
+        public let states: String?
+    }
+
+    /// CT1's check of the ICG modulus (`IDS_STRING_MODUL_NOT_PRIME`).
+    public static func ct1IsValidICGPrime(_ p: BigUInt) -> Bool {
+        p > 1 && Primality.isProbablePrime(p)
+    }
+
+    /// Bit length actually used by "Primzahl erzeugen": CT1 replaces values ≤ 8 by 128.
+    public static func ct1EffectiveICGPrimeBits(_ bits: Int) -> Int { bits <= 8 ? 128 : bits }
+
+    /// "Primzahl erzeugen": random prime between 2^(L-1) and 2^L (CT1 `GeneratePrimes::SetLimits`).
+    public static func ct1ICGPrime(bits: Int) -> BigUInt {
+        let l = ct1EffectiveICGPrimeBits(bits)
+        let lower = BigUInt(1) << (l - 1), upper = BigUInt(1) << l
+        return Primality.randomPrime(in: lower...upper) ?? Primality.randomPrime(bits: l)
+    }
+
+    /// Runs one of the four generators like CT1's `GenRandomDataThread`. `progress` receives the
+    /// percentage (once per percent), `cancel` aborts (result nil). Internal states are only
+    /// recorded for X^2 mod N, LCG and ICG.
+    public static func ct1Generate(_ g: CT1Generator, parameters p: CT1Parameters, count: Int, internalStates: Bool,
+                                   progress: ((Int) -> Void)? = nil, cancel: CancellationToken? = nil) -> CT1Output? {
+        guard count > 0 else { return CT1Output(bytes: [], states: internalStates && g.hasInternalStates ? "" : nil) }
+        let record = internalStates && g.hasInternalStates
+        var stateText = ""
+        func addState(_ s: BigUInt) { stateText += s.description; stateText += " " }
+        var out = [UInt8]()
+        out.reserveCapacity(count)
+        var lastPercent = 0
+        func report(_ done: Int) -> Bool {
+            if cancel?.isCancelled == true { return false }
+            let pc = done * 100 / count
+            if pc > lastPercent { lastPercent = pc; progress?(pc) }
+            return true
+        }
+        let chunk = max(1, min(4096, count / 100))
+
+        switch g {
+        case .secude:
+            while out.count < count {
+                out += secure(count: min(chunk, count - out.count))
+                if !report(out.count) { return nil }
+            }
+        case .x2modN:
+            guard p.x2Modulus > 1 else { return nil }
+            var x = p.seed
+            if record { addState(x) }
+            while out.count < count {
+                var first = true
+                out += x2modN(seed: x, modulus: p.x2Modulus, count: min(chunk, count - out.count)) { s in
+                    if first { first = false; return }      // the seed of this chunk
+                    x = s
+                    if record { addState(s) }
+                }
+                if !report(out.count) { return nil }
+            }
+        case .lcg:
+            guard !p.lcgModulus.isZero else { return nil }
+            var gen = CT1LCG(seed: p.seed, a: p.lcgA, b: p.lcgB, modulus: p.lcgModulus)
+            if record { addState(p.seed) }
+            while out.count < count {
+                for _ in 0..<min(chunk, count - out.count) {
+                    var o: UInt8 = 0
+                    for bit in 0..<8 {
+                        if gen.next() { o |= 0x80 >> UInt8(bit) }
+                        if record { addState(gen.state) }
+                    }
+                    out.append(o)
+                }
+                if !report(out.count) { return nil }
+            }
+        case .icg:
+            guard p.icgPrime > 1 else { return nil }
+            let gen = CT1ICG(seed: p.seed, a: p.icgA, c: p.icgC, modulus: p.icgPrime)
+            if record { addState(p.seed) }
+            while out.count < count {
+                for _ in 0..<min(chunk, count - out.count) {
+                    let k = out.count
+                    var o: UInt8 = 0
+                    for bit in 0..<8 {
+                        let x = gen.value(counter: icgCounter(byte: k, bit: bit))
+                        if x.bit { o |= 0x80 >> UInt8(bit) }
+                        if record { addState(x.state) }
+                    }
+                    out.append(o)
+                }
+                if !report(out.count) { return nil }
+            }
+        }
+        return CT1Output(bytes: out, states: record ? stateText : nil)
+    }
+}
+
+// MARK: - CT1 generator kernels (identical results to `lcg`/`icg`, but resumable)
+
+/// LCG x ← (a·x + b) mod N with a 64-bit fast path; the first step uses the unreduced seed as in CT1.
+struct CT1LCG {
+    private let a, b, n, half: BigUInt
+    private var x: BigUInt
+    private let fast: (a: UInt64, b: UInt64, n: UInt64, half: UInt64)?
+    private var x64: UInt64 = 0
+    private var started = false
+
+    init(seed: BigUInt, a: BigUInt, b: BigUInt, modulus: BigUInt) {
+        self.a = a; self.b = b; n = modulus; half = modulus / 2; x = seed
+        if let n64 = modulus.uint64Value, let a64 = (a % modulus).uint64Value, let b64 = (b % modulus).uint64Value,
+           let h = (modulus / 2).uint64Value {
+            fast = (a64, b64, n64, h)
+        } else {
+            fast = nil
+        }
+    }
+
+    var state: BigUInt { fast != nil && started ? BigUInt(x64) : x }
+
+    /// Advances the generator and returns the output bit (x > ⌊N/2⌋).
+    mutating func next() -> Bool {
+        if let f = fast {
+            if !started {
+                x64 = ((a * x + b) % n).uint64Value!
+                started = true
+            } else {
+                let (hi, lo) = f.a.multipliedFullWidth(by: x64)
+                let t = f.n.dividingFullWidth((hi % f.n, lo)).remainder
+                let (s, ov) = t.addingReportingOverflow(f.b)
+                x64 = (ov || s >= f.n) ? s &- f.n : s
+            }
+            return x64 > f.half
+        }
+        x = (a * x + b) % n
+        started = true
+        return x > half
+    }
+}
+
+/// ICG x_i = (a·(seed + c_i) + c)⁻¹ mod P (0 if not invertible) with a 63-bit fast path.
+struct CT1ICG {
+    private let seed, a, c, n, half: BigUInt
+    private let fast: (seed: UInt64, a: UInt64, c: UInt64, n: UInt64, half: UInt64)?
+
+    init(seed: BigUInt, a: BigUInt, c: BigUInt, modulus: BigUInt) {
+        self.seed = seed; self.a = a; self.c = c; n = modulus; half = modulus / 2
+        if modulus.bitLength <= 62, let n64 = modulus.uint64Value, let s = (seed % modulus).uint64Value,
+           let a64 = (a % modulus).uint64Value, let c64 = (c % modulus).uint64Value, let h = half.uint64Value {
+            fast = (s, a64, c64, n64, h)
+        } else {
+            fast = nil
+        }
+    }
+
+    func value(counter: Int) -> (state: BigUInt, bit: Bool) {
+        if let f = fast {
+            let sc = (f.seed + UInt64(counter)) % f.n
+            let (hi, lo) = f.a.multipliedFullWidth(by: sc)
+            let v = (f.n.dividingFullWidth((hi, lo)).remainder + f.c) % f.n
+            let x = CT1ICG.inverse(v, f.n)
+            return (BigUInt(x), x > f.half)
+        }
+        let v = (a * (seed + BigUInt(counter)) + c) % n
+        let x = v.inverse(modulo: n) ?? 0
+        return (x, x > half)
+    }
+
+    /// Modular inverse for moduli < 2^62 (0 if not invertible).
+    static func inverse(_ v: UInt64, _ m: UInt64) -> UInt64 {
+        guard v != 0 else { return 0 }
+        var (r0, r1) = (Int64(m), Int64(v))
+        var (s0, s1) = (Int64(0), Int64(1))
+        while r1 != 0 {
+            let q = r0 / r1
+            (r0, r1) = (r1, r0 - q * r1)
+            (s0, s1) = (s1, s0 - q * s1)
+        }
+        guard r0 == 1 else { return 0 }
+        return UInt64(s0 < 0 ? s0 + Int64(m) : s0)
+    }
+}

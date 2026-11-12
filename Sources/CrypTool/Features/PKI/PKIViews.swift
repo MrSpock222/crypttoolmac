@@ -1,0 +1,297 @@
+import AppKit
+import SwiftUI
+import CTCommon
+import CTBigNum
+import CTModern
+
+/// Editable combo box (CT1 CBS_DROPDOWN), e.g. "Bitlänge des RSA-Moduls".
+struct PKIComboBox: NSViewRepresentable {
+    @Binding var text: String
+    let items: [String]
+    var enabled = true
+
+    func makeNSView(context: Context) -> NSComboBox {
+        let c = NSComboBox()
+        c.addItems(withObjectValues: items)
+        c.completes = false
+        c.numberOfVisibleItems = 8
+        c.delegate = context.coordinator
+        c.stringValue = text
+        return c
+    }
+
+    func updateNSView(_ c: NSComboBox, context: Context) {
+        if c.stringValue != text { c.stringValue = text }
+        c.isEnabled = enabled
+        context.coordinator.parent = self
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    final class Coordinator: NSObject, NSComboBoxDelegate {
+        var parent: PKIComboBox
+        init(_ p: PKIComboBox) { parent = p }
+        func controlTextDidChange(_ n: Notification) {
+            if let c = n.object as? NSComboBox { parent.text = c.stringValue }
+        }
+        func comboBoxSelectionDidChange(_ n: Notification) {
+            guard let c = n.object as? NSComboBox, c.indexOfSelectedItem >= 0 else { return }
+            parent.text = parent.items[c.indexOfSelectedItem]
+        }
+    }
+}
+
+/// Gives SwiftUI content access to its window (to close tool windows with "Schließen").
+struct PKIWindowReader: NSViewRepresentable {
+    let onWindow: (NSWindow?) -> Void
+    func makeNSView(context: Context) -> NSView {
+        let v = NSView()
+        DispatchQueue.main.async { onWindow(v.window) }
+        return v
+    }
+    func updateNSView(_ v: NSView, context: Context) {}
+}
+
+final class PKIWindowBox: ObservableObject { weak var window: NSWindow? }
+
+// MARK: - Key generation (CT1 IDD_KEYASYM_GENERATION "Erzeugung eines asymmetrischen Schlüsselpaares")
+
+struct KeyGenerationView: View {
+    private enum Method { case rsa, dsa, ec }
+    @CTState private var method: Method = .rsa
+    @CTState private var rsaBits = "1024"
+    @CTState private var dsaBits = "1024"
+    @CTState private var curveName = EllipticCurve.ct1DefaultCurveName
+    @CTState private var lastName = ""
+    @CTState private var firstName = ""
+    @CTState private var label = ""
+    @CTState private var pin = ""
+    @CTState private var pin2 = ""
+    @CTState private var base: PKINumberBase = .decimal
+    @CTState private var busy = false
+    @CTState private var lastKey: UUID?
+    @StateObject private var windowBox = PKIWindowBox()
+
+    private let forbidden = Set("\\/:*?\"<>|~$%&,;][")
+    private var curve: EllipticCurve? { EllipticCurve.anyNamed(curveName) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top, spacing: 12) {
+                PKIGroup("Verfahren") {
+                    methodRadio("RSA", .rsa)
+                    HStack {
+                        Text("Bitlänge des RSA-Moduls:").frame(width: 170, alignment: .leading)
+                        PKIComboBox(text: $rsaBits, items: ["512", "768", "1024", "2048"], enabled: method == .rsa).frame(width: 90)
+                    }.padding(.leading, 20)
+                    methodRadio("DSA", .dsa)
+                    HStack {
+                        Text("Bitlänge der DSA-Primzahl:").frame(width: 170, alignment: .leading)
+                        PKIComboBox(text: $dsaBits, items: ["512", "768", "1024", "2048"], enabled: method == .dsa).frame(width: 90)
+                    }.padding(.leading, 20)
+                    methodRadio("Elliptische Kurven", .ec)
+                    HStack {
+                        Text("Bezeichner (Bitlänge und Kurvenparameter):").frame(width: 170, alignment: .leading)
+                        Picker("", selection: $curveName) {
+                            ForEach(EllipticCurve.ct1Curves, id: \.name) { Text($0.name).tag($0.name) }
+                        }.labelsHidden().frame(width: 120).disabled(method != .ec)
+                    }.padding(.leading, 20)
+                }
+                .frame(width: 340)
+                PKIGroup("Benutzerdaten") {
+                    Text("Das erzeugte Schlüsselpaar wird in einer verschlüsselten Datei (PSE) abgelegt. Durch Ihren PIN-Code wird das Schlüsselpaar geschützt:")
+                        .font(.callout).fixedSize(horizontal: false, vertical: true)
+                    Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
+                        GridRow { Text("Name:"); TextField("", text: $lastName) }
+                        GridRow { Text("Vorname:"); TextField("", text: $firstName) }
+                        GridRow { Text("Schlüsselkennung\n(optional):"); TextField("", text: $label) }
+                        GridRow { Text("PIN-Code:"); SecureField("", text: $pin) }
+                        GridRow { Text("PIN-Verifikation:"); SecureField("", text: $pin2) }
+                    }
+                }
+            }
+            if method == .ec, let c = curve {
+                Text("Domain-Parameter der durch '\(c.name)' spezifizierten Elliptischen Kurve:")
+                PKIECParameterTable(rows: PKIECParameterTable.domainRows(c), base: base).frame(height: 190)
+                PKIGroup("Zahlensystem der Parameterdarstellung") { PKIBasePicker(base: $base) }.frame(width: 340)
+            }
+            Divider()
+            HStack {
+                Button("Neues Schlüsselpaar erzeugen ...") { generate() }.keyboardShortcut(.defaultAction).disabled(busy)
+                Button("PKCS #12-Import") { importP12() }.disabled(busy)
+                Button("Schlüsselpaar anzeigen...") { showKeyList() }.disabled(lastKey == nil)
+                if busy { ProgressView().controlSize(.small) }
+                Spacer()
+                PKIHelpButton(action: .keyGeneration)
+                Button("Schließen") { windowBox.window?.close() }
+            }
+        }
+        .padding(16)
+        .frame(minWidth: 720)
+        .background(PKIWindowReader { windowBox.window = $0; $0?.title = "Erzeugung eines asymmetrischen Schlüsselpaares" })
+    }
+
+    private func methodRadio(_ title: String, _ m: Method) -> some View {
+        Button { method = m } label: {
+            HStack(spacing: 5) {
+                Image(systemName: method == m ? "largecircle.fill.circle" : "circle")
+                    .foregroundStyle(method == m ? Color.accentColor : .secondary)
+                Text(title)
+            }
+        }.buttonStyle(.plain)
+    }
+
+    /// CT1 input checks (messages from the CT1 string table).
+    private func validate() -> Bool {
+        let l = lastName.trimmingCharacters(in: .whitespaces), f = firstName.trimmingCharacters(in: .whitespaces)
+        if l.isEmpty { PKIModal.warning("Bitte geben Sie einen Nachnamen ein."); return false }
+        if f.isEmpty { PKIModal.warning("Bitte geben Sie einen Vornamen ein."); return false }
+        if (l + f + label).contains(where: { forbidden.contains($0) }) {
+            PKIModal.warning("Die Eingabefelder für den Namen, Vornamen und die Schlüsselkennung\ndürfen folgende Sonderzeichen NICHT enthalten:\n\\/:*?\"<>|~$%&,;][")
+            return false
+        }
+        if pin.isEmpty { PKIModal.warning("Bitte geben Sie einen PIN-Code ein."); return false }
+        if pin != pin2 {
+            PKIModal.warning("PIN und PIN-Verifikation stimmen nicht überein.\nBitte nochmal eingeben.")
+            pin = ""; pin2 = ""
+            return false
+        }
+        return true
+    }
+
+    private func generate() {
+        let maxBits = 4096
+        var bits = 0
+        switch method {
+        case .rsa:
+            guard let b = Int(rsaBits.trimmingCharacters(in: .whitespaces)), b > 300, b <= maxBits else {
+                PKIModal.warning("Für die Bitlänge L des RSA-Moduls muss gelten:\n\n\t300 < L < \(maxBits + 1).\n\nBitte die Bitlänge nochmal eingeben.")
+                return
+            }
+            bits = b
+        case .dsa:
+            guard let b = Int(dsaBits.trimmingCharacters(in: .whitespaces)), b > 300, b <= maxBits, b % 64 == 0 else {
+                PKIModal.warning("Für die Bitlänge L der DSA-Primzahl muss gelten:\n\n300 < L < \(maxBits + 1) und L teilbar durch 64.\n\nBitte die Bitlänge nochmal eingeben.")
+                return
+            }
+            bits = b
+        case .ec:
+            break
+        }
+        guard validate() else { return }
+        busy = true
+        let m = method, c = curve
+        let (ln, fn, lb, p) = (lastName.trimmingCharacters(in: .whitespaces), firstName.trimmingCharacters(in: .whitespaces),
+                               label.trimmingCharacters(in: .whitespaces), pin)
+        Task.detached(priority: .userInitiated) {
+            let started = Date()
+            let material: PrivateKeyMaterial?
+            switch m {
+            case .rsa: material = .rsa(RSAKeyPair.generate(bits: bits))
+            case .dsa:
+                let params = DSA.generateParameters(L: bits, N: 160)
+                material = .dsa(DSA.generateKey(parameters: params))
+            case .ec: material = c.map { .ecc(ECKeyPair.generate(curve: $0)) }
+            }
+            let t = Date().timeIntervalSince(started)
+            await MainActor.run {
+                busy = false
+                guard let material else { return }
+                do {
+                    let k = try KeyStore.shared.add(lastName: ln, firstName: fn, label: lb, material: material, pin: p)
+                    lastKey = k.id
+                    pin = ""; pin2 = ""
+                    PKIModal.info("Die von ihnen gewählten Parameter und das erzeugte\nSchlüsselpaar wurden erfolgreich abgespeichert.\nDer zugewiesene Schlüsselbezeichner ist:\n'\(k.ct1Identifier)'\n\nZum Erzeugen des Schlüsselpaares benötigte Zeit: \(PKIText.seconds(t)) Sekunden.")
+                } catch { Alerts.error(error.localizedDescription) }
+            }
+        }
+    }
+
+    private func showKeyList() {
+        if let id = lastKey { KeyListView.preselect = id }
+        WindowPresenter.tool(id: "keylist", title: "Verfügbare asymmetrische Schlüsselpaare", size: CGSize(width: 860, height: 560)) { KeyListView() }
+    }
+
+    private func importP12() {
+        PKIPKCS12.importFile(defaultName: lastName, defaultFirstName: firstName) { k in lastKey = k.id }
+    }
+}
+
+// MARK: - Key list (CT1 IDD_KEY_ASYM "Verfügbare asymmetrische Schlüsselpaare")
+
+struct KeyListView: View {
+    /// Key to select when the window opens ("Schlüsselpaar anzeigen..." of the key generation).
+    @MainActor static var preselect: UUID?
+
+    @ObservedObject private var store = KeyStore.shared
+    @CTState private var selection: UUID?
+    @CTState private var filter = PKIKeyFilter()
+    @StateObject private var windowBox = PKIWindowBox()
+
+    private var key: StoredKey? { selection.flatMap(store.key(id:)) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Die folgende Liste zeigt die verfügbaren asymmetrischen Schlüsselpaare an.")
+            Text("Klicken Sie mit der linken Maustaste auf eine Zeile, um eine Auswahl vorzunehmen.")
+            PKIKeyTable(selection: $selection, filter: filter, minHeight: 260) { k in showPublic(k) }
+            HStack(alignment: .top, spacing: 16) {
+                PKIKeyFilterBox(filter: $filter)
+                Grid(horizontalSpacing: 10, verticalSpacing: 6) {
+                    GridRow {
+                        Button("Öffentliche Parameter anzeigen...") { if let k = key { showPublic(k) } else { selectFirst() } }
+                            .frame(maxWidth: .infinity)
+                        Button("Alle Parameter anzeigen...") { if let k = key { showAll(k) } }
+                            .disabled(key?.type.kind != .ec).frame(maxWidth: .infinity)
+                    }
+                    GridRow {
+                        Button("Zertifikat anzeigen") { if let k = key { PKICertificate.show(k) } else { selectFirst() } }
+                            .disabled(key?.type.kind == .ec)
+                        Button("PSE exportieren (PKCS#12)") { if let k = key { PKIPKCS12.export(k) } }
+                            .disabled(key == nil || key?.type.kind == .ec)
+                    }
+                    GridRow {
+                        Button("Eintrag löschen...") { if let k = key { delete(k) } else { selectFirst() } }
+                        Button("Schließen") { windowBox.window?.close() }.keyboardShortcut(.defaultAction)
+                    }
+                }
+                .frame(width: 460)
+                Spacer()
+                PKIHelpButton(action: .keyList)
+            }
+        }
+        .padding(16)
+        .frame(minWidth: 820, minHeight: 480)
+        .background(PKIWindowReader { windowBox.window = $0; $0?.title = "Verfügbare asymmetrische Schlüsselpaare" })
+        .onAppear {
+            if let p = KeyListView.preselect { selection = p; KeyListView.preselect = nil }
+        }
+    }
+
+    private func selectFirst() {
+        PKIModal.info(store.keys.filter(filter.accepts).isEmpty
+                      ? "Zur Zeit stehen keine asymmetrischen Schlüssel des gewünschten Typs zur Verfügung.\nWählen Sie einen anderen Schlüsseltyp oder erzeugen Sie neue Schlüssel."
+                      : "Wählen Sie einen Schlüsselbezeichner aus der Liste.")
+    }
+
+    private func showPublic(_ k: StoredKey) {
+        if k.type.kind == .ec {
+            PKIModal.run(title: "Öffentlicher Schlüssel (asymmetrisch)") { close in PKIECKeyView(key: k, privateKey: nil, close: close) }
+        } else {
+            PKIModal.run(title: "Öffentliche Parameter") { close in PKIPublicParameterView(key: k, close: close) }
+        }
+    }
+
+    private func showAll(_ k: StoredKey) {
+        guard let pin = PKIPinAccess.ask(for: k), case .ecc(let pair)? = PKIPinAccess.open(k, pin: pin) else { return }
+        PKIModal.run(title: "Öffentliche und private Schlüssel (asymmetrisch)") { close in PKIECKeyView(key: k, privateKey: pair.d, close: close) }
+    }
+
+    private func delete(_ k: StoredKey) {
+        guard Alerts.confirm("Sind Sie sicher das die zu dem Schlüsselbezeichner\n'\(k.ct1Identifier)'\ngehörenden Schlüsseldateien GELÖSCHT werden sollen?\n\nDrücken Sie OK um den Vorgang fortzusetzen.",
+                             title: "CrypTool") else { return }
+        guard let pin = PKIPinAccess.ask(for: k), PKIPinAccess.open(k, pin: pin) != nil else { return }
+        store.delete(k)
+        selection = nil
+    }
+}
