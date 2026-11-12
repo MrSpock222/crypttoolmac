@@ -107,6 +107,27 @@ section("Kleine geheime Schlüssel (Wiener)") {
     if let r { check(r.p * r.q == N, "p·q ≠ N") }
 }
 
+// MARK: - Kleine geheime Schlüssel (Boneh-Durfee / Blömer-May), δ > 0,25
+
+section("Blömer/May (δ ≈ 0,25, über Wiener)") {
+    let nb = 100
+    var p = Primality.randomPrime(bits: nb / 2)
+    var q = Primality.randomPrime(bits: nb / 2)
+    while p == q { q = Primality.randomPrime(bits: nb / 2) }
+    let N = p * q
+    let phi = (p - BigUInt(1)) * (q - BigUInt(1))
+    // d mit genau ⌊N-Bitlänge/4⌋ Bit ⇒ δ ≈ 0,25 – jenseits der sicheren Wiener-Grenze (N^0,25/3).
+    let dbits = N.bitLength / 4
+    var d = BigUInt.random(in: (BigUInt(1) << (dbits - 1))...(BigUInt(1) << dbits))
+    while d.gcd(phi) != BigUInt(1) { d = BigUInt.random(in: (BigUInt(1) << (dbits - 1))...(BigUInt(1) << dbits)) }
+    guard let e = d.inverse(modulo: phi) else { check(false, "kein e"); return }
+    let start = Date()
+    let r = BloemerMay.attack(n: N, e: e, delta: 0.25, m: 5, t: 2)
+    print(String(format: "      Laufzeit %.3f s, dim=%d, realdelta=%.3f", Date().timeIntervalSince(start), r?.latticeDimension ?? 0, Double(d.bitLength)/Double(N.bitLength)))
+    check(r != nil && r!.p == max(p, q) && r!.q == min(p, q), "p/q nicht gefunden")
+    if let r { check(r.p * r.q == N && r.d == d, "p·q ≠ N oder d falsch") }
+}
+
 // MARK: - Seitenkanalangriff auf Textbook-RSA (Kühn)
 
 section("Seitenkanalangriff (Textbook-RSA)") {

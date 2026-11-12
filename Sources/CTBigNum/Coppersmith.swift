@@ -321,6 +321,45 @@ public enum Coppersmith {
         return nil
     }
 
+    /// Ganzzahl-Näherung eines (auch sehr großen) Double-Wertes.
+    static func bigIntFromDouble(_ v: Double) -> BigInt {
+        guard v.isFinite, v != 0 else { return BigInt(0) }
+        let neg = v < 0
+        let av = abs(v).rounded()
+        if av < 9.0e18 { return BigInt(neg ? -Int(av) : Int(av)) }
+        let e = max(0, Int(floor(log2(av))) - 52)
+        let f = (av / pow(2.0, Double(e))).rounded()
+        var r = BigInt(BigUInt(Int(f)) << e)
+        if neg { r = -r }
+        return r
+    }
+
+    /// Ganzzahlige Nullstellen eines Polynoms (|Wurzel| ≤ bound) ohne skalierte Zeile:
+    /// Startpunkte aus Durand-Kerner und einem Raster, exakte Verfeinerung per Bisektion.
+    static func integerRoots(_ h: [BigInt], bound X: BigInt) -> [BigInt] {
+        let a = trim(h)
+        guard a.count >= 2 else { return [] }
+        var roots: [BigInt] = []
+        func consider(_ c: BigInt) {
+            if c.absoluteValue <= X && evalBig(a, c).isZero && !roots.contains(c) { roots.append(c) }
+        }
+        if a.count == 2 {
+            let (q, r) = (-a[0]).quotientAndRemainder(dividingBy: a[1])
+            if r.isZero { consider(q) }
+            return roots
+        }
+        var seeds: [BigInt] = [BigInt(0)]
+        for y in DurandKerner.realRoots(a) where y.isFinite { seeds.append(bigIntFromDouble(y)) }
+        let grid = 128
+        for k in 0...grid {
+            seeds.append((BigInt(2) * X * BigInt(k)).floorDivided(by: BigInt(grid)) - X)
+        }
+        for seed in seeds {
+            if let r = refineRoot(a, seed: seed, bound: X) { consider(r) }
+        }
+        return roots
+    }
+
     /// Näherung von x / 2^scaleBits als Double (für die numerische Nullstellensuche).
     static func approxDouble(_ x: BigInt, scaleBits: Int) -> Double {
         let mag = x.magnitude

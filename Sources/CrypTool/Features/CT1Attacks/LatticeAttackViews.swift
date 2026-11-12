@@ -222,22 +222,33 @@ private struct StereotypedView: View {
 private struct SmallSecretKeyView: View {
     @CTState private var nText = ""
     @CTState private var eText = ""
+    @CTState private var deltaText = "0.25"
+    @CTState private var mText = "5"
     @CTState private var running = false
     @CTState private var result = ""
     @CTState private var info = ""
 
     var body: some View {
         DialogScaffold(title: "Angriff auf kleine geheime Schlüssel",
-                       subtitle: "Mit diesem Angriff lässt sich der RSA-Modul N faktorisieren, wenn der geheime Schlüssel d zu klein gewählt wurde. Die macOS-Version verwendet das Kettenbruchverfahren (nach Wiener); es ist sicher für δ = log(d)/log(N) < 0,25.",
-                       minWidth: 620) {
+                       subtitle: "Mit diesem Angriff lässt sich N faktorisieren, wenn der geheime Schlüssel d zu klein ist. Verwendet wird das Gitterverfahren nach Blömer/May (Boneh/Durfee), δ = log(d)/log(N) < 0,292 – wie in CT1. Für sehr kleines d (δ < 0,25) wird zuerst das schnelle Kettenbruchverfahren (Wiener) versucht; es liefert denselben Schlüssel.",
+                       minWidth: 640) {
             GroupBox("Öffentlicher Schlüssel (N, e)") {
                 Grid(alignment: .leading) {
                     GridRow { Text("N:"); TextField("", text: $nText).font(.system(.body, design: .monospaced)) }
                     GridRow { Text("e:"); TextField("", text: $eText).font(.system(.body, design: .monospaced)) }
                 }.padding(6)
             }
+            GroupBox("Gitterparameter") {
+                HStack {
+                    Text("δ (geschätzte Größe von d):"); TextField("", text: $deltaText).frame(width: 70)
+                    Text("m:"); TextField("", text: $mText).frame(width: 50)
+                    Text("(t wird optimal gewählt)").font(.caption).foregroundStyle(.secondary)
+                }.padding(6)
+            }
+            Text("Hinweis: Das Gitterverfahren ist rechenintensiv; größere N oder δ nahe 0,29 können einige Minuten dauern. CT1 nutzt eine schnellere Fließkomma-LLL.")
+                .font(.caption).foregroundStyle(.secondary)
             if !info.isEmpty { Text(info).font(.caption).foregroundStyle(.secondary) }
-            if running { HStack { ProgressView().controlSize(.small); Text("Kettenbruch wird ausgewertet …") } }
+            if running { HStack { ProgressView().controlSize(.small); Text("Gitter wird reduziert …") } }
             if !result.isEmpty { ResultBox(text: result, minHeight: 80) }
         } buttons: {
             Button("Beispiel erzeugen") { makeExample() }.disabled(running)
@@ -247,17 +258,21 @@ private struct SmallSecretKeyView: View {
     }
 
     private func makeExample() {
-        // RSA mit kleinem geheimem Exponenten d (< N^{1/4}).
-        let p = Primality.randomPrime(bits: 256)
-        let q = Primality.randomPrime(bits: 256)
+        // RSA mit kleinem geheimem Exponenten: N 128 Bit, d mit δ ≈ 0,25 (jenseits der
+        // sicheren Wiener-Grenze – zeigt das Gitterverfahren; läuft in wenigen Sekunden).
+        let p = Primality.randomPrime(bits: 64)
+        let q = Primality.randomPrime(bits: 64)
         let N = p * q
         let phi = (p - BigUInt(1)) * (q - BigUInt(1))
-        var d = Primality.randomPrime(bits: 100)
-        while d.gcd(phi) != BigUInt(1) { d = Primality.randomPrime(bits: 100) }
+        let dbits = N.bitLength / 4
+        var d = BigUInt.random(in: (BigUInt(1) << (dbits - 1))...(BigUInt(1) << dbits))
+        while d.gcd(phi) != BigUInt(1) { d = BigUInt.random(in: (BigUInt(1) << (dbits - 1))...(BigUInt(1) << dbits)) }
         guard let e = d.inverse(modulo: phi) else { return }
         nText = N.description
         eText = e.description
-        info = "Beispiel erzeugt: N mit 512 Bit, d mit 100 Bit (δ ≈ 0,20)."
+        deltaText = "0.25"
+        mText = "5"
+        info = "Beispiel erzeugt: N mit \(N.bitLength) Bit, d mit \(dbits) Bit (δ ≈ 0,25)."
         result = ""
     }
 
@@ -265,17 +280,30 @@ private struct SmallSecretKeyView: View {
         guard let N = parseBigNumber(nText), let e = parseBigNumber(eText) else {
             Alerts.info(NTMessages.inputFalse, title: "Eingabe"); return
         }
+        let delta = Double(deltaText.replacingOccurrences(of: ",", with: ".").trimmingCharacters(in: .whitespaces)) ?? 0.25
+        let m = max(3, Int(mText.trimmingCharacters(in: .whitespaces)) ?? 5)
         running = true; result = ""
         let start = Date()
         Task.detached {
-            let r = Coppersmith.wienerSmallSecretKey(n: N, e: e)
+            // Schneller Wiener-Vorlauf (identisches Ergebnis für δ < 0,25).
+            if let w = Coppersmith.wienerSmallSecretKey(n: N, e: e) {
+                let dt = Date().timeIntervalSince(start)
+                await MainActor.run {
+                    running = false
+                    result = "Angriff erfolgreich (Wiener, \(String(format: "%.2f", dt)) s):\n\nd = \(w.d)\n\np = \(w.p)\n\nq = \(w.q)"
+                }
+                return
+            }
+            // Gitterverfahren nach Blömer/May.
+            let t = BloemerMay.optimalT(m)
+            let r = BloemerMay.attack(n: N, e: e, delta: delta, m: m, t: t)
             let dt = Date().timeIntervalSince(start)
             await MainActor.run {
                 running = false
                 if let r {
-                    result = "Angriff erfolgreich (\(String(format: "%.2f", dt)) s):\n\nd = \(r.d)\n\np = \(r.p)\n\nq = \(r.q)"
+                    result = "Angriff erfolgreich (Blömer/May, Gitterdimension \(r.latticeDimension), \(String(format: "%.1f", dt)) s):\n\nd = \(r.d)\n\np = \(r.p)\n\nq = \(r.q)"
                 } else {
-                    result = "Es wurde kein kleiner geheimer Schlüssel gefunden (d ist vermutlich ≥ N^(1/4))."
+                    result = "Es wurde kein kleiner geheimer Schlüssel gefunden. Für δ nahe 0,29 ggf. m erhöhen (deutlich längere Laufzeit)."
                 }
             }
         }

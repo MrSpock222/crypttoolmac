@@ -10,10 +10,11 @@ import Foundation
 /// Gleitkomma gerechnet, das Ergebnis ist also exakt und reproduzierbar.
 public enum Lattice {
 
-    /// LLL-reduziert die Zeilen von `basis` (jede Zeile ein Gittervektor) mit δ = 3/4.
-    /// Die Vektoren müssen linear unabhängig sein. Rückgabe: die reduzierte Basis,
-    /// kürzeste Vektoren zuerst tendenziell oben.
-    public static func reduce(_ basis: [[BigInt]]) -> [[BigInt]] {
+    /// LLL-reduziert die Zeilen von `basis` (jede Zeile ein Gittervektor). Der Parameter δ
+    /// (`deltaNum/deltaDen`, Standard 3/4) steuert die Reduktionsqualität; Werte nahe 1
+    /// (z. B. 99/100) liefern kürzere Vektoren und werden für Coppersmith/Boneh-Durfee benötigt.
+    /// Die Vektoren müssen linear unabhängig sein.
+    public static func reduce(_ basis: [[BigInt]], deltaNum: Int = 3, deltaDen: Int = 4) -> [[BigInt]] {
         let n = basis.count
         guard n > 0 else { return basis }
         let dim = basis[0].count
@@ -69,8 +70,10 @@ public enum Lattice {
 
             // --- Schritt 3: Lovász-Bedingung testen ---
             reduceStep(k, k - 1)
-            let lhs = BigInt(4) * d[k] * d[k - 2]
-            let rhs = BigInt(3) * d[k - 1] * d[k - 1] - BigInt(4) * lambda[k][k - 1] * lambda[k][k - 1]
+            // δd·d_k·d_{k-2} < δn·d_{k-1}² − δd·λ²   (δ = deltaNum/deltaDen)
+            let dn = BigInt(deltaNum), dd = BigInt(deltaDen)
+            let lhs = dd * d[k] * d[k - 2]
+            let rhs = dn * d[k - 1] * d[k - 1] - dd * lambda[k][k - 1] * lambda[k][k - 1]
             if lhs < rhs {
                 // SWAP(k)
                 let lam = lambda[k][k - 1]

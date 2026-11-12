@@ -3,7 +3,7 @@
 (Früher: „nicht enthaltene Funktionen“. Seit Version 1.3.0 sind alle CT1-Funktionen vorhanden;
 der Dateiname bleibt aus Gründen stabiler Links erhalten.)
 
-Vergleich der macOS-Version (1.3.0) mit CrypTool 1.4.x für Windows (deutsch).
+Vergleich der macOS-Version (1.4.0) mit CrypTool 1.4.x für Windows (deutsch).
 
 **Alle 201 Menüeinträge** von CT1 (Text-, Hex-, Diagramm- und 3D-Fenster) gibt es auf dem Mac
 mit demselben Namen an derselben Stelle, und **alle sind funktionsfähig** – es gibt keinen
@@ -31,13 +31,19 @@ gibt es wie in CT1 unter *Einzelverfahren ▸ RSA-Kryptosystem* **und** *Analyse
 |---|---|---|
 | Faktorisieren mit teilweise bekanntem p … | Coppersmith (höchst-/niederstwertige Bits), nötig: ⌈n/4⌉+1 Bit von p | ja (eindeutiger Faktor) |
 | Angriff auf stereotype Nachrichten … | Coppersmith bei kleinem e, unbekannter Teil < N^(1/e) | ja (eindeutige Nachricht) |
-| Angriff auf kleine geheime Schlüssel … | Kettenbruchverfahren nach Wiener | ja, wo anwendbar (s. u.) |
+| Angriff auf kleine geheime Schlüssel … | Gitterverfahren nach Blömer/May (Boneh/Durfee); Wiener als schneller Vorlauf für δ < 0,25 | ja |
 
-**Einzige echte Methodenabweichung – kleiner geheimer Schlüssel:** CT1 nutzt das *Gitterverfahren
-nach Blömer/May* (δ = log(d)/log(N) < 0,290). Die macOS-Version nutzt das *Kettenbruchverfahren
-nach Wiener* (δ < 0,25). Das gefundene d, p, q ist identisch (es ist Bobs eindeutiger privater
-Schlüssel) – nur der abgedeckte δ-Bereich ist etwas kleiner. Für Unterrichtsbeispiele mit kleinem d
-stimmen die Ergebnisse überein; der Dialog weist auf den Unterschied hin.
+**Kleiner geheimer Schlüssel – gleiches Verfahren wie CT1:** Seit Version 1.4.0 ist das
+*Gitterverfahren nach Blömer/May* (Boneh/Durfee, δ < 0,292) nativ umgesetzt – dasselbe Verfahren
+wie in CT1 (bivariate Coppersmith-Nullstellensuche mit Resultante). Für sehr kleines d (δ < 0,25)
+wird zuerst das schnelle Kettenbruchverfahren (Wiener) versucht; es liefert exakt denselben
+Schlüssel. Das gefundene d, p, q ist in jedem Fall identisch mit CT1 (es ist Bobs eindeutiger
+Schlüssel).
+
+*Leistungshinweis:* CT1 nutzt die stark optimierte Fließkomma-LLL der NTL-Bibliothek. Die
+macOS-Version verwendet eine exakte Ganzzahl-LLL; sie ist für kleine bis mittlere Schlüssel
+zuverlässig, aber langsamer. Für δ nahe 0,29 oder sehr große N können die nötigen großen Gitter
+lange dauern (der Dialog weist darauf hin, m lässt sich einstellen).
 
 ### Seitenkanalangriff auf „Textbook-RSA“ (nach Ulrich Kühn)
 
