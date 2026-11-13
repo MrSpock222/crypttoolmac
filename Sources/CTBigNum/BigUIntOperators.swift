@@ -9,7 +9,7 @@ extension BigUInt {
 
     /// Subtraction; precondition: `lhs >= rhs`.
     public static func - (lhs: BigUInt, rhs: BigUInt) -> BigUInt {
-        precondition(lhs >= rhs, "BigUInt: Unterlauf bei Subtraktion")
+        precondition(lhs >= rhs, "BigUInt: underflow in subtraction")
         return BigUInt(normalizedLimbs: Limbs.sub(lhs.limbs, rhs.limbs))
     }
 
@@ -42,14 +42,14 @@ extension BigUInt {
 
     /// Quotient and remainder of a truncating division (precondition: divisor != 0).
     public func quotientAndRemainder(dividingBy divisor: BigUInt) -> (quotient: BigUInt, remainder: BigUInt) {
-        precondition(!divisor.isZero, "Division durch null")
+        precondition(!divisor.isZero, "Division by zero")
         let (q, r) = Limbs.divMod(limbs, divisor.limbs)
         return (BigUInt(normalizedLimbs: q), BigUInt(normalizedLimbs: r))
     }
 
     /// Quotient and remainder for a single word divisor.
     public func quotientAndRemainder(dividingBy divisor: UInt64) -> (quotient: BigUInt, remainder: UInt64) {
-        precondition(divisor != 0, "Division durch null")
+        precondition(divisor != 0, "Division by zero")
         if limbs.isEmpty { return (BigUInt(), 0) }
         let (q, r) = Limbs.divSmall(limbs, divisor)
         return (BigUInt(normalizedLimbs: q), r)
@@ -57,7 +57,7 @@ extension BigUInt {
 
     /// `self mod m` for a single word modulus (fast path).
     public func remainder(dividingBy m: UInt64) -> UInt64 {
-        precondition(m != 0, "Division durch null")
+        precondition(m != 0, "Division by zero")
         if limbs.isEmpty { return 0 }
         return Limbs.modSmall(limbs, m)
     }
@@ -140,7 +140,7 @@ extension BigUInt {
 
     /// self^e for e >= 0 (binary exponentiation). Precondition: e >= 0.
     public func power(_ e: Int) -> BigUInt {
-        precondition(e >= 0, "Negativer Exponent")
+        precondition(e >= 0, "Negative exponent")
         if e == 0 { return 1 }
         if isZero { return self }
         if limbs == [1] { return self }

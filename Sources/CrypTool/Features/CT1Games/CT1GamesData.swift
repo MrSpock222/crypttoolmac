@@ -1,4 +1,4 @@
-// Generated from the CrypTool 1 sources (NumberShark, setup/template, setup/template-de).
+// Generated from the CrypTool 1 sources (NumberShark, setup/template, setup/template-en).
 // Do not edit by hand. Content © CrypTool-Team, Apache License 2.0.
 // swiftlint:disable all
 import Foundation
@@ -423,253 +423,223 @@ best known
 403:50925:401,361,323,391,299,403,377,341,217,371,343,329,301,287,265,395,365,355,335,305,295,259,245,237,393,381,339,327,321,309,303,291,267,262,398,394,386,382,362,358,346,334,326,314,302,298,278,274,249,175,325,275,385,147,231,363,242,165,195,273,117,387,369,351,333,297,279,261,243,207,345,189,171,399,285,135,315,225,375,404,388,356,332,316,292,284,268,244,236,212,188,376,402,366,354,318,282,258,344,246,328,222,296,186,248,372,374,370,310,250,230,184,368,276,170,255,357,238,350,322,266,182,338,286,150,210,294,196,392,364,208,156,390,312,260,340,272,234,342,228,380,304,204,306,198,330,220,308,176,352,264,396,224,168,336,252,378,270,180,300,200,400,280,240,360,216,324,320,256,384,288,290,232,348:173:401
 404:51329:401,361,323,391,299,403,377,341,217,371,343,329,301,287,265,395,365,355,335,305,295,259,245,237,393,381,339,327,321,309,303,291,267,262,398,394,386,382,362,358,346,334,326,314,302,298,278,274,249,175,325,275,385,147,231,363,242,165,195,273,117,387,369,351,333,297,279,261,243,207,345,189,171,399,285,135,315,225,375,404,388,356,332,316,292,284,268,244,236,212,188,376,402,366,354,318,282,258,344,246,328,222,296,186,248,372,374,370,310,250,230,184,368,276,170,255,357,238,350,322,266,182,338,286,150,210,294,196,392,364,208,156,390,312,260,340,272,234,342,228,380,304,204,306,198,330,220,308,176,352,264,396,224,168,336,252,378,270,180,300,200,400,280,240,360,216,324,320,256,384,288,290,232,348:174:401
 """#
-    /// German NumberShark online help (sharkHelp_de); Windows screenshots are omitted.
+    /// English NumberShark online help (sharkHelp_en); Windows screenshots are omitted.
     static let sharkHelpPages: [String: String] = [
         "NumberShark.html": #"""
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" Content="text/html; charset=utf-8">
-<TITLE>Bedienung des Zahlenhai-Spiels</TITLE>
+<TITLE>Number Shark manual</TITLE>
 <link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
 </HEAD>
 
 <BODY>
-<h3><P><A NAME="zahlenhai"></A><B>Bedienung des Zahlenhai-Spiels</B></P></h3>
 
-<p>Zum Spielbeginn ist das Muschelfeld (auch "Zahlenvorrat" genannt) mit einer
-bestimmten Anzahl von Zahlen gefüllt (zum Beispiel mit den Zahlen 1-20).</p>
+<h3><P><A NAME="zahlenhai"></A><B>Number Shark manual</B></P></h3>
 
-
-<h4><u>1. Die Spielidee</u></h4>
-
-<p>Die Spielidee des Zahlenhais besteht darin, dass Du von den ausw&auml;hlbare
-Zahlen m&ouml;glichst viele f&uuml;r Dich gewinnst, so dass deren Summe
-gr&ouml;&szlig;er ist als die Summe der Zahlen des Zahlenhais und m&ouml;glichs
-maximal. W&auml;hlst Du eine Zahl, bekommt der Zahlenhai alle noch freien,
-<a href="NumberSharkRealFactors.html">echten Teiler</a> davon, usw. Die echten
-Teiler von 6 sind zum Beispiel 1, 2, 3.</p>
-
-<p>Das Spiel lehrt spielerisch den Umgang mit Teilern und
-<a href="NumberSharkPrimes.html">Primzahlen</a> 
-und wurde urspr&uuml;nglich f&uuml;r Sch&uuml;ler konzipiert.</p>
-
-<P>Im Folgenden wird die Bedienung des Zahlenhai-Spiels anhand der
-Dialogfenster erl&auml;utert.</P>
+<p>At the beginning the shell square will be filled with a certain amount of
+numbers, also called numbers stack (for example with the numbers 1-20).</p>
 
 
-<p><h4><u>2. Bedienung des Spiels - Hauptdialogfenster</u></h4></p>
+<p><h4><u>1. The game idea</u></h4></p
 
-<p>Das Spiel beginnt, indem Du Dir eine Zahl (z.B. 19) ausw&auml;hlst -- der
-Zahlenhai bekommt dann die echten Teiler (hier die 1) davon. Diese gew&auml;hlte
-Zahl und deren Teiler werden im Menüfeld (Block mit dem Zahlenvorrat) ausgegraut, sie sind nicht mehr ausw&auml;hlbar (nicht mehr frei).</p>
+<p>The game idea of the Number Shark game is to win as many of the numbers
+as possible for yourself, so that the sum of your numbers is higher than the
+sum of the Number Shark, and also to reach the highest possible score. When
+you choose a number, the Number Shark gets all free
+<a href="NumberSharkRealFactors.html">real factors</a> etc.
+(the real factors of the number "6" are "1", "2", and "3").</p>
 
-<p>Nachdem Du und der Zahlenhai jeweils einen Zug gemacht haben, geht es folgenderma&szlig;en weiter:</p>
+<p>The Number Shark game playfully teaches the handling with factors an
+<a href="NumberSharkPrimes.html">prime numbers</a> and was originally
+designed for school kids.</p>
 
-<p>Du nimmst Dir eine neue Zahl und der Zahlenhai bekommt die Teiler -- bis alle Zahlen verteilt sind.</P>
+<P>In the following paragraph the handling of the Number Shark program is described.</P>
 
-<P>Dein Ziel ist es, dass die Summe Deiner Zahlen gr&ouml;&szlig;er ist als die
-Summe der Zahlen, die der Zahlenhai frisst.</p>
+
+<p><h4><u>2. Handling of the game -  Main dialog</u></h4></p>
+
+<p>The game starts once you picked a number -- the Number Shark gets the
+factors of this number. This number and its factors will be deactivated in
+the shell square, you can’t use them any longer.</p>
+
+<p>Once you and the Number Shark completed one round the next steps are:</p>
+
+<p>You take a number and the Number Shark gets the factors - until all
+numbers are used.</P>
+
+<P>Your goal is that the sum of your numbers is higher than the sum of the
+numbers the Number Shark eats.</p>
 
 <P></P> 
 
-<P>In der Gruppierung "Einstellungen f&uuml;r ein neues Spiel" kannst Du den
-Zahlenvorrat bestimmen, also mit wieviel Zahlen Du spielen m&ouml;chtest.
-Diese Eingabe muss durch den <b>OK</b>-Knopf oder durch die <b>Enter</b>-Taste
-best&auml;tigt werden. Beim ersten Aufruf des Programms enth&auml;lt dieses
-Feld den Wert 20.<br>Dr&uuml;ckst Du <b>Neues Spiel</b>, bleibt die zuletzt
-gew&auml;hlte Zahl stehen. In den Spieloptionen kannst Du festlegen, ob sich
-das Programm diese Zahl f&uuml;r den n&auml;chsten Programmstart merkt oder 
-nicht.</P>
+<P>In the group box "Settings for a new game" you can select with how many numbers you want to play the game. This decision needs to be confirmed by the <b>OK</b> button or the <b>Enter</b> key on your keyboard. When you first start the game this field contains the value 20. <br>If you press <b>New game</b> the number inserted lastly will be conserved. In the "Game Options" dialog you can decide if the program should remember this number for the next start too.</P>
 
-<p>Wenn Du den <b>OK</b>-Button dr&uuml;ckst, f&uuml;llt sich der Zahlenvorrat
-mit den Muscheln, die man wie Buttons per Mausklick bedienen kann. Es sind auf
-dem Block nur maximal 30 Muscheln gleichzeitig sichtbar.
+<p>If you press the <b>OK</b> button, the number store will be filled with shells which you can use as normal buttons. You only can see 30 shells at once in the block.
 
-Wenn Du Dich f&uuml;r eine Anzahl &uuml;ber 30 entscheidest, erscheinen &uuml;ber
-dem Block Reiter, &uuml;ber die Du auf alle anderen Zahlen-Muscheln zugreifen
-kannst. Du kannst Dich mit dem Tabulator und mit den Pfeiltasten durch die
-Zahlen bewegen. Die Zahlen kannst Du auch mit der Enter-Taste oder der Leertaste
-ausw&auml;hlen.</p>
+If you choose a number higher than 30, further tabs will appear above the block
+via which you can see all other shells. With the tabulator and the arrow keys
+on your keyboard, you can move through the numbers. The numbers can be selected
+with the Enter key or with the blank key.</p>
 
 <P></p>
 
-<p>Zur besseren Lesbarkeit werden die Zahlen in allen Muscheln im Zahlenvorrat in gelb dargestellt.</P>
+<p>For a better readability, all numbers in the shells are written in yellow.</P>
 
-<P>Die Muscheln selbst sind beim Start blau, d.h. Du kannst <b>jede</b> von ihnen ausw&auml;hlen.</P>
-
-<p></p>
-
-<P>Jede Zahl, die Du ausgew&auml;hlt hast, und auch jeder Teiler, den der
-Zahlenhai von dieser Zahl gefunden hat, wird grau gef&auml;rbt. Alle grauen
-Zahlen sind vergeben ("verbraucht" oder "gefressen") und k&ouml;nnen 
-von Dir in den folgenden Z&uuml;gen nicht mehr gew&auml;hlt werden.</P>
+<P>At the beginning of the game, all shells are blue, which means, that you can
+select <b>anyone</b> of it.</P>
 
 <p></p>
 
-<P>Die Spielverlaufstabelle, die anstelle des Haibilds nach Deiner ersten Auswahl erscheint, zeigt den 
-jeweils aktuellen Punktestand an. Dabei unterteilt sich die Liste in sechs Spalten:</P>
+<P>Every number you chose, and every factor of this number, will be colored
+in gray to show you that you cannot use this number any longer.</P>
 
+<p></p>
+
+<P>The game progress list which appears instead of the shark pictures after your first choice shows you the current score. The list is divided into six columns.<br>
 <ul>
-	<li>die Nummer der aktuellen Runde,</li>
-	<li>die Zahl, welche Du in der jeweiligen Runde gew&auml;hlt und
-       	    erhalten hast,</li>
-	<li>welche Zahlen sich daraufhin der Zahlenhai geschnappt hat,</li>
-	<li>Deine aktuelle Gesamtpunktzahl,</li>
-	<li>die aktuelle Gesamtpunktzahl des Hais und</li>
-	<li>wieviele Zahlen sich noch im Spiel befinden.</li>
+	<li>the current round,</li>
+	<li>the number you have chosen in this round,</li>
+	<li>which numbers the Number Shark had taken,</li>
+	<li>your current points,</li>
+	<li>the points of the Number Shark and</li>
+	<li>how many numbers are left in the game.</li>
 </ul>
+The width of the columns in the game progress list can be changed by the player, but they will not be adjusted automatically. Each row in the list can be selected and if the list is full a scroll bar will appear so that you can always scroll to every round.</p>
 
-<P>Die Spalten der Tabellen sind alle in ihrer Breite ver&auml;nderbar, passen
-sich aber nicht automatisch der maximalen Breite ihres Inhaltes an. Jede Zeile
-l&auml;sst sich zur besseren Lesbarkeit einzeln markieren. 
-Wenn der angezeigte Bereich der Liste komplett gef&uuml;llt ist, erscheint am
-rechten Rand ein Rollbalken (Bl&auml;tterleiste) und der Inhalt der Liste wird
-nach oben ger&uuml;ckt, damit immer der letzte Eintrag sichtbar ist.</p>
-
-<p>Immer wenn eine <a href="NumberSharkPrimes.html">Primzahl</a> gew&auml;hlt wurde (egal ob von Dir oder 
-vom Zahlenhai), wird in der Spielverlaufstabelle hinter diese Zahl die Markierung "(prim)" geschrieben, um 
-anzuzeigen, dass es sich bei der Zahl um eine Primzahl handelt.</p>
+<p>Always when a <a href="NumberSharkPrimes.html">prime number</a> was chosen, no matter from whom, "(prime)" will be written behind this number in the game progress list to show that this number is a prime number.</p>
 
 <p></P>
-<br>
-<p>
+
+<p>The following buttons will help you to control the game.</p>
+
 <table border="0">
 <tr>
 	<td></td>
-	<td>Wenn Du auf den Button <b>Neues Spiel</b> dr&uuml;ckst, dann kannst Du jederzeit ein neues Spiel 
-	starten. Dabei werden die Spielverlaufstabelle und auch die Muscheln zur&uuml;ckgesetzt. Nur die 
-	ausgew&auml;hlte Anzahl an Zahlen, mit der Du das letzte Spiel gespielt hast, bleibt erhalten.</td>
+	<td>When you press the button <b>New game</b> the course of the game and the shells are set back to the status they have at the beginning of the game. Only the amount numbers with which you played the last game will be kept.</td>
 </tr>
 <tr>
     <td></td>
-	<td>Mit dem Button <b>Laden</b> oder der Tastenkombination <b>SHIFT+ALT+L</b> kannst Du ein 
-	gespeichertes Spiel laden.</td>
+	<td>You can load a previously saved game with the <b>Load</b> button, or press <b>SHIFT+ALT+L</b>.</td>
 </tr>
 <tr>
     <td></td>
-	<td>Mit dem Button <b>Speichern</b> oder der Tastenkombination <b>SHIFT+ALT+S</b> kannst Du das 
-	aktuelle Spiel in der Datei <i>Zahlenhai.save</i> speichern.</td>
+	<td>Pressing the <b>Save</b> button or <b>SHIFT+ALT+S</b> saves the current game in the file <i>NumberShark.save</i>.</td>
 </tr>
 <tr>
 	<td></td>
-<td>Mit dem Button <b>R&uuml;ckw&auml;rts (Undo)</b> kannst Du bereits gespielte Spielz&uuml;ge r&uuml;ckg&auml;ngig machen, um Dich zum Beispiel f&uuml;r eine andere Zahl zu entscheiden.<br> Mit dem Button <b>Vorw&auml;rts (Redo)</b> kannst Du die r&uuml;ckg&auml;ngig gemachten Spielz&uuml;ge solange wieder vorw&auml;rts gehen, solange Du keine &Auml;nderungen im Spielverlauf vornimmst.</td>
+	<td>With <b>Undo</b> you can repeat previous rounds if you want to choose other numbers. With <b>Redo</b> you can go forward through the game as many steps as you went back via <b>Undo</b>.</td>
 </tr>
 <tr>
 	<td></td>
-	<td>Mit dem Button <b>Spieloptionen</b> &ouml;ffnet sich das Spieloptionen-Fenster, das auch vor dem ersten Aufruf gezeigt wurde.</td>
-</tr>	
+	<td>With the <b>Game options</b> button you get access to the options screen, which you also saw at the beginning of the game.</td>
+</tr>
 <tr>
 	<td></td>
-	<td>Der Button <b>Haifutter</b> wird immer dann aktiv, wenn es im Spiel Zahlen gibt, die keine Teiler mehr 
-	haben und selber auch keine Teiler mehr sind.<br>Wenn Du auf diesen Button dr&uuml;ckst, werden alle diese 
-	Zahlen dem Zahlenhai sofort zugeschrieben, da der Hai sie auf jeden Fall bekommen w&uuml;rde.</td>
+	<td>The button <b>Shark food</b> only gets active if there are numbers left in the game which have no more real factors and at the same time are not a factor of any other number.<br>If you press this button, all these numbers will be given to the Number Shark, because sooner or later he definitely gets these numbers. </td>
 </tr>
-	
+
 </table>
 
-<p>Nachdem Du auf die erste Zahl (Muschel) gedr&uuml;ckt hast, siehst Du am unteren Ende des Spieldialoges eine Anzeige, die immer den aktuellen Punktstand anzeigt. Auf der linken Seite sind Deine Punkte und auf der rechten die des Zahlenhais.</p>
+<p>After you pressed the first shell or selected the first number you can see an LED-like display at the bottom of the dialog. On the left side you can see you current points and on the right side the points from the Number Shark.</p>
+
+
+
+<p>While playing the game you can make the shells on the buttons visible/invisible by pressing <b>SHIFT+ALT+C</b> on your keyboard or the <b>Change Style</b> button.</p>
 
 <p></p>
 
-<p>Um die Zahlen auf den Muscheln noch besser lesen zu können, kannst Du während des Spieles mit der Tastenkombination <b>SHIFT+ALT+C</b> oder dem Button <b>Stil ändern</b> die Muscheln ein- und wieder ausblenden. Dies kann auch zu einer schnelleren Darstellung des Spieles führen, falls es bei Dir zu langsam laufen sollte.</p>
 
-<p></p>
-
-
-<p><h4><u>3. Spielregeln</u></h4></p>
+<p><h4><u>3. Game rules</u></h4></p>
 <table border="0">
 <tr>
 	<td></td>
-	<td>&Uuml;ber den <b>Hilfe</b>-Button kannst Du Dir jederzeit die Online-Hilfe zum Zahlenhai anschauen. Du kannst auch einfach die F1-Taste dr&uuml;cken, um die Hilfe aufzurufen</td>
+	<td>Via the <b>Help</b> button you can take a look at the online help of the Number Shark game. This is also possible via the F1 key on your keyboard.</td>
 </tr>
 <tr>
 	<td><p>		<br>		</p></td>
 </tr>
 <tr>
 	<td></td>
-	<td>&Uuml;ber den Button <b>Spielregeln</b>, am oberen rechten Rand des Spielfensters, erh&auml;ltst Du jederzeit eine kurze Zusammenfassung der Spielregeln.</td>
+	<td>Via the button <b>Rules of the game</b> you get a short summary of the game rules.</td>
 </tr>
 </table>
 
 <P></p>
 
 
-<p><h4><u>4. Festlegung der Spieloptionen</u></h4></p>
+<p><h4><u>4. Setting the game options</u></h4></p>
 
-<p>Zu dem Spieloptionen-Dialog kommt man, indem man im Hauptfenster auf den Button <b>Spieloptionen</b> dr&uuml;ckt.</p>
+<p>You can reach the options by pressing the <b>Game options</b> button in the main dialog.</p>
 
-<p><B>4.1</B>: Im Reiter <b>Willkommen</b> findest Du ein paar kurze Informationen zu dem Zahlenhai Spiel.</p>
+<p><B>4.1</B>: On the <b>Welcome</b> tab you can read some information about the Number Shark game.</p>
 
+<P></p>
 
-
-<p><B>4.2</B>: Unter dem Reiter <b>Standard</b> hast Du folgende M&ouml;glichkeiten:
+<p><B>4.2</B>: In the <b>Standard</b> tab you have the following possibilities:</p>
 <ul>
-	<li>Du kannst Deinen Spielernamen eingeben, der am Ende eines Spieles in die Datei <a href="NumberSharkTutorial.html#Zusammenfassung">Zusammenfassung.txt</a> geschrieben wird und der w&auml;hrend des Spiels in der Kopfzeile des Spielfensters sichtbar ist.</li>
-	<li>Ist die Checkbox "ToolTips aktivieren" gesetzt, kannst Du Dir w&auml;hrend des Spiels zu allen aktiven Muscheln (diese sind blau gef&auml;rbt) die noch verf&uuml;gbaren Teiler anzeigen lassen. Diese Option sollten nur Anf&auml;nger aktivieren, die noch nicht gut teilen k&ouml;nnen oder die noch keinen Spiel&uuml;berblick haben.</li>
-	<li>Mit der Option "Spieloptionen beim n&auml;chsten Programmstart anzeigen" kannst Du Dir aussuchen, ob Du den Spieloptionen-Dialog vor dem n&auml;chsten Programmstart sehen m&ouml;chtest oder nicht.</li>
-	<li>Ist der Haken bei "Die zuletzt gew&auml;hlte Anzahl der ausw&auml;hlbaren Zahlen beim n&auml;chsten Programmstart wieder eintragen" gesetzt, merkt sich das Programm diese Zahl f&uuml;r den n&auml;chsten Programmstart.</li>
+	<li>You can insert your player name, which will be written into the <a href="NumberSharkTutorial.html#Summary">Summary.txt</a> at the end of the game and it is shown in the head of the main dialog.</li>
+	<li>If the checkbox "Activate tool tips" is set, then the game will show you all factors of a number. This should only be used by beginners who don’t have enough experience and know-how with this game, factors and prime numbers.</li>
+	<li>With "Show dialog at next game start" you can decide if you want to see the options dialog at the next game start or not.</li>
+	<li>With the checkbox "Remember the last total number..." the game stores this number for the next game start.</li>
 </ul>
-<br>Diese Einstellungen kannst Du jederzeit w&auml;hrend des Spiels &auml;ndern.
+<br>All these settings can be changed in the game at any time.
 </p>
 
 <P></p>
 
-<p><B>4.3</B>: Unter dem Reiter <b>Maximale Punktzahl</b> kannst Du Dir anzeigen lassen, wie viele Punkte man 
-maximal bei welcher Zahlenanzahl n (Zahlenvorrat) bekommen kann.</P>
+<p><B>4.3</B>: Via the tab <b>Maximum score</b> the program can show you how many points you can get with 
+your chosen count of numbers.</P>
 
-<P>Die Berechnung dieser optimalen Werte ist mit unserem Brute-Force-Algorithmus schon für Zahlen 
-bis 20 sehr rechenintensiv. Wir sch&auml;tzen die Rechendauer der derzeit implementierten 
-Brute-Force-Suche für n=23 auf einem 3 GHz PC auf ca. 80 Tage bei 100% CPU-Auslastung. Aber auch mit 
-dem neuen Back-Tracking-Algorithmus dauert die Suche ab n=40 über zehn Minuten.</P>
+<P>The calculation of these optimal values with our brute-force algorithm takes very long even for 
+numbers up to 20. We believe a search for n=23 will take around 80 days on a 3 GHz PC. But even the new 
+backtracking algorithm needs over ten minutes for numbers bigger than 40.</P>
 
-<P>Deshalb wurden die Ergebnisse bis n=158 vorberechnet. Ist der Radiobutton <B>Die maximal mögliche 
-Punktzahl anzeigen</B> ausgewählt, erscheint das Ergebnis nach einem Klick auf den Button <B>Start</B> 
-sofort.</P>
+<P>Therefore the results for n=158 have been pre-calculated. If the radio button <B>Show highest score 
+possible</B> is checked, the result will be displayed immediately after clicking the <B>Start</B> 
+button.</P>
 
-<P>Neben der <a href="NumberSharkDevelopment.html#Berechnung">maximal m&ouml;glichen Punktzahl</a> 
-wird auch noch mit ausgegeben, welche Zahlen Du in welcher Reihenfolge dr&uuml;cken solltest, um diese 
-maximale Punktzahl zu erreichen. Dieser optimale <B>Weg</B> ist nicht immer eindeutig, oft k&ouml;nnen 
-einzelne direkt aufeinander folgende Zahlen in der Reihenfolge der Auswahl miteinander vertauscht 
-werden (es gibt also meist keine eindeutige Lösung). Zus&auml;tzlich erh&auml;lt man noch einen Tipp, mit welcher 
-Zahl man das Spiel beginnen muss, um m&ouml;glichst viele Punkte zu erreichen.</p>
+<P>Beside the <a href="NumberSharkDevelopment.html#Calculation">maximum possible points</a>, you also 
+get one <B>way</B> on which you can achieve this score, which means that the program shows you in which 
+order you should take the numbers. Sometimes the order can be changed in some parts and you will also 
+achieve the highest score (so mostly there is no unique solution). And you get a hint with which number you need 
+to start the game in order to achieve the highest score.</p>
 
 <P></p>
 
-<P><B>4.4</B>: Unter dem Reiter <B>Tastenkombinationen</B> werden die
-implementierten Tastenkombinationen dargestellt, z.B:</P>
+<P><B>4.4</B>: Below the tab <B>Accelerators</B> you can find the implemented
+keyboard shortcuts, e.g.:</P>
 <table border="0">
   <tr>
     <td>TAB</td>
-    <td><p>Auswahl der Muschel im angezeigten Zahlenblock (eines Reiters).</p></td>
+    <td><p>Selects the next shell within the shown number block (of one tab).</p></td>
   </tr>
   <tr>
-    <td>ENTER / LEERTASTE</td>
-    <td><p>Auswahl der Zahl der selektierten Muschel per Tastatur.</p></td>
+    <td>ENTER / SPACE</td>
+    <td><p>Chooses the number of the selected shell via keyboard.</p></td>
   </tr>
   <tr>
     <td>SHIFT + ALT + C</td>
-    <td><p>Die Darstellung der Zahlen alterniert zwischen Text in Muscheln 
-    und Text in normalen Buttons (das zweite ist besser lesbar).</p></td>
+    <td><p>Alternates how the numbers are written: within a shell or
+	   within a normal button (the latter is better to read).</p></td>
   </tr>
   <tr>
     <td>SHIFT + ALT + L</td>
-    <td><p>Lädt ein vorhandenes Spiel.</p></td>
+    <td><p>Loads an existing game.</p></td>
   </tr>
   <tr>
     <td>SHIFT + ALT + S</td>
-    <td><p>Speichert das aktuelle Spiel.</p></td>
+    <td><p>Saves the current game.</p></td>
   </tr>
-  
 </table>
 
 
 
-
 <br><br>
-<p>Wenn Du N&auml;heres zur Entstehungsgeschichte des Zahlenhai-Spieles erfahren willst, klicke <a href="NumberSharkDevelopment.html">hier</a>.</p>
+<p>You can find more information about the development of the Number Shark game  <a href="NumberSharkDevelopment.html">here</a>.</p>
 
-<p>Aus rechtlichen Gr&uuml;nden m&uuml;ssen wir explizit auf <a href="NumberSharkLicense.html">Lizenzbestimmungen / Haftungsausschluss</a> hinweisen.</p>
+<p>By legal reasons we explicitly have to point at the <a href="NumberSharkLicense.html">terms of license and the information regarding non-liability</a>.</p>
 
 </BODY>
 </HTML> 
@@ -679,162 +649,146 @@ implementierten Tastenkombinationen dargestellt, z.B:</P>
 <HTML>
 <HEAD>
 <meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
-<Title>Tutorial zum Zahlenhai-Spiel</Title>
+<Title>Number Shark tutorial</Title>
 <link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
 </HEAD>
 <BODY>
 
-<h3><P><A NAME="tutorial"></A><B>Zahlenhai-Tutorial am Beispiel eines Zahlenvorrats von 20 Zahlen</B></P></h3>
+<h3><P><A NAME="tutorial"></A><B>Number Shark tutorial on an example with 20 numbers</B></P></h3>
 
-<p>Der "Zahlenhai" ist ein Lernspiel, das Schülern (und Erwachsenen ;)) hilft, ihr Verst&auml;ndnis f&uuml;r 
-Teiler und <a href="NumberSharkPrimes.html">Primzahlen</a> zu verbessern.</p>
+<p>Number Shark is an educational game for children (and andults ;)) to improve their knowledge of factors 
+and <a href="NumberSharkPrimes.html">prime numbers</a>.</p>
 
-<p>Zu Beginn wird im Muschelfeld eine bestimmt Menge an Zahlen (z.B. die Zahlen von 1-20) bereitgestellt 
-(wir nennen diese Menge nachfolgend auch den "Zahlenvorrat").</p>
+<p>At the beginning the shell square will be filled with a certain amount of numbers (for example the 
+numbers 1-20).</p>
 
-<p>Das Spiel ist sehr einfach zu spielen f&uuml;r kleinere Zahlenvorr&auml;te. Und es ist eine echte 
-Herausforderung f&uuml;r gr&ouml;&szlig;ere Zahlenvorr&auml;te.</p>
+<p>This game is easy with a small amount of numbers, but a real challenge with a high amount of numbers.</p>
 
-<p><h4><u>1. Die Spielidee</u></h4></p>
+<p><h4><u>1. The game idea</u></h4></p>
 
-<p>Die Spielidee besteht darin, von den auswählbaren Zahlen im Zahlenvorrat möglichst viele für sich zu 
-gewinnen, so dass deren Summe größer ist als die des Zahlenhais und möglichst maximal.<br>Wählt der Spieler 
-eine Zahl, bekommt der Zahlenhai alle <a href="NumberSharkRealFactors.html">echten Teiler</a> davon. Dies 
-geht so lange, bis alle Zahlen gewählt oder gefressen sind.</p>
+<p>The game idea is to win as many of the numbers as possible for yourself, so that the sum of your numbers 
+is higher than the sum of the Number Shark, and also to score as high as possible. When you choose a number, 
+the Number Shark gets all free <a href="NumberSharkRealFactors.html">real factors</a> until there are no more 
+numbers left in the game.</p>
 
-<p>In diesem Tutorial-Teil der Online-Hilfe wird der Spielverlauf anhand eines konkreten Spiels mit einem 
-Zahlenvorrat von 20 Zahlen verdeutlicht.</p>
+<p>In this tutorial part of the online help the game course will be described on an example game with 20 
+numbers.</p>
 
-<p><h4><u>2. Optionen am Beginn eines neuen Spiels</u></h4></p>
+<p><h4><u>2. Options at the beginning of a new game</u></h4></p>
 
-<p>Zur Begr&uuml;&szlig;ung erscheint beim Programmstart das Spieloptionen-Fenster mit dem Reiter 
-<b>Willkommen</b> im Vordergrund.</P>
+<p>When you start the game the first time you see the <b>Welcome</b> tab in the front.</p>
 
 <P></p>
 
-<p>Im Spieloptionen-Fenster kannst Du</P>
+<P>In the game options window you can</P>
 
 <ul>
-	<li>Deinen Namen eingeben,</li>
-	<li>die ToolTips f&uuml;r die Zahlen im Zahlenvorrat an- oder ausschalten,</li>
-	<li>angeben, ob der Spieloptionen-Dialog <u>vor</u> dem n&auml;chsten Programmstart wieder angezeigt 
-	werden soll oder nicht, und</li>
-	<li>Dir aussuchen, ob sich das Programm die Anzahl des Zahlenvorrates f&uuml;r den n&auml;chsten 
-	Programmstart merken soll oder nicht. Wenn diese Einstellung nicht gesetzt ist, ist bei jedem 
-	Programmstart die 20 als Anzahl ausw&auml;hlbarer Zahlen eingestellt.</li>
+	<li>enter your name,</li>
+	<li>switch the tool tips for the shell square on or off,</li>
+	<li>decide if you want to see this dialog <u>before</u> the next program start and</li>
+	<li>you can decide if the program should remember the last amount of numbers with which you played for 
+	the next program start.</li>
 </ul>
 
-<P>Du kannst in dem Spieloptionen-Dialog auch ohne jede Eingabe einfach die Enter-Taste dr&uuml;cken oder 
-auf den Button <b>Zum Spiel</b> klicken.</p>
+<P>You can start the game without setting any options by pressing the enter key or the <b>To the game</b> 
+button.</P>
 
 <P></p>
 
-<p><h4><u>3. Der erste Zug</u></h4></p>
+<p><h4><u>3. The first round</u></h4></p>
 
 <P></p>
 
-<p>Beim ersten Start des Spieles ist immer 20 als Anzahl aller zu Beginn ausw&auml;hlbaren Zahlen 
-(Zahlenvorrat) eingetragen. Diese Einstellung wurde f&uuml;r dieses Tutorial beibehalten.</p>
+<p>When you first start the game, there is an amount of 20 numbers set for the shell square. We kept this 
+for the tutorial.</p>
 
-<p>Da der Zahlenhai alle verf&uuml;gbaren <a href="NumberSharkRealFactors.html">echten Teiler</a> der 
-gew&auml;hlten Zahl erh&auml;lt (bzw. auch die gew&auml;hlte Zahl selbst, wenn keine ihrer echten Teiler 
-mehr verf&uuml;gbar sind), solltest Du darauf achten, dass der Zahlenhai meist nur eine einzige Zahl 
-bekommt.<br>Um ein optimales Ergebnis zu erzielen, musst Du in der ersten Runde immer die h&ouml;chste 
-verfügbare Primzahl ausw&auml;hlen, da diese nur "1" und sich selbst als Teiler hat. In unserem Beispiel 
-w&auml;re die h&ouml;chste Primzahl im Zahlenvorrat die "19".<br>Da die "1" Teiler aller Zahlen ist, ist 
-sie immer nach der ersten Runde weg.<br>Wird eine Zahl von Dir ausgew&auml;hlt oder vom Zahlenhai gefressen, 
-ist sie nicht mehr verf&uuml;gbar und wird im Zahlenvorrat grau gef&auml;rbt und damit deaktiviert.</p>
-
-<P></p>
-
-<p>Wenn w&auml;hrend des Spielverlaufes ausw&auml;hlbare Zahlen &uuml;brig bleiben, die dem Spieler keine 
-Punkte mehr einbringen k&ouml;nnen (das passiert, wenn die Zahlen keine freien, echten Teiler mehr haben 
-und auch nicht selbst Teiler einer anderen, noch freien Zahl sind) wird der Button <b>Haifutter</b> aktiv. 
-Dieser gibt dem Spieler die M&ouml;glichkeit, sofort all diese Zahlen aus dem Spiel herauszunehmen (und dem 
-Hai zum Fressen vorzuwerfen). Es empfiehlt sich, wann immer der Button <B>Haifutter</B> erscheint, diesen zu 
-dr&uuml;cken. Man gewinnt dadurch &Uuml;bersicht, welche ausw&auml;hlbaren Zahlen man noch dr&uuml;cken kann, 
-um sie auch f&uuml;r sich zu gewinnen.</p>
-
-<p><h4><u>4. Weitere Z&uuml;ge</u></h4></p>
-
-<p>Nach dem ersten Zug wird die Entscheidung komplizierter. Du solltest versuchen, die Zahlen so zu 
-w&auml;hlen, dass der Zahlenhai immer nur einen Teiler bekommt. Manchmal geht dies aber nicht, da die "2" 
-ein Teiler vieler Zahlen ist. Also solltest Du zumindest versuchen, dem Zahlenhai so wenig wie m&ouml;glich 
-Teiler zu geben. Dabei musst Du aber auch beachten, dass Du nicht zu kleine Zahlen w&auml;hlst, die zwar 
-vielleicht nur einen Teiler haben, aber wiederum selbst einer der wenigen Teiler einer gr&ouml;&szlig;eren 
-Zahl sein k&ouml;nnen. F&uuml;r den zweiten Zug empfiehlt es sich daher, die Zahl "10" (=2*5) oder "14" 
-(=2*7) zu w&auml;hlen. In unserem Beispiel haben wir die "10" gew&auml;hlt.</p>
+<p>Because the Number Shark gets every available <a href="NumberSharkRealFactors.html">real factor</a> of the 
+chosen number (and even the number itself if there are no more factors left), you should try to give the 
+Number Shark in most cases only one number in every round.<br>To achieve an optimal score, you must always 
+start the game with the highest prime number available, because prime numbers only have "1" and itself as a 
+factor. The highest prime number in the number stack in our example is the "19".<br>The Number Shark always 
+gets the "1" after the first round, because the "1" is a factor of every number.<br>Every chosen number or 
+shell (from you or from the Number Shark) is colored in gray and can't be used any longer in the game.</p>
 
 <P></p>
 
-<p>Da beim vorhergehenden Zug die "10" gew&auml;hlt wurde, hat jetzt die "14" nur noch die "7" als Teiler 
-und bietet sich daher als n&auml;chste Wahl an.</p>
+<p>The button <b>Shark food</b> gets active if there are numbers in the game which can't give you any more 
+points (this happens if there are numbers available with no more factors and which at the same time are not 
+a factor of another available number). With this button you can pass all these numbers directly to the Number 
+Shark. You should use this button always when it appears in order to have a better overview.</p>
+
+<p><h4><u>4.Next rounds</u></h4></p>
+<p>It's getting more difficult after the first round. Normally, the Number Shark should only get one factor 
+in every round, but sometimes this is not possible. The "2" for example is a factor of many numbers. That's 
+why you should try to give the Number Shark as few factors as possible, but you shouldn't choose numbers that 
+are too small, because they could be one of only a few factors of another number. So in the next round you 
+should choose the "10" (=2*5) or "14" (=2*7). In our example we take the number "10".</p>
 
 <P></p>
 
-<p>In den n&auml;chsten zwei Z&uuml;gen kann man gut die "15" und die "20" w&auml;hlen, da beide nur noch 
-einen freien Teiler (3 bzw. 4) haben.</p>
+<p>After the "10" we can now choose the "14" as the next number, because it has left only the "7" as a 
+factor.</p>
+
+<P></p>
+
+<p>In the next two rounds you should choose "15" and "20" because both only have one factor (3 or 4) 
+left.</p>
 
 <p></p>
 
-<p>Jetzt sind nur noch drei Zahlen &uuml;brig, die noch freie Teiler haben: die "12", "16" und "18".</p>
+<p>Now are only three numbers with free factors are left: the "12", "16" and "18".</p>
 
 <p></p>
 
-<p>Von den 3 Zahlen kann man zumindest f&uuml;r "12" und "18" eine klare Reihenfolge festlegen.</p>
-<p>Es empfiehlt sich, die "12" vor der "18" zu w&auml;hlen Beide haben die "6" als freien Teiler -- die 
-"12" hat aber nur noch die "6", dagegen hat die "18" zus&auml;tzlich aber noch die "9". W&uuml;rde man also 
-zuerst die "18" w&auml;hlen, kann man im sp&auml;teren Spielverlauf die "12" nicht mehr nehmen und verschenkt 
-somit Punkte an den Zahlenhai.</p>
 
-<p>Ob Du nun die "12" vor der "16" w&auml;hlst oder anders herum, spielt keine Rolle.</p>
+<P>Of the three at least there is a clear sequence order between "12" and "18".</P>
 
-<p></p>
+<p>It is suggested to take the "12" before the "18". Both have the "6" as a factor, but the "18" also has 
+the number "9". If you first take "18" than you can't take the "12" later in the game and you wasted 
+points.</p>
 
-<p>Als letzte Zahl mit freien Teilern ist jetzt nur noch die "18" &uuml;brig.</p>
+<p>It doesn't matter if you take "16" or the "12" at first.</p>
 
 <p></p>
 
-<p><a name="Uebrige">Wenn</a> Du den Button <b>Haifutter</b> schon nach der ersten Zahl gedr&uuml;ckt hast, 
-dann ist das Spiel jetzt zu Ende. Falls Du das nicht getan hast, sind jetzt noch die Zahlen "11", "13" und 
-"17" &uuml;brig. Jetzt hast Du die Wahl, ob Du jede der restlichen Muscheln einzeln anklicken m&ouml;chtest, 
-oder ob Du den <b>Haifutter</b>-Button dr&uuml;ckst. Punkte kannst Du f&uuml;r diese drei Zahlen nicht mehr 
-erhalten.</p>
+<p>The last number with free factors is the "18".</p>
 
 <p></p>
 
-<p>Jetzt sind alle Zahlen verteilt und das Spiel ist zu Ende.</p>
+<p><a name="Remaining">If</a> you had pressed the <b>Shark food</b> button after the first round, then 
+the game is over now. If you didn't, you can do it now or you have to click the last three numbers 
+individually to finish the game. But you won't get anymore points for these numbers.</p>
 
 <p></p>
 
-<p>Das Programm kann nach Spielende eine Zusammenfassung des Spiels in eine Datei schreiben. Die Datei wird 
-in dem Ordner abgespeichert, in dem sich auch die Datei "Zahlenhai.exe" befindet.<br>Schreibt man bei einem 
-neuen Spiel eine neue Zusammenfassung mit denselben Daten, wird eine alte mit gleichem Namen 
-&uuml;berschrieben. Der Dateiname ergibt sich nach folgendem Muster: 
-[gew&auml;hlter Zahlenvorrat]_[erreichte Punktzahl]_[Name des Spielers]_Zusammenfassung.txt</p>
+<p>Now the game is over.</p>
 
-<p><a name="Zusammenfassung">Die</a> Zusammenfassung enth&auml;lt:</P>
+<p></p>
 
+<p>At the end of the game, the program produces a summary of the game. This file can be saved in the same 
+folder where the game is. The file is called: [number stack]_[player points]_[your name]_summary.txt. If 
+you play a new game with the same values, then this file will be overwritten.</p>
+
+<p><a name="Summary">The</a> summary contains:
 <ul>
-	<li>das Datum und die Uhrzeit, an der die Datei erstellt wurde,</li>
-	<li>den Spielernamen, falls dieser eingegeben wurde,</li>
-	<li>den gew&auml;hlten Zahlenvorrat,</li>
-	<li>die komplette Spielverlaufstabelle,</li>
-	<li>die erreichte Gesamtpunktzahl des Spielers und des Zahlenhais,</li>
-	<li>die ben&ouml;tigten Z&uuml;ge,</li>
-	<li>die maximal erreichbare Punktzahl, falls diese f&uuml;r den eingegebenen Zahlenvorrat 
-	bekannt ist.</li>
+	<li>the date and time when this file was created,</li>
+	<li>your name, if you entered it in the game options,</li>
+	<li>the chosen number stack,</li>
+	<li>the complete game course,</li>
+	<li>the achieved score of points from the player and the Number Shark,</li>
+	<li>the number of rounds you played,</li>
+	<li>the maximum possible points, if this value is known.</li></p>
 </ul>
-
 <p></p>
 
-<p>Im Spieldialog kannst Du jederzeit ein neues Spiel starten.<br>Dabei wird der Inhalt der 
-Spielverlaufstabelle gel&ouml;scht und alle Zahlen werden wieder als ausw&auml;hlbar angezeigt. Die Anzahl 
-der zu verteilenden Zahlen &auml;ndert sich nur, wenn Du im Feld "Zahlenvorrat" eine andere Zahl 
-eintr&auml;gst und den Button <b>OK</b> oder die Enter-Taste dr&uuml;ckst.</p>
+<p>You can start a new game in the main window anytime you wish.<br>
+If you start a new game the course table will be cleared and all shells switch to active again. 
+The number for the number stack won't change, this is only possible by entering a new number and 
+clicking the <b>OK</b> button (or pressing Enter).</p>
 
-<p>Aus rechtlichen Gr&uuml;nden m&uuml;ssen wir explizit auf 
-<a href="NumberSharkLicense.html">Lizenzbestimmungen / Haftungsausschluss</a> hinweisen.</p>
+
+<p>By legal reasons we explicitly have to point at the <a href="NumberSharkLicense.html">terms of license 
+and the information regarding non-liability</a>.</p>
 
 </BODY>
 </HTML>
@@ -844,218 +798,207 @@ eintr&auml;gst und den Button <b>OK</b> oder die Enter-Taste dr&uuml;ckst.</p>
 <HTML>
 <HEAD>
 <meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
-<Title>Entstehung des Zahlenhai-Spiels</Title>
+<Title>Development</Title>
 <link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
 </HEAD>
 <BODY>
-<h3><P><A NAME="entstehung"></A><B>Entstehung des Zahlenhai-Spiels</B></P></h3>
+<h3><P><A NAME="development"></A><B>Development of the game</B></P></h3>
 
-<p>Die Idee zum Zahlenhai-Spiel stammt von Herrn Lothar Carl, der auch die urspr&uuml;ngliche
-Version in Delphi programmierte. Das Zahlenhai-Spiel dient zur Verbesserung und zum
-spielerischen Training der Kenntnisse &uuml;ber Teilbarkeiten und über Primzahlen
-in den Klassen 6 bis 10.</p>
+<p>The idea for the Number Shark game comes from Mr. Lothar Carl, who created the original version of 
+the game in Delphi. The Number Shark game is used to improve and to train the knowledge of factors and 
+prime numbers in grades six to ten.</p>
 
-<p>Das Original-Zahlenhai-Spiel von Herrn Carl war Freeware, aber nicht Open-Source.<br>
-Leider ist es nicht mehr zugänglich: 
-<a href="http://archive.is/djxT9" target="_blank">http://archive.is/djxT9</a></p>
-<!-- Kommentar:
-<a href="http://www.learn-line.nrw.de/angebote/neuemedien/medio/mathe/coalgebr/zahlhai/hai01.htm" target="_blank">http://www.learn-line.nrw.de/angebote/neuemedien/medio/mathe/coalgebr/zahlhai/hai01.htm</a></p>
-  -->
+<p>The original program from Mr. Carl was freeware, but not open source. It's not accessible any more.<br>
 
-<!-- Kommentar:
-<P>Auf der Seite von Herrn Carl stehen die für den Spieler maximal erreichbaren Punktzahlen für 
-Zahlenvorr&auml;te bis n=50. Das sind allerdings erspielte Werte, so dass sich die Ergebnisse noch 
-&auml;ndern k&ouml;nnen (die letzte Änderung der Seite datiert auf den 12.10.2000).</P>
-  -->
-
-<P>Herr Carl hat uns dankenswerterweise erlaubt, seine Idee und seinen Spielnamen f&uuml;r eine 
-Neuimplementierung uneingeschr&auml;nkt zu nutzen. Das nachfolgende Bild zeigt die 
-urspr&uuml;ngliche Fassung des Zahlenhai-Spiels:</P>
+<P>Mr. Carl kindly allowed us to use his ideas and the name for a new implementation. The following 
+picture shows the original version of the Number Shark (German version):</p>
 
 
 
 <img src="hai.gif" ALT="hai.gif" BORDER=0>
 
-<P>Das neue Zahlenhai-Programm hier ist Open-Source und Freeware.</P>
+<P>This is the new version of the Number Shark which is freeware and open source.</P>
 
-<P>Im Englischen heißt diese Spielidee bezeichnenderweise "Taxman".</P>
+<P>In the English speaking world this game idea is called "tax man" significantly.</P>
 
-<P>Die Seite <a href="https://oeis.org/A019312" target="_blank">https://oeis.org/A019312</a> 
-der <b>Integer Sequences</b> enthält die bekannten Maximalwerte. Dort kann die Folge auch 
-gleich grafisch angezeigt werden. Bei der ATT Integer Sequence ist - dank Dan Hoey - inzwischen in den 
-"Notes" auch der optimale Weg angegeben. Eine Formel für den optimalen Wert ist bisher nicht bekannt.</P>
+<P>The site <a href="https://oeis.org/A019312" target="_blank">https://oeis.org/A019312</a> 
+of the <b>Integer Sequences</b> contains the known maximum amounts of points. The 
+sequence can be displayed there graphically, too. Meanwhile, for each n the ideal way is stated too in 
+the notes (thanks to Dan Hoey). A formula for the ideal value is not known as of now, though.</P>
 
-<P>Alle bisher bekannten Verfahren zur Berechnung des optimalen Weges benötigen für große Werte von n 
-<B>sehr</B> lange. Im neuen Java-CrypTool sind heuristische Verfahren implementiert, die gute -- aber nicht unbedingt optimale Wege -- suchen. Diese Verfahren sind sehr schnell.</P>
+<P>For big values of n, all known methods to calculate the ideal way need <B>very</B> long. The new 
+JavaCrypTool contains heuristic methods that find good -- but not necessarily ideal -- ways. These 
+methods are very fast.</P>
 
-<P>Im März 2015 wurde die Folge der Maximalwerte ausgedehnt bis n=404.</P>
-<P>(Stand: Februar 2017)</P>
+<P>In March 2015 the maximum amounts of points possible was extended up to n=404.</P>
+<P>(Status February 2017)</P>
 	
 
-<p><b><u>1. Programmieren lernen</u></b></p>
+<p><b><u>1. Learning to program</u></b></p>
 
-<p>Innerhalb der Ausbildung im 1. Lehrjahr zum Fachinformatiker wurde die Idee von Herrn Carl als Vorlage gew&auml;hlt, um Programmierkenntnisse in C++ zu vermitteln und diese Kenntnisse sp&auml;ter durch Erweiterungen des Programms zu vertiefen.</p>
+<p>Within the first year of the apprenticeship as an IT specialist, the idea of Mr. Carl was chosen as a sample to teach programming skills in C++ and to expand them by upgrading the program step by step.</p>
 
-<p>Zuerst wurde das Verfahren des Zahlenhai-Spiels in C++ als "Konsolenprogramm" implementiert (Konsolenprogramme machen nur eine  Textein- und -ausgabe. Sie werden von der Kommandozeile gestartet: Unter Windows ist das Kommandozeilenfenster sehr versteckt: siehe Start \ Alle Programme \ Zubeh&ouml;r \ Eingabeaufforderung).</p>
-
-<p></p>
-
-<p>Erst als die Logik des Algorithmus korrekt implementiert war, wurde eine grafische Oberfl&auml;che erstellt.</p>
-
-<p>Danach wurde das Programm stetig erweitert: <a name="Buttons">Die</a> erste Erweiterung bestand darin, das Spiel mit mehr als 50 Zahlen spielen zu k&ouml;nnen (50 Zahlen waren die Obergrenze in dem Spiel von Herrn Carl). Daf&uuml;r wurde ein Reiter-Control (Tab) verwendet, auf dem sich 30 Buttons befinden, die je nach ausgew&auml;hltem Reiter ihre Beschriftung und somit auch ihren Wert &auml;ndern.<br>
-Dadurch wurde die maximal m&ouml;gliche Anzahl an Zahlen auf 9999 erh&ouml;ht. Die Grenze ist im Quellcode so vorgegeben und ist bedingt durch die Gr&ouml;&szlig;e der Buttons und der Reiter. Es w&auml;re auch nicht sinnvoll, mit noch mehr Zahlen zu spielen, da man bei so einer Menge gleichzeitig sehr viele Teiler von sehr vielen Zahlen ber&uuml;cksichtigen muss und dadurch auch schnell den &Uuml;berblick &uuml;ber das Spiel verliert.</p>
-<p>Das Spielfenster und alle Teile darin haben eine feste Gr&ouml;&szlig;e. Wir h&auml;tten gern das Fenster wenigstens in vertikaler Richtung  so gr&ouml;&szlig;enver&auml;nderlich gemacht, dass sich die Spielverlaufstabelle entsprechend anpasst, leider bot uns der Layout-Manager im Ressourceneditor von Visual C++ 6.0 und Visual C++ 7.1 (Visual Studio 2003) keine M&ouml;glichkeit f&uuml;r das so genannte "Andocken" von grafischen Elementen an die Dialogmasken. Nur die Spalten der Spielverlaufstabelle sind in ihrer Breite ver&auml;nderbar, damit sich der Spieler wirklich alle Punkte, die der Zahlenhai erhalten hat, anschauen kann. Die Spalten passen sich aber nicht automatisch ihrem Inhalt an. Die Größenveränderlichkeit wäre eine gute Aufgabe für eine zukünftige Version, die den Grafikmechanismus WPF von Windows 7 benutzt (siehe <a href="#TODOLIST">TODO #16</a> unten in Kapitel 7 dieser Onlinehilfe-Seite).</p>
+<p>At first the Number Shark procedure was implemented as a console program (Console programs can only do text in- and output. They are started from a command line: You can find the command line in Windows via: Start \ Programs \ Accessories \ Command Prompt). The command line version of the program was only developed in German.</p>
 
 <p></p>
 
+<p>After the logic for the algorithm was implemented, we created a graphical user interface.</p>
 
-<p><b><u>2. Maximal erreichbare Punktzahl ausgeben</u></b></p>
+<p>After that, the program was continually expanded: <a name="Buttons">The</a> first add-on was to give the player the possibility to play with more than 50 numbers (this was the maximum in the original game of Mr. Carl). In order to do this we created a tab control on which 30 buttons are placed. These buttons change their value and label depending on which tab you choose.<br>
+Now you can play with maximum 9999 numbers. This border is set in the source code because the current buttons are not wide enough for bigger numbers and it would make no sense to play with a higher number because it will get too difficult to know all numbers and all factors.</p>
+<p>The game dialog and all parts of it have a fixed size. We would have liked to make the size of the dialog variable, but unfortunately the resource editors in Visual C++ 6.0 and Visual C++ 7.1 (Visual Studio 2003) don't give us the possibility of the so called "docking" of graphical elements onto the dialog windows. The width of the columns in the game progress list can be changed in their width, so that the player can see all points that the Number Shark was awarded in every round. If the new content is broader then the current column, the width will not be adjusted automatically. To make the size scalable would be a good task for a future version using the Windows 7 graphics engine WPF (see <a href="#TODOLIST">TODO #16</a> below in chapter 7 of this online help page).</p>
 
-<p>W&auml;hrend des Testens kam mehrfach die Frage auf, wie viel Punkte der Spieler maximal erreichen 
-kann. Um dies zu beantworten, wurde eine Funktion geschrieben, die die maximal erreichbare Punktzahl 
-ausrechnet. Dr&uuml;ckt man auf den Button <b>Start</b>, welcher sich in dem "Spieloptionen"-Fenster 
-(Reiter "Maximale Punktzahl") befindet, kann man zwischen zwei Algorithmen wählen:</p>
+<p></p>
 
-<p><B>Brute-Force-Algorithmus</B>: <a name="Berechnung">Die</a> hier implementierte Berechnung 
-l&auml;sst das Programm jedes m&ouml;gliche Spiel und jeden m&ouml;glichen Spielzug spielen und die 
-erreichten Punkte vergleichen.</P>
 
-<P><B>Back-Tracking-Algorithmus</B>: Der Algorithmus arbeitet nach dem Versuch-und-Irrtum-Prinzip; 
-Teillösungen werden Schritt für Schritt zu einer Gesamtlösung zusammengesetzt. Weitere Informationen 
-zu Back-Tracking-Algorithmen findest Du <a href="http://de.wikipedia.org/wiki/Backtracking" target="_blank">hier</a>.</P>
+<p><b><u>2. Maximum possible points</u></b></p>
 
-<P>Nach der Auswahl des Algorithmus erhält man:</P>
+<p>During the test phase, we asked ourselves how many points a player can score. To answer this 
+question, a function which calculates the maximum possible score was written. After pressing the 
+<b>Start</b> button in the "Game options" dialog (flag "Maximum score"), you can choose from two 
+different algorithms:</p>
+
+<p><B>Brute-force algorithm</B>: <a name="Calculation">This</a> algorithm calculates every possible 
+move order and compares the achieved scores (brute-force).</P>
+
+<P><B>Back-tracking algorithm</B>: This algorithm is using trial and error to assemble partial solutions 
+to a holistic solution. You can find further information on backtracking 
+<a href="http://de.wikipedia.org/wiki/Backtracking" target="_blank">here</a>.</P>
+
+<P>After choosing the algorithm, you get:</P>
 
 <ul>
-	<li>die maximal erreichbare Punktzahl,</li>
-	<li>die Zeit, die f&uuml;r die Berechnung ben&ouml;tigt wurde,</li>
-	<li>die Anzahl der Schritte, die das Programm durchlaufen musste, um das Ergebnis zu berechnen,</li>
-	<li>die h&ouml;chste Primzahl (die Du als erste Zahl ausw&auml;hlen solltest), und</li>
-	<li>die Zahlenfolge, die das Programm berechnete, um die maximal m&ouml;gliche Punktzahl zu erreichen.</li>
+	<li>the highest possible score,</li>
+	<li>the time the program needed to calculate this score,</li>
+	<li>the amount of steps the program had to go through to achieve this score,</li>
+	<li>the highest prime number (you should choose this number first in a game) and</li>
+	<li>a numerical sequence to achieve the maximum possible score.</li>
 </ul>
-
-
-
-<p></p>
-
 </p>
-<p>Da die Berechnung f&uuml;r eine gr&ouml;&szlig;ere Anzahl an Zahlen sehr lange dauert, wird der Spieler vorher gefragt, ob diese Funktion wirklich ausgef&uuml;hrt werden soll.</p>
+
+<p></p>
+
+<p>Because this calculation takes a long time, the player is asked by the program before the calculation starts.</p>
 
 <p></p>
 
 <p></p>
 
-<p><u><b>Bemerkung</b></u>:</p>
-<p>Die maximal m&ouml;glichen Punktzahlen sind f&uuml;r die Zahlenvorr&auml;te von 1 bis 158 schon in der Datei "GameData.txt" abgelegt und m&uuml;ssen nicht noch einmal berechnet werden, sondern können auch sofort ausgegeben werden.</p>
+<p><u><b>Remark</b></u>:</p>
+<p>The maximum possible points are already available for numbers from 1 to 158 and are saved in the 
+file "GameData.txt", so that they don't need to be calculated again and can be displayed right away.</p>
 
 <p></p>
 
-<p>Au&szlig;erdem kann sich der Spieler auch noch einen optimalen Weg (also die Folge der Zahlen, die zur maximalen Punktzahl f&uuml;hrt) anzeigen lassen.</p>
+<p>And the program can show you an optimal way to achieve this score (i.e. in which order you should 
+take the numbers).</p>
 
 <p></p>
 
 
-<p><b><u>3. Durchf&uuml;hrung und Wiederaufsetzten bei &uuml;berlangen Berechnungen</u></b></p>
-<p>Da die Berechnung der maximal m&ouml;glichen Punkte bei gr&ouml;&szlig;eren Zahlen mit unserem Brute-Force-Algorithmus extrem lange dauert, musste ein Weg gefunden werden, um die Berechnung der Zahlen unterbrechen und zu einem sp&auml;teren Zeitpunkt wieder fortsetzen zu k&ouml;nnen (z.B. weil der Strom ausfiel oder man den Rechner f&uuml;r andere Aufgaben brauchte). Dazu werden alle f&uuml;r die Berechnung ben&ouml;tigten Zwischenwerte in geringen Zeitabst&auml;nden in einer Textdatei gespeichert. Die Datei "ZahlenHaiSuche[Anzahl der Zahlen].zha" wird in demselben Ordner gespeichert, in dem sich auch die Datei "Zahlenhai.exe" befindet. Sie l&auml;sst sich mit einem Texteditor &ouml;ffnen und anschauen.</p> 
+<p><b><u>3. Stop and restart the calculation</u></b></p>
+<p>Because calculating the highest possible score for bigger numbers lasted very long with our brute-force algorithm, we had to find a way to stop and restart the calculation because the PC may have to be used for other work or may have a power breakdown. Therefore, intermediate results are saved in a document in short time intervals. The file "NumberSharkSearch[amount of numbers] is created in the same folder as the Number Shark executable and can be opened with a normal text editor. </p> 
 
 <p></p>
 
-<p>Wenn jetzt eine neue Berechnung der maximalen Punktzahl gestartet wird, schaut das Programm erst, ob schon eine Datei mit gespeicherten Werten existiert, liest diese ein und setzt dann die Suche an der eingelesenen Stelle fort. Auch ohne Wissen dar&uuml;ber, was f&uuml;r Werte in der Datei gespeichert werden und wie die Brute-Force-Suche funktioniert, kannst Du, einen schnellen Rechner und viel Zeit vorausgesetzt, auch selbst neue Werte berechnen.</p>
+<p>When you start a new calculation the program first looks if an intermediate result for this number already exists. If yes, then the calculation starts at the same position where the former one stopped. Even without any knowledge of the content of this file or how the calculation works, you can, if you have a fast PC with a lot of idle time, calculate new values on your own.</p>
 
-<p><u><b>Bemerkung</b></u>:</p>
-<p>Unter den beiden Algorithmen, die das optimale Ergebnis suchen (Brute-Force und Back-Tracking), ist das Wiederaufsetzen auf Zwischenergebnisse nur für das Brute-Force-Verfahren implementiert.</p>
+<p><u><b>Remark</b></u>:</p>
+<p>There are two algorithms searching for an optimal result (brute-force and back-tracking). Only for the brute-force algorithm it is implemented to restart using already calculated preresults.</p>
 
-<p>F&uuml;r Zahlen &gt; 158 bitten wir um Deine Mithilfe: siehe <a href="NumberSharkChallenge.html">Challenge</a>. Wenn Du f&uuml;r Zahlen &gt; 158 eine maximale Punktzahl und einen optimalen Weg gefunden hast, w&uuml;rden wir uns sehr freuen, wenn Du diese Ergebnisse dann an bernhard.esslinger@uni-siegen.de sendest.</p>
+<p>For numbers &gt; 158 we need your help: see <a href="NumberSharkChallenge.html">Challenge</a>. We have precalculated and saved the maximum possible points, and one of the best ways to get these points for numbers &lt; 158 in our program. If you reach the highest possible score and an optimal way with numbers &gt; 158 then we would be pleased if you could send us your results to bernhard.esslinger@uni-siegen.de.</p>
 
 
-<p><b><u>4. Programmsteuerung</u></b></p>
-
-<p>a) Auswahl der Zahlen im Muschelfeld</p>
-<p>Um die Benutzerfreundlichkeit in dem Programm zu erh&ouml;hen, wurde auch noch eine reine Tastatursteuerung implementiert: Damit kann sich der Benutzer mit den Pfeiltasten (links, rechts, hoch, runter) frei auf den mit Zahlen beschrifteten Muscheln, sowie den dazugeh&ouml;rigen Reitern, bewegen. In früheren Versionen konnte man sich nur mit den Pfeiltasten links und rechts, sowie mit der Tabulator-Taste bewegen sowie mit der Leertaste eine Zahl auswählen. Ausw&auml;hlen kann man die Zahlen dann mit der <B>Enter-</B> oder der <B>Leertaste</B>.</p>
-<p>b) R&uuml;ckg&auml;ngig machen und wieder Vorw&auml;rts-Gehen mit den Undo- und Redo-Buttons</p>
-<p>Im Zahlenhai kannst Du &uuml;ber den <b>R&uuml;ckw&auml;rts</b>-Button (Undo)  bereits gespielte Spielz&uuml;ge r&uuml;ckg&auml;ngig machen, um Dich f&uuml;r eine andere Zahl zu entscheiden. Mit dem <b>Vorw&auml;rts</b>-Button (Redo)  kannst Du Deine zur&uuml;ck genommenen Spielz&uuml;ge auch wieder vorw&auml;rts gehen, solange Du keine &Auml;nderungen im Spielverlauf vorgenommen hast.</p>
+<p><b><u>4. Program control</u></b></p>
+<p>a) Choose a number in the shell square<br><br>
+To increase the usability in the program, we added a keyboard control. Now you can move over the shells and the tabs with the arrow keys (left, right, up, down). In previous versions you could only use the left and right arrow key, the tab key and the space bar to activate the buttons. Now you can select the shells with the <b>Enter</b>- or the <b>Space</b> Button.</p>
+<p>b) Undo and redo the rounds you played<br>
+The Number Shark game has a feature to undo  your previous played rounds if you want to choose another number. And you can redo  these steps as long as you change nothing in the course of the game.</p>
 
 
 <p><b><u>5. Tests</u></b></p>
 
-<p>An den Tests des Programms waren neben den Mitarbeitern aus der Abteilung und einigen Auszubildenden auch Test-User im Internet beteiligt. Dadurch ergaben sich viele praktische Vorschläge zur Verbesserung des Programms wie zum Beispiel die ToolTips, die Steuerung &uuml;ber die Tastatur oder das Durchf&uuml;hren langer Berechnungen durch Wiederaufsetzen.
+<p>In addition to some colleagues from the branch and some apprentices, there were also users on the internet involved in testing the game. Some of the suggestions that we received because of these tests were the tool tips, the keyboard control and stopping and restarting of the calculation.
 
-Später kamen von verschiedenen Seiten interessante Untersuchungen zum zugrundeliegenden zahlentheoretischen Problem
-zusammen.</p>
+Later interesting investigations about the underlying number theoretic problem came together from different people.</p>
 
 
-<p><b><u>6. Optische Gestaltung</u></b></p>
+<p><b><u>6. Visual appearance</u></b></p>
 
-<p>Damit das Programm mehr wie ein Spiel und weniger wie eine normale B&uuml;roanwendung aussieht, musste auch die optische Aufmachung des Spieles verbessert werden. Der erste Schritt zu einer besseren optischen Gestaltung war die Ver&auml;nderung der Buttons f&uuml;r den Zahlenvorrat. Daf&uuml;r wurde das Bild einer Muschel entsprechend den verschiedenen Zust&auml;nden eines Buttons, also "gedr&uuml;ckt", "deaktiviert" oder "Focus", verändert. Die Buttons an sich wurden transparent gemacht, so dass es so aussieht, als w&auml;ren die R&auml;nder der Muschel auch der Rand des Buttons.</p>
+<p>To make the program look more like a game and less like a normal office application we needed to change the visual appearance of the game. The first step was to change the look of the buttons in the shell square. To realize this, we created a picture of a shell for every condition of a button (pressed, activated, has focus, deactivated) and placed it over the button. The buttons are transparent, to make the buttons look like the borders of the shell are the borders of the buttons.</p>
 
-<p>Du kannst die Muscheln jederzeit w&auml;hrend des Spieles durch einfache Buttons ersetzen. Daf&uuml;r brauchst Du nur die Tastenkombination <b>SHIFT+ALT+C</b> auf Deiner Tastatur dr&uuml;cken. Die Zahlen auf den einfachen Buttons sind (für manche Menschen) besser lesbar. Erneutes Drücken von <b>SHIFT+ALT+C</b> zeigt wieder die Muscheldarstellung.</p>
+<p>Whenever you want you can switch between the normal button and the shell button look by pressing <b>SHIFT+ALT+C</b> on your keyboard. This will make the shells in the shell square visible or invisible.</p>
 
-<p>Verschiedene Haifisch-Bilder wurden in das Spielfenster eingef&uuml;gt; und jedes Mal,
-wenn Du den Button <b>Neues Spiel</b> drückst, erscheint ein neues Bild.</p>
+<p>Different pictures of a shark were added to the dialog; and every time you press
+the button <b>New game</b> the picture changes.</p>
 
-<p>Bei den Muschel-Bildern wurde die Schriftfarbe an die Farbe der Bilder angepasst.
-Zus&auml;tzlich wurde die Spielverlaufstabelle in den Farben der Muscheln eingef&auml;rbt.</p>
+<p>For the shell pictures the color of the text was adapted. Additionally the
+table with the score (course of the game) was painted in a color fitting to the shells.</p>
 
-<P>Dann wurden die normalen rechteckigen ToolTips über den Muscheln durch abgerundete
-Fenster, so genannte Balloon-Tips, ersetzt.</p>
+<p>Then the normal rectangle tool tips over the shells were replaced by so called balloon tips.</p>
 
-<p>Um den Dialog noch mehr wie ein Spiel aussehen zu lassen, wurde ein Dialogfeld, das aussieht wie eine LED-Anzeige, hinzugef&uuml;gt: W&auml;hrend des Spiels zeigt dieses gro&szlig; den Punktestand an.</p>
+<p>Other visual changes are the different colors on the game progress list and a LED display which shows you the scores and the end results.</p>
 
-<p>Die Optionen wurden auf die Reiter <B>Willkommen</B>, <B>Standard</B>,
-<B>Maximale Punktzahl</B> und <B>Tastenkombinationen</B> verteilt, so dass jede Optionen-Art f&uuml;r sich alleine steht. In dem Reiter <B>Farben</B> soll man sp&auml;ter noch die M&ouml;glichkeit haben, sich die Farben der Tabelle und die Schriftfarben, &auml;hnlich wie bei MS Paint, selber auszusuchen (siehe <a href="#TODOLIST">TODO #5</a>).<p>
+<P>The options were split on the sliders <B>Welcome</B>, <B>Standard</B>,
+<B>Maximum score</B> and <B>Accelerators</B>, so that different types of options are separated. Later, you'll be able to chose colors for the table and the fonts via the slider <B>Colors</B> which is similar to MS Paint (see <a href="#TODOLIST">TODO #5</a>).</P>
 
-<p>Bei der Gestaltung der Buttons f&uuml;r den Zahlenvorrat, der LED-Anzeige und
-der farbigen Darstellung der Spielverlaufstabelle wurde auf Quellcodebeispiele
-von <a href="http://www.codeproject.com" 
-target="_blank">http://www.codeproject.com</a> zurückgegriffen.</p> 
+<p>The design of the buttons in the numbers stack, the LED display and the
+colored course of the game were realized with the help of source code examples
+from the users of the website <a href="http://www.codeproject.com"
+target="_blank">http://www.codeproject.com</a>. 
 
 
 
-<p><a name="TODOLIST"></a><b><u>7. TODOs</u> - Wie man das Programm weiter verbessern kann.</b></p>
+<p><a name="TODOLIST"></a><b><u>7. TODOs</u> - How the program can be improved</b></p>
 
-<p>Das Zahlenhai-Programm kann nat&uuml;rlich noch weiterentwickelt werden. Vorschl&auml;ge f&uuml;r eine Version 2.0 sind:
-<ol type =1>
-	<li>Eine gro&szlig;e Aufgabe, die sich noch stellt, ist es, schnellere M&ouml;glichkeiten zu finden, die maximal m&ouml;gliche (optimale) Punktzahl und den Weg dahin zu berechnen (siehe <a href="NumberSharkChallenge.html">Challenge</a>).<br/>
-	Ein erster großer Fortschritt wurde mit dem Back-Tracking-Algorithmus erzielt [dabei wird im Prinzip auch eine vollständige Suche durchgeführt -- mit Ausschluss möglichst vieler (Teil-)Lösungen]. Dieser Back-Tracking-Algorithmus 
-	wurde uns freundlicherweise von Herrn Dr. Jens Liebehenschel, metio GmbH, zur Verfügung gestellt.</li>
-	<li>Au&szlig;erdem gibt es viele M&ouml;glichkeiten, das Programm bunter und spielerischer aussehen zu lassen.</li>
-	<li>Wenn sich der Mauszeiger über einer noch auswählbaren blauen Muschel befindet, also einer blauen, dann soll sich er sich zum Beispiel in eine Hand verwandeln.</li>
-	<li>Eine animierte Muschel schluckt die Zahlen, wenn sie an den Zahlenhai gehen.</li>
-	<li>Eine Farbauswahlpalette, &auml;hnlich MS Paint, in die Optionen integrieren (Optionen-Reiter Farbe).</li>
-	<li>Sliderbox zur Auswahl der Zahlenvorratsgr&ouml;&szlig;e (in JavaCrypTool bereits implementiert).</li>
-	<li>Eine Highscore-Tabelle anzeigen (dies gibt es in CrypTool-Online
-	unter <a href="http://cryptool-online.org/index.php/de/highlights/taxman"
-		target="_blank">http://cryptool-online.org/index.php/de/highlights/taxman</a>).</li>
-	<li>Es soll m&ouml;glich sein, dass sich der Spieler aussuchen kann, wie viele Buttons er auf einmal im Tab-Control sehen m&ouml;chte (20, 30 oder 40).</li>
-	<li>Da sich die Spalten der Spielverlaufstabelle nicht automatisch ihrem Inhalt anpassen, sondern der Benutzer dies selber machen muss, soll es auch eine M&ouml;glichkeit f&uuml;r den Benutzer geben, die Spalten wieder auf ihre Ursprungsbreite zur&uuml;ck zu setzen.</li>
-	<li>Eine weitere Spielm&ouml;glichkeit f&uuml;r das Programm w&auml;re, dass Spieler und Zahlenhai die Rollen tauschen.</li>
-	<li>Zeilen aus der Spielverlaufstabelle markieren und in ein Clipboard kopieren k&ouml;nnen.</li>
-	<li>Batch-Aufruf mit allen n&ouml;tigen Eingaben (Name, Anzahl, Eingabezahlen, Outputdateiname). Damit k&ouml;nnte man herausfinden, wieviele Punkte man durchschnittlich erh&auml;lt, wenn die Muscheln willk&uuml;rlich gedr&uuml;ckt werden. Ein Benutzer könnte auch eine Folge von Zahlen direkt eingeben, und das Programm berechnet den zugehörigen Wert.</li>
-	<li>Eine Idee w&auml;re auch noch, dass man das Spiel nicht mit einem Zahlenvorrat von 1 bis n startet, sondern zum Beispiel von 5 bis n (den kleinsten Wert ändern).</li>
-	<li>Wenn man brute-force optimale Werte f&uuml;r n &gt; 158 berechnen l&auml;sst, sollte<br>
+<p>Of course the program is not completed yet. More ideas are:
+<ol type=1>
+	<li>A big task is to make the algorithm for the maximum possible points and the best way to achieve them faster (see <a href="NumberSharkChallenge.html">challenge</a>).<br>
+	A first big progress was made with the backtracking algorithm
+	[this performs an exhaustive search -- by excluding as much as
+	possible (partial) solutions]. This one was provided by Dr. Jens
+       	Liebehenschel (metio GmbH).</li>
+	<li>And there are many ways to make the game look more like a game for kids.</li>
+	<li>If the mouse pointer moves over a shell that is still active, the blue ones, it should change it appearance to a hand for example.</li>
+	<li>The numbers disappear in the shells (shells need to be animated).</li>
+	<li>A color selection similar to Paint where the player can change the text colors for example.</li>
+	<li>A slider control to select the size of the shell square (already implemented in JavaCrypTool).</li>
+	<li>Show a high score list for all users (this is available with
+	    CrypTool Online at the link  <a href="http://www.cryptool-online.org/index.php/en/highlights/taxman"
+		target="_blank">http://cryptool-online.org/index.php/en/highlights/taxman</a>).</li>
+	<li>The player should have the possibility to decide buttons he wants to see on the shell square (20, 30 or 40).</li>
+	<li>Because the width of the rows can be changed manually, in the game progress list, there need to be a way to set them back to their default width.</li>
+	<li>One more idea is to switch the roles of the player and the Number Shark.</li>
+	<li>It should be possible to copy the lines from the course of the game to another document.</li>
+	<li>Allow the Number Shark to be called from the command line (as batch) with all necessary parameters (name, number of shells, order of numbers, name of output file). So you could find out, what score can be achieved by randomly pushing the shells, and the program could directly process a user-chosen number sequence.</li>
+	<li>Another idea could be to offer a set of numbers like 5 to n instead of 1 to n (change the lowest possible value).</li>
+	<li>When you calculate new score for numbers &gt; 158 via brute-force it should be possible to
 	<ol type = "a">
-		<li>diese Task abzubrechen sein (Multithreading).</li>
-		<li>es möglich sein, während der Berechnung weiterzuspielen.</li>
-		<li>man aus der Datei *.zha die besten, bisher gefundenen Werte auslesen k&ouml;nnen.</li>
+		<li>abort this task (multithreading)</li>
+		<li>play the game while a new value is calculated</li>
+		<li>read the already achieved values out of the *.zha file</li>
 	</ol>
 	</li>
-	<li>Zwischen-/Spielstand speichern und wieder aufsetzen (erledigt für
-            den Brute-Force-Algorithmus). Dokumentieren für Entwickler, wie das
-	    Wiederaufsetzen zu implementieren ist.</li>
-	<li>In der Dialogbox "Spielregeln/Spielbeschreibung" (nicht Onlinehilfe)
-	    den Hintergrund weiß und die Überschriften größer machen.</li>
-        <li>In der Dialogbox "Spieloptionen" unter dem Reiter "Willkommen"
-	    die Zeile "Grips-Spiel" zentrieren und größerer Font.</li>
-	<li>Auf WPF portieren und dann die Dialogbox in der Höhe
-            größenveränderbar machen (Andocken der Controls).</li>
-        <LI>Eine Funktion implementieren, die die Haifutterzahlen immer sofort
-	    verteilt, ohne dass der Benutzer eingreifen muss.</LI>
+	<li>A save and load function would also be a good idea (already
+            implemented for the brute-force algorithm). Document for
+	    developers how the restart using intermediate calculated results
+	    has to be implemented.</li>
+	<li>Make the background white within the dialog box
+	    "Game rules / game description" (this is not the online help)
+	    and enlarge the font of the capitals.</li>
+        <li>Within the dialog box "Game options" below the tab "Welcome":
+            centralize horizontally the line with "savvy game" and enlarge
+            the font.</li>
+	 <li>Port the Number Shark to WPF and make the dialogs sizable
+	    (docking).</li>
+	 <LI>Implement a function that distributes the shark food numbers
+	    without any user interaction.</LI>
 </ol>
 </p>
 
-<p>Allgemeine Hinweise zur Benutzeroberfl&auml;che findest Du <a href="NumberShark.html">hier</a>. Und Tipps zum Spielverlauf findest Du <a href="NumberSharkTutorial.html">hier</a>.</p>
+<p>You can find general information about the interface <a href="NumberShark.html">here</a>, hints for the game are available <a href="NumberSharkTutorial.html">here</a>.</p>
 
-<p>Aus rechtlichen Gr&uuml;nden m&uuml;ssen wir explizit auf <a href="NumberSharkLicense.html">Lizenzbestimmungen / Haftungsausschluss</a> hinweisen.</p>
+<p>By legal reasons we explicitly have to point at the <a href="NumberSharkLicense.html">terms of license and the information regarding non-liability</a>.</p>
 <br />
 
 </BODY>
@@ -1066,84 +1009,82 @@ target="_blank">http://www.codeproject.com</a> zurückgegriffen.</p>
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" Content="text/html; charset=utf-8">
-<TITLE>Echte Teiler</TITLE>
+<TITLE>Real factors</TITLE>
 <link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
 </HEAD>
 
 <BODY>
 
-<h3><P><A NAME="zahlenhai"></A><B>Echte Teiler</B></P></h3>
+<h3><P><A NAME="Number Shark"></A><B>Real factors</B></P></h3>
 
-<P>Als echte Teiler bezeichnet man alle Teiler einer Zahl - außer der Zahl selbst.</P>
+<P>All factors of a number besides the number itself are called true factors.</P>
 
-<P>Alle Teiler der "20" sind zum Beispiel die "1", "2", "4", "5", "10" und die "20".</P>
+<P>All factors of the number "20" for example are "1", "2", "4", "5", "10" and "20".</P>
 
-<P>Die echten Teiler der Zahl "20" sind aber nur die "1", "2", "4", "5" und "10".</P>
+<P>But the real factors of the number "20" are only the "1", "2", "4", "5" and "10".</P>
 
-<P>Im Zahlenhai-Spiel bekommt der Zahlenhai immer alle noch freien echten Teiler der ausgew&auml;hlten 
-Zahl.</P>
+<P>In the Number Shark game the Number Shark always gets all free real factors of the selected number.</P>
 
-<P>Du bekommst normalerweise die Zahl selber zu Deinen Punkten gutgeschrieben. Dies gilt aber nur, wenn noch 
-nicht alle echten Teiler einer Zahl verbraucht sind. Falls Du eine Zahl w&auml;hlst, die keine echten Teiler 
-mehr hat, dann bekommt der Zahlenhai leider die Zahl, die Du Dir ausgesucht hast.</P>
+<P>Usually you get the selected number added to your points, but only when real factors of this number are 
+left in the game. When you choose a number without any more true factors left, than the Number Shark gets 
+this number.</p>
 
 </BODY>
-</HTML>
+</HTML> 
 """#,
         "NumberSharkChallenge.html": #"""
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" Content="text/html; charset=utf-8">
-<TITLE>Challenge / Herausforderung</TITLE>
+<TITLE>Challenge</TITLE>
 <link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
 </HEAD>
 
 <BODY>
 
-<h3><P><A NAME="zahlenhai"></A><B>Challenges / Herausforderungen</B></P></h3>
+<h3><P><A NAME="zahlenhai"></A><B>Challenges</B></P></h3>
 
-<P>Für einen Zahlenvorrat bis zur Zahl 158 wurden die <b>optimalen</b> Ergebnisse schon errechnet
-(dank Dan Hoey), und inklusive einem dazugehörigen Weg in diesem Programm abgespeichert.</P>
+<P>For numbers up to 158, <b>optimal</b> results have been calculated already
+(thanks to Dan Hoey), and stored in this program (including one way to achieve
+the respective optimal score).</P>
 
-<P>Für einen Zahlenvorrat bis zur Zahl 404 haben wir <b>gute</b> Ergebnisse mit heuristischen
-Verfahren (dank Markus Schu und Volker van Nek) berechnet und inklusive einem dazugehörigen
-Weg im Programm abgespeichert. Leider wissen wir (noch) nicht, ob die Ergebnisse
-oberhalb von n=158 optimal sind.</P>
+</P>For numbers up to 404, we have calculated <b>good</b> results with heuristic methods (thanks 
+to Markus Schu and Volker van Nek), and stored in the program.
+Unfortunately, we don't know (yet) if these results higher than n=158 are optimal.</P>
 
-<P>Du kannst uns dabei helfen, die von uns gesammelten Daten zu erweitern.
-Wir würden uns sehr freuen, wenn Du ...</P>
+<P>You can help us to enhance the data we have gathered so far.
+We'd be pleased if you ...</P>
 
 <UL>
 
-<LI><b>optimale Lösungen für einen Zahlenvorrat bis 158 findest</b>. Du hast
-dann die gleiche Punktzahl erreicht wie wir, 
-aber vielleicht unterscheiden sich unsere Lösungswege.</LI><br>
+<LI><b>find an optimal result for numbers up to 158</b>. You have achieved the
+same score that we have, but maybe you found another way to get there.</LI><br>
 
-<LI><b>Spiele mit einem Zahlenvorrat größer 158 und kleiner 405 gewinnst</b>.
-Falls Dein Ergebnis besser ist, als das abgespeicherte, würden wir uns sehr über die Einsendung
-der Logdatei freuen.</LI><br>
+<LI><b>win a game for numbers larger than 158 and smaller than 405</b>.
+If your result is better than the already calculated result we'd be very happy if
+you could send us the log file of your game course.</LI><br>
 
-<LI><b>Spiele mit einem Zahlenvorrat größer 404 gewinnst</b>.
-Bitte sende uns die Logdatei mit Deinem besten Ergebnis.</LI><br>
+<LI><b>win a game for numbers larger than 404</b>.
+Please send us the log file of your best game course.</LI><br>
 
-<LI><b>eine Idee für einen neuen Algorithmus hast</b>, um die maximale Punktzahl
-(optimales Ergebnis) zu berechnen. Dafür sind in CT1 zwei Algorithmen implementiert: Der erste
-Algorithmus probiert nacheinander alle Möglichkeiten durch (Brute-Force).
-Der zweite Algorithmus arbeitet sich über Teillösungen zu einer Gesamtlösung
-vor (Back-Tracking).
-Wir würden uns hier neue Ansätze zur Lösung des Problems wünschen.</LI>
+<LI><b>have an idea for a new algorithm</b> to calculate the highest score
+(optimal result) possible. For that, two algorithms are implemented in CT1: The first one
+subsequently tries out every possible solution (brute force).
+The second one deals with partial solutions to determine the result
+(back tracking).
+We'd highly appreciate any new approaches in this regard.</LI> 
 
 </UL>
 
-<P>Wenn Du eine dieser Herausforderungen gemeistert hast, kannst Du Deine Ergebnisse und Anregungen gerne an 
-<b>bernhard.esslinger@uni-siegen.de</b> schicken.</P>
+<P>If you have mastered any of these challenges, feel free to send your results and comments to 
+<b>bernhard.esslinger@uni-siegen.de</b>.</P>
 
-<P><b>Anmerkung</b></P>
-Heuristische Algorithmen für das Zahlenhai-Problem sind in JCrypTool, dem plattformunabhängigen Nachfolger von CT1, implementiert.
-Heuristische Algorithmen finden sehr schnell eine gute Lösung, die aber typischerweise etwas schlechter ist als der Optimalwert.
+<P><b>Remark</b></P>
+Heuristic algorithms for the number shark problem are implemented within JCrypTool (the platform-independent successor of CT1).
+Heuristic algorithms fast find a good solution which typically is a bit worse than the optimal value.
 
-<P>(Stand: Mai 2012)</P>
+<P>(Status in May 2012)</P>
 
 </BODY>
 </HTML> 
@@ -1153,19 +1094,21 @@ Heuristische Algorithmen finden sehr schnell eine gute Lösung, die aber typisch
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" Content="text/html; charset=utf-8">
-<TITLE>Lizenzbestimmungen / Haftungsausschluss</TITLE>
+<TITLE>Terms of License / Non Liability</TITLE>
 <link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
 </HEAD>
 
 <BODY>
-<h3><P><A NAME="zahlenhai"></A><B>Lizenzbestimmungen / Haftungsausschluss</B></P></h3>
+<h3><P><A NAME="zahlenhai"></A><B>Terms of License / Non Liability</B></P></h3>
 
-<P>Lizenzbestimmungen / Haftungsausschluss</P>
+<p>Terms of License / Non Liability</p>
 
-<p>Das Lernspiel "Der Zahlenhai" ist Open-Source-Software und Freeware. Die erste Fassung entstand als Auszubildenden-Arbeit innerhalb des CrypTool-Projektes.</P>
-<p>Die Bin&auml;rfassung des Programms "Zahlenhai" wird jedem Nutzer kostenlos zu Ausbildungszwecken zur Verf&uuml;gung gestellt. F&uuml;r das Produkt wird jede Gew&auml;hrleistung ausgeschlossen. Eine Verantwortlichkeit f&uuml;r die Funktionsf&auml;higkeit oder Sicherheit des Produkts, dessen einzelner Komponenten oder f&uuml;r die Ergebnisse, die der Nutzer oder Dritte mit diesem Produkt erzielen, wird nicht &uuml;bernommen. Die Anwendung unterliegt dem Urheberschutz. Durch die Nutzung erwirbt der Nutzer keine eigenen Rechte am Produkt, diese verbleiben vielmehr bei den Urhebern.</p>
-<p> Das Programm "Zahlenhai" wird mit CrypTool ausgeliefert, kann aber auch als Standalone-Programm genutzt werden.</p>
-<p>Der Quellcode des Programms "Zahlenhai" steht unter der Apache License 2.0 (ver&ouml;ffentlicht von der Apache Software Foundation).</p>
+<p>The educational game 'Number shark' is open source software and freeware.
+The first version was developed as work of an apprentice within the
+CrypTool project.</P>
+<p>The binary version of the 'Number shark' program is provided free of charge to every user for educational purposes. The product is supplied without any warranty. No responsibility is accepted for the functionality or security of the product, individual components of it or the results which the user or third parties obtain using the product. The 'Number shark' program is subject to copyright protection.</p>
+<p>Use of the product does not confer any rights to the product on the user; all rights remain with the originators.</p> 
+<p>The source code of the "Number Shark" program is distributed under the terms of the Apache License 2.0 (as published by the Apache Software Foundation).</p> 
 
 <p><b>(C) 2018 CrypTool Team</b></p>
 
@@ -1178,20 +1121,20 @@ Heuristische Algorithmen finden sehr schnell eine gute Lösung, die aber typisch
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" Content="text/html; charset=utf-8">
-<TITLE>Primzahlen</TITLE>
+<TITLE>Prime numbers</TITLE>
 <link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
 </HEAD>
 
 <BODY>
 
-<h3><P><A NAME="zahlenhai"></A><B>Primzahlen</B></P></h3>
+<h3><P><A NAME="zahlenhai"></A><B>Prime numbers</B></P></h3>
 
-<P>Eine Primzahl ist eine nat&uuml;rliche Zahl, die nur genau zwei Teiler hat, die "1" und sich selber. 
-Primzahlen sind zum Beispiel die "2", "3", "5", "7", "11", ...</p>
+<P>A prime number is a natural number having exactly two factors, the "1" and itself. For example, prime 
+numbers are "2", "3", "5", "7", "11", ...</P>
 
-<p>Wenn Du Dich mehr über Primzahlen informieren möchtest, dann klicke 
-<a href="http://de.wikipedia.org/wiki/Primzahlen" target="_blank">hier</a> (Wikipedia) oder lies im 
-<A class="filelink" onclick="parser('CT-Book-de.pdf')">CT-Buch</a> nach.</p>
+<P>If you want to learn more about prime numbers, then click 
+<a href="http://en.wikipedia.org/wiki/prime_numbers" target="_blank">here</a> (Wikipedia) or read in 
+the <A class="filelink" onclick="parser('CT-Book-en.pdf')">CT Book</a>.</P>
 
 </BODY>
 </HTML> 
@@ -1220,7 +1163,7 @@ table.pad10 td {padding-left:10pt;padding-right:10pt;} /* Gestaltung der Tabelle
 table.pad20 td {padding-left:20pt;padding-right:20pt;}
 table.pad30 td {padding-left:30pt;padding-right:30pt;}
 """#
-    /// Help of the Flash Enigma visualisation by Frank Spieß (Enigma-Help_de.html).
+    /// Help of the Flash Enigma visualisation by Frank Spieß (Enigma-Help_en.html).
     static let enigmaHelp = #"""
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -1229,7 +1172,7 @@ table.pad30 td {padding-left:30pt;padding-right:30pt;}
 <meta name="description" content="Simulation of the encryption system Enigma implemented in Flash 5">
 <meta name="author" content="Frank Spiess">
 <meta name="keywords" content="enigma simulation flash">
-<TITLE>Hilfe zur Enigma-Simulation</TITLE>
+<TITLE>Enigma Simulation Help</TITLE>
 </head>
 <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#000080" alink="#008000">
 <!-- removed for better view
@@ -1242,38 +1185,40 @@ BODY
 </style>
 -->
 
-<b>Geschichte</b><br>Die Rotormaschine "Enigma" wurde 1923 vom deutschen Erfinder und Entwickler Arthur Scherbius gebaut. Sie sollte zur Verschlüsselung von Nachrichten in der Wirtschaft dienen. In den 30er Jahren des vergangenen Jahrhunderts entdeckte das deutsche Militär die Enigma, ließ das sogenannte Steckerbrett hinzufügen und die Rotor-Verdrahtungen ändern. Im 2. Weltkrieg benutzte die deutsche Kriegsmaschinerie ca. 200.000 dieser Kryptosysteme, um den Austausch geheimer Informationen zu sichern.
+<b>History</b><br>The rotor machine "Enigma" was invented in 1923 by the German engineer Arthur Scherbius. It was meant to serve as a means to encrypt messages in the economy area. In the 1930s, the German army discovered the Enigma, added the so-called plugboard and changed the rotor wiring. During WW II, the German military used about 200,000 of these cryptosystems in order to scramble the messages they exchanged with each other.
 <hr>
-<b>Aufbau und Funktionsweise</b><br>Die Enigma besteht im wesentlichen aus der Tastatur, dem Steckerbrett, drei Rotoren (auch Walzen genannt) und dem sogenannten Reflektor, einer feststehenden Mimik, die zur Stromumlenkung dient. Die Originalmaschine ordnete jedem via Tastatur eingegebenen Buchstaben einen verschlüsselten Buchstaben zu, indem sie einen sich immer wieder neu konfigurierenden Stromkreis schloss.
+<b>Construction and function</b><br>The Enigma constists, in its main parts, of the plugboard, the three rotors and the reflector which was meant to redirect the electrical current. The original Enigma matched every letter that was entered by means of the keyboard with an encrypted letter by closing an electrical circuit that is reconfigured after each key entry.
 <hr>
-<b>Grafische Aufteilung der Komponenten</b><br>Die Anordnung der drei Rotoren erfolgte wie bei der echten Enigma: Der rechte Rotor wird als erster Rotor ("schneller Rotor", der sich bei jeder Eingabe ändert) bezeichnet. Die römische Zahl, die in der Mitte eines jeden Rotors eingezeichnet ist, zeigt, welcher der 5 Rotoren (I, II, III, IV oder V) eingesetzt wurde. Auch die Verdrahtung auf jedem Rotor entspricht der Original-Enigma.
+<b>The graphical display of the different Enigma components</b><br>The alignment of the three rotors is according to the Enigma's original construction: The first rotor ("fast rotor" changing its position with each letter entry) is the rightmost one. The roman number in the center of each rotor indicates which of the five rotor possibilities was chosen (I, II, III, IV or V). The rotor wirings that you see in my model are exactly the same as in the original Enigma.
 <br>
 <hr>
-<b>Systemvoraussetzungen</b><br>Sie brauchen einen flinken Rechner, eine Auflösung von mindestens 800x600 Pixeln und Truecolor-Farbtiefe.
+<b>Prerequesites</b><br>You need a fast system, a resolution of at least 800x600 pixels and true colors.
 <br>
 <hr>
-<b>Eingabebeispiel</b><br>Öffnen Sie das Maschinen-Fenster, klicken Sie auf das Feld "Eingabe:" und geben Sie dort "c" ein. Das Steckerbrett lässt den Buchstaben C unverändert auf C, der Verbindungsdraht erscheint <b><font color=#ff0000>rot</font></b> markiert. Nun wandert der Strom zum rechten Rotor, zu dessen Buchstaben A. A ist über die Rotorverdrahtung mit B verknüpft. Der Strom wandert zum zweiten Rotor, der G mit R verknüpft, im linken Rotor wird dann V auf I abgebildet. Im nächsten Schritt wird im Reflektor B auf R weitergeleitet. Nun wandert der Strom auf dem <b><font color=#669900>grün</font></b> markierten Weg wieder zurück durch die Rotoren zum Steckerbrett, wo Q unverändert auf Q geleitet wird. Als Ergebnis wurde also C zu Q verschlüsselt.
+<b>A brief example</b><br>Open the machine window, click on the "Input:" textbox and enter "c" on the keyboard. The plugboard leaves C as C while highlighting the specific wire in <b><font color=#ff0000>red</font></b>. The electrical current then moves to the rightmost rotor, that is, to its letter A. A is then connected to B. The current enters the middle rotor, that connects G with R. The third (leftmost) rotor maps V to I. In the next step, the reflecor maps B to R. Then the current moves way back along the <b><font color=#669900>green</font></b> wires through the rotors back to the plugboard, where Q leads to Q. As a result, we have the encryption of C to Q.
 <br>
-Geben Sie nun erneut "c" ein, so sehen Sie, dass nun C zu R verschlüsselt wird. Vor jedem Tastendruck nämlich wird der rechte Rotor um einen Schritt weiter nach links gedreht.<br>Sonderfall: Dreht sich der rechte Rotor von Stellung V nach W, so wandert der zweite Rotor ebenfalls um einen Schritt weiter nach links. Für den mittleren Rotor gilt die entsprechende Regel. Die Stellung der Rotoren ändert sich also nach dem Prinzip eines Kilometerzählers. Die sogenannten "Notches" regeln, welche Rotorbewegung eine Bewegung seines linken Nachbarn auslöst. Die Position der Notches sowie die Verdrahtung waren fest vorgegeben.
+If you now enter "c" again, you see that in this case it yields G! This is because the rightmost rotor moves one step to the left before a letter is entered.<br>Special case: Whenever the right rotor moves from V to W, the second rotor is also changing its position by one step. This holds true for the middle rotor accordingly. All in all, the rotors behave like an odometer.
 <hr>
-<b>Wie verschlüssele ich einen Text?</b><br>Durch Drücken des "Zurück"-Buttons (Reset) setzen Sie die gesamte Maschine in den Urzustand. Sie müssen sich zunächst einen Schlüssel ausdenken. Ein <b>Schlüssel</b> besteht hier aus drei Teilen:<Br>a) Zuerst geben Sie an, welche Buchstabenpaare im Steckerbrett vertauscht werden sollen, z.B. A mit B und auch F mit X.<br>b) Zweitens können Sie durch Klicken auf "Exchange Rotors" eine Kombination von drei Rotoren auswählen. Zur Verfügung stehen die fünf Rotoren I, II, III, IV und V.<br>c) Als dritter Teil ist die Stellung der drei Rotoren zu Beginn der Texteingabe zu notieren, z.B. F-E-S.
+<b>How can I encrypt a plaintext?</b><br>At first you have to make up a key. In this case, a <b>key</b> consists of two parts, at first you decide, which pairs of letters should be exchanged in the plugboard, e.g. A to B and also F to X. Secondly, choose the rotor settings at the beginning of the text entry, e.g. F-E-S. Click "RESET" which puts the whole machine to the "initial state". Now you can encrypt a first sample.<br>Now drag the small yellow circle underneath  A to B and release the mouse button. Thus, you have exchanged A and B. Please exchange F and X in that same way.
 <br>
-Geben Sie nun z.B. in der Input-Zeile den Klartext "versuch" ein. In der Zeile "Ausgabe:" sollte der verschlüsselte Text "TBLGXHW" erscheinen. Bis auf die Anzahl der Buchstaben hat der verschlüsselte Text nur noch wenig gemein mit dem Klartext.
+The mentioned rotor settings are set by pressing the buttons <b>"&lt"</b> or <b>"&gt"</b> above each specific rotor. Each mouse click puts a rotor one position forward in the indicated direction.
+<br>
+Now key in "welcome". The line "Output:" should show "DBRZNUP", the ciphertext. Except for the pure number of letters, the encrypted text looks completely different.
 <br>
 <img src="enigma_screenshot1.png" alt="enigma_screenshot1.png" width="91%">
 <hr>
-<b>Wie ENTschlüssele ich einen Text?</b><br>Da es sich hier um ein symmetrisches Kryptosystem handelt, kann der verschlüsselte Text mit dem *gleichen* Schlüssel wieder den Klartext hervorbringen. Hierzu löschen Sie mit der Backspace-Taste alle Eingaben in der Input-Zeile (die Rotoren drehen sich rückwärts), und geben Sie statt dessen den Text "TBLGXHW" in die Input-Zeile ein. Wenn sie "VERSUCH" erhalten, ist alles bestens.
+<b>How do I decrypt a text?</b><br>Did I mention that we are dealing with a symmetric encryption system here? Well, that is the case. Symmetric encryption means that for encryption and decryption you need exactly the same key. To prove this in our example, keep the cipertext "DBRZNUP" in mind, clear the entry in the "Input:" row and key in the above cipher text. It yields "WELCOME", which is the right plaintext.
 <br>
 <hr>
-<b>Limitierungen des Modells</b><br>Für Detailverliebte möchte ich einige Vereinfachungen nicht verschweigen. Die Original-Enigma bot neben den gezeigten Funktionen noch sogenannte Ringe. Diese waren an den Rotoren angebracht, und die 26 verschiedenen Ring-Stellungen konnten das Alphabet eines Rotors um eine additive Größe verschieben.<br>Schließlich gab es noch die gefürchtete Enigma mit *vier* Rotoren (M4), die in den letzten Kriegsjahren in U-Booten eingesetzt wurde und für eine Vergrößerung des Schlüsselraumes um den Faktor 26*26 sorgte (Anzahl Rotorstellungen mal Anzahl der Ringstellungen).
+<b>Limitations to this model</b><br>For those among you who want to know some more details about the Enigma, I do not want to hide some simplifications I put into place here. The original Enigma also allowed for changing its so-called ring settings, which implemented a shift in the alphabet by up to 25 letters.<br>Finally, there was the four rotor Enigma that was developed in the late years of WW II in order to protect the U-boat messages even better.
 <br>
 <hr>
 <b>Links</b>
 
 <UL>
-<LI>In puncto Detailtreue ist folgende <a href="http://homepages.tesco.net/~andycarlson/enigma/enigma_j.html" target=mainframe>Enigma-Simulation</a> sehr zu empfehlen (statt Flash wurde hier Java verwendet). Sie können gerne den Code der beiden verschiedenen Simulatoren vergleichen. Beachten Sie dabei bitte, dass unter "Advanced Settings" im Applet der Reflektor von "C" auf "B" eingestellt sein muss, um mit der Konfiguration meiner Flash-Simulation übereinzustimmen. Reflektor "C" wird nur bei der Vier-Rotor Enigma verwendet, die mit dem Applet ebenfalls simuliert werden kann.</LI>
-<LI>Eine weitere sehr interessante Webseite ist Jim Oram's <a href="http://www.enigma-replica.com" target=manframe>www.enigma-replica.com</a>, dort können Sie Jims Fortschritte bei der Rekonstruktion einer Vier-Rotor Enigma (M4) bestaunen.</LI>
-<LI>In CrypTool v2 (<a href="http://www.cryptool.org" target=manframe>www.cryptool.org</a>)  ist sowohl eine Simulation der Enigma als auch eine Kryptoanalyse davon enthalten.</LI>
+<LI>Another simulation of the real Enigma is this <a href="http://homepages.tesco.net/~andycarlson/enigma/enigma_j.html" target=mainframe>link</a> (powered by Java instead of Flash). You can compare the codes of the two simulators, please keep in mind that in the applet, you have to choose reflector "B" in the "Advanced Settings" pane in order to match my Flash simulation. The "C" reflector was used in the M4-Enigma having four rotors.</LI>
+<LI>Another interesting website is Jim Oram's <a href="http://www.enigma-replica.com" target=manframe>www.enigma-replica.com</a>, where you can see Jim's project to reconstruct the four-rotor Enigma (M4).</LI>
+<LI>CrypTool v2 (<a href="http://www.cryptool.org" target=manframe>www.cryptool.org</a>) contains both another simulation of the Enigma and an according cryptanalysis system.</LI>
 </UL>
 
 </body>
@@ -1281,7 +1226,7 @@ Geben Sie nun z.B. in der Input-Zeile den Klartext "versuch" ein. In der Zeile "
 """#
     /// Base64 images: shell bitmap (5 states à 45×45), shark pictures and comics of the main dialog.
     static let images: [String: String] = [
-        "shells.png": "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",
+        "shells.png": "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",
         "hai.gif": "R0lGODlh5gCHAIAAAAAAAP///yH5BAEAAAEALAAAAADmAIcAAAL+jA+px+0Po5y02ouz3tyqDwLdSJbmiaZamCCsqMbyTNcc67ywzff+PwJJcMCi8WgUCgO6FvIJjZqa1KX0is0yqtyF9gs+dsfhsrk27p7X7FNa3Y7LPW/u/I7P1av5/n1v5yfIBsg3eFhWSIXImPXWYNgoiUSmtziJWRTI5FSZ+UkT+OGyCWqaYjdqkHba6mboxPnoSruhaCWrU7tLcYubS8QrDOmrSvoynLxaHEKsq7zLHLyMDF0rXX3cbN2K/Uw9zf3p/Q3+Ky5JXg5sjI6pnm3u5T4JH88eS89oX96kj8jPn7Z5/6Tku9ApoBWBBZ8QRLhDIa51DX+02IHhoMT+dgwr9oCBEaKzjSEperQRUiQ+klvunURzAyQTeQpbbnvJIyXEizZZ9myHM4bOjCJKkiToMigWmT990hyqVMXBChGP3sQXFSXQXgkHSmw6dUIxel2JgsRoFenVCPDchSUK1qlLZFCfeor2VuXKo16NnlMn7KFYnUVHpZ1XLdxGV4KHhC08027NvdOsdjtnaWinvnwpnz28NRlksZwXlwadlNfFuqvi7vH8DHUda2tzuJ4N6LTs2sM0qko4FnbH3aVMhfY9UnikW7qJM8acOTlzyZ6IdzS+jOrWz6+bb7KeehxrPZkLeVVOBDx08XldZIeg6Dz6bbKhVeW6ffVsmtT+YdmryFt0bOW2Un/+MaNUaB1wJ0owCM63Xlba1cXgJQUW2B0OFkpoVlGOGQgcRxpisxeHK6A1GCtYPQVidQGaWF5cDxw4UXr/tRbHLEvVyNol9yR2Y47xXTEiJKRA+BCQ/LQhjUE/jqiiXd4FF8aGBGoiUFeF3dWPU19kQyUQWUaEZH9TPvjlX2FatByS36WlhYOAYXnYbV85idhkbHZ2ZpBiLGSamIG62RYl9PG5p3qIJhpLnXQqapkPgIL2J6ReojGpo0lYSs6FWuVZ36ackujpDEuA59CoaIY3RaPWRaFqmOGgAmqosMbKXIXj2fJbpFXi6guLUnkxKCHADmn+Eq+udjrIseaV2OqyTTbirHms7qTrs+9U+1qyO7UYySncepNBrfv1Ni4Z16VY1ZXKpNugt8f02Zho8FoY7kjZ5itOvMeC2BS49aKDb7X0EnuuRwyl6ya9CYLJsK8nxabLqAcPObGN9woc7EuHKmnxxRUXR5ZhFANL6Dcku2WynPciyy/LC6j88nSeKYywxjXnei03p7q8c3w909brTUEn2THO0pr7MnwYKx0i09xOGKXHRRtTM7YxQ62ryLZ2KC+ATHOMakyzRoV1pijDaOrVUlvK9qf6iahq3B/lnPbbl9qNadTm2ukn33JX+JPTAQle6ZZ05zUn4lDMbHSEQ5xa5nia8/EKeOU7Vp0RjsJpDuvlJ/oVNuh33wVXeQqaLigcoxMmOeuSoq416bvKfvqG5ap9O+6Mnl078L7f+iId6w4PRnvBr458Osc3b1zp0O8j/PTsWY+9DAUAADs=",
         "hai01.jpg": "/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAACPKADAAQAAAABAAABBAAAAAD/7QA4UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAAA4QklNBCUAAAAAABDUHYzZjwCyBOmACZjs+EJ+/8AAEQgBBAI8AwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMABAQEBAQEBgQEBgkGBgYJDAkJCQkMDwwMDAwMDxIPDw8PDw8SEhISEhISEhUVFRUVFRkZGRkZHBwcHBwcHBwcHP/bAEMBBAUFBwcHDAcHDB0UEBQdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHf/dAAQAJP/aAAwDAQACEQMRAD8A+e0d1HJp3mE8sa2hppbotWotFdsZT86+iVOR4LnEwkuWHABNTrdTL04roV0Up1AxTXsEU9h9avkkiOeJhO87jNLHM6tiU4rUe3Uen4VUeEY5wamzQ7ouwXBjwVfdW1FewuMSOFNcxEjKcDpVlbZn55H0rSMmiJRR0pFpIvEozUTWsRGVkFZsOlXT/NE4PtuxU62F7Hy54+ua1u3ujLRbMlazLEFW6dhTTaEDg8+lTRW0+eXH5mtiCz3/AHzVKNxOVjmmgmXtSq80R+Wu1XToP4if8/hTDpFuTjd/n8qfs30F7RHMW88iK0zS5bIwmO31rWg1qQDa6gY75q02hRH7rH/P4VTk0TaeGJ9/8imlJbCbi9zVi1qPb8zDFacOq2cgG6RR9TXIro7E8tj6mrsWnW0WC75I9+Kpc3VE6LZnUtfaZnmRf1qwl1pDLlpVH4muTJhX7qqfqM1nzSSnhAv5Gh6AtT0AXejx/cnH4Ampo9Wsx90lsdDgj+leYmQiF1ZX83PykHgVVWa6zgO2PqahtdS7PoeyR6hBIh+YIPzqe3v3hjkRZsmQYOOK8cQ3TfxsMe5rSkS4s7dJ7mSTEv3dr5P16/zpWQ7tHpEmwuGAADdSpBz78VMfLmLGeQBh+o9a8wTxG+ny7tOLyqwG8XI3ZI9ADitS31+LUNvmD7PdrnbtGImPYEDJpXWw7HVSXGl2qn5snPUhu9Um1vRHXbtIcdWG4/piual1LULR2W7jjBPYjI5545pgvftJAxGFPB2Lg/rWhB20WsabLD9kSXch6rhu/wCFWJ7OC7VUeVd8QGxQvJB9M9a86FlqED/aLY4znBzz+NdPYX95dPs1JAFQAgoCGz+GaVmF0bUM09sjwXCHgEMh4IGehHUVZ07T7K9jdkl2H7w4JHHb8KuNfXd1YxQxW8bPjDMyfPj3PrS6NDbxwyzyOUdX+6voO2MVDbsykldItWeqabBDPaPahGQD59zEk/7oogmmv1f7OD0wCqnK47Yxn8aWWKJkkvpUxCzAK64Azz1HWs5mitkeKNpEdvmVkPy888nrUJJ7F3a3JbbSrmBys4xIQWwcbsH1HvipZFjt5BHcQbO6sCee+DjgcetSabdq8fmSEuSMMeSc9sZ7VFGDJM6yLIzu2AGxsH5nim276hZW0IJrS6e7RoD/AKMy5PQHPuDzXOk6ja3I6xhmyDkY5712epG8tEiFrGpCffJ5xjk9D715/PJqhIuY03I+du4EgVpTbaM5qzJdZS4uZ/NTPAALDHzEd8dqxM+T/rck/lTjJdOSZp/m9AT/AFpfst63OVbPpWq0Rk9WMTUtudsmwfTNQtqLEnJ3D1xVxbS6b5dq/lR/Z04bDhR+H/1qNQ0Mh5YJeGUkn6iqz20B6Ia6NdGuw25ShB9f/wBVX49Jx/rgv4VOj3K22OM+xxZwVOasro7SDKRk5+tdkNPtIzlkBHuP/rVKr24yIlII9qLId2cfD4flY8pj/P1rVj8NRLhmfafX/JrUmEsi/I+wfiP5VlS2bMx3Xb59Nzf4UcvZC5i6tnYQxlBchWHf0/WrdsLFE2tOsjeucVzj2vlfdkDfXJP8qz3a7XIjC/lTdxHeFrcD5HX86qy3CpkNeIg9OK4GVNUkBy2PocVny2F2/wB5mJ92NQ5PsaJLuehtqFp/z9o5H+0BVc3UDchwQf8AbFcD/YszDcXKn2J/wp406eE5Ds3tkn+lCnLsHIu53qSWGeZh9M1Z+0QHAWUAfXNeeDePlkjkz6inb54zuUNt/wBo0c4uQ9B+0gnaJwB6VYjkc8pKG/KvOk1OVDxgfUGrSaxdocsilf8AZ/8A101NE8jPQEeQ5DZJ9hUgVWPzrXCJr14MbVHP+fWro1O5cZkB+qnH9ad09gs0dUzR5wFGfrVUtbs+AygjtnNc95hkwwLgj3qyt55S/vY92O4HNUSazInJPSoMQr91gvtmqa6zbP8AKUdceoqY6lZFSNufcrRcLCStD/Exx9DTEtLK4J2y4Ppg05bixl+U5H4VJmzjO5M5/CnuLYgbR0PRj+X/ANekOllBuMhA+laIvbZ1wCacs8Q4DfgaVh3MYwxpwZSf+AmozJCvG4k/Q1uncecRkfSqpiw+Sg59MYqhGKzLIeV3fpTDbBjkD9a3poUZQFQA/QVnNazZ4UVNh3P/0OTMkKfdlUVA9zu/5aZrmheEnBqXz93QV9b7Q+X9maj+ZJ91xUD2krj5pBVQPK3CnFO2T/xMfzqb3Haw42e3nzATTBAo45P4U4RzE8ZNTC3n6YP50reQ7iwpCPvVqRT2w+UMKyvs9wO3603ZIvOwZ9atO3Qlq5un7K/KuAfrU6SMi7Y24/OsKGKV+iVr21uzsE5FaRbZm1YtKIZOJI8n16VG9qnWFzHjt1rYisYkwZXIq6sFiB94k/StCLswIpriIdd/6f0pklwXdTLAxKngg/8A6q6Mx2n8K/pTvLgHITP5f4UgMhLiSVfll2H0IpGjv3ACzgj6CtjEHaEfkKa3+zGBnpTAx00e5uC0lzMpVRnaeN3sCO9ZsmjTJKXTheoHJwPrXTCSVOGXI+tCyRMcSMRntS5UPmOc8+W04aMH6VPFqruD+6DBRk8gcVtTLYEbpGDfh/8AWrM+x2s4Jixg+lFn0DTqQfb7eZfNMJVScZzmpPl3A/6vIyA4wSD0IqlJp8gG1RgDpz0qpKLwNmUngADv07daV2tx2T2LzwSsGIOW7bec/XpSyzWQtEhlsykyjBk3Egn1xVBrqa2ZVmTO4ZHPapFuIbk8Aox/h6ip0Y7NEYbT34ZQCO+aZ5flutxauAVOattpk8n3kUDsVAz/ADqFNJuiQYt35ik0+w7ruaU2onxAYLbyczxjYZSeD7YAGKzn32c6x3kBIQ8rnH/6q3dOlv7GaNzawyFAyhWX1B5ODyR1BrTewOoL+9Clz1OPm/M0WC5iW2oSqpZflUcLyPXpW5ZXl612imIyHIyB6H1xU/8AwikrRebb/MqqN4JUEH2//VVvTLL7IzwsZFeXG1gQWyOwOOBT5lYXK7nUaNe3NlqDyzWxaP7pwcAg++O1WJobMTSyO8dt5zZeVj1HXGOntSQRXkCyrMFKnJVf4hjuWzg/lXJHV7meJ7GSOPckh++N3B6Z5rBR5ndG7dlZm5qUlvbTxLCftUTDgKPlz2JOc/hiql5ppvbP7TcTGEAjGF6e3YVs6Zp5vUjlcc4IdQRhSOm0EdKrarGn9kzI9xIIQ+CVXkEHHr/Q0J6pITWl2VorsQ20cVluJX+JvlI98Dd1psV/cQgzXLP5rYXbjLkeuOmPxrNa1u7CxlIunEDIpBIDNnnCgjBHvxXQ6e10ltb3FskFwWXDGVScccnJIPFN2SuJXuWtQ1WO2hSGLa7Og3jP/jpGOtc48kBsULMxMTZWIkKAfVTnJx7ioborcXcrlDuj64YbQfXGOntn8ae4Z0jWVI9h+fIHIz2zzxVRikhOTbMyaK2uZPNtbZndxu2Lljnv/jWY2sQ2qZjjbI65wAPx5roL7VLKMrPBN9imgwmIx1U9W4HJ9q83kt11G43GaTyNxyw4yOxx71d3Yi2p19tqN/qSl7KJpAgy3ljfj8hVZ9eEP3nyehHANLoMc1ruSFnizxlDjcPfFdGnhyz1OLZIgim/hYAfNn14pt23BK70OeXxAHGEXfn0P/1qf/bSp1Q5PpS6h4VudKmaGZGDjkbSACPwzWO+n3EXzGJiPUsDTVmrol3vqbSapv8AuxEj61ZN+zDOzb9TXIeVcpkRZQn1OasC21Nk3FuB74/rT+QvmdKJ5ZOSCR7U0oshwxK/UVyrRXcZy9w6AehJpxmlQDfK7A98kf40XCx0f2aLd9/9P/r0/wCzxEEMelcq2pwIdpd8j6mpF1YkkBuPof8AGnzLuK3kdP5dsowXC1AyW+dqurn0rGXVRLgELj6GkN4A4ZcZ+mKL+YWfY0XKxcmE8dxzURvQp4Vl+oqH7XO3RVI/H/GopJ7g4BiXB6EU7isWGvtx+/kelIZ7KXAcqfxqhKZgOEXn2qmyO4yVA+gpNlJGpJZ6fLyHRfxqsdGjJ3RuG9hWSYOcMzLSm3mXmG4k+mai/kXbzLkmlrFzt59s0wTXVuMAsV9CKbHLdxj75Y/7XNTLeTN8rRqfrRp00Fr1Gf28sR2vat9c1dg1mGUgH5V9Dj+dVS4c4eBMfSk8lMYEQ45HT/Ci8u4NLsajvBMOoUeuc0xYoufJdZD9cVRPmxLzEGHpTUfHJiKj1Bx/SquTYvJZTytypBz17VI1jIrFTGH9xmoY5gvzK8i/jxVhrtk5EuG7ZUn+op6C1IxasHz5RUDqPWrKQKvBUgmqq6g2cySrn02kf1NTLqsZ7Bvc8U00DTLiwMg+VyPwqdZJUGMbveqn9oWxGS2Ppz/SoTqdorY3n8ad0KzNQzD+Ic04MhHBrJF9G5yjoc9iDVoTEDkL+VHoI//R8cWOMdDUowD1zT4bC5lPyJn8q0Y9DvXwSNv4j/Gvp1FvZHzjku5TV1HfFXI2ReQ9Xk0JCP302z8M/wBal/srT4fvTs5+hrVQkZOUSNJ8ng5rVgV3+7VRTDCP3MCn/aJqrJf3SMQGEY9sD+QrRO25Fr7HShEjGZaiN/p0YyULY7A//XrmPtN1Jy7swPqacJo0++qim5iUDoF8QWYfalu4A/z60p15G/1cDZ/z71gLPbk5GM+wqdJ4FzgAUlJ9xuK7F59YmfOIc/gf8aj+33b8RxFM/wCyarreQA/Kf0qQX0YPD8/SnfzFbyLCHUm5Eu38B/hV6IX4+9Kx/Af4Vmi/XP36kGoJjh8/iapNdyWn2NlIrtukxH1A/wAKnW3nH35d35f4ViLqPYPyewJpTqqrgbt2evJFVdCszoREMfOc/jTTa2bcuB/30awxqiLyOSe5JOM+x61akuo4bHdcwHM5zHKWPAB5AA4/Ok2gszQW2sVyqquPqT/WrMUVqqgRqFx1rlUvYEG2M5+uSf1q3b6jcPMIYIt7NwBkck9OtF13HZnWmNndmEJReOAD39M5qW40oRqu75t3PHauevb3V7O0jaSMxvISB8wOQPbpxWIdR1mUkfaCg+oFRd9CrLqda2j2hyZFHHvUI0/RouXZVPu3H865iV9TiCNczuBKMjJ6jpVaR1cYeQnHUnPNAHcC80mHChw+P7hB/rT01XTezKv1Yf41wANuMeWSW9siow9kzEscZ9c0DPRH1JeHjnh4YALnJ+vWtD7ZNOqNDLsCsF2EAkk+nXrivJjeQRMUUbhkEnkV0MU8Un73SizeUodiGZShGfXr9aWjDVHewLqMtwxiADbvlCoTzWxDb3N28k8rFJo/ldscAdxjFec6Nrl3cXS20Qkd5X+95jKeQfTFesWMK2GjsC8ge43vuye3B7/N071lN2NYK5i3N3ayTLaxXKMcqApIDGrl3pNnayFhhWcB2BOSTjmuKvbyztNQXUbdFmAkEYyu3aR1PI6n1rvntmnhF9t80HkAt0B52/8A16T0tqNa3CDT0ubaS5jlDNF8zBTyPr6e1Ysmo6dJuWcsTkheQMkdAf8A61MbXE0O3Meqg2puWw+09QOmQAQa828SXUTXfmaPcm5ilJJ2gR7ffp+dCWruDeisd8t7FJOBFIoZegJFdk0NrbwJe3kgkZ4gNoO3aSMYPT8a8M8NajDNdLZ3iBpZHTbISSeM5xjj0612Xj6bUtOjiW3DvG55O7AB7cUSs2gjdXuaAls4mZxPFArEgjcOB+Oa4jWPEeGeDT5NyrkEgA7/APdPpXK6k1/axRSXTPGs67lG77wJI/pT9JtftTK+zDHtnjFXe7siNldmlp0FxfRia+Xyxk8EYIFdxYadFPGkcUYAbgdc/jzVGzj8pQTFvA4wa9q8I+EUDfbL1i6qcLGwGP0NFWoqcbsVODqSsjkNF8N6i06OEfYHwSAf04r2e38IaMQjujbscjccZrchtbWL5YlWPHZRj+VXCyoMDj0ryKuIlN6aHrUqEYLXU5/UfDOm6hIi3EZZUXbwxH0ryPxR4Ym0JzcQgvbE9eSV+vFe9LLliG4NU7uGG7jaC4RZFbswyP1qaVeUH5Dq0YyXmfJ0l/ZnIeVOfUgVVc2J/erN+TDFa3jzwVqGkas0ljAbiznJKAYG0+nXNcBNo/kQedeO1oCCVVj94jsMGvbjUTV4nkSg07SOqSJJMGHDZ6nOf5VM1iuQWArgFuJbdg1pcPGgHK5J/Q1oQ61eMcCYsT/eq+YjlOklsYiclgB3oTTbEDI5P1rnDfam5Lbxx2wp/pTl1O7jUmbC/gP6CncVjoxp9qcDkD0qJ9PtcYU4Pua5v+3JgMsGHuCahOuKrYkmO49Pl/rilzLuHK+x1S6bEAPX1zTX04dAcj3/APrVipr0TFYzNlvoR/Sr8erhuA27PSqTQmi1/Z4XHHX0qCWxfHyt/n8qsJeXLf8ALMEDvkUG7cf6wc1RJnGynzg8g+xqEwNFzsZvoK0xfKq5Z+D7UJqAdtowwpDuZIfnmNwfepxv+8WX8eK1d0TDfJGPyFBWzkXHligRmbQ/V0B+tO8t+zj8Ku/ZYM8oPqOP5VA8C/wgr75pgVfMmVtnz/UAY/lUUk0gXBWQ49hU7WdwfmjlYfjVN4dSjbd5hZffbUtsasL5yEYeNh+lVXZG4AKketWDNcKcSIrfXFSbo3PzRAZ6nNLcexnlATktzVSWFXzvPWugEFsSARz6042kRB2oGH1pOFxqdjmEiWLBUn6UrfY2/wBYvPfJroDaJjKxg1XktIiMPEuankaK50YyxWoIMa7fqT/jV1WIGBmpfsEbng7QPSkOkv8AwznH0oUX2HzLuf/S86bxEqcRx/mP/r1Ul12WVdrKpHpj/wCvXO7wc8VHluy19M6sj51U4m6NSlxhQAPTFRNeOxyxP4VlB5B7UmZCfmNTzsrlRpNM55zTBKwHBqkQ5+8OKVV28YpXHYuedOMbuh6YzS+c561XBI6c1IAx6CncViws7D1FPFwMfMT+FV/mxwmPxoG7bgrz65p3FYuLKhBznmk4Y4U8VW2k/SnKjA5FO4rE5R+xyKNrZ3dxQiyseTgfhVhWCAhk/HOf5VQiBRLznke1XLaUQyrLgMVOcMMqfqKVInl5jXNTfY5M5AOapJkNoeIYpGLeYFHXGcVMttAOfM/WoxZORgjHvVuKxkCk7iAeOlaJeRDfmPjgtdmDIB6A1OI4AAZHQLwGCkZx/jUZtRGxZwSCOM8YPrVmDSJ54w6JvU9x/wDrq7EXKtw0UbMI3O3+E/8A6qol0fA3nn1PFdPP4fEaRmJ/OY/eG0rt/Enmq40Fiu4x4B6e/wCOaVmx3SOaKDlslgvU9aNgABz1rpf7AXPPT0/yamk0hPJVFg5Xq+ev4UuRj50cyZGdEjAX5D1A5P1PemKkiNvjBB9RXQDSmg2ygFj6Dt+NVWQxyr9udo0PUlSfp90UcvcObsZi225kPClzgZ7HPf0rt7HTrZYI5kjiR9p3eagYMw6FDisGNmHJT91k4bpkD2PNdXbHUfscQmtd9szERElRnpnBHPpTshXZn6Yl/JfTSRQ8IMbVT5c5HZe9ej+FVvLk3dvqMJTbyHnUrGykfdG7uPSqVpYxWkcrF3ju5UI+zhCThv8Aa6V1Wn2w0eyFtcjzY5Pn/u7c/QknFYVZaWRtTjrdmRL4aXTIZ7jTpTESSwMzkQ+vGB1qha6neSpHbx3isXYqZLfd5YJ4+Zv8a1LnVLS4H9nyb3iIJUOCAvrjjLVT0vTtOtp7hLSHAmTBfDjgjlsH0qVe3vFO1/dGeJLGO7W1GoSwzWsYJclt0gIx3/nmuFvbq28Pz/avD8RO/wCXMh3RMO+0L1rprnRtOkQxyzl4IyRFwQPcjnJ7Vd0u0jtUhSeJ9QkEoFvIwaIKO49D3PNWrJEu7ZJpwvXs0vtRMH2wqWigiGCF/wB3qT9K8c8T38735eeS4Fy5yyNlMnrhVPPWux8XX3iez18PpoeVYY96LDhipJ5JABP51xOtC2vD5uv5h1KTDsxB3Yxx8owOf0pLbQb3IbBtRvLtHa3O23Ks42k/g2ev0NbYjjtZGe3UrvGSMdCeuAO1Zem39xYQZghMULjYWzw3t0rXgm+0yASH73Tnp7VvA553Ov8AD+nyanPbw2sc5gXBkdh8gbPPI4AxX0jY3NtHGLVJ43dFGFDAnA9e9eKaN4Y8Ra1pn2RJfKthyOVO8enByKh0XwX4x0rWIpQzSwI5byjtGAOB82SSK4q6jN2ctjsouUNVHc+ho5Fxn5ifT/CpluIWYgHJ9DXNafB4juWBvGEEQ+UxgKSeeuetdTaacsQKlcZ9+teXJJdT04tvoMjYNIQylcdM8D8Ku+Uj4wrfhVyONY/ugChiWPy81jzGqRn3ek2t9A0E6hkYYw2CP1FfJ/jv4ca5o11NqQRru3diytErvsX0b5cDH5V9gEkYJHIqUAuMEc1tSrypvyMqtCNT1PzdurZGbDyDcP4s9/c+tV/7BuJ5YU8+GKOY8SyPtjH1Y8V9r+LfhHoHimT7Sh+xXW/c8igvuHoVLAfjXz344+HPiTSLqRobJ59PhAWOSPDDbjJyoJI59a9ONenU9TzpUakPQ8V1K2k0u7Nq11Dchf44H3qfoarC/uYRmFiw+taT6dubEmVPfIqIaeiHESbsdx/9er5X0I5l1IYNev8AO1uh9M/41cfWL3PlqobucjIqu2nMxJIwffj+tVJ7e5XGYsr6g5/QUXmkFot6G4L5nAykY+iip/NiPQ7D9cCuWjclgWQcepxmpjdQo/KhSO2elNVO4uTsdOrS/wDLOUEH3qTztQjPBJA781y7XaN1OPfNW4rt48eVPkd6tTRLgzoTqt6nHlq34E0/+1yRmS36ei8/zrJXUZAMFQ4+uKsDUImAEtvs985/lVqfmZuHkXY9TtictFKn4YqVtTBPyk496zmu7E9E/U0C5sH4ZcHt1quZ9xcvkXxeO+djoB33DFNL3GCyzoT6BzVF5bEgAHP51A0tn/C+Pzpc3mNR8i/Hc3OC8km4Z7EnFTnUkA2uwz06j/GsRZbVHMyHn1Gam/tC1YBTyPqaSn5jcfI3I57Z/wDWybfT5sGrax6fKcFnP0IrmFW1m5VMfrT1s4gcqxH4Hiq5vIlx8zojbWa54YD1YCoTDbk/LIq++cVkCOVDt84lT/s5pSBGMrkn6Efzp83kLl8zo4hbxjD3CH/gQP8AOpDLAfuNkexFcc90quEeLczdP/1ilNxDHhjCUPsSf0p+0D2Z1plDNtHT3FSbYT3j/HrXKR6qv3fmA9Rz+lWDqqjpcYHup/wpqoiXTZ//0/E/IVDgnmplhUfeNb5s1IwFGfXJqsbVo+hx+FfT8lj5znuU1tRsLEcevFXU09ZVBGMe1BDrhjz9KspdgH5yAapJdSW30IV09SCijdjqe9SppMR+9n9KsiZZBiJh/OnCO8BBVsj0xitFFdiLvuQf2RH1QjPv/wDqpraWV/iT8M/4U5lvc5YZ/wA/SmZnH3hj/P0osuwXfcQ2UYGCcn2pgt7dfvbj+VWkMhOARnsaci3GcYP48f40WQXZV+zwBd2G59hTRFCPm5UfStQQXDcEjFPWxdxy4H1H/wBenyi5jLK27Doc/SpV2jB2DHpW4unR7MFgDUZ0dB8/nqo9x/8AXp8jFzIyxOScIoT6Uougow36CtBtKt1G83Ckdv8AOapzWtpGeZN30NFpBdMiGoQoxLs2Owxmr9lqOneYDdmXy89IhlvwyQKy8Qbt0cbMw79qfFLONyJG5V8bhs4OPfrU3Y7I0dT1AKIwEKtyecHI7dD1qG316aNhC7NHA3VgPmH05qoLWTOGG4dwBzir8emJ5bPFJtjYZ2hd5DdlOSKd5B7prWHie0tjIWE85HCblUrk+uWFKPFd6knkwW8JVQ2RKpOc8no3btWVceHrqKESJcRyFsZReoz7e1Ul0m6VsOCAfQZ/wpPmYXSL516d5PMkIXJzhQcD6DNWxrC4GS53d8f/AF6wZbaWPrG7H1C8fnmpo0cD5Y2G3qelWm9iWkdPbXtu7hlZnUcbWHzf4frUxhE4wynn1xisyzuCJUW6jMkY6Kpw2fyraS0uklAAQLgNvkJVT7dDWifcho0odMs3/wBGkcIrrlWK/Nux06Eda3beyuPs0du0g2hhsVD0x168Csi6mCATyzRluAEi+fA+pI7e1WLSKFJRMkMs6sMqp+Tn65bP5Vm72NFud1PDH5yrG7ecMKS5XnPckZqvrF40di9vcFiEwD5Z+bA5yD0qja2STTDegiCkYLZOP5VoamZI4lto/wBxHnlsAqx7Ek9K5LK6R030bOAni1N3XU3u42aABtjFuh6AjGDnvg1py6xeagqi6SG2XbtJtw6nnpnt3q9PbQxxpFfqL2SU7keJtoU+ox97P4V015p0en2QY4kE0YbB4Kt7+4raU1pdGSi9TFs7OJLePUB5ki7cpH8uM5GSQT0qjqviOHS7JdQuoZAqyMEVdvyHOMsN3T/dyce9ZQnjiZPt4TT7NYmczNL8sxOMDJC7SOeATXjninUrvWdNe/05IrfTLCTAWRzlyvG7dtPB7DNZye5ceh7TpniG0nhuNe8uFvLXYy7WDAdcncBnPsa83vRPrF28YWJTdSmVZHB8xRydobnCgdq84sviJvtH0kyEqORymFY8HnqwOB9MV2kF+kqW9tcyIshVWDMeCvbJB449jThOEthThOO5VfdbuInmZwGOFJOOO/YV6D4TtINWvYYYEO0Y3bsde/PpXN3UMOsAxrFiSPADq+4H6DAzXa/D8y6dqUULOM5wARjvWruk7GSs2rn1Xo2n29jZJDCoG0c4wP8ACtDYu8uduQO1ZsczlASBu9ulW4VMh69K8CV73Z7ytayLsZzwoqwUkwP6UkYWIexqOW52gnG5R15rI0LSxsR8xqLfFESS2MetcjqXiuKzYKqmQfxEEBV+prz688R6jrUzxxHEAOMnGP0HNZSmkdVPDTnr0PT77xfpdo5g+aWT/YHA+pJH6Vyc/ijxDcO4sRAkJ7ncG/DmsK0sIY1VzGXIHPJ596lMthHIJXIjVDlgx6/rWLqPZHo08LTWr1Kcsni2e48xL5FH+/J0/Cpp7TX5EImvlk3jhWZyD9aytU1OLUS0Wl3gQKuCkQVyfbrxWPqmpvo1pBJdWckcRKr9oZiFQnj5gRgZ+tRzSNXGCVkjkfGvhmZ4Hv4oUiuU5ZY8CNlHccda8XSSRztAbPTA619Wi2mXTGl8v7ZbXGOYmJAz3Bx/UV4rrkc/hfVEawbywcSH5QSW7/ez/OvZwddy9yR85j8PGP7yB504dupfPvVc+dHkbiQfU5rcvb37XO1xKMl+SAPWqEjRA/KhGe45r1GvM8VMy/3THDqfripjaRygFSue+R/9apH2FflaqrSYzuYcVGnUsbPpLLgoQVPv/wDWqgbOSLucexrYj1JB8sg3e/SnmWI/PG20mk4xew1KS3MFobkDeGbafejdcqPkdmPcEk1vrOAMsN59RxU0ckLYIjK+uaXJ5j532OZN9cJ1AP1B/wAakTUJiPmVfqAa6xbGwuMPuAPcE/8A16d/Y1k5yrr+ef61Xs5dGT7SPY5ldSA+Uqd30GP51YGoJj7oz9B/jWzNotq3R1B+tU5fD+MlGH4An+tHLNBzQZQ/tCM/LtGfpTGutw2lFDdto/nVhtHnXgEgf7tJ/Ys20/PnPtU2kVeJnm5nXhW2/TNBvLnPEj/n/wDXq/8A2Rcbdu/p7VC+mSr/ABZ98UnGQ+aIyLUbocF8n3Jz/Or8OoTg7ixb6msyTTJ93BwPpVJrG7Q5AP5UryQWizrVumf5gqZ9xR525+QMGuOIulHKtx7UGa/TAUkZ9v8A61V7QXszsVKgk4yfoKPtEP8AGOfpXHC+vkYcnj2/+tU/9p3J6j/P5Ue1QezZ/9TkAqjjFIY0IwVz+FX9xHRfzqtPGrncevotfZtHySZCbPePlXOe1MOigjJ/pVgXNxGoWIYHuKYbm7Y5b+tTaPUfvdCk+lBeVJX6cVXNrcRHKTP+JrTDyHlv5UbQ/WlyroVzPqUVvZ4Rh9r/AFB/xoOqp3gUj24/xq6bZWxweBiomsFxwOaVpdA90dFe2EnDLsz7Z/pVpBA3+qlzn+8KzmsxtI2Et2NRCykxjhad5dUKy7mz9nuBnYVb/P1qrK+oRjaIl475/wDr1S+ykAHftPc5xVgX5tsB5d2PU5p37it2ITeXyg70A/z9aiW4LHdKXPOMZ4/LFaH/AAkltEMY3fl/jTz4otVO14gPwH+NQ2v5irP+UITbtwTgnsRmtSC2tDw5Vj7gf4VkN4i01iAdoz/ex/jT11fQi2LqSMxsOdhXd+Ga05orqTyy7HQCPTY+CFz6YH+FKzWQ+4APy/wrgJ7/AEZSXBk2NnaRj+dPk1jQf7NS3RJTNvyxIXp2waj2qQ/ZNnYmWwIJIwf8+1SvcF7F4ra1QKBuMoX5wB7/AP1q4kaxpA2gQSHIznC1q2/jSOKxfTovNEBO7Zkdfpmj2ifUFTa6FaW7nQbkmbBPfNMXUdRkIiVicnIHQ5+tJ/btiFwYZMkZyAOn51btNd0lJAtxDM0ZODjaW/DPepuv5irPsUpr7UoH2t/F1wc1oRSa09lcXdtGr28QHmM2MrnpjkH8qiudS0tixijlKlsAsBkD0PvW1pqWtwgRbO5nQjEhTkAnkdKPmHyKui3V7dTRwKsXmZ3gsp5A9TuFQ32q6lp2pG2vSJNhOUJJXHtya1rFNMneeK7D2/OwebgbeccE9PerX2FA3lyP9qKJtRrU75B6Nxzj1qne24vkSaJe6fdWkq+aFuA27DRb8ewPHBrv/Deo6c9k884cpC21ZHXIYjqAoAIxWF4Y0DSruKS7t4naSFtvzr3HXtn616NDZC3hM6ABOPlAxyPUVhUktmbQi90XIraF0a73ZhkO5cDA554Bzj2rlL6W6vLiaLg2y4CqgKsSeOpJ598V3d3NG8dvFNCsjkAkgdM/T+tZP2KexkeRYzMrtycblA9K54S6s3nG+hxFnoF/FJbXG5xGAzAO4Y57D/IqTxJ4mj8MaejXuLmSbOUkycH0GAc/nXURzk6nHB5aiAKd21cOCPp0qaQHUNQmtbuzfy4AJEkdfkYegY9TxyK0lNt6kRilseP2N5HrVgl1qMEYs4gx8iZDIFHQEHI9fSvJrvwk2vy6hbWmo3ENsqmVLeNgiHA/u8Lj2xn3r1nxLqtlN9rs9N1GBnkJAidwzqfQD+H3xXmEWiXMEkjyBrifgrHC24gYzlhjOPWtJRUlqjOLcXozyhvAF1a3sUcUhk3YG8bUwcnsc5+vFdzFpF5ZGOG4n3SRAKB1/XPatzVYpDJFE8kbMcFvLYlV9BnsR3rb0uyiugIpmRlXgbMBsn+lZ06EE2omlSvJpORUsfMYq25k2HgqcV7P4Uj+36rbMyRxmJB/q1ILe7kk5PvXIaZ4dEtx5CXEalRxub5v5V7l8P8ASfsayiYlHYAAfxY9fp71tVkoQfcxpRc5rsek24Oweb8ufTrWiLhEOFHJqsIlh+YHPt3qoY1uH8xnK7CCFzj1+8K8N9z2l2NWW6VVyT71yWr+IoY2+zROS+MsOeBU175wR23KoUck+1ebahBaSYzeRR3MjHYruBu+g6muGdRvRHrUKEN5MrTX0mozsrgR22cgjOSPf2/CrCrHbMkdo4Kv8wJ45HaqqMsIWOaVPNfgsTxz1rK8W6TpN54elSK7gS5Qhgd4BOOo45rFK53zqKD5Uzqvs2svZyTrIftCKdibsqfY4P8AWuQ8N+LvDeo3n2DVHeC/WQxNC2WQsDjrtxz9a8WuX1nSUSXTr6WPjA8qVhge+CKjuFaaLz7ljJJLy7sck/7xPJpt2IjCUm7s9a8f6Y+h6rBq2izGCK5HKxkKoZfQLjr3rOi+LFvPbNoniqyhubaRdjOgO4f7WGDgsOua84gmhjtQbVHlccbVGR+Apjq91ETLaqgIIOU+Ye9JSCVJWtI6qDxnq3hO4dNJlbUdFuB+7FyWBVT/AHRkbSP938K6B5rXxVpoutZX7MykiCWP5ix7LJwc8d+K8bt9PR3YsXKjoOor0nwVNMsU8UJ748uQcEd+K7cLVUaiucWOw3NR5onNyafbwuyFs4PaqhtbU5VWOfpXe6tYLBJ5n2aRFYZOBwPp7Vkp9nfb5XD+4FfVKKeqPi22nZnGSWXl8kfKe/AqBtKSYZHP5V23mMGIVkZh2FTCQEclV/Sl7JMPas89bTAq4Mf48VAbJVHAOB3yK9I2xEfPtb34qq1paMdzAA+2BUuiuhSrM8/K7CCEFTjaw67T9K7T7LaHjGD69qgk0y3bJV1B+vFT7Jj9qjkCrqdyH8qkDSAbuVz6V0n9lpt5dc/7JqM6bInIcUvZsftEYkV2ofJ59QecVorMDh1P4Uk2nzP1ByO+KrDTZgx4yPpQlJBdM0fNL8A57+lRs5Izt4HpVJbKVeQSCOmelTIkgODnI6+n4U7sVkKZU6tkZNMZrdhjJGO1WleVMggH04/nSearYZ1/DHFMCBVidfQetRyWgYdc+/f61dUwE4AIP6VMIYXGQRn0H+FHLcLmN/Z67SF5+uCaqtYbOcAj35xXQm2jXuPX3qItGoIIwPepcEUps5w2IZ8FQPfjmk/s2E9R+lb6yIOw9t1KcMclAfpU8iHzs//V543Tn7zD9KiLMRnOB7Vxq6jKRj8zg1Z+2TKVBIw3Tcf/AK9fX+1TPlfZtHTYbHM2PwpmyM8GYEmuVk1yCBsSyliOygn+dMk8VWmAIIn3erAY/nU+1j3KVKR1qxxqcl+PpUzT2ycHI/OuBbxLfscKiAe4P+NRSapd3I+Y4/P/ABpe3j0H7GXU746lpsPVwD9TUQ16xyxZuO3B/wAK4Lezff5NWYiowvWl7Z9B+xR2Da7ZHhOfz/wqjNqzltqptH15x9KzFe0U/MvI9hVpbqwHLBj9Mf1p87fUXIlsirJJeXJd0UmMHgnAzVd4JWA25dyOVCnIFby3lsE3Rg4fjBANU3lYk7G2nv2NS0u4032Odkt5GYYB/KoWsrmUHZlwvLHoB9TW5NGyPtlfBOOhz1+lQSwTKjOrfI3B56/UVk4mqkc2YSDh849KtRx2vkyGQqrY+XI3Z/wq00BXOSDU6SEwG32pjOTx8xHsazUS2zFeWe4IWRidowvFSRxDer7FABGVLAZ/M1bf7IBg5Y9ivGPzAqK3jW9aQRsEKKWG44GFGfzpWKvoWr9kkcJaRLBGQNwB449z1/CtTw/pulzm4m1PUFs/LjPloykiU+m4fdqx/puv3aWNw1vHKV2RiJSCSBnJIBFU7TSrq0v5ftMf2tbYAsF5QduQ2K0trczvpYzzsfcGQyRr8qc8fnV/S9Oinu1t725a1KjK/KWOevQfzru7a60CaP7Hqn2e2gVcpIsLZDHszIrEn6DHvWFeOujz/wBq6Evmt0P2hQYmXpuUDBHtnFXyrcnm6HNSTzpcvHMrSIhOC3A643V7HoUL6Ro8upQ26641yFxFE2DGcH5iFycj6VzcXjKC7eO3jgtC04AmE8JIBHUIQMgH6U64e2s4zcW0UuwyLlrVyig88LnH600m07MltaaFfTr/AEWO6ee8tBbXSy7nW4LbgSewxnI9CK6m0ktZfst7pQM4BZJ8oYx82MAbgCRx2rsNOuPC+oWENxNYSSzkBnYojOQpxyx6nitS5uvD5t2axhW2l3hUUoAMnPGF57dcU1Jp6oTimr3LGmva6dYmWUJppbLO7yfLtPXljgZ61qyXkWj6a0k8ii0nw2R8/mA+gXJOfauO1KzKxM91JFJbwrudZMspXHTaRycdvWmJ4zufECRnTY7AWdqPKPnQuGU9sDkD8KzlFtmkZJI0IvFNtHJPBYwmWZlDeSUdSijucr09zW+9xp15pkVxC+zcNrlBvG/qenfBFePWEeq6de3uoXH75p5DsKEchjwuSRhfaub1LXJYEa13zpqDllMdr9wE9D1xnHercFa5Km72PoG2sbVYrmLR5PK8zdlU5b6kMc8etcmBqejXDWkczSxTriU7ApDY6k8jJXBrzGx+IOrRx6ZY2kSwRiXyJppRmVgo55RmJJI54r2GBzE/2pbq3lExLt5mSemAAp5HTuKmLtcb1sfJR8QXp8UT2dxI72tjM2wMojwO/GAf613treNeXDx6aZTaTkGSRULYYHIOMde1e6a3pNjFGszWlr5+AxIiX5ifUgc1zGtaTY2mmDxR5lvbNAFYwp8ik5wP3SjP50U7pXb6jnZuyR5z4k8NXlirXcMReIDezMyqwH+6Tnn6Vj22p2heGSKEwMgAYAltxA5PI4z7V0S6tp+qyt9vuJIzId2WyU9gQMnH4VledpUDTy482XPyNGvyYB9Gw36VpbW6Zl0s0eg6Nr0wmWa2jWEtjC/eOR0OSP0r6X0h2ezgnmH710GSRgk45r450O6e7lD7Ci9Vzxk59s8V9Z+FJLq709ZbjAAxjHasMUk4qSNsM2pOJ1DSFeWbr0HpUYkxHk846U9rck7gc/WoJFYAqOleY1dHpLRnO69cXQsZHgABPXJA/nXndtaSMzajeEPKeEXj5B3wR1z/AErrvFcv2ex+UZY/KBXM6QgvIh5u8E9Oa8yS96x7dKX7vmLw0pL+Ei5ibPQMMsR+X9a8/wDFOktbTxW80JhyBh8j5gCffFdrq9rqWnJ5qzFFf7pRj+uK841q51W/k+z3FyHCD5NxYsM+/SjbQcG5O9zmptKmu5JFiiaXysuNgJxjvkVj2Ek0lw1nfru3fdZv/rVvQLd6XvRLh18xcMNxww96qC1MpW6TZvJwKzZ6MPU3LCxt5opY9mCnTg1z+r2d0qbRCY1H8Q5rudLKooeRcFuDtFSaoDbwmZoS0W5ecqeM896djGUnzaHmNpbf2c3mzgyA/wAPT+Vev+HtOtJrDzbZlguNwbaRliOuRmuGjtvtl/GqKf3hyR/DgV6B5E8Hlm0Aj2kh8njHbGK0pW51cxxkn7PlW5fa8WRntIx9oXHOV27T6jIzXJ+I9IjtbO3vSRH57MMY6479avz3o+1efcTpBDGv7wKGBY+3GCa5HWtaudZucMwW2iXZCqnkAdzyRk9zX1lLZOOx8PVTTaluZKxJkhizD/dNDDb8qnA9CMfzqgsLCct58mDxgk4/StZVKRhd2T6nmulHM9CmLdgN2zOe2aq3n2qNUNvbGQk4I3dB65rXYOwwflPt0qNkaP5ixz78ihxBMoiGRtrcqfTrTtkanbJke+DVnzJlH70KAemOaaZQwywBzSsh3ZC0ERAIOT9P60qgIu1ZMH0zT2ERXJ3Kfam/Z42HXrQHqOWdU4lYH0DGnifcMgAH2OaqNaseMhvqai8toxjo35/youx2Rc3HOXBI+n+FMMtuePLB/HFU1luomwxBX8c0rlXGWyM+mKVx2LxlslUb12fmR+dRb7EtujZST71nN0+Ukj0PSmMygfPGAPUDmp5h8prAW+MMFP40gtYnORj6A1gSCNx+5kZfzpkP2yQ/LuCjqWOP5Glz+Q+XzOga02nAPFNMAHBG4Vl+ZNnG/GPU1YEsgxvwR/smi67Csyw9sjfKpwai+wv/AHc/jQ11Ch3SggY6iomvoM/Kxx+ND5R6n//W+ezqOouNolO09gB/hVSWOST55CST1zT0fHoKtBt+FI4r3d92eNtsiiY2Chd3A7UbO/WtDylA6ZpAig0cocxCp28jcT06VMs0oH3c0uB6VKGB5AHFNEgksi845p4nkHamgY60u+JT61Qh6zSscld1WMSP91cfrVP7XHGeO5pkuqyA4iA9+MUcy6sVn0ReZJxwp25pyyTsHVnGG+8T6Vmx3UjgtJk+nNWV8x1JZdo6ZznNNPsDXckZ0RPLH3ifvdsVYVZGjTyZA+T91Rlsn2/+vUCWqyZBLEnGORgfhUkf2nT7sSoo3Lxg9P0NUvMl+QnkXt3M1vFG5kjHzIRyMe1U5ElLKiI+9OCQvVhWrd6xqFw0LQxxRSIoUvCpV2OMfMxY5J7mpdN1G7t45YWjjLklw7pvfdjoDkAflSsmPVFWGwl8p57uCSKFgQsrr8pf069aoywWuyJljYkghsjaue2PmNbKX8NxbeVeTTBixYxhvkLdiFxwfU5qK5vJrwW6PBGgiHG0bS3+8e9NpWFd3NS2s4rNm11NQgnljj/1DjY+TxgAZHFULS5ndZbi2jdyx2zFCTlT146dKtWsVzNH/Zn2eJ5LqQhSQN4OM/ezjH4VsadcaNoczQajdGG4MbbYliJRivHzEcZJrRL5GbZcax0XXFOmXTnRmtk3LNINyPn1G4bf1rgb/S5YbtrWK5Wa3QqqzKTs5+tXBq839pm5nKrGzfdwXyvv/wDqrrbS78H3iXFvNJIyxsNsuwgFh2KFc/rUtRk9yk5R6FKz8E3LS+cb+CC1yMSA78NgeuP513Gn6DF4XkaKS9/tGGXqka7Qy9D3PXOaw7+TVmsRqFhDBLpyZwypsJ4wcrv6jHBxXZ6UbDVdHVNTZrZniD+ZDy6rwMDrjkitUorVGbbe52mlyfY7YNp0iNHKh8uNcHYBng9c1gGzYXrahJG1zI0m9CONvoABXOXGh2dlFGtleX0i5CxBJNhZs5w5x746Vo32qajEyWVgqwRw/MXcFnfPGCQwxj1xTSd9BNqx0urRW2oWzQ30WDMOcsflJ4yenT0pjaTpmgaC8MtwhD4+fpknPAGeSPrXO3F3rKhZhbLJaE/NLJJkgd/lxk1QnmvdWgebU2SOBD+68oEqwPfaScHihR6JicurQ7+2bCwha3Ie8+b70ajAPUEjNcfrx0mYHUbeCSwmLqXuj9449F3bT6dq2bfTbJJ/MmvmjjQ/KBGWVj6kA81XvdWjt7uOwuNLW6i+8m4ghh6kYOPxqpJdRRb6EXhu5inm0+2uhObqEvcBpIVhwu0qNw3nghvvc/SuqX4d6PeaqdTvb5bczr5ixgFixxn5TuGRXPpqWm6lqS3nkyW7NGIsZyF46fdGQSK0X1XWItVt5kZBcRYjjt8ExbRwC3PcdcEVHK2iuZJnok18yQxi8ja4js1wr7tvI+grxbxFpy65cG/tlWE3AbKlmYtjkDOBwB6V1sXi2eUXEUiwy/xzIqMuwtxjLNg/gKj1abRfD+ml1aWW4u4iyh/mCFhkBSANuKLK2qC7voeaSaZFYkeair+7ztLEEn8RVqAwXHzQQ+XhskAlsDuOf51NY21rdWgu9QuJVkDgEuC42nuPp6Zroxqem28P2HSbWOZQRvnkXDN9BgY/WmrX0BtkmnIqRG48ltmdu7P3TX0l4Iml/sVPmL7exAGc184JeT3QW24hQY4VcBvrzjNfQXgOz1G3s987hoyAEAOQfrzUYr+GVhvjPS1UKgY4GeTjpVchH77jT1beNr8Y7DpVgIijpXis9hHlfipmkMQUfOshGRzisBYbiB18x8q/WXoAfcV2fiLTJbq5ZbUYQ/MSDg++Kzho8r2iwSEtj5uccj3rCnB81zqqVVyKJhajcSWdrtS8jlDHpxkY/A15RcLdzXrXDHcv90D9c12uqaJNJdtPDdgRtkBCOh9Bz/SvMdZttUgudnmCOHbwVf5iw6jGenSoqpt6o3oOMY6MW4EN3JtaMs3ZsnFNtrSaLKAYXOQPpS6dKJ488BwK09shwsmVYdCp/nXM0d6qNaGjo7y3ExXf8oHzLVi8S5ndoYZC0RPKheB+NRWMEqbpEOOxI46111lp7RWxuIW8wOf4hjNaU6UpvQyq4iMHdmbaRQWMKDYSwHJ6YP0rUsorm9l8iNSwbJOORk+vpVR45mk8to9pPet/R5rbRYLmcyNMxckhuNvsMDpXb9VnFcx5jxkJux4b4mvb5tUn0zU4yv2Ztqr7HuOASDWJaRLDKRbgYbrivafiDo9lreinXLIGO8t1LkqANy+jHAJ9ua8GtL27kZB5HzdTgEHHrXr0J6K6PErx952dzpbvdaFRKmUbkOuSD+eKas8bjiQY9K6fS9Kv9T01njQNIj7VjfHIPOcseMZ9Kn/4QLWUia4aBBsG5lDrnHrXY5JdTk5W+hzaSthQGzirAkQnDcmqt1Y39pKDNA0aNypznj8KpPNKudihiOOTg1fMQ4mqU44HFQT+UqFpiFUdzVNbt3UK67HPUZpzTSFNrhWHoe9HMgSaHQeRdLmCYOo9BTzAcHJ4qCNnibEcSqp6heP/ANdaCyAr1z7ULUGUV8xDgNhajaSYEgEEe/FXzJERjAz9KMQ5+ZcZosF/IyxM7Akrtx75pnm5BG8H2rWWK3weevbFRtaRNyEBz9KXKyuZGajHHIP4Cg4U+3cVe+xNnCZHtTWt5YxjCk+4zS5WF0UmWHqE/M1Gsi87SY8fjmr7pJgLIqgf7NVxDAxySwI/z6VNikys4D4LDzfwxVcwRlv9UYyPetQwcDaRj1x/9eoJFlz0BI79zScRpmdJFOOFfiqhilJywya02knXlYwR3BPSmCbIyVGazaRabP/X+dY8d6myB0I+lMVeTigqQeeK91HiluKdwCFyM+opDvJycGmxlTxmpflzheR69KskYGOcE4oZnHGQRQ4UHmmrJtJIGaQBuG33pjSdsEUzzSTtK4zTg+flIpXKsVWj3HIBoWAn5scCrB45B49KEuBgrxzxSsuo7jVYD5e5qZJSpGwc1I0cchBjGOOc+tIbWSILKeUz9KqzJui0krLk9DnJrqbK/tLi2jsr2UrGpYnYFzzjuRXEtIRISqlVPbOeKuW93DbxSPJBv3/KrZ5U+tXGdmRKN0dNL4fZoJbq3mVUT7gc4Zx6qMc1HZ6VMtg2pNcqrgkCFf8AWZHcgg5FVbK5u7iCJpZnZGyozjjHJwO3Sq15q01scxTF4wcAn5c1o3H4jO0th/8AxO5gRPsULz+8Ur/KqMsollSBoGIAIbGSMn05zir9zLqusac8drbeXI4yJvOIwB14JArlNHv7mxuVtboCcg4ZpMcH3ODms5Ss0jSMbpsvvY3VtuvbXzIzFypwWBPcA+tFzBq11ZNPG0k6xBS6IoY84Ppn863bYm/k8i1ZnZslYwxCnHU8nFY0N3PHrX9mTE2pkOAwI+Y44zj+RqWkvmNNv5GXoen6lpWqWt1crM81zyscY+ZUz0II6mvbpNN1S/Eeo2ySLLHujSN48kRkYJIUd/WotG8nSl+2XcUV08Z2ZcAnPXAbBOK6e11ddSvEOlK9rK65EKu20Efe54BHsa6adPkVjnnU53cd4fsZbOMfZ/n8z5nXaSisOMeoPsTWtpdhp0Oo/aIInS4RiSIidnPHOSTTNMlmEhFttLM5LqABgjqcnua623sInld1i2Mx3Hadpz35XGfxq5O25EVfYt/Y/OUnCmQk8AnI+oFY974XuWdXmbg9UGRyeh6Z/XFbsN0ILpVljCIw5I+83OCeORXM6hqNyxkaC5mOFOCXIPt3rKPNfQ1ly21G+JHTSrJQ06+VEFHO3JOO3FeZ2OsWl5O+lTI4hPEIBxknkg5JJz7Ua1qVzshhvQbmTd8wck5Y9znisy81sWf7mwto57pFLO+0K0PTBU45/CtfhW5l8TM+7m8aXepix0ON208uE+WLIWMn7pfaTkDrzXU3Kal4bhkt5ZIUadMENneU9s4HrXNaTq/iC609Gs9TeObcGYqACMeo4z71r6t9vk8vUbpWvZI8JK8hyq55+70HXsKmN9X0KlbRdTtfDljPqWgSX+oalHb20ZIjRDGGBHruUk57c1xkerXOkajdK0yL5owJZxtlKEcAAYTH/Ac+9aB8WLoum7NV0S3SNm3Rujfe9PlUHt615jqGpjVb2S+2mLdnarOXwOwXPQVLlbcpRvseuWFr4b1h4I9df7QXUkSK5QDHQDaRn8cmp75vD+mx/wDFOxGVm3J5ZYybSBjLgkkD6GvOrDXFtrcWyQrI6nKy5wynHbiu90e501NPEWpbYmmBYSFck5PQ4Gevc1orN8yId0rMddTa9fafHZXn2VkyPL8vO4Z9R0/Sq/mWekW5tgCbzA3OCCM+wNWLiOOxdFBVCOUYAZx61m31zDfyq7yAyJkHEYBJ9SQBnNaqNjJyuMuNSvLqNBPMGRT8qhQMfXjNexfDzWFt4zBe3KiM4CrkDn19f1ryOG1U7fPARX6d/wAcCvRPD/h9lLXJDJEuNpOPzIzUVYxcGmXSclJNH0A08Sor7gQenv8ASozdSZBDAL6VzFk06oiufNVB8rE9/p2rYW9tmIV05P1rxXCx6/NcvusVzgFgpx3OK4vxRLJYQMbT53YAqM5BI/U10L3EXIXnrg9P0rzfxF428KWN9DperyES4JRlVzz/AMBGBVwi7kzkjg9XstUv4zq0EBWVTiSIA7j/ALQXnj1rz3xP4dutaeymMtvAY25ErlSOnTr+ten6/runW2kyvoN3Jc3N4QgzuUpnr96vK2hub2Axs5MkLBmYnOP8av6ne7QLG2tFo2LHSr+0uNoUsq9HxkEeuQBxXYT2WoPmW6ZWRwBuAwOBwOnauF0svroSxW8lhFyRH56SOrIFOflCkemK9ks/C93DbrZjUJZY143TfOTx1G4kiud4LrJnR9fvpFHO2Nr9pkaBG2ogyfeu+itX/s1EaMuSuOAeg6fjWrZ6PY6bB5aojvgZfHOa0reVfJePy+mSMfnWtKPItDCrPnepzTw3wSG3uVEsWeCAcge9XG0+KeMvCCrjja59P88VsEXM/wAsYCBDyeD/ADqL7II2LPKyyHtjg/lW/OYcplzaXt07yJHDmQHO7p9OMVnzeGNQkmtb21eKO4RPLkIB2mPqAuQecgc12DRo6iK5iBVehz6+wpPNtogyws+B2BbH05NZutymkaDm9EeR3ngnxHHqwv48SuDkAg7vrgLjFdvosNz5LR6hbSRzxnhmG1SPTpXVLqEJQzMzEoO+QR7Z61BPfo4WQBWV+Bxz/KoqYxWszWlgW5WRZt4QynzkWRT6da838beDtNm0yfVLG3ZLtDnqef8AgPSu2e+mijkaEkFVzgH0rKfxBb3Vrtt0889JMk9/UEVzxxai7nW8vlL3T5eALna/zA/pUM9pMgDWx/Dr/SvTfEvhlVSTUtPjEJGSYlGFwOpHNeeCU7M88DtXtUqkakbo8KtSlSlyswpLq/gwP5ioRrF2H+UH0OR/KugzBMpDAMfQiqslhBJnyxtI9KpxfRkKS6oqR6ywJEiEr345q3DrcBOOUA7NisuaEx5BX8fWs2eJSu4/K3tUc8kVyRZ1Z1NS4C456HtQk7O5cx4IOM5P+NcOI7v7yOTt/SrlvdXqvyWYDrzx+X+FCqvqDpLodl9pVmG7qPXip/tqZxtY47jkVyyai8wCtHt569an8/Y5+baCeMVp7Qh0zpPtKyKcMBz0NKtwOEVxk9jisTcCvA3E++M1OkcZxLnaR3xnHtVqTI5UXZHC5zHnPfnFMMkK4YLkn0pyMwAY/MDTTIqkiRAPTvmmAjyIyl3OB2zwaiVoCM71H1P/ANepP3cw2gDjtURs+eEX/vkVLuNWP//Q+XxMx6gjHrVjzmC4cMV9B0z61cFvEwOQRj8qqiNcnB4U/SvZs0eTdMakitkZ596fGGBPIpvlpuyMH8alkfj5F247UASIC3VgD6VOImByx2hcEg8E/SqKyc4atOFrTyC8h3PnHl8jI9d3SrWpLHywK4EkUihT0BI3fjioltsnBOfxpN4U/KmMe9KbmBFy42f1qtCdSYWbk96kjtFdhHwPf/69QR34VgnlGUNxj/IqxHe2wlPAzjlckYz68U1yk6luTS1lRjbv/qwMgkZJ9sdRUkGmxon+kEjB6k4H51zupataWMqR3M65IBwuWwD/ALoNSG1TU7VfMJnU/MmAc8+w5p80b2S1DllbV6HT3VjpUEf2kXAEYH8TL1/z0rNhNleSeXaAtxy2QUz7EVY0Xw1LewPBaLKxGcxPGy8+xbFbd1oKeHbWR7+dbTBUNE+AXbnAHJ6VpZvW1kZ3S0vdnNXdhdCBoEzsbnBzjI/SqeiaJc3Uv2W6v4bWyjy7fa22Et32EjH0rvre3E0JZ50BVCyoGVmPfG0HPPriqeoxQy20D/ZWsmbhg25sn1yRjn2olSW4Kq9jnNVt9GjWO20m/eeaNsyKrgpj/ZA5rE1bV7e2e3OlW8xIwJTPHkH129jXob+HPL0sXVqF85QJGJwCVPoCenuBXAjTYNSlCXrtDN5gKyBGfgn0Ws6kZLbqaU5Re/Q5BpwwlmuRMJGk+XygFGznOR65xWhbah/aAW1V3SSJc/vTjgc4HfPp71audNhCPbx2xlXzMmYsQSP901JDasrhIUKbO/05rlUZJnS5RaNmykn5aeRpG3DkksAPx5Br2bw5ZaT9lllF2Ge65fzJBgMeeh6HPSvEbCQC7E0w85d2SOmce4r3ixkluYY7XTlNvCSDhsjjrjLAfnXoUNUzgr6HpOnQNb2Ua28kTOOMbssff1qe4n1D7NJGyuj9AxBAB9zXHf29F/aKwiMv9lUK7seQfQDGSPpWi2viTCWSfPF/yyAIJz3JI4+lauLvcz5laxuaT5sLiCRSGfasjP8AdOT6mqmr6DZyRSktLJKDmJkI2D15Iz+Vaena/cfvLbVbcuHAKnIwoxzyopskSXNuzrJx13YJB9Bx0qLyUrsqycbI8qHhOQbbief5Iz8yoecnoeRjNacOk6OmnyvPdJK+VVd0qmTjJ5745rI1yPULeeYPb53LnJIAYDoB/KuOS7ms7xp2g2EjasYbcQT3GM1s7IyV2dNb694c0nV5bNI1a0lB8yRdrZPuQcY9abr3iOIzQT6BFELdjsLSqNqnoCQp4FefDTr29m2vbkB/m3HjJ64rWtfBepXboT+6iTkklQAfxYZ/CsbzeyNbRW7LsOr3U1yk2lx/8TEBklYDOfdCPmxWKNB1q6uWuru2uFyx3GZXyc9xuH5V6HpnhTRdNkW5YeaVI3SbWwPwBOas6j4tfVZLmC1drCCxAESmNn8zHfJUBeexNNxenMCkteU4mSx1rQ0a7S2mUSDHmMjHavucDFNsY7iZCfmkMvOBktn3rstP1rUbmONDdBFYkO0m0HB6EDqfwFdtpsWqLAgLx3Ekb5SXcgO0dBtznp6jNUlbUi9zh7SxkRFR0cM3/PQHcT7d66uy8NXs8EzW6iOQjB88Mrcd4+KmXVL6G7lklhE13MNolJHyY7gYwa0LS81mSWVEl82RSG3NtQD168fnWkm7aERUb6mlo/h+XTbfHDyOCHHJY579M4rr4vL0+0W4uAuGIUA9ST6ZpmnfaQiOmHduHIIHP40t1e2t1cLpd2yzMmNv+9n29BmuGUnJ6nZGKS0NOBXmdmA2qcYA6dKmljIXaMkmtiK0jWJVK4CjApjoiHAFc3NqdPKYH2F2K4HHeuPuPhVoeoXz3Ek88SNliFcDBPp8vSvThLGD057c1FLMgOZGDdsHiqU5dCXCPU8nT4dWdtC8VzI9wFYlGHzNtzxnK9cVuafodvplskX9nxzrISrMYstg/wB7j869AEu4qYYDs745AHrThdW5OJgNqn5evNW60mrMlUop3R55YeGNA8NzTzWCETTncQxUkeu3gYrZsY5pS8u1Fi6/KOa6V/sczE/Kv1NWRdQQoYgBsYEZPG78Kh1HYpQVzPSxWeLcHQv/AHXODS39hHFYLPhw44YAenTFTK2ml8ysAQPujP8ASq7XWnxubYSKnng7U9SPepTdymlYxlghgKSecobruzxk+9OnvllO1Q5K9GGNv5itwRWFqAyRrnpnJNPl1JVj6jC8D/OKzqRlL4WbUZQh8SuctHfawkhMUBdcdPLZqimk1aUFmjkSQ+u4D8BW9c6nI6KZCT6D1rMuNQJ+XOwHqKxWFk92dX19R+GJgRwzzxyxtDKbjnDSj91/jVK30TWrO4DRXECIc52lgfxwK2JL0bS4bYM9axLjVMq208DvnrV/UW9mZrMbNto6UPI9tJFf3W5WGPkb0+tZx1LTtNGyy3OxGMuQ1cXfawkUOC4XIrjdW8V6fpNubi7mEe4EAnOSfYYya7YYGCV5nBUx9STtA73XPFNpZ20tzeOqQwqSxJAB9FGTjJ6YrwueUKI7iNsrNl8Dtkk4P4V5d4r8WX/iZxDENlshBWIEHJ/vE4HX0o0vULm3Vft82xR0XGf5URqwi+WC0IlSnJc03qesqQ3zAYIqaCZA23OCaxtOvluIAy8rt61MZATwOfSu5S6o43HozQuprZeZJVTt8xABqubSOQbgwI9Qf5Gs+4tobkKl0m8KdwB7GrEbCI4DBQaV7vUdrLQhlttuW2ZzxyOapxWtwpP3Sp9ua3mBdPX2qlFDKjl4vunsKlxGpaGDeWzgHZxk/wCelVBNLHheWx6da7KSPzF2lTmsebTpWY7AR+FZyg1saRn3K1vcpIp+9G3vxV7zmG0gb8/xIM/mazpNLkbBc9OxoitbiLKEEKRwf/rdaScl0BpM0VmkDgq5GfTp+NWvthP3lO72HFc9GHWQBYwMdyQP0NaZn4GACR6HOapSYnE0jOhUPt2H0PBNSJcptyZNvsSKgZ7V1CvgAjkHjFIEsW5WcAenWtLmdj//0fIv7BjI+eQ49j/9aj+wLAjhpAffGP5Vsi6izhomwe4pz3ka/IgDZ7Z/+tX1XJA+a55GNJo8WE24XyxgFAOfrnrWLNo7q2c/r/8AWrr/ALQFIDLtU++abNdWJi8rhZRzvJ4x9KmUIsanJHEHTznHX6UjWLINwK4/z7V0MlxBgr88n+6v/wBeqD3DQp+6RkU88jNYOKNlJmR5Tu4Cj/69V59JuJpkaQsu05A3cflXU2l+kS+apyx4xwD/ACNYOq3OvXMxkimHPCqAOB/3zzUyjGxcZNsbxbnDgcd+4+lRW8qJdErtw4wxbk/hVNbK9uDt1Zhcpjovyfyq3FpkKgIi4H4n+tRr0RTsddYeHfD95p0v+s+23BADzBWQc9QQCw/Ktq8in0awtwkVnGqJ5ZcZaQnuxCjoPz9q4+W01DTmjmkjeAsoKEgjK9jg9qVI7tJEvnkWaV8k7AAR9RiuhNLZamDTe7JdQmMCxJaavL9pduZFZljIPIxwGzjrkdaw7PVNXtZZ21kNqhkOVMx80D0OHIqeZftNygktioz80vQ/989D+YrevdKbR4k1AXaXFs682/CyD6/e5/GsrNvmRpdJWZzz6wl1dRRX6eUrkZktQyOAByFzVrWZLjUZ4rXRb2aeGMgxxylhMT3BIBXHpzVm08S6BqZjF7o8qyqwHmGRgSoGMAAAfrVie6i07V7a50nUfsYg/eCOONXxk92Zs59sGjdN3uGzWljobrw34rtvCz69fNIjjEccLScbe2QCTiuN0yPXkui7xxYjAbdk7cnpnPP5V6PPNPrWntFHdMXkUs87Ddk8cYBA5+teUajeS28sml34kuUxtDMPLwAOmAf61pUXLZtkQfNdGze2M1pFHdX23Y5JfyySR9AQP51m6fJo087m/mmVN+Itm0Hbnjdz1x1r03StK8N2/hdrS/nt1upMMjGcnav44zXj+o/8I1BcztBGW5wsgbd8/QvjPI79aia5bMuD5ro6Y6LsumuISfso6AHLbfcYAzXWnXL+ztoLOyACxksXlzu+mQeRXmA1bUoBELCbcRhV6FdvucH+X416dFrmj65BDp+sxS2U6gATxESx4A6EEx45+tXTnHW2hE4S0vqX9G8XvaXkkuqWv2qIjLGMDfwO29hXEajqGq6pq1zfaEZbeBz8qtJtYA+uGxXWDQbF0+2R67bSyOflhfCPheBwC1Z8nh5nma5W5W2ONrKV3DJ75yKtxlIhSjE1dM8XeJbWyhs5RbSBcoZW3NIfYndzXqek6hrdnCs7i3lRgCqqSV59QSK8g0nwabaQ3MOpw3hY/PFgp/It/IVbbSdZW6S5tLhLGAnaoT98Sx9AwWrimlqiJNN6M9K1PWzqMm24gQSKDxGmF5+pPSuJMFlc3X2do7ncw4dAuQ31Paurtb1/D1qJNWucSFRhHVUYZH3gD1z1x+tUrPX9SmaWSNy0aDO4lVJ9gMGttNkZebEh0+00ycRXRee4ZAVVOUGP72cc/QmpIr+Ka4a3u3wUwCsOQBnpncAPyzWPPrENzdxh5PsrK2SXwWyD1AyB+FK9xpsmqfapZ5btunEaqD+T07isd3BFZfMtzKEQc8Z/UFRVhzo72rwIkOxzyzJyfxArmpLtZcItruMnQMxB5+maytS0LU7iFIIb0WAJJKlA+4f3Rux+dKUeoKRg+JvL09o5rRgqliMLx/kVd0DU7+aKKSOYJ9nmzhi2Xz2OM5596x/7LvV3K6/an+6xI28H1ABx0611ekaFcTNB5EJs44XD4GXQ9j8xwfep1vdl6WsjskkW7j+2zReWTkYXAIPsM9/rVuxuDNOqoiw8AEdN+Oc5GfrzWfJb+ZcuWmUYPKgZJFdJYWtqiK7oFx7n+VEmkgim2b97qEEFk0sJMeRgcY574xRoeixOi6ndFvNYh0ye3v8A/rqhEYrubzbhB5UZ/drn071snVAAQvPbjFcjulZHUrN3Z2bXcKD5ieage5hkxgiuGlvJpFyG2iqLuuOW5rJUfM1dU7udsZXIAPcdax7m4jiPLuQeh61yZnkjPyPzThfynAY5xWipWM3UudtbXisgDSSI3UbSMEe/NVrto77IG+NlxkggD+dce8yOC0nzdsZxUDXEi4W3OxRyV65HpzTVLW6E6uljtjOIYs25znHL4PH55rIfVCyFPmfn8c+2TgVzM+oybv7uP4eKS3uZZmwqklufoPerVK2rIdS+iOk/tSOJdzDBHduT+lOjunlY3MkQHOI+AeO5JzkVy73CNGWaRHKHcVB647Z9aR5IriFZVIjDDLBzjA9CRVezJ5ztnvyynzDjA4xWX9olkyQS3bANYL3EgtzMQFRQdvPB/E/4ViDXWtVMkUe8t0G7Gf0NEaXYHU7ney3DiJRN29Ov86z7jUbdWCZ3Aj8a8/ufEIkJLuYy3ReDj8eP5Vzl1qxjHy5lc8cYrVUktWZurfRHeajraICvQD0rgrrxQJLk2Vu6iUgnBz0H41yXiXWLqy017gDIxjLfKFPbJwaxdH0NdBsZfEOrMLm8kXduGVyD/CO36UnO0uWK9QUbrmk/Qmv/ABTf3s722kR+ZKjFZJJ8rEoHBI5ycfSvK9WudUlvJIr+UXDxnsSyD/dzW94h8RSarapFDF5ERPK7sk/oK5aJORn07V5lapzO1z0aNPlV7BBbySHfnb7DiurtYIVCtMMn8/51lRgonIq2js64+79aiCSLk7nUx3apGq2/ygcY6VYSQsc7yG9zxXKRjng/MavxvLgCQ4PrXSpnO4HQLNc7trMD781OzyEZyMisXzWH8eT7U9PNY55x6kVqpEcptR3cyYz0q8t4CN+AAK5p/NjI2N/WmZkZ94bOevFPnaJ5EdvDcIwL5GKkLx43B+DXEp5kZyHKe5GRUy6iqAyyzBtvYYz+Vae17mfs+x1TqrKT17nFRhUPzqM49aw01e0lAaNwWHT5sf41a/teBVwRjHXninzxFyyNNfJzlowW+gxTWCL8wjQY9QP6VTXUYZAGDqU7jOP1qpI8LZdJCM8DAzj8c0cy6Bysts+VL+WCTx04/wAagEhHSFPwpqvGVCyH8c07MXYg1JR//9Lwkavd9M8/hTxqMrnJGW/D/CudhSKI4+ar0bhCGGD7GveU31PEcUbInuZCBI5+mf8ACraHJAmAB+ua526meRNsKoCeufSnp5UEMcz5LyHbtjIYr7lewq1MnkOj8qDbvEh47dKxG1rSHmFsly24/LgxnGfTOKtz/Y1RfMkJJHRG5NVA0sTOWszLGQCNqZb/AOvTk30FFLqWI5Ld5miiO50xxtA6++KvNG0Q3OFA9MVRs45J52YxGOMDhWTBFbDxJFGZGRQq8kkf41UVdXJk9bGabi2VgSikfQirUUsDzJEkA3N3yRisie6gI3hnbHTbiqqTW0/zL5hIP8XIqeezK5bm1f6uZDictOYvkUMT8oHYZzwKghu4HTeG8onqNuf1xWW1ujnPzdf4aT7OiNwCSfep5ncrlRoXkLXcQ8u4cKD/AAgL+owaydS1Szs1WFS1zMR/EzAD/GpTEwPynb7mq0lrLIQWfP1JqJN9CopdSy9/bG1jFrEsJI+dsbiD6jNco81694fNuhKgYYYxqvHp6mugNpIxDMCxH93mmC2kB+aNufReazkmzSLSIHu9YeVbWK8mSFOI2jOwNjplQRn8ajurfVbqOX7RMJZSflYou4DHqOa0fKUYypJB70qmTzMAIB0+ccU+W+4r9hbPyra0VdWVpDD1fLHK/TJH5Vi3OoeHDI1vbSjY3IYxnjPOOR2PFbiK24h5Y2Vs5VWz+lQyabpKbpEtpNzHJ+UH8uKGnayBNXuzF0+CdmMkceYk6ENjJ9cDpXV291MIIQtpGqo/zNnJYnsc1mQSi2YSeXKFXooGP06VqjUg0Ei28QRmOcOuAfqB1pwSXUU230LN7Zz2l017LaqwBBEQcjhgMDrWRP4pltbo2FtcNLC5O/cTlD6Ank4qqWuXeR7gsUx8oB4B9u2KwXCtKEMciFeQQOCPrSnNr4dBxgn8R0MOt38NxIbHUpCV4x93r71fPibUOFubkjYQSM7sH1GP6VyE9uqYeDuPm3cnPtVMrFaoFkX52zhlJ79j7Vn7WS6l+zizvz4on1Jwbx3vdowplY5Hp15IHbNXf7Te7fyo5jDJxkoSCfbjFeaxR3QkDRughKkFiTnj3rotA12TQdTt76QwSpGeVkHyt7dRVxrPqTKkuh2ljNEtyHvC0yqer5JY/XqK6C51eyVlit4hG78lhnI9q5efWbHUpJLu2ljt5Vy2xX4O7rgZPrRpGoQi9BaVIsqSWlO0HHbmuyM7aJnJKF9Wj0mC5ubIRzySn5exAYj8evFWW1yxuGE0k8jYyOQSM+wxxXBWOvo80qSyhTu+Ro2/d4H4966Ox8V2FruS3iDMOX8zBJ+mT+ldCqLozB02t0egaeoVMrEpZh16nJ6E5rO/4SK4s5DbSkKSGwg7nnuBiuZn8UW15mC1KxQSAeYJNqtn/ZIPSueutPnF2sulhbjcuTgbh+Y703K+qVxKNtGekaTqU01ywYhgeSx5P0rom1oEmGMEsuN30NcFFHe3UAiulSNkA4iG0jr17896c9rbumFJBwBuQ/OpBz97qKvlvrYi9tD0mz1i3vQ8cEmDGdp69fxrSE6xrktgeprySa3s5pIZZP8AWwkMsgOHyP8Aa65rYudfuo4hEIBOjcHOCfyJqHTLVQ9NHmuoZMMCM/eqhK7kqSNoORwc1wa6i7hUhPkooGAeMH8KuyeIW81jMyKzf88+E/LNL2bQ/aI6rMRV5ZJCgj64yenWqr3cW0Feh5ya5E6yhj2RsM5yDkD+tZ82tO7/ADNvOOD1/rVKHclz7HbC7LvtU9KY1+EIV2we5/8A1Vx6amUg4YFsZNYM2p3khLMwCE4G3Oc1TSRKbZ6gl3kofKV1b+I9/wATzVO/v9lwIbdGjZh8yqxHB965ayt4Y3RZrsKzAMd7YH61Dqeo2DP5AuGMy8IysMY745/lRZLULtnTF1TMSuqPjJBP9aZb3TyKzM+SvGzsf/115+kjQOzykvH6jufrTjf+Y7SSMydNu04z9T3NHMgszuNRi1VWQ4/cuOF38D8KxL2YwRBFcuU/i7A+lUrvxLbpYOLVne4XBBJ4x33DOa5q28TTS3EtrIocSKT5ijMQOO5Jxmp9olpcrkb1sbKsJkMyOJpM/d6H86871i68ZXtxJaaZZi1WPI80SAnB/wB7vWiL7ybWa3W/tI7lmOzMinGenA5qu2vNY2ebjUYJL1BhQGyMf7uc5rmqTUlZux0U4uLulcnsdCubPTluvE+pSXCod7wuN6kdgeSCPwrl/EniibWZFt4cxWsXCIvAIHtgU3WPEdjqK75YN8rIAxVVAJHcd6523eJl37cZ7HmuSpUVuSGx1U4P4p7ke0vjHIqWGNRJzz7VZRuPl/LvUzK8y7Aox9KwSN2ybyyBn0pA2R6EdqSKxixmVicds0jCOP8A1UefTirsQTLLs5PGPap/trkfu0BHcn/69Zm24ZsrGxA9QcVcjin67QM9eOKabE0i1HMQd78GpvOllOVlKr6DpVIqY8DrTMOzYww96q5NjVaWQcFufrVOS4mHG/ApAHWM/Oin0J5qrmQglcH8KGwSJjPcIP3sjY9CapPcKDkHOevbNRSI7sPWm+S2SDzWbbNEkPEjqcg7B7f/AFqsrOR1YsD6k1CEOOeKiZcjAou0BsfbI41Gzn1Bq4LzKgAfJ1yCRj8K5sAjg4qYM3U8DocVamyHFG79oZz5eSoPTqalEgUYLViLPL0XG3tkZp+1Ty8i5+tVzk8p/9P5oS6IXy8Z96ry3MqspRS2fTHFMjkdhwg/KphbSSKW6fiBXsXb2PK0QozK26S5aIYxtC5/UVMJBGAiSeYF79KgMRA+8g/M/wBKblF4d1J7BQf8KAJ/NlL88GrEd/eQ8eYQD9KzMtks2cdsUFs8gfrRzMOVHSx6zMPl+/7nj+lTS34u08i5KmM9QWFcczsDxn86lDOq7nAGfxqlUZPs0dbb2VgAVtmRc9QGBz+ta1nYpbklVP5HFcDBO4b5cj3HFbcGoyqNrMx+p/8Ar1rCcexlKEu51T28TE7G2E9eKjXSVZdwl2++M/1rITWPKGHGf1/rVqDWo5DsBA/AituaD3MnGSFl0xf77N77Diqh091XK9Poa0/tzTsBCynHbmo7i5kI2PhSPT/61JqI05GUbe4Q4QnP0x/OomhuSQTukPpir41GEDZMGPuP/r05L2BTuhDH/ewf61Fl3Lu+xQSOYNzan8zVkxJgFoiCexJH86seel0QRkN6H5RQIixPzLkerGmkJsx5IUSfIi5PbdWxb2YkUEgDPUbgf1zQ9o/32dcex/yaiDCJwgkIB9M/4UkrPUG77Fi40qNSAQpB/wBoD+tU5tKtsffC+2P/AK9X9sagvvZv945xVGQNcEgMdmeo4P61Ukuwk33I0t7dML94+3NRT2STMxB2ZGPcUh8y3TzATtB+Ynnj2q1Zx3s5ygEijnnjj8etRo9LF3tqZkeiOpDTuXUd+OfbrUkuiRXK7Su5fpXTtuXCqFHT73/1qvvbbo1KDc/+8Nv5datUkQ6rPPv+EdkRSVQrt4VcZyPzoXw1a3UcjXqeXKOUTDHd+I4FegRwyp82VyOwzUvmuxCsiqO5A5oVCIe2keX/ANgXNuc2sLIR2A6/nT20zUJNrT27IQfvf/qr1GayecDyWxgdzWXPbXSkAsGHtmpeHSGq7Z54dJ1GMDHPr0HH51fhZ7TBktyfYEn+Wa6V4ZGO1Mlvc0LazD76rx3NSqdnoU6l9zNtLu4Qhim0E8ZGMV2enXM8eFafYjdQMVzwWPcwO0kDOMH/AAquxmOcMFx2Ga2i3EzklI9Nh/sdVIkmD7uuSa00vtJWJYUZcKMDGa8jjmmQhS2TVn7TOeSSPpWyreRi6Xmd1evDM+ba/wDKH91YwT+dVYSsDiSS6eYY6MuBXEme5X7jdeuc1Is88n3pOPbNL2uuwey03Ozn1u1jO1EyfUE/4VlvrasuREPqT/8AWrAbAJOc1MImK5wMUe0kxqnFFtrueWQSxqF/L+tWIbyck+YF9zkf0rPDeWmxO/rTWklwRgCp5mPlRbkvpVchMHPYEVZTUL3yvKijMXfcOcn8RxWN8/GNo96YXlcFQ/HfBNLmY+VG/Bcuo/0yYGTP3jjP04qBRp9s0siSAPOcyMB1+orndwLGNCzMP72f501pJIozJcHCrycAn8u9HOPkNrzoHiKlu+eDg0ouYCoUbTxjk8/rWP8AaULBEwGYZAINVZ5GiXLlFNRzlKBajNwmo7YnW3hPBGVz/jVyXS4pxJ9rnMwP3cjhfwHWuRk12K2ndCynaM/KhLfmcCqLeK5vLcxtJtP3cqP1+asfawW5r7Kb2Ll5FHG7JHO8sAOCu3YPpnrWHNaae0p8u3VVzwcmqkWsKQ0l4JCpOfkx/Imp7jX7SUHyYXBA4yAB+hrlcovU6VGSLBhCqFiUj0IGaQCUYBX9QKrWmtXs7AC3iKhSefb6HP6Vq2z3sis6woTjIOMD9TmhWewO63I1j77OT0q4kTxAb2CD0OAfy61Tlnct5GGFwR0AAXn3zVFLW+DM92SZOijdkGqvYVrnRKiOgdI8nu26tFIYAoXHzHvmudiuDtkDNtCsMdcD1rYaWJLfzjxx1/8A1VrFozkmaptkVQVP5c1CYrcAHcQW7YOSayR9rvzC0LNHEpwzZKnGO3fr7V0ENoVALyGTb0yc/wBK0WuyMnpuyqkcGHJiyF4yTVSWN3YFAFA4yK3jFkHCjnrUKxqCVZcD9KpxEpHNzW5iO4sME4z70xbV157Hvmupe3jYfvEDDORUf2QEfKOBU+zK9ocybRwueuaqNHIpwQa6h7Nx93FQGxeU8jn2qHTKUzmmU5yOfrxScHndlvSt99KuDxhR+NVn0105fAI/u1Dgy+dGWEJ5HHrRvWMkAgg+labWknAXGD781Wa1EbEkDH60uVjUkUnkY8DgetUhI6EjJPPpWnIEQ/KDnp7VDjPVeahopM//1Pl3eQOcr9agJjJBLA1KsErqTgnHqajEEb8s5XH90V6rueZoQsyk8KaeJ5IVwoIH0q0LKJVLuzgVW2xs2ELH/eP/ANaizHdDBcT9VQgetDee/O7H4VOttIx4z+dTiJohl14oswuiqolVcbufXFPEE3VjtHqRV6PcwyqA47HFTMjKqs2fmPTcCP5VXKTzGdHEQSc596cImGWJzWv9nUqSrY4/u/8A16pLIIyQwDe5FNxtuLmuVRvPCilxzmTj61MzlzlePZeKYUkPIXPuTSGPjlWPIUEA1fjuFCAFM++cVnxwyyOo6A+2f61IY1jk8t2JHcj/AAqk2iWkzQxHIMqyD2J5pFkKAorrg/SqLSWyHYm5ieB2H8qkSION4GR7VVybFtEibncP8aY1oc705/A1XQMkm2QMin+IkHH0GKtMViQh5JPUfNnP5CnoGpCPtEZ8xPl28dOamW7vWBLRFj/ePT8sVFBIruzAMeM4Jz/QUXLT7R5KMM9t4HHr0o6aB1sXobu82kyt5WOnHzH6D/69TteXpTBDKenzAbj+FZG97dAJWye2WyR+NSx3sFyGPmE+TjzG2k4/WmpdLkuPWxswrMoxNOrn0A5H1FTm6/gllCKo/iwv8s1lQtLckS2w2Qtz5rHJP0Xgj8TVj7GipiUmR35CsRn860T7ENLqVneKVz++wc8gAf41djmlSNdjkgHghQf61z9xrGl2k4tJozHNwBgZzn3xXRQAyoHtkEi44+YKPxUjOfxqYtNuzKkrLVGvE9xKPMeYnHTA70BrjbvfJB74xUAuJY1RcKB0wB/9epldTyWbBPTtXRc57FyGZipAxjp1/wDrVJlBluAfSkhKkbQAB7VI0Gc7DyetadDMru0gQ/NgH6U3bmIvvBX+dTS+YgwY0dR1yKpLcRZxtwuenUVLKHKnmnMfBHXIpsiHuQKikulCEQ/Lk9utNAaXCuxU+xqboqzItqryGz9KQ4BAx71ZKwREF3wfTHWqs1whb93gH3H6e1TsUtRfLLNnGAfWlERBwozUhclP9r07VWedEbaWO/8Aug8fyo0DUnEbJ80XyH1xmlz2ZweeT0/Ss6SfaVUuwJPQZqu1+kZZJccjrg5qeZFcrZshQ5ADoQfepVCL1kU/jXJR3iAbo2IH95if8BU/2kSI4DbnXpsGP51KqIfIzbaaFycMDj+VRi7ty22EeZt/uc1y1vezWpEIRSSfm3nccH8qWS8lAaBmFvu+b90CCR+Bqfal+zNS41mSOTyxCR3JyOg9arSalLKWMQyMfKQc9e+Mcj6ms4PNNGrLGvPAJ5Lcf560xLW4hUseMnpn9BWbnJmijFD4bxreIzSNtkkyCBgn8c1gXs9y04nZ923nA6gflWvNCrblZQpB605reIxBWZSP7yr830zn+lZSTasaJpO5y15dSXUm5iWXHHTI/KoE8sp++BY9BjittdKtmf8AdM5Hvj/61WUsfMHltGqccYxk1jyN6mvOkYRtYHK5APrhiSaR47Rk8uBNrdc8nP4VujTxCdwUD61nOF84KigZOMjqKHGwKVx+jgWV7uRQ8qjneSmB7cHP5V051q2LuoJdn4GwA4/x/IVgiCXkLyP4pMgN9OcnFQviKVJF2RIDnKjkkevNaRbirIiSUndmgjJLcZzhlOEVurH14o1UXNvaRoTukzkBex/Gs+CMXE007M4PJUr8vPr7Vpw25knV7iRiqfd3fNQtULZle4aWfTYg5Kzlvm4ycD1Haq9vb3FzfwWshzHu3MPYY6+lbV3b7oCDw78kp8pJPAwecD1rS0mOOK7aSWP5kUJk4OR78cmrULySZLnZOx0IhCphRlfQUkUco3EDA/un/GrRePj+H6VaTyyud3X2rvscLbKBi5xtI+lPEaqAxyR/KnyRF5AdzLj0PWm88gZHsaLBckD5O1eR2peDyV2+xrPkuXiXO0AjPSqUF5LKxf5sHIwT0qeYpRNxjkZX8qaW+Xrg+4qlul2bw3FVpmUBS8jMx6YOBQ5C5TT2AruWTPrgVRd13Zk5A6dqdFOkTGIcNjv0NTxtHLlXCqy9RjNG49jPkngJGMehGazpI4JSQrbf1Fas9tCp3nOPbH+FZsxSPJHT6VlJdzSPkZrRhQdrdPyqqVQnJ2n8asSyR/w55/D+lUGYA4B/Sudm6P/V+ZhIhGZrd9+eNmdv45p8lyFcPFGUYenP88063vSzFWJdAevf8qfK9pI4w/l/hkn869rpozyOuo0yvcYM0UjkdwMD9MUkqlFzswPTJz/OrJMagGG48v35/lUasrsftcodR0LD/CnYCNYEdctKvPYHJpW3cIJs46LgZ5oMkJIW124H3j/+urMdxYZCW6+ZJ3xnOfrQrCKypGu7z0kkHYIAKroqxEtEdgPY8n8atzttPzS7fVcc/nRFeWipxCDjuf8A9VLQeo0Xlz0Vif8AgK/4UoubjGDKqg9ioz/KllvIXXCkR57Kv+AqJXh2nBLEeo/xov5hbyJxPg43bj7Bf8KUtLMcgrn3/wDrVWDxso2xYPrmn7pYscLj0wB+tO4WLBt5iu15lC+i1Wvn+zWmyygM0rEYL5K+/wB3Bp4uQpXfhQeTx/hTTqMQk4HmAevH9M0NqwrO5DY/biFEq+Q7dePl/XNXXtZySXuUA75OP5CoF1ASNtW33EerE/jzUqzNNlhCCfrQrWsN3uMazWMKd+/8TTCiq3L59Ap/nT1lEzbGl5XjaF6fjUqwhSSclRyCQKLLoK/cpNEyK0cIID89zSrFIYwoZevQ9ak+1hH2bQxccZb9cVGrNkgA8H+HA/UVOhWoslnatGySnLHjbnrVq1SHTVIYiMPldh6+5Oaoz3aJlwoyBnpkg/U1kPePNtuZgZCfUn9aXMkxqLa1Nee4DxPHaAKoPOT1/GseW4mEkaSuwRPu5Ax+fWrMbJtPBAbk002ttckGYn6c9qhtstWW5sx2Om6zLGLnIdMEHOP5VpTaC9vKZ9OugrY6ZBJx6cEVm6ZYiWXbaytu6Bcn5QPTJ5rqIblLO6FvL++IHOex/WumEU1do55tp2TMu1NzOcmOXc3BJAGCOvQV0cayvGqphNvUNWin2KVDOnyhc9Mjnvx3rOlkXOF+YnsOP1roUeXqc7lfoW4fOjUhl357gVb88IAGT8RWSt5Io2bSMep60i38cjbW+Ug8jrn8atSRDiwnvJS5+0Rnyweo7e5pkMsN1ujRh69etWzPDtZ7hdyNwFPQ1mWUSRSSTRvsUn7vTA9Kh3uWti/a29m7EyN8w7A81Vdf3pUKxweD2p7y4YMuAD37mqj3qgkDrQ2rAk7kxjm3ZLIo9zzUd3J5QGCZM8fLgiqEkkztsnbYOy9SR+FUpo7iQiOBWHOcl/6ZrNy7Gij3NFpFPy9B3J4FBltozjoazJI7jKqz5I6g4P60XMiAgpGCvQs3P86nmK5SzJeyeaY4huUD7wGVH1NEpZ1LeYqyEY5I5/KqiXKIdpQCM85zgflUF5f2qOkUcavIf4Rxn6nH86ly01ZXL2Rc8uLKSPL8uOgIwT+VQXP2WKdH2Es3QA4AH+1zVMrPcr9pLkIhwIl+6Me9RTSgq/ltmV8YyM/L+PSoci0iVbe0815ioiU85ZuDz2zVue+HlKbddhI2qW7e+PQ1iq8kq+URwg+83z/ocgfhUYuJEIeVTIACME8ZqOaxXLc01uZZgYpOWjOckdvw/rShlzkZbHP0rJN28aCTd9/rjinRyqxXbKQG+/1pcw+U0FcMxV+DjgimGRwNpYZXuelVHu43ZREOV9DiptzMpcr1685ouFiWJ1bLZIP6U5jyN3J9apRSr90KG/SrBBbr8ooT0CwSYYckVjyRmQkSD3BGePrWyygRnIBPbtWbGs2HaX5AfU5qZFRKzY8xAUwnf/8AXTJmjlKoh+TJPP8AOmtNEZPJBz/eNVoGbJbYHXGCOwFY3NLGxBNuKmRScD5ccZ/+tVuXUWEZ8kbZM5KsOv0HWsp2kmVGtEwV4znp+dbdtHAsKtIgaXvIetaxvsjOSW49J0viGuAVTA/djg5Hc9/1rcEwYBSDkDAz0rEYxoQYwM/lUiTO3O0D8jWydjJo6BSMA5welWoyxO7PI79K5c3k6nB59AaUajcEf3D6A1oqiIcGdYLmRWyHG3vnFTC6BYb2DD+VcmLqYpgj8Qf6UrzTgoVYjjnmq9oT7M67zI3UkEfjWe7uGI8sDHf2rDF7Mp2jLbetXUvsxZcFvXmnzpi5Gi7uMsoAfKEY/wAmopbNiGUjcG60xJ4U+YYA7L71YF6rP84IB6fWjR7hqtigihV8qcEqnQnjH1rSASWMSQndjg85qcxKyEogyfUVmRwzBXjDmNu2Ohp2sK9zRjYAiIkE0yaKJxzg/X/61U1klSbEkeeOWGPzq1bspkZWGU7Z5p36CtbUy5rW1JJXPHoayZLS3LkhW/OuvmtUKEoBnsOlZbWk2emKzlA0jM//1vAnIU7oVTb6N1/AVVKTYMpCgH/nqPmrn7bUTcAJM6R7OxIrShneQ7Q64HfIxXt86Z4/I0PYryIwWY98/wAqpyWTsm+SQkg52Bsn8q0TcyK20TDA/hXaP/r00QCX94Op74JNJpMabRnxWk8wygVQO7A4pJLdgNkkvPomRWy/lCMLdMZAOg2lcfkKje5eEA2aqgPTkD/0LFHKg5mZa2BUKWU4J6t/jVk28edqNEuO7HH6jipVKXR33cm1h6Bn/wDQRipPsMG3MbGTPYIV/nQo9gcu5X+xEAk3EDf7r5NRKIkb5ixx/dxWgbdo1Ci3LDry2KsIIgys0EcQHcyA/wBafKLmMZriQMVRmx25NMVbqU8hiPU5rppNkoPlxo4x1BzTVivdoRGI/AYA/GnyC5zDaxcL5jKfoQcn8MVNDawSLkkxnvuIB/xrSkt7R5CLi486Y9AFPH5VP9kt0iABCP3OP8elNQE5mK0Cxny48yY6Y5qMq6gEqVYHoo4P1rblfKLDChkPc9OKqZEe6OKEI2ectyaTiNSMlmk3YlV5P90E1FN9p3AwIFz1JQ5H49q15LqOLAaXIHWNR/M1kTzMSTbw7FJ5/wAmolYuPoQ3P21AFjljJI5xn+lVo7S7df3hT1yCf61ch89X4DCrwE20gc569APzqLXLvYzzDKigq6H9aRrYMwMoO7r8taIhuXIYKXA+mPzpjBo3+dghPoQ38s0+Um5WWJXIUDnPOabIwD+XGv4/41ad7cRHEbSEdwGP6AVSkuYIY927YR2YYP64oeg1dj9rAgjJbttrQRrh8NK3A4wc7jWWNSklCxx87vQ/1rV3rCAYx8x+8fT8KcWugpJk3lmaPZK3l85C5xx9KSC5igJiwypnq3H60kFwApmJ3dgenFNWUIRzvBOS3SruRboa32lI2DogINLLePIwJAHso4/CsuS4jLFXw4PYnFPgurdDtVh8nv09qvm6E8pos+DkggfSnidThF6+prLmu/NyEXbVWO4aFs8HHcnp+FLnDlNeWVnG0YP0600orr5YZQ2PvZ6VlPesAUL7A38Rx/KoRcqoxEGlz3zgClzofKzSjRdxQHLDqQc/rUzsVKrkHA5xWDNfvjbEVyfRgcVTF7cJEYEmw/8Au5J/Sp50iuRnTi4RXKll+hPNR3RSVcXMxiyOzbciuUW4uoAUR2LnnoBTFa8uXJuXLDHfHH4Dk1HtOlivZ9bm4+qW1tCbe1j80qMAIAQT+HWqUeoXpLfaJolQ8ELkfhz3rP8A3sY8pThD04/p1qJoVYh5BtC84PfNQ5s0UUaNxqjXLJbRLsUptDOOfcg/1psM0S3DRD94V6Ecg1S+wxzOG+5GpBC4zx3596Hg8yYiJjGHXaeOtTd7sdo7I0hcYt5EeMorN0K4Y49KfMrxKjrHIyv2x0+tUYxCqqsjhpUHBrWW6mdQCpOelWtdyXpsN+ygxlcjHoetKtu0RAGMHp7U0easvmD5VPXmrQRpG3A4Udsf1qkkRcptbOz79w9yKlaKRELYBI6VMsCxlgrcHnGR/jQYWIJY4AosFyunz8uccVG06RE5BwOnuasjaVIc5qN4iy/KvTkUDKz+ZMVfgY6HpVSZpAoCAMCcfLyPrWq28qAeR6dKryW07DLLhBzUtFJmW9smRLuG7uB0qvLFgYjzj0qc3FqCQBuIOABmqt3NKpCqmxeuaydjRXLMfyjCArnv0FSKZVJHLfTmpLGKaZAACe+Tx/8ArrajtvL5VeT39KuMbkuSRnI0xX5hwfbmmm1ZssxH51smIYJTg9+KpNbrIu5vmX0H+NW4kKRTFpIi7kZvzNTJDLtxub3zmrPCcRDCAcD/AOvQJpsAbMge4osguw+zsCNxPHXFRyKzfJjPuR/WrwufkCldp+tPUiRvlPXj8aqyJuygYpNgKjkDrTGFwAMqQD3wc/WtQhf4wAejAmpURGXCcj2PSnyi5irHdvEuJRnA4I/rUkc0y481oyeq47U54ocBSf8AgJBHP1pBFEDh2AHoarUnQ2bW/wDMADYDDv0B+lXZJkUbjyuetc2sYhcjP7tvTkVdikgiAjikAVv4fT861UnbUzcV0NOWOGQhlcgHpg8VAbQp8yvjPvTo3iQeTKQAeAanb5V4b5R2xVaMjVDFuJI2CyDI9RTXuBuOA9MZmcGRRx0GKWJ8JhhzRcdj/9f41t5GbrirBmcNhfl+nFU7b+tTn7/4V3LY43ubcMjeWW7jvUD3lyDxI35mnw/6o1TetW9DNLUm+0TuRulc/iasfMAGLFvqapJ1FXm+4PrSQM1LaESRFizA+xxWlFagwF/MkyP9qqdl/qG+la0X/Hq1bxMZGO13JbE7QH/38n+taMZFxEJmUKfRRxWJd9a2rP8A49RVohhOMwqUPln1Tiq6XVwmD5jN25JqzN/qRWd2H1oe4LYdeu6AXKnDkjpwKuNFmAS72BYZ68VR1D/j1X6itM/8ea/7tLqx9jLN5OCiA+2ec1oqivIHbkgViN/rE+tb0fX8KEDM28VXlJxtxzgcUyJzNGFIC5z92pbn/WN+NV7T7q/jSe7H0Rp2dtHGjclye7HJH0qAzNBBMVVW2ZxuGavwfc/Csu4/497j8apbIl7sjS7maFWzjeOQOlJkKckBj155qtD/AKiP6VYbtUI0IJJHJJB2/wC7xUUqIVBYBs8c805u9LL91ahjQ6C3iX94FwVHFNM7yzpCcBT1I61Zh/1Z+lUU/wCPyOn0H1NPy1X90PunNYtwzRhkUnGa3j/rB+Nc/efeP1okEBsEzhWJ+YnI55pm/DnaoBxnIpsX3D9TSfxn6Vn0K6jJdQnj2ooXGM98/wA6uiZzEGPU81i3P31+laq/6hfoKENoeW2jeRuPvzU+S8e7O32HAqs33KsL/qaYinHCrktkg+1WFAKPgYK9COv50yDoakj+5LUobKCbtrHcc8855qJJHeRSTj2HtUyfdP41Wg++v41BZd3tu8zqTTvKWQ/MTz2qM9Ksp1/CqJJIEVxk9uMClRVDeuKdbfdP1oH3q0IZA0McchlAyT69KlaR0tiysc7h+tE39KZJ/wAeh/3hUjNODBUEjk1b8sFd4JX2HSqlt9xavr/q62Rk9xhYZVSqndxnHNMdRG4C9D60p+/H9aWf/WCqZKKknyHK96ha4kCEjHHFTzfw1Rf/AFZrM0JIpGZcnnFVrqWQRI+45Y4xnipofuGq13/x7x/71SyluRtbR24JTksM5OP0rEm3ebgsTz3NdHdfdH0rnJv9d+NYyNonXQMRBEQB2rSh+djzj6Vlw/8AHvH9K1Lb7xrqRyyIrg5IA+XPUjilY+SEReQfWkn+8KJ/vR03uLoSvBGyg9M+lQm2jA4JH41cP3VpjdKTBFARgsRk9KUoEYBSRmnr98/Sh/vrUlD5MgqxJJHr3+tWonO0kAD6VVl6Cp4vuGtEQyyPmXewycVRuYVyJMnJ7Z4q8v8Aq/wqvc/dX6US2FHczWlcSImeG4NaKQI2FJPHesp/9fHW5F1qUWxzJvQoSfl6HvToLmQ2u5sMc45pR/FVe3/49P8AgRrXqZvYu2szl/LONpqaZikhVQMVUtP9cKs3P+tP0qlsQ9z/2Q==",
         "Hai04-vers5.jpg": "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",

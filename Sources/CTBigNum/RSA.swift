@@ -44,15 +44,15 @@ public struct RSAKeyPair: Codable, Hashable, Sendable {
     /// Builds a key pair from two primes and the public exponent. Throws `CTError` if p or q is
     /// not a (probable) prime, p = q, e is not in 1 < e < φ(n), or gcd(e, φ(n)) ≠ 1.
     public init(p: BigUInt, q: BigUInt, e: BigUInt) throws {
-        guard Primality.isProbablePrime(p) else { throw CTError("p = \(p) ist keine Primzahl.") }
-        guard Primality.isProbablePrime(q) else { throw CTError("q = \(q) ist keine Primzahl.") }
-        guard p != q else { throw CTError("Die Primzahlen p und q müssen verschieden sein.") }
+        guard Primality.isProbablePrime(p) else { throw CTError("p = \(p) is not a prime number.") }
+        guard Primality.isProbablePrime(q) else { throw CTError("q = \(q) is not a prime number.") }
+        guard p != q else { throw CTError("The prime numbers p and q must be different!") }
         let phi = (p - 1) * (q - 1)
         guard e > 1, e < phi else {
-            throw CTError("Der öffentliche Exponent e muss zwischen 1 und φ(N) = \(phi) liegen.")
+            throw CTError("The public exponent e must be between 1 and φ(N) = \(phi).")
         }
         guard let d = e.inverse(modulo: phi) else {
-            throw CTError("Der öffentliche Exponent e = \(e) ist nicht teilerfremd zu φ(N) = \(phi).")
+            throw CTError("The public exponent e = \(e) is not coprime to φ(N) = \(phi).")
         }
         self.init(p: p, q: q, e: e, d: d, phi: phi)
     }
@@ -62,7 +62,7 @@ public struct RSAKeyPair: Codable, Hashable, Sendable {
     public init(p: BigUInt, q: BigUInt, e: BigUInt, d: BigUInt) throws {
         try self.init(p: p, q: q, e: e)
         guard (e * d) % phi == 1 % phi else {
-            throw CTError("e·d ≢ 1 (mod φ(N)) – d passt nicht zu e.")
+            throw CTError("e·d ≢ 1 (mod φ(N)) - d does not match e.")
         }
         self.d = d
         self.dp = d % (p - 1)
@@ -86,7 +86,7 @@ public struct RSAKeyPair: Codable, Hashable, Sendable {
     /// If e is not usable for very small key sizes (e ≥ φ(n)), the smallest suitable odd e ≥ 3
     /// is chosen instead.
     public static func generate(bits: Int, e: BigUInt = 65537) -> RSAKeyPair {
-        precondition(bits >= 8, "RSA-Modul muss mindestens 8 Bit haben")
+        precondition(bits >= 8, "RSA modulus must have at least 8 bits")
         let pBits = (bits + 1) / 2, qBits = bits / 2
         // for tiny moduli there are too few primes with the two top bits set
         let topTwo = bits >= 32
@@ -195,7 +195,7 @@ public enum PKCS1 {
     public static func encrypt(_ message: [UInt8], key: RSAPublicKey) throws -> [UInt8] {
         let k = key.byteLength
         guard k >= 11, message.count <= k - 11 else {
-            throw CTError("Die Nachricht ist zu lang: höchstens \(max(0, k - 11)) Byte bei einem \(key.bitLength)-Bit-Schlüssel.")
+            throw CTError("The message is too long: at most \(max(0, k - 11)) bytes for a \(key.bitLength)-bit key.")
         }
         var ps: [UInt8] = []
         while ps.count < k - message.count - 3 {
@@ -210,16 +210,16 @@ public enum PKCS1 {
     public static func decrypt(_ cipher: [UInt8], key: RSAKeyPair) throws -> [UInt8] {
         let k = (key.n.bitLength + 7) / 8
         guard cipher.count == k, k >= 11 else {
-            throw CTError("Der Chiffretext muss genau \(k) Byte lang sein.")
+            throw CTError("The ciphertext must be exactly \(k) bytes long.")
         }
         let c = BigUInt(bigEndianBytes: cipher)
-        guard c < key.n else { throw CTError("Der Chiffretext ist größer als der Modul.") }
+        guard c < key.n else { throw CTError("The ciphertext is greater than the modulus.") }
         let em = key.decrypt(c).bigEndianBytes(length: k)
         guard em[0] == 0x00, em[1] == 0x02 else {
-            throw CTError("Entschlüsselungsfehler: kein gültiger PKCS#1-Block (Typ 2).")
+            throw CTError("Decryption error: not a valid PKCS#1 block (type 2).")
         }
         guard let sep = em[2...].firstIndex(of: 0x00), sep >= 10 else {
-            throw CTError("Entschlüsselungsfehler: ungültiger PKCS#1-Füllstring.")
+            throw CTError("Decryption error: invalid PKCS#1 padding string.")
         }
         return Array(em[(sep + 1)...])
     }
@@ -233,7 +233,7 @@ public enum PKCS1 {
     public static func signatureBlock(hash: [UInt8], algorithm: DigestAlgorithmID, k: Int) throws -> [UInt8] {
         let t = digestInfo(hash: hash, algorithm: algorithm)
         guard k >= t.count + 11 else {
-            throw CTError("Der Schlüssel ist zu kurz für eine \(algorithm.displayName)-Signatur (mindestens \((t.count + 11) * 8) Bit).")
+            throw CTError("The key is too short for a \(algorithm.displayName) signature (at least \((t.count + 11) * 8) bits).")
         }
         return [0x00, 0x01] + [UInt8](repeating: 0xFF, count: k - t.count - 3) + [0x00] + t
     }
@@ -242,7 +242,7 @@ public enum PKCS1 {
     public static func sign(hash: [UInt8], algorithm: DigestAlgorithmID, key: RSAKeyPair) throws -> [UInt8] {
         let k = (key.n.bitLength + 7) / 8
         if hash.count != algorithm.digestLength {
-            throw CTError("Der Hashwert hat nicht die für \(algorithm.displayName) erwartete Länge von \(algorithm.digestLength) Byte.")
+            throw CTError("The hash value does not have the length expected for \(algorithm.displayName) (\(algorithm.digestLength) bytes).")
         }
         let em = try signatureBlock(hash: hash, algorithm: algorithm, k: k)
         let m = BigUInt(bigEndianBytes: em)

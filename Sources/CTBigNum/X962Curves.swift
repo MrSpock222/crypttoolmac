@@ -12,7 +12,7 @@ extension EllipticCurve {
         let a = p - 3
         let bb = hx(b), x = hx(gx)
         var c = EllipticCurve(name: name, p: p, a: a, b: bb, gx: x, gy: 0, n: hx(r), h: 1)
-        guard case let .affine(_, y0)? = c.lift(x: x) else { preconditionFailure("X9.62-Basispunkt ungültig") }
+        guard case let .affine(_, y0)? = c.lift(x: x) else { preconditionFailure("X9.62 base point invalid") }
         c.gy = (y0.isOdd == yOdd) ? y0 : (p - y0) % p
         return c
     }

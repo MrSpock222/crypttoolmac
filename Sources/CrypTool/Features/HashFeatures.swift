@@ -35,17 +35,17 @@ struct PKIHashValueView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("\(algorithm.displayName)-Hashwert von <\(sourceName)>").font(.title3.weight(.semibold))
+            Text("\(algorithm.displayName) hash of <\(sourceName)>").font(.title3.weight(.semibold))
             ResultBox(text: Hex.encode(digest), minHeight: 44)
             HStack {
-                Button("Hashwert als HEX-Datei") {
-                    DocumentFactory.openResult(digest, title: "\(algorithm.displayName)-Hashwert von <\(sourceName)>",
+                Button("Store hash value to HEX format") {
+                    DocumentFactory.openResult(digest, title: "\(algorithm.displayName) hash of <\(sourceName)>",
                                                parent: parent, viewMode: .hex)
                     close()
                 }
                 Spacer()
                 PKIHelpButton(action: .hash(algorithm.rawValue))
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(18)
@@ -69,17 +69,17 @@ struct FileHashView: View {
                 PKIHashValueView(algorithm: algorithm, digest: d, sourceName: u.lastPathComponent, parent: nil) { windowBox.window?.close() }
             } else if url != nil {
                 VStack(alignment: .leading, spacing: 10) {
-                    PKIGroup("Hashfunktion") {
+                    PKIGroup("Hash function") {
                         Picker("", selection: $algorithm) {
                             ForEach(ct1HashOrder, id: \.self) { Text($0.displayName).tag($0) }
                         }
                         .pickerStyle(.radioGroup).labelsHidden()
                     }
                     .frame(width: 220)
-                    if busy { ProgressView("\(algorithm.displayName)-Hashwert berechnen").controlSize(.small) }
+                    if busy { ProgressView("Calculating \(algorithm.displayName) hash value").controlSize(.small) }
                     HStack {
                         Button("OK") { compute() }.keyboardShortcut(.defaultAction).disabled(busy)
-                        Button("Abbrechen") { windowBox.window?.close() }.keyboardShortcut(.cancelAction)
+                        Button("Cancel") { windowBox.window?.close() }.keyboardShortcut(.cancelAction)
                         PKIHelpButton(action: .hashOfFile)
                     }
                 }
@@ -98,11 +98,11 @@ struct FileHashView: View {
 
     private func choose() {
         let p = NSOpenPanel()
-        p.title = "Hashwert einer Datei"
+        p.title = "Hash of a file"
         p.canChooseDirectories = false
         guard p.runModal() == .OK, let u = p.url else { windowBox.window?.close(); return }
         url = u
-        windowBox.window?.title = "Hashfunktion wählen"
+        windowBox.window?.title = "Select a Hash Function"
     }
 
     private func compute() {
@@ -115,7 +115,7 @@ struct FileHashView: View {
             await MainActor.run {
                 digest = h
                 busy = false
-                windowBox.window?.title = "\(alg.displayName)-Hashwert von <\(u.lastPathComponent)>"
+                windowBox.window?.title = "\(alg.displayName) hash of <\(u.lastPathComponent)>"
             }
         }
     }
@@ -173,34 +173,34 @@ struct HashDemoView: View {
         let h1 = Hashing.hash(originalBytes, algorithm: algorithm)
         let h2 = Hashing.hash(encode(current), algorithm: algorithm)
         VStack(alignment: .leading, spacing: 8) {
-            PKIGroup("Beschreibung") {
-                Text("- Wählen Sie ein Hashverfahren aus und editieren Sie dann unten die Kopie der Originaldatei (Textfeld \"Aktuelles Dokument\").\n- Ganz unten sehen Sie, wie viele Bits sich im Hashwert ändern, wenn Sie das Dokument editieren.")
+            PKIGroup("Description") {
+                Text("- Choose a hash function and then change the copy of the original file (see field \"Actual document\").\n- You can see below how many bits of the hash value change when you edit the document.")
                     .fixedSize(horizontal: false, vertical: true)
             }
             HStack(alignment: .top) {
-                PKIGroup("Auswahl der Hashfunktion") {
+                PKIGroup("Selection of hash function") {
                     Picker("", selection: $algorithm) {
                         ForEach(ct1HashOrder, id: \.self) { Text($0.ct1ComboName).tag($0) }
                     }.labelsHidden().frame(width: 200)
                 }.frame(width: 240)
-                PKIGroup("Darstellung der Hashwerte") {
+                PKIGroup("Base of hash values") {
                     Picker("", selection: $base) {
-                        Text("dezimal").tag(0); Text("hexadezimal").tag(1); Text("binär").tag(2)
+                        Text("decimal").tag(0); Text("hexadecimal").tag(1); Text("binary").tag(2)
                     }.pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                 }
             }
-            Text("Aktuelles Dokument (diese Kopie der Originaldatei können Sie hier ändern)")
+            Text("Modified document (copied from the original file)")
             CodeEditor(text: $current, minHeight: 170)
-            Text("Hashwert der Originaldatei")
+            Text("Hash value of the original file")
             ResultBox(text: format(h1), minHeight: base == 2 ? 60 : 30)
-            Text("Hashwert der aktuellen Datei")
+            Text("Hash value of the modified file")
             ResultBox(text: format(h2), minHeight: base == 2 ? 60 : 30)
-            Text("Unterschied zwischen dem Hashwert der Original- und dem Hashwert der aktuellen Datei")
+            Text("Difference between the hash values of the original and of the modified file")
             HashDiffView(a: h1, b: h2)
             HStack {
                 Spacer()
                 PKIHelpButton(action: .hashDemo)
-                Button("Schließen") { windowBox.window?.close() }.keyboardShortcut(.cancelAction)
+                Button("Close") { windowBox.window?.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding()
@@ -212,14 +212,14 @@ struct HashDemoView: View {
             current = originalText
             if truncated {
                 DispatchQueue.main.async {
-                    PKIModal.info("Die Dateigröße ist in dieser Demonstration auf \(Self.maxBytes) Bytes begrenzt.\nDer Rest der Datei wird ignoriert.")
+                    PKIModal.info("The file size in this demonstration is limited to \(Self.maxBytes) characters.\nEverything beyond that will be ignored. ")
                 }
             }
         }
     }
 
     private func updateTitle() {
-        windowBox.window?.title = "Hash-Demo: \(algorithm.ct1ComboName)-Hash für " + (docTitle ?? "")
+        windowBox.window?.title = "Hash Demonstration: \(algorithm.ct1ComboName) Hash of " + (docTitle ?? "")
     }
 }
 
@@ -253,11 +253,11 @@ struct HashDiffView: View {
             }
             if i < n - 1 { text = text + Text(" ") }
         }
-        let pct = String(format: "%.2f", total == 0 ? 0 : 100.0 * Double(ones) / Double(total)).replacingOccurrences(of: ".", with: ",")
+        let pct = String(format: "%.2f", total == 0 ? 0 : 100.0 * Double(ones) / Double(total))
         return VStack(alignment: .leading, spacing: 2) {
             text.font(.system(.body, design: .monospaced)).fixedSize(horizontal: false, vertical: true)
-            Text("\(pct)% der Bits unterscheiden sich (\(ones) von \(total)).")
-            Text("Längste unveränderte Bitfolge: Offset \(bestOff), Länge \(bestLen).")
+            Text("\(pct)% of the bits differ (\(ones) of \(total)).")
+            Text("Longest identical bit sequence: offset \(bestOff), length \(bestLen).")
         }
         .textSelection(.enabled)
         .padding(6)
@@ -280,18 +280,18 @@ struct PKCS5View: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            PKIGroup("Eingabe (Passwort und Parameter)") {
-                HStack { Text("Passwort:"); TextField("", text: $password) }
+            PKIGroup("Data entry (password and parameters)") {
+                HStack { Text("Password:"); TextField("", text: $password) }
                 HStack(alignment: .top) {
-                    Text("Länge des Ausgabeschlüssels (in Bytes):")
+                    Text("Length of output key (in bytes):")
                     TextField("", text: digits($keyLength)).frame(width: 44)
-                    Text("(darf nicht länger als die Ausgabelänge der gewählten Hashfunktion sein)").font(.caption)
+                    Text("(may not be longer than the output length of the selected hash function)").font(.caption)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 HStack(alignment: .top, spacing: 12) {
-                    PKIGroup("Hashfunktion wählen") {
+                    PKIGroup("Choose hash function") {
                         Grid(alignment: .leading, horizontalSpacing: 18, verticalSpacing: 6) {
-                            GridRow { Text("Verfahren").foregroundStyle(.secondary); Text("Ausgabelänge").foregroundStyle(.secondary) }
+                            GridRow { Text("Algorithm").foregroundStyle(.secondary); Text("Output length").foregroundStyle(.secondary) }
                             ForEach([HashAlgorithm.md2, .md5, .sha1], id: \.self) { h in
                                 GridRow {
                                     Button { hash = h; keyLength = String(h.digestLength) } label: {
@@ -301,33 +301,33 @@ struct PKCS5View: View {
                                             Text(h.displayName)
                                         }
                                     }.buttonStyle(.plain)
-                                    Text("\(h.digestLength) Bytes")
+                                    Text("\(h.digestLength) bytes")
                                 }
                             }
                         }
                     }.frame(width: 220)
                     VStack(alignment: .trailing, spacing: 10) {
-                        PKIGroup("Optionale Parameter") {
-                            HStack { Text("Salz:"); TextField("", text: $salt) }
-                            HStack { Text("Anzahl der Iterationen"); TextField("", text: digits($iterations)).frame(width: 80) }
+                        PKIGroup("Optional parameters") {
+                            HStack { Text("Salt:"); TextField("", text: $salt) }
+                            HStack { Text("Number of iterations:"); TextField("", text: digits($iterations)).frame(width: 80) }
                         }
-                        Button("Schlüssel erzeugen") { generate() }.keyboardShortcut(.defaultAction)
+                        Button("Generate key") { generate() }.keyboardShortcut(.defaultAction)
                     }
                 }
             }
-            PKIGroup("Aus dem Passwort und den weiteren Parametern generierter Schlüssel") {
+            PKIGroup("Key generated from password and other parameters") {
                 ResultBox(text: result, minHeight: 30)
                 HStack {
-                    Button("In die Zwischenablage kopieren") { copyToPasteboard(result) }
+                    Button("Copy to clipboard") { copyToPasteboard(result) }
                     Spacer()
                     PKIHelpButton(action: .pkcs5)
-                    Button("Schließen") { windowBox.window?.close() }
+                    Button("Close") { windowBox.window?.close() }
                 }
             }
         }
         .padding(16)
         .frame(minWidth: 560)
-        .background(PKIWindowReader { windowBox.window = $0; $0?.title = "Schlüssel aus Passwort generieren gemäß PKCS #5" })
+        .background(PKIWindowReader { windowBox.window = $0; $0?.title = "Key Generation from Password According to PKCS #5" })
     }
 
     /// CT1 CheckEdit: only digits, no leading zeros.
@@ -344,13 +344,13 @@ struct PKCS5View: View {
         let len = Int(keyLength) ?? 0
         let maxLen = hash.digestLength
         if len <= 0 {
-            return PKIModal.warning("Die eingegebene Länge des Ausgabeschlüssels ist kleiner als 1!\nBitte geben Sie eine Zahl zwischen 1 und \(maxLen) ein!")
+            return PKIModal.warning("The given byte length of the output key is smaller than 1 !\nPlease enter a number between 1 and \(maxLen).")
         }
         if len > maxLen {
-            return PKIModal.warning("Die gewählte Schlüssellänge ist zu groß! Der aus dem Passwort generierte Schlüssel muss mindestens 1 Byte lang sein, und höchstens so lang wie die Ausgabelänge der gewählten Hashfunktion (hier \(maxLen) Bytes).\n\nBitte geben Sie die Länge des Ausgabeschlüssels so ein, dass sie zwischen diesen Grenzen liegt.")
+            return PKIModal.warning("The chosen key length is too large! The key generated from the password must be at least 1 byte long, and it may not exceed the output length of the chosen hash function (\(maxLen) bytes).\n\nPlease choose an output length that lies within those boundaries.")
         }
         if n > 100_000 {
-            return PKIModal.warning("Die maximale Anzahl der Hash-Iterationen ist beschränkt auf 100.000 Iterationen!\nBitte wählen Sie unter 'Anzahl der Iterationen' eine kleinere Zahl.")
+            return PKIModal.warning("The maximum count of hash-iterations is limited to 100,000!\nPlease select for 'Number of iterations' a smaller number.")
         }
         do {
             let key = try PasswordKeyDerivation.pbkdf1(password: PKIText.bytes(password), salt: PKIText.bytes(salt),
@@ -412,44 +412,44 @@ struct HMACView: View {
     var body: some View {
         let d = details
         VStack(alignment: .leading, spacing: 8) {
-            PKIGroup("Beschreibung") {
-                Text("Mit Hilfe eines HMACs kann der Empfänger eine Nachricht auf Integrität und auf Authentizität des Senders überprüfen. Hierzu verwenden beide Parteien ein gemeinsames Geheimnis (symmetrischer Schlüssel). ")
+            PKIGroup("Description") {
+                Text("By means of a HMAC the recipient of a message is able to verify its integrity and the authenticity of its sender. Therefore both parties use a shared secret (symmetric key).")
                     .fixedSize(horizontal: false, vertical: true)
-                Text("Um den HMAC einer Nachricht zu erzeugen, wird eine kryptographische Hashfunktion auf eine Verknüpfung aus der Nachricht m und dem geheimen Schlüssel k angewendet. Je nach HMAC-Variante können auch zwei geheime Schlüssel k und k' verwendet werden. ")
+                Text("To create a HMAC, a cryptographic hash function is applied to a combination of the message m and the secret key k. According to the variation chosen below, two different keys k and k' can be used.")
                     .fixedSize(horizontal: false, vertical: true)
             }
-            PKIGroup("Nachricht") { CodeEditor(text: $message, minHeight: 110) }
-            PKIGroup("HMAC-Parameter und Schlüssel") {
+            PKIGroup("Message") { CodeEditor(text: $message, minHeight: 110) }
+            PKIGroup("HMAC parameter and key") {
                 HStack {
-                    Text("Hashfunktion")
+                    Text("Hash function")
                     Picker("", selection: $hash) {
-                        Text("Bitte wählen Sie das Hashverfahren").tag(HashAlgorithm?.none)
+                        Text("Please choose a hash function").tag(HashAlgorithm?.none)
                         ForEach(ct1HashOrder, id: \.self) { Text($0.ct1ComboName).tag(Optional($0)) }
                     }.labelsHidden().frame(width: 230)
-                    Text("HMAC-Variante")
+                    Text("HMAC variant")
                     Picker("", selection: $construction) {
-                        Text("Bitte wählen Sie die HMAC-Variante").tag(MACConstruction?.none)
+                        Text("Please choose a HMAC variant").tag(MACConstruction?.none)
                         ForEach(MACConstruction.allCases, id: \.self) { Text($0.displayName).tag(Optional($0)) }
                     }.labelsHidden()
                 }
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
-                    GridRow { Text("Geben Sie den Schlüssel (k) ein"); TextField("", text: $key).font(.system(.body, design: .monospaced)) }
+                    GridRow { Text("Enter your key (k)"); TextField("", text: $key).font(.system(.body, design: .monospaced)) }
                     GridRow {
-                        Text("Geben Sie den zweiten Schlüssel (k') ein")
+                        Text("Enter second key (k')")
                         TextField("", text: $key2).font(.system(.body, design: .monospaced)).disabled(construction != .doubleKey)
                     }
                 }
             }
-            Text("Innerer Hashwert")
+            Text("Inner hash value:")
             ResultBox(text: d?.innerHash.map { Hex.encode($0, separator: " ") } ?? "", minHeight: 30)
-            Text("Eingabe für äußere Hashfunktion (abhängig von der oben gewählten HMAC-Variante)")
+            Text("Input for outer hash function (depends on the HMAC variant chosen above)")
             ResultBox(text: outerInputText, minHeight: 60)
-            Text("Erzeugter HMAC")
+            Text("HMAC generated from message and key")
             ResultBox(text: d.map { Hex.encode($0.mac, separator: " ") } ?? "", minHeight: 30)
             HStack {
                 Spacer()
                 PKIHelpButton(action: .hmac)
-                Button("Schließen") { windowBox.window?.close() }.keyboardShortcut(.cancelAction)
+                Button("Close") { windowBox.window?.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -461,7 +461,7 @@ struct HMACView: View {
             message = String(initialMessage.prefix(Self.maxLength))
             if initialMessage.count > Self.maxLength {
                 DispatchQueue.main.async {
-                    PKIModal.info("Die Länge einer Nachricht ist auf 16.000 Zeichen begrenzt.\nZeichen, die darüber hinausgehen, werden ignoriert.")
+                    PKIModal.info("The size of a message is limited to 16,000 characters.\nFurther characters are ignored.")
                 }
             }
         }
@@ -477,14 +477,14 @@ struct HMACView: View {
         switch c {
         case .doubleKey:
             if key.isEmpty && key2.isEmpty {
-                if !shownNoKey { shownNoKey = true; msg = "Sie haben keinen Schlüssel eingegeben!\nDer HMAC entspricht daher dem Hashwert der Nachricht." }
+                if !shownNoKey { shownNoKey = true; msg = "You did not enter a key!\nThe HMAC of your message corresponds to its hash value." }
             } else if key.isEmpty || key2.isEmpty {
-                if !shownOneKey { shownOneKey = true; msg = "Sie haben nur einen Schlüssel eingegeben!\nDer HMAC wird daher nur aus der Nachricht \nund einem Schlüssel berechnet." }
+                if !shownOneKey { shownOneKey = true; msg = "You did only enter one key!\nConsequently, the HMAC will be determined by your message \nand one key only." }
             }
         case .hmac:
-            if key.isEmpty && !shownDouble { shownDouble = true; msg = "Sie haben keinen Schlüssel eingegeben!\nDer innere Hashwert entspricht daher dem Hashwert\nder Datei, der HMAC dem Hashwert dieses Wertes." }
+            if key.isEmpty && !shownDouble { shownDouble = true; msg = "You did not enter a key!\nThe inner hash value therefore corresponds to the hash value\nof the message, the HMAC to this values' hash value." }
         default:
-            if key.isEmpty && !shownNoKey { shownNoKey = true; msg = "Sie haben keinen Schlüssel eingegeben!\nDer HMAC entspricht daher dem Hashwert der Nachricht." }
+            if key.isEmpty && !shownNoKey { shownNoKey = true; msg = "You did not enter a key!\nThe HMAC of your message corresponds to its hash value." }
         }
         if let msg { DispatchQueue.main.async { PKIModal.info(msg) } }
     }

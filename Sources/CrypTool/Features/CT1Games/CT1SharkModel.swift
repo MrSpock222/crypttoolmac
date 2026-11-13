@@ -1,105 +1,105 @@
 import AppKit
 import SwiftUI
 
-// Port of CT1's "Der Zahlenhai" (NumberShark 1.2.4, MFC): EvoZahlenHai (rules), zhl (back-tracking
-// search), zahl (brute-force search), ZahlenHaiOptionen/GameSummary/... (dialogs). German captions
-// are taken from the German resources of MFC-ZahlenHai.rc.
+// Port of CT1's "The Number Shark" (NumberShark 1.2.4, MFC): EvoZahlenHai (rules), zhl (back-tracking
+// search), zahl (brute-force search), ZahlenHaiOptionen/GameSummary/... (dialogs). English captions
+// are taken from the English resources of MFC-ZahlenHai.rc.
 
-// MARK: - German texts (MFC-ZahlenHai.rc, LANG_GERMAN)
+// MARK: - English texts (MFC-ZahlenHai.rc, LANG_ENGLISH)
 
 enum SharkText {
-    static let numberShark = "Zahlenhai"
+    static let numberShark = "Number Shark"
     static let titleVersion = " - Version 1.2.4"
-    static let sharkAgainst = " gegen "
-    static let primeInfo = "(prim)"
-    static let rules = "Beschreibung:\n - Im Zahlenhai-Spiel entscheidet man sich zu Beginn für die Größe des Muschelfeldes, also mit wie viel Zahlen man spielen möchte.\n    Diese Größe des Muschelfeldes bezeichnen wir mit \"n\" und nennen sie die \"Anzahl der auswählbaren Zahlen\". Der Zahlenvorrat beginnt bei 1\n    und geht bis zu der Zahl, die Du als Größe für das Muschelfeld ausgewählt hast (vorgeschlagen ist zu Beginn die Zahl 20).\n    Danach werden alle Zahlen aus dem Zahlenvorrat nach den Regeln, die Du weiter unten findest, zwischen Dir und dem Computer (\"Zahlenhai\") aufgeteilt.\n - Standardmäßig sind beim Start des Spiels 20 Zahlen in dem Muschelfeld eingestellt. Du kannst als Gesamtzahl n jede Zahl von 1 bis 9999 wählen.\n\nZiel:\n - Dein Ziel ist es, dass die Summe Deiner Zahlen größer ist als die Summe aller Zahlen, die der Zahlenhai gefressen hat.\n\nRegeln:\n - Du hast immer den ersten Zug, d.h. Du beginnst die erste Runde.\n - In der ersten Runde kannst Du Dir eine beliebige Zahl aus dem Zahlenvorrat auswählen\n   (der Zahlenvorrat umfasst n Zahlen und wird im Muschelfeld angezeigt).\n - Immer bekommt der Zahlenhai von der ausgewählten Zahl alle echten Teiler, sofern diese noch nicht ausgewählt wurden\n   (6 ist zum Beispiel teilbar durch 1,2,3,6. Die echten Teiler sind 1,2,3).\n - In allen darauf folgenden Runden kannst Du nur Zahlen wählen, die Du vorher noch nicht gewählt hast und die\n    noch nicht vom Zahlenhai gefressen wurden (also nur die blauen Muscheln).\n - ABER: Der Zahlenhai darf nie leer ausgehen!\n - Wählst Du eine Zahl, deren Teiler alle schon verteilt wurden, so bekommt der Zahlenhai die gewählte Zahl\n    und Du erhältst 0 Punkte in dieser Runde.\n\n"
-    static let rules2 = "Während des Spielens kannst Du mit der Tastenkombination SHIFT+ALT+C die Muscheln auf den Buttons sichtbar und unsichtbar machen.\nDadurch kann man die Zahlen auf den Buttons noch besser lesen und das Spiel kann dadurch auch flüssiger dargestellt werden.\n\nHilfen und weitere Hinweise stehen in der Online-Hilfe. Diese kannst Du an jeder Stelle im Zahlenhai-Spiel mit der F1-Taste öffnen.\n\nDie Online-Hilfe enthält eine ausführliche Bedienungsanleitung, einen konkreten kommentierten Spielverlauf (Probespiel), Informationen zur Entstehung des Spiels\nsowie eine Herausforderung an Euch, mit der Ihr uns helfen könnt, dieses Spiel zu verbessern.\n"
+    static let sharkAgainst = " against "
+    static let primeInfo = "(prime)"
+    static let rules = "Description:\n - At the beginning of the Number Shark game you choose the size of the shell square, this is the amount of numbers you want to play with.\n    We name the size of the shell square with \"n\" and call it the \"count of selectable numbers\". The pool of numbers starts with 1\n    and ends with the number which you have chosen for the size of the shell square (we suggest the number 20 for the beginning).\n    After that all numbers from the shell square will be given to either you or the computer (\"Number Shark\").\n    You can read the rules of how the numbers are divided below in the text.\n - By default, there are 20 numbers in the shell square. As total number you can select every number from 1 to 9999 for n.\n\nGoal of the game:\n - It is your goal to achieve a higher score than the sum of the numbers that were eaten by the Number Shark.\n\nRules:\n - You always have the first turn, i.e. you are starting the first round.\n - In this round you can choose any of the n numbers from the shell square.\n - The Number Shark gets every available real factor of the number selected by you, if they have not been chosen yet\n    (6 for example is divisible by 1, 2, 3 and 6. The real factors are 1, 2 and 3).\n - In all subsequent rounds you can only choose numbers which have not been chosen by you,\n    or were eaten by the Number Shark in previous rounds (i.e. only the blue shells).\n - BUT: The Number Shark may never miss out!\n - If you choose a number which has no more factors, then the Number Shark gets your chosen number and you get 0 points in this round.\n\n"
+    static let rules2 = "While playing the game you can make the shells on the buttons visible and invisible by pressing SHIFT+ALT+C on your keyboard.\nThis can help you to read the numbers on the buttons better and to make the game a bit faster.\n\nYou can get additional help and information by pressing the F1 button.\n\nThe online help contains a operation manual, a commented sample game course, some information about how the game was developed,\nand a challenge for you, which gives you the chance to help us improve the game.\n"
     static func playerWins(_ n: String, _ p: String, _ n2: String, _ best: String) -> String {
-        "Glückwunsch, Du hast gegen den Zahlenhai gewonnen!\n\nWenn Du eine größere Herausforderung suchst, dann nimm eine höhere Zahl als \(n).\n\nDu hast \(p) Punkte erreicht. Maximal wären bei \(n2) Zahlen \(best) Punkte möglich gewesen."
+        "Congratulation, you have won against the Number Shark!\n\n If you are looking for a bigger challenge, then try a higher number than \(n).\n\nYou achieved \(p) points. The highest possible score with \(n2) numbers would have been \(best)."
     }
     static func playerWins2(_ n: String, _ p: String) -> String {
-        "Glückwunsch, Du hast gegen den Hai gewonnen!\n\nWenn Du eine größere Herausforderung suchst, dann nimm eine höhere Zahl als \(n).\n\nDu hast \(p) Punkte erreicht."
+        "Congratulation, you have won against the Number Shark!\n\nIf you are looking for a bigger challenge, then try a higher number than \(n).\n\nYou achieved \(p) points."
     }
     static func playerWins3(_ n: String, _ p: String, _ n2: String, _ best: String) -> String {
-        "Glückwunsch, Du hast gegen den Zahlenhai gewonnen!\n\nWenn Du eine größere Herausforderung suchst, dann nimm eine höhere Zahl als \(n).\n\nDu hast \(p) Punkte erreicht. Bis jetzt haben wir bei \(n2) Zahlen maximal \(best) Punkte erreicht."
+        "Congratulation, you have won against the Number Shark!\n\n If you are looking for a bigger challenge, then try a higher number than \(n).\n\nYou achieved \(p) points. Until now the highest score we achieved with \(n2) numbers was \(best)."
     }
     static func playerWinsOptimal(_ p: String, _ n: String, _ n2: String) -> String {
-        "GLÜCKWUNSCH, Du hast gegen den Hai gewonnen!\n\nMit \(p) Punkten hast Du sogar die maximale Punktzahl bei \(n) Zahlen erreicht.\n\nWenn Du eine größere Herausforderung suchst, dann nimm eine höhere Zahl als \(n2)."
+        "Congratulation, you have won against the Number Shark!\n\nWith \(p) points you even achieved the highest possible score with \(n) numbers.\n\nIf you are looking for a bigger challenge, then try a higher number than \(n2)."
     }
     static func playerWinsOptimal2(_ p: String, _ best: String, _ n: String) -> String {
-        "GLÜCKWUNSCH, Du hast gegen den Hai gewonnen!\n\nMit \(p) Punkten hast Du sogar mehr Punkte erreicht als wir bisher geschafft haben. Unser bestes Ergebnis war bisher \(best) Punkte bei \(n) Zahlen.\n\nBitte schicke die Zusammenfassung an esslinger@fb5.uni-siegen.de."
+        "Congratulation, you have won against the Number Shark!\n\nWith \(p) points you even achieved a higher score than we did. Our best score was \(best) points with \(n) numbers.\n\nPlease send the summary of the game to esslinger@fb5.uni-siegen.de."
     }
     static func computerWins(_ c: String, _ p: String) -> String {
-        "Diesmal hat der Zahlenhai gewonnen! :,-(\n\nEr hat Dich mit \(c) zu \(p) Punkten geschlagen.\n\nLos! Versuch es gleich nochmal!"
+        "This time the Number Shark won :,-(\n\n It has beaten you with \(c) to \(p) points.\n\n Go -- Try again!"
     }
     static func numberOne(_ c: String, _ p: String) -> String {
-        "Diesmal hat der Zahlenhai gewonnen! :,-(\n\nEr hat Dich mit \(c) zu \(p) Punkten geschlagen.\n\nWenn nur die Zahl '1' im Muschelfeld liegt, kann man auch nicht gewinnen.\n\nLos! Versuch es gleich nochmal!"
+        "This time the Number Shark won :,-(\n\nIt has beaten you with \(c) to \(p) points.\n\nYou can't win with only one number in the shell square.\n\n Go -- Try again!"
     }
     static func draw(_ p: String) -> String {
-        "Unentschieden!?!\n\nDas kommt nur sehr selten vor!\n\nDu und der Zahlenhai haben jeweils \(p) Punkte."
+        "Draw!?!\n\nThis happens only very seldom!\n\nYou and the Number Shark have \(p) points each."
     }
-    static let drawHeadline = "Unentschieden!"
-    static let computerWinsHeadline = "Verloren!"
-    static let playerWinsHeadline = "Gewonnen!"
-    static func invalidInput(_ max: String) -> String { "Für den Zahlenhai können nur Zahlen zwischen 1 und \(max) eingegeben werden!" }
-    static let validInputHeadline = "Die eingegebene Zahl ist zu groß!"
-    static let validInputHeadlineLow = "Die eingegebene Zahl ist zu klein."
-    static let startInfo = "Jetzt kannst Du Dir eine von den Muscheln aussuchen und mit dem Spiel beginnen."
-    static func sumText(_ n: String, _ s: String) -> String { "Bei \(n) Zahlen werden insgesamt \(s) Punkte an den Zahlenhai und an Dich vergeben. " }
-    static let shellGroupBox = "Muschelfeld (blau bedeutet \"frei wählbar\"; grau bedeutet \"schon vergeben\")"
-    static let normalGroupBox = "Muschelfeld"
-    static let listGroupBox = "Spielverlaufstabelle  [ In der Tabelle sind die Primzahlen mit \"(prim)\" markiert ]"
+    static let drawHeadline = "Draw!"
+    static let computerWinsHeadline = "You didn't win!"
+    static let playerWinsHeadline = "You have won!"
+    static func invalidInput(_ max: String) -> String { "In the Number Shark game you can play with numbers between 1 and \(max)!" }
+    static let validInputHeadline = "The entered number is too big!"
+    static let validInputHeadlineLow = "The entered number is to low."
+    static let startInfo = "Now you can choose one of the shells to start with the game."
+    static func sumText(_ n: String, _ s: String) -> String { "With \(n) numbers: \(s) points can be assigned in total to you and to the Number Shark." }
+    static let shellGroupBox = "Shell square (blue means \"still free to choose\"; gray means \"already distributed and eaten up\")"
+    static let normalGroupBox = "Shell square"
+    static let listGroupBox = "Course of the game -  [ \"prime\" marks a prime number ]"
     // Column headers (IDS_ZUG … IDS_REST) and their one-line variants for the summary file.
-    static let columns = [" Zug", "Deine\nZahlen", "Zahlenhai-\nZahlen", "Deine\nPunkte", "Hai-\nPunkte", "Rest-\nZahlen"]
-    static let columns2 = [" Zug", "Deine Zahlen", "Zahlenhai Zahlen", "Deine Punkte", "Hai Punkte", "Rest Zahlen"]
+    static let columns = ["Move", "Your\nchoice", "Number Shark's\nchoice", "Your\npoints", "Number Shark's\npoints", "Remaining\nnumbers"]
+    static let columns2 = ["Move", "Your choice", "Number Shark's choice", "Your points", "Number Shark's points", "Remaining numbers"]
     static let columnWidths: [CGFloat] = [39, 88, 189, 90, 90, 55]
     // Tooltips
-    static let ttStartNew = "Ein neues Spiel starten."
-    static let ttEnd = "Spiel beenden."
-    static let ttRules = "Spielregeln durchlesen."
-    static let ttOK = "Startet das Spiel mit dem eingestellten Zahlenvorrat."
-    static let ttOption = "Spieloptionen anzeigen."
-    static let ttHelp = "Zeigt Dir die Online-Hilfe des Zahlenhai-Spiels."
-    static let ttUndo = "Undo/Backward:\nÜber den \"Rückwärts\"-Knopf kannst Du Deine letzten Züge rückgängig machen\nund einen neuen Weg ausprobieren, um die höchste Punktzahl zu erreichen."
-    static let ttRedo = "Redo/Foreward:\nÜber den \"Vorwärts\"-Knopf kannst Du Deine rückgängig gemachten Züge solange wieder vorwärts gehen,\nsolange Du keine Änderung im Spielverlauf vornimmst."
-    static let ttLoad = "Lädt ein vorhandenes Spiel."
-    static let ttSave = "Speichert das aktuelle Spiel."
-    static let ttSwitchStyle = "Wechselt den Anzeigestil (Muscheln oder Zahlen)."
-    static func ttRest(_ list: String) -> String { "Der Hai frisst alle Zahlen, die Dir keine Punkte mehr bringen können.\nFolgende Zahlen könnte der Hai sofort fressen: \(list)" }
+    static let ttStartNew = "Start a new game."
+    static let ttEnd = "Finish the game."
+    static let ttRules = "Read the rules."
+    static let ttOK = "Start the game with the selected number pool."
+    static let ttOption = "Show the game options."
+    static let ttHelp = "Shows you the help for the Number Shark game."
+    static let ttUndo = "With \"Undo\" you can repeat previous rounds if you want to choose other numbers."
+    static let ttRedo = "With \"Redo\" you can go forward through the game as many steps as you went back in the game via \"Undo\"."
+    static let ttLoad = "Loads an existing game."
+    static let ttSave = "Saves the current game."
+    static let ttSwitchStyle = "Changes the display style (shells or numbers)."
+    static func ttRest(_ list: String) -> String { "The Number Shark eats all numbers from which you can't get any more points. The Number Shark could eat the following numbers at once: \(list)" }
     // Options dialog
-    static let optionsHead = "Um gleich zu starten, kannst Du auch einfach die Enter-Taste drücken oder auf den Button  \"Zum Spiel\"  klicken."
-    static let optionsToolTips = "ToolTips für die Muscheln aktivieren\n[Verweilt man mit der Maus etwas länger über einer der blauen Muscheln (mit den noch auswählbaren Zahlen), so wird ein Rechteck (ToolTip) eingeblendet, das u.a. die noch verfügbaren Teiler dieser Zahl anzeigt]."
-    static let optionsShowDialog = "Den Spieloptionen-Dialog beim nächsten Programmstart anzeigen."
-    static let optionsShowNumbers = "Die zuletzt gewählte Anzahl der auswählbaren Zahlen im Zahlenvorrat beim nächsten Programmstart wieder eintragen."
+    static let optionsHead = "To start immediately just press \"Enter\" or press the  \"To the game\"  button."
+    static let optionsToolTips = "Activate the tooltips for the shells\n[If you place the cursor a bit longer over one of the blue shells (the ones with the still active numbers), a little window (tooltip) opens and provides you with information, e.g. the factors still available for this number]."
+    static let optionsShowDialog = "Show the \"Game options\" dialog at the next program start."
+    static let optionsShowNumbers = "Remember the last total number of the number stack for the next program start."
     static func optionsMaxPoints(_ n: String) -> String {
-        "Hier kannst Du die maximal mögliche Punktzahl, und einen Weg dahin, für den eingestellten Zahlenvorrat von \(n) Zahlen berechnen.\nDies könnte aber sehr lange dauern...\n\nStattdessen kannst Du Dir die Werte anzeigen lassen, die wir bereits vorberechnet haben."
+        "Here you can calculate the maximum score for your selected number stack of \(n) numbers. But this might take a while...\n\nInstead, we could immediately show you the scores we have precalculated already."
     }
-    static let gameIdea = "Grips-Spiel: Für ein oder mehrere Spieler ab 10 Jahre.\n\nSpielzeit: Für 20 Zahlen benötigt man nicht länger als 3 Minuten, bei 9.999 Zahlen kann man aber schon über ein Jahr brauchen."
-    static let infoText = "Das Programm Zahlenhai entstand als Ergänzung zum Freeware- und Open-Source-Projekt CrypTool: www.cryptool.de"
-    static let disclaimer = "Bitte beachte die Lizenzbestimmungen und die Informationen zum Haftungsausschluss für eventuelle Schäden durch das Zahlenhai-Programm.\n(C) 2018 CrypTool Team"
-    static let tabRadio1 = "Die maximal mögliche Punktzahl berechnen."
-    static let tabRadio2 = "Die besten bisher bekannten Punktzahlen anzeigen."
-    static let accelerators = "TAB: Auswahl der Muschel im angezeigten Zahlenblock (eines Reiters).\n\nENTER / LEERTASTE: Auswahl der Zahl der selektierten Muschel per Tastatur.\n\nSHIFT + ALT + C: Verändert das Aussehen der Buttons im Muschelfeld.\n\nSHIFT + ALT + L: Lädt ein vorhandenes Spiel.\n\nSHIFT + ALT + S: Speichert das aktuelle Spiel.\n\n"
-    static let selectSearchAlgorithm = "Der Zahlenhai beinhaltet zwei verschiedene Algorithmen für die Suche nach der maximalen Punktzahl: Der ursprünglich verfügbare Brute-Force-Algorithmus wurde um einen Back-Tracking-Algorithmus ergänzt.\n\nMit dem Brute-Force-Algorithmus hat ein 3 GHz Rechner für 20 Zahlen knapp 8 Stunden am Stück gerechnet. Bei 22 Zahlen dauerte das schon ca. 9 Tage. Und bei 30 Zahlen sind es wahrscheinlich Wochen oder Monate.\n\nDer neue Algorithmus ist bedeutend schneller.\n\nWillst Du den neuen Algorithmus verwenden?"
+    static let gameIdea = "It's a savvy game for one or more players from age 10.\n\nPlay time: You shouldn't need more than 3 minutes for 20 numbers, but 9,999 numbers might take you more than a year."
+    static let infoText = "The Number Shark program was created as an addition to the freeware and open source project CrypTool: www.cryptool.com"
+    static let disclaimer = "Please note the terms of license and the information regarding non liability for any damage arising from the use of the Number Shark program.\n(C) 2018 CrypTool Team"
+    static let tabRadio1 = "Calculate the maximum score."
+    static let tabRadio2 = "Show the best known scores."
+    static let accelerators = "TAB: Selects the next shell within the shown number block (of one tab).\n\nENTER / SPACE: Choose the number of the selected shell via keyboard.\n\nSHIFT + ALT + C: Changes the style of the buttons in the shell square.\n\nSHIFT + ALT + L: Loads an existing game.\n\nSHIFT + ALT + S: Saves the current game.\n\n"
+    static let selectSearchAlgorithm = "The Number Shark contains two different algorithms to determine the maximum number of points possible: The originally available brute-force algorithm was complemented by a new back-tracking algorithm.\n\nUsing the brute-force algorithm, a 3 GHz PC had to calculate about 9 hours for 20 numbers. For 22 numbers the calculation took about 9 days. And we believe it will take weeks or months for 30 numbers.\n\nThe new algorithm is considerably faster.\n\nDo you want to use the new algorithm?"
     static func backtrackingResult(_ n: String, _ s: String, _ t: String, _ p: String, _ seq: String) -> String {
-        "Um bei \(n) Zahlen die maximal mögliche Punktzahl \(s) zu berechnen, hat das Programm \(t) Sekunden gebraucht.\n\nDie höchste Primzahl ist \(p). Mit dieser Zahl musst Du das Spiel beginnen, um die maximal mögliche Punktzahl erreichen zu können.\n\nDie höchste Punktzahl kannst Du unter anderem mit folgender Zugfolge (Weg) erreichen: \(seq)."
+        "To calculate for \(n) numbers the highest score of \(s) points, the program spent \(t) seconds.\n\nThe highest prime number here is \(p). You should start the game with this prime to be able to reach the maximum score.\n\nTo achieve the highest score, you can choose the numbers in this order: \(seq)\n\n"
     }
     static func maxPointsNew(_ n: String, _ s: String, _ t: String, _ k: String, _ p: String, _ seq: String) -> String {
-        "Um bei \(n) Zahlen die maximal mögliche Punktzahl von \(s) Punkten zu berechnen, hat das Programm \(t) Sekunden benötigt und musste dabei \(k) Knoten durchlaufen.\n\nDie höchste Primzahl ist \(p). Mit dieser Zahl musst Du das Spiel beginnen, um die maximal mögliche Punktzahl erreichen zu können.\n\nDie höchste Punktzahl kannst Du unter anderem mit folgender Zugfolge (Weg) erreichen: \(seq)."
+        "To calculate for \(n) numbers the highest score of \(s) points, the program spent \(t) seconds. It had to pass through \(k) knots.\n\nThe highest prime number here is \(p). You must start the game with this prime to be able to reach the maximum score.\n\nTo achieve the highest score, you can choose the numbers in this order: \(seq)"
     }
-    static let maxPointsHeadline = "Maximale Punktzahl"
-    static func searchProgress1(_ alg: String, _ n: Int) -> String { "Der Zahlenhai sucht mit einem \(alg)-Algorithmus nach der bestmöglichen Punktausbeute für \(n) Zahlen." }
-    static func searchProgress2(_ s: Int) -> String { "Verstrichene Zeit: \(s) Sekunden" }
-    static let searchProgressInfo = "Leider können wir nicht genau vorhersagen, wie lange die Suche dauern wird. Wenn Du möchtest, kannst Du die Suche jederzeit abbrechen."
+    static let maxPointsHeadline = "Highest possible score"
+    static func searchProgress1(_ alg: String, _ n: Int) -> String { "The Number Shark is using a \(alg) algorithm to find the highest possible score for \(n) numbers." }
+    static func searchProgress2(_ s: Int) -> String { "Elapsed time: \(s) seconds" }
+    static let searchProgressInfo = "Unfortunately we cannot predict how much time the search will take, but you can cancel the search at any time."
     static func precalculatedIntro(_ proved: Int, _ total: Int) -> String {
-        "Für die Zahlen 1 bis \(proved) kennen wir die optimalen Wege.\nFür die höheren Zahlen \(proved + 1) bis \(total) zeigen wir hier die besten bisher bekannten Werte -- ob diese Werte oberhalb von \(proved) auch optimal sind, wissen wir nicht."
+        "For numbers 1 through \(proved) we know optimal ways to win.\nFor the higher numbers \(proved + 1) through \(total) we show the best known results already precalculated. However, we don't know whether these results from \(proved) up are optimal."
     }
-    static func loadFailed(_ f: String) -> String { "Die Datei \"\(f)\" konnte nicht richtig eingelesen werden." }
+    static func loadFailed(_ f: String) -> String { "The file \"\(f)\" could not be loaded." }
     static func noSummary(_ f: String, _ dir: String) -> String {
-        "Die Datei \"\(f)\" konnte nicht erstellt werden, da Du wahrscheinlich nicht genügend Zugriffsrechte in dem Ordner\n\"\(dir)\" hast.\n"
+        "The file \"\(f)\" could not be written. Probably you do not have enough rights in the folder\n\"\(dir)\".\n"
     }
-    static func radioEdit1(_ f: String, _ dir: String) -> String { "Ja,\nin der Datei  \"\(f)\" im Ordner\n\"\(dir)\"." }
-    static let fileName = "Zusammenfassung.txt"
+    static func radioEdit1(_ f: String, _ dir: String) -> String { "Yes\nas \"\(f)\" in the folder\n\"\(dir)\". " }
+    static let fileName = "Summary.txt"
 }
 
 // MARK: - Game rules (EvoZahlenHai)
@@ -154,7 +154,7 @@ struct SharkGame {
         return true
     }
 
-    /// Free proper divisors of `n` (tooltip "Übrige Teiler").
+    /// Free proper divisors of `n` (tooltip "This time he would eat").
     func freeDivisors(of n: Int) -> [Int] {
         guard n > 1 else { return [] }
         return (1...(n / 2 + 1)).filter { owner[$0] == .free && n % $0 == 0 && n != $0 }
@@ -465,7 +465,7 @@ final class SharkSearch: ObservableObject, Identifiable {
     let cancelFlag = SharkSearchCancel()
     var onFinish: ((String, String) -> Void)?   // (title, message)
 
-    var algorithmName: String { backtracking ? "Back-Tracking" : "Brute-Force" }
+    var algorithmName: String { backtracking ? "back-tracking" : "brute-force" }
 
     init(backtracking: Bool, limit: Int) {
         self.backtracking = backtracking
@@ -645,13 +645,13 @@ final class SharkGameModel: ObservableObject {
         let multiples = game.freeMultiples(of: n)
         var isFactor = multiples.map(String.init).joined(separator: ", ")
         if multiples.count == 10 { isFactor += "...." }
-        let number = "Zahl: \(n)"
+        let number = "Number: \(n)"
         if factors.isEmpty {
-            let f = isFactor.isEmpty ? "Teilt keine andere Zahl." : isFactor
-            return "\(number)\nKeine Teiler mehr vorhanden!\nIst Teiler von: \(f)"
+            let f = isFactor.isEmpty ? "Does not divide any other number." : isFactor
+            return "\(number)\nNo more factors left!\nIs a factor of: \(f)"
         }
-        let t = isFactor.isEmpty ? "Teilt keine andere Zahl." : "Ist Teiler von: \(isFactor)"
-        return "\(number)\nÜbrige Teiler: \(factors)\n\(t) "
+        let t = isFactor.isEmpty ? "Does not divide any other number." : "Is a factor of: \(isFactor)"
+        return "\(number)\nThis time he would eat: \(factors)\n\(t)"
     }
 
     // MARK: Timer
@@ -783,7 +783,7 @@ final class SharkGameModel: ObservableObject {
     // MARK: Game summary (CGameSummary)
 
     static var summaryFolder: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Zahlenhai")
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Number Shark")
     }
 
     private var summaryFileName: String {
@@ -823,7 +823,7 @@ final class SharkGameModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in self?.writeLogFile() }
     }
 
-    /// writeLogFile: game protocol "<n>_<points>_<name>_Zusammenfassung.txt".
+    /// writeLogFile: game protocol "<n>_<points>_<name>_Summary.txt".
     func writeLogFile() {
         let name = summaryFileName
         let folder = Self.summaryFolder
@@ -831,9 +831,9 @@ final class SharkGameModel: ObservableObject {
         df.locale = Locale(identifier: "en_US_POSIX")
         df.dateFormat = "MMMM dd, yyyy, HH:mm"
         var out = "\r\n" + name
-        out += "\r\n\r\nDatum/Uhrzeit:                " + df.string(from: Date())
-        out += "\r\n\r\nName des Spielers:            " + playerName
-        out += "\r\n\r\nZahlenvorrat:                 " + String(limit)
+        out += "\r\n\r\nDate/Time:                   " + df.string(from: Date())
+        out += "\r\n\r\nPlayer's name:               " + playerName
+        out += "\r\n\r\nNumber pool:                 " + String(limit)
 
         var heads = SharkText.columns2
         var nMax = Array(repeating: 0, count: 6)
@@ -845,7 +845,7 @@ final class SharkGameModel: ObservableObject {
                 if nMax[j] < 2 * text.count { nMax[j] = 2 * text.count }
             }
         }
-        out += "\r\n\r\nDiese Datei zeigt die einzelnen Spielzüge und welche Punktzahl sich daraus für\r\nDich und den Zahlenhai ergeben haben.\r\nDie Tabelle enthält die gleichen Infos wie die Spielverlaufstabelle im Spielfenster.\r\n\r\n"
+        out += "\r\n\r\nThis file shows you every single move and the score of both players.\r\nThe chart contains the same information as the \"course of the game\" chart in the game dialog.\r\n\r\n"
         let head = heads.joined(separator: " | ") + " |\r\n"
         out += head
         var allNumbers = ""
@@ -863,17 +863,17 @@ final class SharkGameModel: ObservableObject {
         if rows.count >= 60 { out += "\r\n\r\n" + head }
         if allNumbers.count >= 2 { allNumbers.removeLast(2) }
         allNumbers = allNumbers.replacingOccurrences(of: SharkText.primeInfo, with: "")
-        out += "\r\n\r\nPunkte des Spielers:          " + String(game.pointsPlayer)
-        out += "\r\nDeine gewählten Zahlen:       " + allNumbers
-        out += "\r\nPunkte des Zahlenhais:        " + String(game.pointsComputer)
-        out += "\r\nBenötigte Züge:               " + String(game.round)
+        out += "\r\n\r\nPlayer's points:             " + String(game.pointsPlayer)
+        out += "\r\nYour chosen numbers: " + allNumbers
+        out += "\r\nNumber Shark points:         " + String(game.pointsComputer)
+        out += "\r\nRequired moves:              " + String(game.round)
         if game.pointsPlayer > game.pointsComputer {
-            out += "\r\nVorsprung:                    " + String(game.pointsPlayer - game.pointsComputer)
+            out += "\r\nYour lead:                   " + String(game.pointsPlayer - game.pointsComputer)
         } else if game.pointsPlayer < game.pointsComputer {
-            out += "\r\nRückstand:                    " + String(game.pointsComputer - game.pointsPlayer)
+            out += "\r\nBehind:                      " + String(game.pointsComputer - game.pointsPlayer)
         }
         if limit <= SharkGameData.blocks.count, let b = SharkGameData.blocks[limit] {
-            out += "\r\nMaximal mögliche Punkte für Dich:   " + b.score
+            out += "\r\nHighest possible score for you:" + b.score
         }
         do {
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
@@ -883,7 +883,7 @@ final class SharkGameModel: ObservableObject {
         }
     }
 
-    // MARK: Save / load ("Zahlenhai.save")
+    // MARK: Save / load ("Number Shark.save")
 
     static var saveURL: URL { summaryFolder.appendingPathComponent(SharkText.numberShark + ".save") }
 

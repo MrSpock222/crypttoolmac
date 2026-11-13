@@ -30,14 +30,14 @@ struct PKIStepDialog: View {
                 .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color(nsColor: .separatorColor)))
                 .onChange(of: shown) { _, _ in proxy.scrollTo("end", anchor: .bottom) }
             }
-            Text("Schritt \(shown) von maximal \(steps.count) Schritten.").bold()
+            Text("Step \(shown) out of a maximum of \(steps.count) steps.").bold()
             Divider()
             HStack {
                 Button(finishTitle, action: finish)
                 Spacer()
-                Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: cancel).keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Weiter >") { shown += 1 }.keyboardShortcut(.defaultAction).disabled(shown >= steps.count)
+                Button("Continue >") { shown += 1 }.keyboardShortcut(.defaultAction).disabled(shown >= steps.count)
             }
         }
         .padding(16)
@@ -56,11 +56,11 @@ enum PKIECSteps {
         let c0 = key.curve, r = c0.n
         let digest = Hashing.hash(message, algorithm: hash.algorithm)
         var steps: [String] = []
-        var s1 = "Signaturerzeuger:  \(owner.firstLast)\n\n"
-        s1 += "Zu benutzende Domain-Parameter '\(c0.name)':\n\n" + domainText(c0)
-        s1 += "Geheimer Schlüssel s des Signaturerzeugers:\n\n  s  = \(key.d)\n\n"
-        s1 += "Gewähltes Signaturverfahren: \(method.rawValue) mit Hashfunktion \(hash.rawValue)\n\n"
-        s1 += "Größe der zu signierenden Nachricht M: \(message.count) Byte\n\nweiter ...\n\n"
+        var s1 = "Signature originator:  \(owner.firstLast)\n\n"
+        s1 += "Domain parameters to be used '\(c0.name)':\n\n" + domainText(c0)
+        s1 += "Secret key s of the signature originator:\n\n  s  = \(key.d)\n\n"
+        s1 += "Chosen signature algorithm: \(method.rawValue) with hash function \(hash.rawValue)\n\n"
+        s1 += "Size of message M to be signed: \(message.count) bytes\n\nContinue ...\n\n"
         steps.append(s1)
         while true {
             let u = BigUInt.random(below: r - 1) + 1
@@ -75,17 +75,17 @@ enum PKIECSteps {
                 guard let sd = ECDSA.sign(hash: digest, key: key, nonce: u) else { continue }
                 c = sd.r; d = sd.s
             }
-            steps.append("Berechne mit der gewählten Hashfunktion \(hash.rawValue) aus der Nachricht M einen 'Hashwert' f (message representative):\n\n  f  = \(f)\n\n")
-            steps.append("Erzeuge ein zufälliges one-time Schlüsselpaar (geheimer Schlüssel, öffentlicher Schlüssel) = (u,V)\nmit den Domain-Parametern von '\(c0.name)' (V=(Vx,Vy) ist ein Punkt auf der Elliptischen Kurve):\n\n  u  = \(u)\n  Vx  = \(vx)\n  Vy  = \(vy)\n\n")
-            steps.append("Konvertiere das Gruppenelement Vx (x Koordinate des Punktes V auf Elliptischer Kurve) in die Zahl i:\n\n  i  = \(vx)\n\n")
+            steps.append("Calculate a 'hash value' f (message representative) from message M, using the chosen hash function \(hash.rawValue).\n\n  f  = \(f)\n\n")
+            steps.append("Create a random one-time key pair (secret key, public key) = (u,V)\nwith the domain parameters of '\(c0.name)' (V=(Vx,Vy) is a point on the elliptic curve):\n\n  u  = \(u)\n  Vx  = \(vx)\n  Vy  = \(vy)\n\n")
+            steps.append("Convert the group element Vx (x co-ordinates of point V on elliptic curve) to the number i:\n\n  i  = \(vx)\n\n")
             if method == .ecnr {
-                steps.append("Berechne die Zahl c = i + f (mod r) (c ungleich 0):\n\n  c  = \(c)\n\n")
-                steps.append("Berechne die Zahl d = u - s*c (mod r) (d ungleich 0):\n\n  d  = \(d)\n\n")
+                steps.append("Calculate the number c = i + f (mod r) (c not equal to 0):\n\n  c  = \(c)\n\n")
+                steps.append("Calculate the number d = u - s*c (mod r) (d not equal to 0):\n\n  d  = \(d)\n\n")
             } else {
-                steps.append("Berechne die Zahl c = i mod r (c ungleich 0):\n\n  c  = \(c)\n\n")
-                steps.append("Berechne die Zahl d = u^(-1)*(f + s*c) mod r (d ungleich 0):\n\n  d  = \(d)\n\n")
+                steps.append("Calculate the number c = i mod r (c not equal to 0):\n\n  c  = \(c)\n\n")
+                steps.append("Calculate the number d = u^(-1)*(f + s*c) mod r (d not equal to 0):\n\n  d  = \(d)\n\n")
             }
-            steps.append("Signaturerzeugung beendet.\nDie Signatur besteht aus den beiden Zahlen c und d.\n\n")
+            steps.append("Signature generation finished.\nThe signature consists of the two numbers c and d.\n\n")
             return (steps, c, d)
         }
     }
@@ -95,52 +95,52 @@ enum PKIECSteps {
                        curve c0: EllipticCurve, W: ECPoint, owner: StoredKey) -> (header: String, steps: [String], ok: Bool) {
         let r = c0.n
         let digest = Hashing.hash(message, algorithm: hash.algorithm)
-        var header = "Schrittweise Signatur-Verifikation:\n\nSignaturerzeuger:  \(owner.firstLast)\n"
-        header += "Gewähltes Signaturverfahren: \(method.rawValue) mit Hashfunktion \(hash.rawValue)\n"
-        header += "Größe der signierten Nachricht M: \(message.count) Byte\n"
-        header += "Bitlänge von c + Bitlänge von d = \(c.bitLength + d.bitLength) Bit\n  c = \(c)\n  d = \(d)\n"
+        var header = "Step-by-step signature verification:\n\nSignature originator:  \(owner.firstLast)\n"
+        header += "Chosen signature algorithm: \(method.rawValue) with hash function \(hash.rawValue)\n"
+        header += "Size of message M to be signed: \(message.count) bytes\n"
+        header += "Bit length of c + bit length of d = \(c.bitLength + d.bitLength) bits\n  c = \(c)\n  d = \(d)\n"
         var steps: [String] = []
-        var s1 = "Zu benutzende Domain-Parameter '\(c0.name)':\n\n" + domainText(c0)
+        var s1 = "Domain parameters to be used '\(c0.name)':\n\n" + domainText(c0)
         if case let .affine(wx, wy) = W {
-            s1 += "Öffentlicher Schlüssel W=(Wx,Wy) (W ist ein Punkt auf der Elliptischen Kurve) des Signaturerzeugers:\n\n  Wx = \(wx)\n  Wy = \(wy)\n\n"
+            s1 += "Public key W=(Wx,Wy) (W is a point on the elliptic curve) of the signature originator:\n\n  Wx = \(wx)\n  Wy = \(wy)\n\n"
         }
         steps.append(s1)
         let inRange = c >= 1 && c < r && d >= 1 && d < r
-        steps.append("Falls c oder d nicht im Intervall [1, r-1] ist die Signatur ungültig:\n\n  " +
-                     (inRange ? "c und d liegen im geforderten Intervall [1, r-1]" : "c oder d liegt NICHT im geforderten Intervall [1, r-1]") + "\n\n")
+        steps.append("If c or d does not fall within the interval [1, r-1] then the signature is invalid:\n\n  " +
+                     (inRange ? "c and d fall within the required interval [1, r-1]." : "Either c or d does NOT fall within the required interval [1, r-1].") + "\n\n")
         guard inRange else { return (header, steps, false) }
         let g = ECDSA.hashToInteger(digest, curve: c0) % r
         if method == .ecnr {
             let P = c0.multiplyAdd(d, c0.generator, c, W)
             guard case let .affine(px, py) = P else {
-                steps.append("Der Punkt P = (inf,inf) zeigt an, dass die Signatur fehlerhaft ist\n\n")
+                steps.append("Point P = (inf,inf) shows that the signature is invalid.\n\n")
                 return (header, steps, false)
             }
-            steps.append("Berechne den Elliptischen Kurven Punkt P = d G + c W\n(falls P = (Px, Py) = (inf, inf) ist die Signatur ungültig):\n\n  Px = \(px)\n  Py = \(py)\n\n")
-            steps.append("Konvertiere das Gruppenelement Px (x Koordinate des Punktes P auf Elliptischer Kurve) in die Zahl i:\n\n  i  = \(px)\n\n")
+            steps.append("Calculate the elliptic curve point P = d G + c W\n(If P = (Px, Py) = (inf, inf) then the signature is invalid):\n\n  Px = \(px)\n  Py = \(py)\n\n")
+            steps.append("Convert the group element Px (x co-ordinates of point P on elliptic curve) to the number i:\n\n  i  = \(px)\n\n")
             let f = (c % r + r - px % r) % r
-            steps.append("Berechne die Zahl f = c - i (mod r) (f ist ein 'message-representative'):\n\n  f  = \(f)\n\n")
-            steps.append("Berechne mit der gewählten Hashfunktion \(hash.rawValue) aus der Nachricht M einen 'Hashwert' g (message representative):\n\n  g  = \(g)\n\n")
+            steps.append("Calculate the number f = c - i (mod r) (f is a 'message representative'):\n\n  f  = \(f)\n\n")
+            steps.append("Calculate a hash value g (message representative) from message M, using the chosen hash function \(hash.rawValue).\n\n  g  = \(g)\n\n")
             let ok = f == g
-            steps.append("Falls f = g ist die Signatur korrekt; sonst ist Signatur fehlerhaft:\n\n  " + (ok ? "Signatur korrekt !" : "Signatur fehlerhaft !") + "\n")
+            steps.append("If f = g, then the signature is correct; otherwise the signature is invalid:\n\n  " + (ok ? "Correct signature!" : "Signature is not correct!") + "\n")
             return (header, steps, ok)
         }
-        steps.append("Berechne mit der gewählten Hashfunktion \(hash.rawValue) aus der Nachricht M einen 'Hashwert' f (message representative):\n\n  f  = \(g)\n\n")
+        steps.append("Calculate a 'hash value' f (message representative) from message M, using the chosen hash function \(hash.rawValue).\n\n  f  = \(g)\n\n")
         let h = d.inverse(modulo: r) ?? 0
-        steps.append("Berechne die Zahl h = d^(-1) mod r:\n\n  h  = \(h)\n\n")
+        steps.append("Calculate the number h = d^(-1) mod r:\n\n  h  = \(h)\n\n")
         let h1 = (g * h) % r, h2 = (c * h) % r
-        steps.append("Berechne die Zahl h1 = f*h mod r:\n\n  h1 = \(h1)\n\n")
-        steps.append("Berechne die Zahl h2 = c*h mod r:\n\n  h2 = \(h2)\n\n")
+        steps.append("Calculate the number h1 = f*h mod r:\n\n  h1 = \(h1)\n\n")
+        steps.append("Calculate the number h2 = c*h mod r:\n\n  h2 = \(h2)\n\n")
         guard case let .affine(px, py) = c0.multiplyAdd(h1, c0.generator, h2, W) else {
-            steps.append("Der Punkt P = (inf,inf) zeigt an, dass die Signatur fehlerhaft ist\n\n")
+            steps.append("Point P = (inf,inf) shows that the signature is invalid.\n\n")
             return (header, steps, false)
         }
-        steps.append("Berechne den Elliptischen Kurven Punkt P = h1 G + h2 W \n(falls P = (Px, Py) = (inf, inf) ist die Signatur ungültig):\n\n  Px = \(px)\n  Py = \(py)\n\n")
-        steps.append("Konvertiere das Gruppenelement Px (x Koordinate des Punktes P auf Elliptischer Kurve) in die Zahl i:\n\n  i  = \(px)\n\n")
+        steps.append("Calculate the elliptic curve point P = h1 G + h2 W \n(If P = (Px, Py) = (inf, inf) then the signature is invalid):\n\n  Px = \(px)\n  Py = \(py)\n\n")
+        steps.append("Convert the group element Px (x co-ordinates of point P on elliptic curve) to the number i:\n\n  i  = \(px)\n\n")
         let c1 = px % r
-        steps.append("Berechne die Zahl c' = i mod r:\n\n  c' = \(c1)\n\n")
+        steps.append("Calculate the number c' = i mod r:\n\n  c' = \(c1)\n\n")
         let ok = c1 == c
-        steps.append("Falls c' = c ist die Signatur korrekt; sonst ist Signatur fehlerhaft:\n\n  " + (ok ? "Signatur korrekt !" : "Signatur fehlerhaft !") + "\n")
+        steps.append("If c' = c then the signature is correct; otherwise the signature is invalid:\n\n  " + (ok ? "Correct signature!" : "Signature is not correct!") + "\n")
         return (header, steps, ok)
     }
 }
@@ -173,58 +173,58 @@ struct PKISignDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Signatur eines Dokuments erstellen").font(.title3.weight(.semibold))
+            Text("Sign a Document").font(.title3.weight(.semibold))
             HStack(alignment: .top, spacing: 12) {
-                PKIGroup("Hashfunktion wählen:") {
+                PKIGroup("Choose hash function") {
                     Grid(alignment: .leading, horizontalSpacing: 18, verticalSpacing: 5) {
-                        GridRow { Text("Verfahren:").foregroundStyle(.secondary); Text("Ausgabenlänge:").foregroundStyle(.secondary) }
+                        GridRow { Text("Algorithm:").foregroundStyle(.secondary); Text("Output length").foregroundStyle(.secondary) }
                         ForEach(PKISignHash.signDialogCases) { h in
                             GridRow {
                                 radio(h.rawValue, selected: hash == h, enabled: method.allowedHashes.contains(h)) { hash = h }
-                                Text("\(h.bits) Bit")
+                                Text("\(h.bits) bits")
                             }
                         }
                     }
                 }
                 .frame(width: 230)
-                PKIGroup("Signaturverfahren wählen:") {
-                    Text("Problemklasse \"Faktorisieren\":")
+                PKIGroup("Choose signature algorithm") {
+                    Text("Factorization based algorithms")
                     radio("RSA", selected: method == .rsa, enabled: methodEnabled(.rsa)) { setMethod(.rsa) }.padding(.leading, 16)
-                    Text("Problemklasse \"Diskreter Logarithmus\":")
+                    Text("Discrete logarithm based algorithms")
                     radio("DSA", selected: method == .dsa, enabled: methodEnabled(.dsa)) { setMethod(.dsa) }.padding(.leading, 16)
-                    Text("Problemklasse \"Elliptische Kurven Diskreter Logarithmus\":")
+                    Text("Elliptic curve based algorithms")
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: 5) {
                             radio("ECSP-DSA", selected: method == .ecdsa, enabled: methodEnabled(.ecdsa)) { setMethod(.ecdsa) }
                             radio("ECSP-NR", selected: method == .ecnr, enabled: methodEnabled(.ecnr)) { setMethod(.ecnr) }
                         }.padding(.leading, 16)
                         Spacer()
-                        PKIGroup("Punkt-Repräsentation") {
-                            radio("Affine Koordinaten", selected: affine, enabled: method.isEC) { affine = true }
-                            radio("Projektive Koordinaten", selected: !affine, enabled: method.isEC) { affine = false }
+                        PKIGroup("Presentation format") {
+                            radio("Affine coordinates", selected: affine, enabled: method.isEC) { affine = true }
+                            radio("Projective coordinates", selected: !affine, enabled: method.isEC) { affine = false }
                         }.fixedSize()
                     }
                 }
             }
-            Text("Wählen Sie zum Signieren Ihren privaten Schlüssel:")
+            Text("Choose a key/PSE to be used when signing")
             PKIKeyTable(selection: $keyID, filter: filter, minHeight: 150)
             HStack(alignment: .top, spacing: 12) {
                 PKIKeyFilterBox(filter: $filter, hyphen: false)
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("PIN-Code für den Zugriff auf die gewählte PSE:")
+                        Text("PIN code for chosen PSE:")
                         SecureField("", text: $pin).frame(width: 120)
                     }
-                    Toggle("Zum Signieren benötigte Zeit anzeigen", isOn: $showTime)
-                    Toggle("Zwischenschritte anzeigen", isOn: $showSteps).disabled(!method.isEC)
+                    Toggle("Display signature time", isOn: $showTime)
+                    Toggle("Display intermediate results", isOn: $showSteps).disabled(!method.isEC)
                 }
             }
             Divider()
             HStack {
-                Button("Signieren") { sign() }.keyboardShortcut(.defaultAction)
+                Button("Sign") { sign() }.keyboardShortcut(.defaultAction)
                 Spacer()
                 PKIHelpButton(action: .signDocument)
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -263,7 +263,7 @@ struct PKISignDialog: View {
 
     private func sign() {
         guard let k = key else {
-            PKIModal.info("Bitte wählen Sie eine PSE.")
+            PKIModal.info("Please select a PSE.")
             return
         }
         guard let material = PKIPinAccess.open(k, pin: pin) else { pin = ""; return }
@@ -287,10 +287,10 @@ struct PKISignDialog: View {
                 if showSteps {
                     let (steps, sc, sd) = PKIECSteps.sign(message: message, method: method, hash: hash, key: pair, owner: k)
                     var accepted = false
-                    let header = "Zu signierende Nachricht M:\n\n" + String(PKIText.string(Array(message.prefix(2000))))
-                    PKIModal.run(title: "Signaturerzeugung - Schritt für Schritt") { done in
-                        PKIStepDialog(title: "Schrittweise Signatur-Erzeugung:", header: header, steps: steps,
-                                      finishTitle: "Signaturdaten ausgeben", finish: { accepted = true; done() }, cancel: done)
+                    let header = "Message M to be signed:\n\n" + String(PKIText.string(Array(message.prefix(2000))))
+                    PKIModal.run(title: "Signature Generation - Step By Step") { done in
+                        PKIStepDialog(title: "Step-by-step signature generation:", header: header, steps: steps,
+                                      finishTitle: "Output signature data", finish: { accepted = true; done() }, cancel: done)
                     }
                     duration = Date().timeIntervalSince(start)
                     guard accepted else { return }
@@ -302,10 +302,10 @@ struct PKISignDialog: View {
                 }
                 doc.c = c; doc.d = d; doc.bitLength = c.bitLength + d.bitLength
             }
-            DocumentFactory.openResult(doc.serialize(), title: "\(method.titleName(hash))-Signatur von <\(document.shortName)>",
+            DocumentFactory.openResult(doc.serialize(), title: "\(method.titleName(hash)) signature of <\(document.shortName)>",
                                        parent: document, viewMode: .hex)
             close()
-            if showTime { PKIModal.info("Zum Erzeugen der Signatur benötigte Zeit: \(PKIText.seconds(duration)) Sekunden.") }
+            if showTime { PKIModal.info("Signature generation time: \(PKIText.seconds(duration)) seconds.") }
         } catch { Alerts.error(error.localizedDescription) }
     }
 }
@@ -326,47 +326,47 @@ struct PKIVerifyDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Verifizieren einer Signatur").font(.title3.weight(.semibold))
-            Text("Wählen Sie aus der folgenden Liste den Signaturersteller:")
+            Text("Signature Verification").font(.title3.weight(.semibold))
+            Text("Choose the signature originator from the following list:")
             PKIKeyTable(selection: $keyID, filter: filter, minHeight: 180)
-            PKIGroup("Angegebene Daten") {
+            PKIGroup("Specified data") {
                 HStack {
-                    Text("Signatur-Verfahren:"); Text(signed.method.isEmpty ? "unbekannt !" : signed.method).bold()
+                    Text("Signature algorithm"); Text(signed.method.isEmpty ? "Unknown !" : signed.method).bold()
                     Spacer()
-                    Text("Hashfunktion:"); Text(signed.hash.isEmpty ? "unbekannt !" : signed.hash).bold()
+                    Text("Hash function:"); Text(signed.hash.isEmpty ? "Unknown !" : signed.hash).bold()
                     Spacer()
                 }
             }
             HStack(alignment: .top, spacing: 12) {
                 PKIKeyFilterBox(filter: $filter)
                 VStack(alignment: .leading, spacing: 6) {
-                    PKIGroup("Verifikation mit Verfahren:") {
+                    PKIGroup("Verification algorithm:") {
                         Picker("", selection: $ecMethod) { Text("ECSP-DSA").tag(PKISignMethod.ecdsa); Text("ECSP-NR").tag(PKISignMethod.ecnr) }
                             .pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                     }
-                    PKIGroup("Verifikation mit Hashfunktion:") {
+                    PKIGroup("Verification hash function:") {
                         Picker("", selection: $ecHash) { Text("SHA-1").tag(PKISignHash.sha1); Text("RIPEMD-160").tag(PKISignHash.ripemd160) }
                             .pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                     }
-                    PKIGroup("Repräsentation der EC-Punkte in:") {
-                        Picker("", selection: $affine) { Text("Affine Koord.").tag(true); Text("Projektive Koord.").tag(false) }
+                    PKIGroup("Presentation format:") {
+                        Picker("", selection: $affine) { Text("Affine coord.").tag(true); Text("Projective coord.").tag(false) }
                             .pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                     }
                 }
                 .disabled(!isEC)
                 VStack(alignment: .trailing, spacing: 8) {
-                    Button("Suche Schlüssel") { search(verbose: true) }
+                    Button("Look up key") { search(verbose: true) }
                     Spacer()
                 }
             }
-            Toggle("Zum Verifizieren benötigte Zeit anzeigen", isOn: $showTime)
-            Toggle("Zwischenschritte anzeigen", isOn: $showSteps)
+            Toggle("Display verification time", isOn: $showTime)
+            Toggle("Display intermediate results", isOn: $showSteps)
             Divider()
             HStack {
-                Button("Signatur verifizieren") { verify() }.keyboardShortcut(.defaultAction)
+                Button("Verify signature") { verify() }.keyboardShortcut(.defaultAction)
                 Spacer()
                 PKIHelpButton(action: .verifySignature)
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -385,17 +385,17 @@ struct PKIVerifyDialog: View {
             if !filter.accepts(k) { filter = PKIKeyFilter() }
             keyID = k.id
         } else if verbose {
-            PKIModal.warning("Es gibt keinen Schlüsselbezeichner der dem angeforderten Format\n'\(signed.keyID)'\nentspricht !")
+            PKIModal.warning("There is no key identifier which matches the required format!\n‘\(signed.keyID)‘")
         }
     }
 
     private func verify() {
         guard let id = keyID, let k = KeyStore.shared.key(id: id) else {
-            PKIModal.warning("Eingabe unvollständig\n\nBitte wählen Sie den Signaturersteller.")
+            PKIModal.warning("Entry incomplete\n\nPlease choose the signature originator.")
             return
         }
         guard let hash = PKISignHash.named((isEC && !signed.legacy) ? ecHash.rawValue : signed.hash) else {
-            PKIModal.warning("Eingabe unvollständig\n\nUnbekannte Hashfunktion: \(signed.hash)")
+            PKIModal.warning("Entry incomplete\n\nUnknown hash function: \(signed.hash)")
             return
         }
         let start = Date()
@@ -405,9 +405,9 @@ struct PKIVerifyDialog: View {
             guard let curve = k.curve, let W = k.ecPublic else { return finish(false, Date().timeIntervalSince(start)) }
             if showSteps {
                 let v = PKIECSteps.verify(message: signed.message, method: ecMethod, hash: hash, c: c, d: d, curve: curve, W: W, owner: k)
-                PKIModal.run(title: "Signaturverifikation - Schritt für Schritt") { done in
-                    PKIStepDialog(title: "Schrittweise Signatur-Verifikation:", header: v.header, steps: v.steps,
-                                  finishTitle: "Dialog beenden", finish: done, cancel: done)
+                PKIModal.run(title: "Signature Verification - Step By Step") { done in
+                    PKIStepDialog(title: "Step-by-step signature verification:", header: v.header, steps: v.steps,
+                                  finishTitle: "End dialog", finish: done, cancel: done)
                 }
                 ok = v.ok
             } else if ecMethod == .ecnr {
@@ -430,25 +430,25 @@ struct PKIVerifyDialog: View {
         let s = BigUInt(bigEndianBytes: signed.signature)
         let v = pub.verifyRaw(s % pub.n)
         let k = (pub.n.bitLength + 7) / 8
-        var t = "Signatur s:\n\(s)\n\nÖffentlicher Schlüssel des Signaturerstellers:\nN = \(pub.n)\ne = \(pub.e)\n\n"
-        t += "s^e mod N (hexadezimal):\n\(PKIText.hex(v.bigEndianBytes(length: k)))\n\n"
-        t += "\(hash.rawValue)-Hashwert der Nachricht:\n\(PKIText.hex(digest))\n\n"
-        t += "Erwartet (PKCS #1: 00 01 FF … FF 00 ‖ DigestInfo ‖ Hashwert):\n"
+        var t = "Signature s:\n\(s)\n\nPublic key of the signature originator:\nN = \(pub.n)\ne = \(pub.e)\n\n"
+        t += "s^e mod N (hexadecimal):\n\(PKIText.hex(v.bigEndianBytes(length: k)))\n\n"
+        t += "\(hash.rawValue) hash value of the message:\n\(PKIText.hex(digest))\n\n"
+        t += "Expected (PKCS #1: 00 01 FF … FF 00 ‖ DigestInfo ‖ hash value):\n"
         t += ((try? PKIRSASignature.encode(digest, hash: hash, k: k)).map(PKIText.hex) ?? "–") + "\n\n"
-        t += ok ? "Signatur korrekt !" : "Signatur fehlerhaft !"
-        PKIModal.run(title: "Signaturverifikation - Schritt für Schritt") { done in
-            PKIStepDialog(title: "Schrittweise Signatur-Verifikation:", header: "RSA-Signatur mit \(hash.rawValue)", steps: [t],
-                          finishTitle: "Dialog beenden", finish: done, cancel: done)
+        t += ok ? "Correct signature!" : "Signature is not correct!"
+        PKIModal.run(title: "Signature Verification - Step By Step") { done in
+            PKIStepDialog(title: "Step-by-step signature verification:", header: "RSA signature with \(hash.rawValue)", steps: [t],
+                          finishTitle: "End dialog", finish: done, cancel: done)
         }
     }
 
     private func finish(_ ok: Bool, _ t: TimeInterval) {
         close()
         if showTime {
-            let time = "Zum Verifizieren der Signatur benötigte Zeit: \(PKIText.seconds(t)) Sekunden."
-            ok ? PKIModal.info("Signatur korrekt!\n" + time) : PKIModal.warning("Signatur fehlerhaft!\n" + time)
+            let time = "Duration of signature verification: \(PKIText.seconds(t)) seconds."
+            ok ? PKIModal.info("Correct signature!\n" + time) : PKIModal.warning("Invalid signature!\n" + time)
         } else {
-            ok ? PKIModal.info("Signatur korrekt !") : PKIModal.warning("Signatur fehlerhaft !")
+            ok ? PKIModal.info("Correct signature!") : PKIModal.warning("Signature is not correct!")
         }
     }
 }
@@ -483,40 +483,40 @@ struct PKIExtractDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Extrahierte Signatur").font(.title3.weight(.semibold))
+            Text("Extracted Signature").font(.title3.weight(.semibold))
             Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 4) {
-                GridRow { Text("Signaturerzeuger:"); Text(key?.firstLast ?? "Unbekannt - übermittelter Schlüsselbezeichner existiert nicht").textSelection(.enabled) }
+                GridRow { Text("Signer:"); Text(key?.firstLast ?? "Unknown - transmitted key identifier does not exist").textSelection(.enabled) }
                 GridRow {
-                    Text("Benutzter Schlüssel:")
-                    Text(key.map { "\($0.type.displayName)\($0.label.isEmpty ? "" : " (\($0.label))"); erzeugt am \($0.createdString)" } ?? signed.keyID)
+                    Text("Used key:")
+                    Text(key.map { "\($0.type.displayName)\($0.label.isEmpty ? "" : " (\($0.label))"); created \($0.createdString)" } ?? signed.keyID)
                         .textSelection(.enabled)
                 }
-                GridRow { Text("Signaturverfahren:"); Text("\(signed.method) mit Hashfunktion \(signed.hash)") }
+                GridRow { Text("Signature algorithm:"); Text("\(signed.method) with hash function \(signed.hash)") }
             }
-            Text("Signatur:")
+            Text("Signature:")
             ResultBox(text: signatureText, minHeight: 120)
-            Text("Länge der Signatur: \(signed.bitLength) Bit.").font(.callout)
-            PKIGroup("Optionen der Darstellung der Signatur:") {
+            Text("Length of signature: \(signed.bitLength) bits").font(.callout)
+            PKIGroup("Options for presentation of signature") {
                 HStack {
-                    Text("Zahlendarstellung:")
+                    Text("Numbers:")
                     Picker("", selection: $mode) {
-                        Text("Oktal").tag(0); Text("Dezimal").tag(1); Text("Hexadezimal").tag(2); Text("Hex-Dump (hexadezimal und Ascii):").tag(3)
+                        Text("Octal").tag(0); Text("Decimal").tag(1); Text("Hexadecimal").tag(2); Text("Hex dump (hexadecimal and ASCII):").tag(3)
                     }
                     .pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                 }
             }
-            Text("Signierte Nachricht:")
+            Text("Signed message:")
             ResultBox(text: PKIText.string(Array(signed.message.prefix(100_000))), minHeight: 120)
-            Text("Länge der Nachricht: \(signed.message.count) Byte.").font(.callout)
+            Text("Length of message: \(signed.message.count) bytes").font(.callout)
             Divider()
             HStack {
-                Button("Verifizieren") {
+                Button("Verify") {
                     close()
                     DispatchQueue.main.async { SignatureOps.verify(document) }
                 }
                 Spacer()
                 PKIHelpButton(action: .extractSignature)
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(16)

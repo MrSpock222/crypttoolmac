@@ -70,22 +70,22 @@ final class ShamirModel: ObservableObject {
     /// "Polynom generieren" (OnButtonGenerate). Returns false if the options dialog should open.
     func generate() -> Bool {
         if secret.isEmpty || participants.isEmpty || threshold.isEmpty || Int(threshold) == 0 || Int(participants) == 0 {
-            CRTUtil.message("Sie haben nicht alle erforderlichen Parameter eingegeben."); return true
+            CRTUtil.message("You did not enter all values needed to set up the scheme."); return true
         }
         guard let tt = Int(threshold), let nn = Int(participants), let ss = Int(secret) else {
-            CRTUtil.message("Sie haben nicht alle erforderlichen Parameter eingegeben."); return true
+            CRTUtil.message("You did not enter all values needed to set up the scheme."); return true
         }
         if tt > nn {
-            CRTUtil.message("Der angegebene Schwellenwert liegt über der Teilnehmerzahl. Bitte korrigieren Sie Ihre Angaben.")
+            CRTUtil.message("The given threshold is bigger than the number of participants. Please correct your specifications.")
             threshold = ""; generateEnabled = false; return true
         }
         if nn > (Int(partyLimit) ?? 30) {
-            CRTUtil.message("Die Anzahl der Teilnehmer liegt über der von Ihnen festgelegten Grenze.")
+            CRTUtil.message("The number of participants exceeds the previously defined limit.")
             threshold = ""; participants = ""; generateEnabled = false; return true
         }
         let maxPrime = Int(primeLimit) ?? 10000
         guard maxPrime >= nn, maxPrime >= ss, let prime = Self.randomPrime(above: max(nn, ss), upTo: maxPrime) else {
-            CRTUtil.message("Die Obergrenze für die Primzahl p muss sowohl größer als das Geheimnis K\nals auch größer als die Teilnehmerzahl n sein.")
+            CRTUtil.message("The defined limit for your prime p has to be bigger than your secret K and the number of participants n.")
             return false
         }
         t = tt; n = nn; s = ss; p = prime
@@ -132,24 +132,24 @@ final class ShamirModel: ObservableObject {
 
     /// CT1 SecretSharingLog.
     func logText(result: BigUInt) -> String {
-        var l = "Protokolldatei für das Secret-Sharing-Verfahren nach Shamir\n\n"
-        l += "Zunächst haben Sie die Parameter des Shamir-Schemas festgelegt. Dabei handelt es sich um das Geheimnis S, die Begrenzung der Teilnehmerzahl l = Max(n), die Teilnehmerzahl n, die Begrenzung für die Primzahl Max(p) und den Schwellenwert t.\n\n"
+        var l = "Log file for Shamir's secret-sharing scheme\n\n"
+        l += "At first, you chose the following parameters that determine the Shamir scheme: the secret S, the upper limit of participants l = Max(n), the number of participants n, the upper limit to a prime Max(p) and your threshold t.\n\n"
         l += "S: \(secret)\nl = Max(n): \(partyLimit)\nn: \(participants)\nMax(p): \(primeLimit)\nt: \(threshold)\n\n"
-        l += (primeFlag ? "Sie haben eine Primzahl p festgelegt." : "Auf Basis der von Ihnen gemachten Angaben hat CrypTool zufällig eine Primzahl p bestimmt.") + "\n\n"
+        l += (primeFlag ? "You did set a prime number p." : "Founded on the values you entered before, CrypTool has randomly chosen a prime number p.") + "\n\n"
         l += "p: \(modulus)\n\n"
-        l += (coeffFlag ? "Für ein Polynom f(x) vom Grad t-1 haben Sie die Koeffizienten bestimmt. Alle folgenden Berechnungen finden mod p statt."
-                        : "Zusätzlich wurde ein Polynom f(x) vom Grad t-1 mit zufälligen Koeffizienten und dem absoluten Summanden S erzeugt. Alle folgenden Berechnungen finden mod p statt.") + "\n\n"
+        l += (coeffFlag ? "You determined the coefficients of a polynomial of degree t-1. All computations take place in the discrete space GF(p)."
+                        : "In addition, a polynomial f(x) of degree t-1 with random coefficients and the absolute summand S has been created. All computations take place in the discrete space GF(p). ") + "\n\n"
         l += "f(x): \(polynom)\n\n"
-        l += "Für jeden Teilnehmer wurde eine zufällige Zahl x gewählt. Diese Zahl ist der öffentliche Wert des entsprechenden Teilnehmers:\n\n"
+        l += "Each participant receives its public value x. Also x has been chosen at random:\n\n"
         for (i, r) in rows.enumerated() { l += "\(i + 1): \(r.x)\n" }
-        l += "\nDurch Einsetzen der öffentlichen Werte x in das Polynom f(x) erhält jeder Teilnehmer seinen geheimen Wert y (Share):\n\n"
+        l += "\nBy applying the polynomial f(x) to every single public value x, each participant obtains his secret value y (share):\n\n"
         for (i, r) in rows.enumerated() { l += "\(i + 1): \(r.share)\n" }
-        l += "\nSie haben die folgenden Teilnehmer ausgewählt, um das Geheimnis wiederherzustellen:\n\n"
+        l += "\nYou selected the following participants to reconstruct the secret:\n\n"
         let sel = checked.sorted()
         for i in sel { l += "\(i + 1), " }
-        l += "\n\nDie zu diesen Teilnehmern gehörenden Wertepaare (x/y) sind:\n\n"
+        l += "\n\nThese participants hold the following pairs of public values and shares (x/y):\n\n"
         for i in sel { l += "\(i + 1): \(rows[i].x) / \(rows[i].share)\n" }
-        l += "\nMit Hilfe des Lagrange-Interpolationsverfahrens wurde aus diesen \(sel.count) Wertepaaren das Geheimnis S rekonstruiert:\n\n"
+        l += "\nBy means of Lagrange polynomial interpolation, the secret S has been reconstructed out of these \(sel.count) pairs of public values and shares:\n\n"
         l += result.description
         return l
     }
@@ -157,58 +157,58 @@ final class ShamirModel: ObservableObject {
 
 /// CT1 "Secret-Sharing-Demo: Aufsetzen eines Schwellenwertschemas".
 struct CT1ShamirDialog: View {
-    static let title = "Secret-Sharing-Demo: Aufsetzen eines Schwellenwertschemas"
+    static let title = "Secret Sharing Demonstration: Initializing the Threshold Scheme"
     @StateObject private var model = ShamirModel()
     @StateObject private var win = CT1WindowRef()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Mit dem (t, n)-Schwellenwertschema nach Shamir ist es möglich, ein Geheimnis S auf n Personen aufzuteilen. Danach sind t Personen (t <= n) in der Lage, mit ihren Teilgeheimnissen (Shares) das ursprüngliche Geheimnis wiederherzustellen.")
+            Text("By means of a (t, n) Shamir scheme a secret S can be distributed among n persons. Afterwards, t persons (t <= n) will be able to reconstruct the original secret by combining their individual secrets (shares).")
                 .fixedSize(horizontal: false, vertical: true)
-            Text("Dazu werden ein Polynom f(x) vom Grad t-1 [also mit t-1 zufälligen Koeffizienten a(i)] und eine zufällige Primzahl p erzeugt. Jedem Teilnehmer werden dann ein zufällig gewählter, öffentlicher Wert x  und ein geheimer Wert y=f(x) [sein Share] zugewiesen.")
+            Text("To set up such a scheme, a polynomial f(x) of degree at most t-1 [with t-1 coefficients a(i) chosen at random] and a random prime p must be generated.")
                 .fixedSize(horizontal: false, vertical: true)
-            Text("Weitere Details erhalten Sie in der Online-Hilfe, indem Sie F1 drücken.")
-            CRTGroup(title: "Geheimnis und Steuerparameter wählen (ganze Zahlen)") {
+            Text("Each participant receives a randomly chosen public value x and his or her share, the corresponding secret value y=f(x). For further details please check the CrypTool online help by pressing F1.")
+            CRTGroup(title: "Choose your secret and the parameters (whole numbers) to set up a scheme") {
                 HStack(alignment: .top) {
                     Grid(alignment: .leading, verticalSpacing: 4) {
-                        GridRow { Text("Geheimnis S mit S >= 0"); field(\.secret) }
-                        GridRow { Text("Anzahl der Teilnehmer n mit n > 0"); field(\.participants) }
-                        GridRow { Text("Schwellenwert (Mindestanzahl) t mit t > 0"); field(\.threshold) }
+                        GridRow { Text("Secret S with S >= 0"); field(\.secret) }
+                        GridRow { Text("Number of participants n  with n > 0"); field(\.participants) }
+                        GridRow { Text("Threshold (minimum) t with t > 0"); field(\.threshold) }
                     }
                     Spacer()
                     VStack {
-                        Button("Beispielparameter setzen") { model.example() }.frame(width: 190).disabled(model.locked)
-                        Button("Optionen", action: showOptions).frame(width: 190)
+                        Button("Set default parameters") { model.example() }.frame(width: 190).disabled(model.locked)
+                        Button("Options", action: showOptions).frame(width: 190)
                     }
                 }
             }
             HStack {
                 Spacer().frame(width: 230)
-                Button("Polynom generieren", action: generate).disabled(!model.generateEnabled || model.locked)
+                Button("Generate polynomial", action: generate).disabled(!model.generateEnabled || model.locked)
                 Spacer()
-                Button("Polynomparameter ändern", action: showParameters).disabled(!model.paramsEnabled || model.locked)
+                Button("Edit polynomial parameters", action: showParameters).disabled(!model.paramsEnabled || model.locked)
             }
-            CRTGroup(title: "Parameter des Polynoms f(x) vom Grad t-1") {
-                Text("Alle Operationen finden im diskreten Raum GF(p) statt.")
-                HStack { Text("Polynom f(x)").frame(width: 90, alignment: .leading); CRTOutputField(text: model.polynom) }
+            CRTGroup(title: "Parameters concerning the polynomial f(x) of degree t-1") {
+                Text("All computations take place in the discrete space GF(p) ")
+                HStack { Text("Polynomial f(x)").frame(width: 90, alignment: .leading); CRTOutputField(text: model.polynom) }
                 HStack {
-                    Text("Primzahl p").frame(width: 90, alignment: .leading)
+                    Text("Prime p").frame(width: 90, alignment: .leading)
                     CRTOutputField(text: model.modulus)
-                    Button("Parameter übernehmen") { model.update() }.disabled(!model.updateEnabled)
+                    Button("Accept parameters") { model.update() }.disabled(!model.updateEnabled)
                 }
             }
-            Text("Aus den Parametern berechnete Werte der Teilnehmer:")
+            Text("Participants' values, calculated from chosen parameters:")
             sharesList
-            Text("Bitte wählen Sie die Teilnehmer, die das Geheimnis wiederherstellen sollen, aus der Liste aus, indem Sie die entsprechenden Checkboxen ankreuzen.")
+            Text("Please check the appropriate boxes to select the participants who will attempt to reconstruct the secret.")
                 .fixedSize(horizontal: false, vertical: true)
-            Toggle("Informationsdialog zu Beginn anzeigen", isOn: Binding(get: { model.showIntro }, set: {
+            Toggle("Show information dialog at startup", isOn: Binding(get: { model.showIntro }, set: {
                 model.showIntro = $0; CT1Prefs.set(ShamirModel.prefIntro, $0)
             }))
             HStack {
-                Button("Schließen") { win.window?.close() }
+                Button("Close") { win.window?.close() }
                 CT1HelpButton(action: .shamirSecretSharing)
                 Spacer()
-                Button("Rekonstruktion", action: reconstruct).keyboardShortcut(.defaultAction).disabled(!model.revealEnabled)
+                Button("Reconstruction", action: reconstruct).keyboardShortcut(.defaultAction).disabled(!model.revealEnabled)
             }
         }
         .padding(14)
@@ -230,9 +230,9 @@ struct CT1ShamirDialog: View {
         VStack(spacing: 0) {
             HStack {
                 Text("").frame(width: 24)
-                Text("Teilnehmer").frame(width: 150, alignment: .leading)
-                Text("Öffentlicher Wert x").frame(width: 150, alignment: .leading)
-                Text("Share (geheimer Wert f(x))").frame(maxWidth: .infinity, alignment: .leading)
+                Text("Participant").frame(width: 150, alignment: .leading)
+                Text("Public value x").frame(width: 150, alignment: .leading)
+                Text("Share [secret value f(x)]").frame(maxWidth: .infinity, alignment: .leading)
             }.font(.caption.bold()).padding(4).background(Color(nsColor: .controlBackgroundColor))
             Divider()
             ScrollView {
@@ -242,7 +242,7 @@ struct CT1ShamirDialog: View {
                             Toggle("", isOn: Binding(get: { model.checked.contains(i) }, set: {
                                 if $0 { model.checked.insert(i) } else { model.checked.remove(i) }
                             })).labelsHidden().frame(width: 24)
-                            Text("Teilnehmer \(i + 1)").frame(width: 150, alignment: .leading)
+                            Text("participant \(i + 1)").frame(width: 150, alignment: .leading)
                             Text("\(model.rows[i].x)").frame(width: 150, alignment: .leading)
                             Text(model.rows[i].share.description).frame(maxWidth: .infinity, alignment: .leading)
                         }
@@ -264,7 +264,7 @@ struct CT1ShamirDialog: View {
     }
 
     private func showIntro() {
-        win.sheet("Einleitung Secret-Sharing-Demo") { close in
+        win.sheet("Introduction Secret Sharing Demonstration") { close in
             ShamirIntroSheet(close: { hide in
                 CT1Prefs.set(ShamirModel.prefIntro, !hide)
                 model.showIntro = !hide
@@ -275,7 +275,7 @@ struct CT1ShamirDialog: View {
 
     private func showOptions() {
         let m = model
-        win.sheet("Secret-Sharing: Optionen") { close in
+        win.sheet("Secret Sharing: Options") { close in
             ShamirOptionsSheet(limit: m.partyLimit, prime: m.primeLimit, close: close) { l, p in
                 m.partyLimit = l; m.primeLimit = p
             }
@@ -284,21 +284,21 @@ struct CT1ShamirDialog: View {
 
     private func showParameters() {
         let m = model
-        win.sheet("Secret-Sharing: Polynomparameter anzeigen und ändern") { close in
+        win.sheet("Secret Sharing: Displaying and Editing Polynomial Parameters") { close in
             ShamirParameterSheet(model: m, close: close)
         }
     }
 
     private func reconstruct() {
         guard let t = Int(model.threshold), model.checked.count >= t else {
-            CRTUtil.message("Die Anzahl der ausgewählten Teilnehmer liegt unter dem von Ihnen gesetzten Schwellenwert.")
+            CRTUtil.message("The number of selected participants is below your chosen threshold.")
             return
         }
         let m = model
         let result = m.reveal()
         let log = m.logText(result: result)
         let rows = m.checked.sorted().map { (i: $0, x: m.rows[$0].x, y: m.rows[$0].share) }
-        win.sheet("Secret-Sharing: Rekonstruktion des Geheimnisses") { close in
+        win.sheet("Secret Sharing: Reconstructing the Secret") { close in
             ShamirRevealSheet(rows: rows, secret: result.description, log: log, close: close)
         }
         m.locked = false
@@ -312,15 +312,15 @@ struct ShamirIntroSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Willkommen zur Visualisierung des Secret-Sharing-Verfahrens nach Shamir!")
-            Text("Das Verfahren behandelt die folgende Problemstellung:")
-            Text("Ein geheimer Wert soll unter n Personen so aufgeteilt werden, dass eine einzelne Person keinerlei Information über diesen Wert besitzt. Nur wenn sich mindestens t der n Personen zusammenschließen, gelingt die Wiederherstellung des Geheimnisses.")
-            Text("Das Verfahren bezeichnet man daher als (t,n)-Schwellenwertschema.")
-            Text("Beispiel:")
-            Text("Das Geheimrezept für eine neue Sorte Eiscreme wird in einem Safe eingeschlossen. Damit kein Mitarbeiter der Versuchung erliegen kann, es aus dem Safe zu nehmen und für viel Geld an die Konkurrenz zu verkaufen, wird die Zahlenkombination unter den 10 Mitarbeitern der Firma aufgeteilt. Mindestens 7 Angestellte müssen ihre Teilschlüssel eingeben, um den Tresor zu öffnen und so an die Rezeptur zu gelangen.")
-            Text("Die folgende interaktive Visualisierung des Verfahrens erfordert Benutzereingaben von Ihnen.")
-            Text("Weitere Informationen zu diesem Dialog erhalten Sie in der Online-Hilfe, indem Sie F1 drücken.")
-            HStack { Spacer(); Toggle("Diesen Dialog in Zukunft nicht mehr anzeigen.", isOn: $hide); Spacer() }
+            Text("Welcome to the visualization of the Shamir secret-sharing scheme!")
+            Text("The protocol deals with the following problem:")
+            Text("A secret value is to be distributed among n persons so that a single person has no information about this value. At least t out of n persons have to cooperate to succeed in reconstructing the secret.")
+            Text("Therefore, this method is called a (t,n)-threshold scheme.")
+            Text("Example:")
+            Text("The secret recipe for a new kind of ice cream is locked up in a safe. In order to prevent any employee from selling the recipe to a competitor for a great deal of money, the secret combination to open this safe is split up among the 10 employees. At least 7 employees have to combine their shares of the key to open the safe and to come into the possession of the recipe.")
+            Text("Since this demonstration is an interactive visualization, you will be prompted for certain inputs a couple of times.")
+            Text("If you need additional information, please feel free to use the CrypTool online help by pressing F1.")
+            HStack { Spacer(); Toggle("Don't show this message again.", isOn: $hide); Spacer() }
             HStack { Spacer(); Button("OK") { close(hide) }.keyboardShortcut(.defaultAction); Spacer() }
         }
         .fixedSize(horizontal: false, vertical: true)
@@ -343,12 +343,12 @@ struct ShamirOptionsSheet: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            CRTGroup(title: "Einstellbare Parameter") {
-                HStack { Text("Maximale Teilnehmerzahl [l = Max(n)]"); Spacer(); TextField("", text: Binding(get: { limit }, set: { limit = CRTUtil.digits($0) })).frame(width: 80) }
-                HStack { Text("Obergrenze für p"); Spacer(); TextField("", text: Binding(get: { prime }, set: { prime = CRTUtil.digits($0) })).frame(width: 80) }
+            CRTGroup(title: "Adjustable parameters") {
+                HStack { Text("Maximum number of participants [l = Max(n)]"); Spacer(); TextField("", text: Binding(get: { limit }, set: { limit = CRTUtil.digits($0) })).frame(width: 80) }
+                HStack { Text("Upper Limit to p"); Spacer(); TextField("", text: Binding(get: { prime }, set: { prime = CRTUtil.digits($0) })).frame(width: 80) }
             }
             HStack {
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
                 Button("OK") { apply(limit, prime); close() }.keyboardShortcut(.defaultAction)
             }
         }
@@ -368,32 +368,32 @@ struct ShamirParameterSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            CRTGroup(title: "Geheimnis und Steuerparameter anzeigen") {
+            CRTGroup(title: "Displaying secret and control parameters") {
                 HStack {
-                    Text("Geheimnis S:"); CRTOutputField(text: model.secret).frame(width: 70)
-                    Text("Teilnehmerzahl n:"); CRTOutputField(text: model.participants).frame(width: 70)
-                    Text("Schwellenwert t:"); CRTOutputField(text: model.threshold).frame(width: 70)
+                    Text("Secret S:"); CRTOutputField(text: model.secret).frame(width: 70)
+                    Text("Number of participants n:"); CRTOutputField(text: model.participants).frame(width: 70)
+                    Text("Threshold t:"); CRTOutputField(text: model.threshold).frame(width: 70)
                 }
             }
-            CRTGroup(title: "Polynomparameter eingeben oder ändern") {
-                Text("Alle Berechnungen eines Shamir-Schemas finden in einem endlichen Körper GF(p) statt.\np ist eine Primzahl, die sowohl größer als das Geheimnis S als auch größer als die Teilnehmerzahl n sein muss.")
+            CRTGroup(title: "Entering or changing polynomial parameters") {
+                Text("All computations of a (t, n) Shamir scheme take place in a discrete space GF(p).\np is a prime that has to be larger than the secret S as well as the number of participants n.")
                     .fixedSize(horizontal: false, vertical: true)
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        Text("Eingabe einer geeigneten Primzahl")
+                        Text("Enter a suitable prime")
                         Text("[p > n, p > S, p > a(i),  i = 1, 2, ..., t-1 ]").font(.caption)
                     }
                     TextField("", text: Binding(get: { prime }, set: { prime = $0.filter { "0123456789^+-*()".contains($0) } }))
                 }
-                Text("Über GF(p) wird ein Polynom f(x) vom Grad t-1 gebildet: Damit können die Shares der Teilnehmer berechnet werden. Mit dem Polynom und den Shares kann später das Geheimnis rekonstruiert werden. Ein solches Polynom besitzt t-1 Koeffizienten a(i) aus GF(p).")
+                Text("A polynomial f(x) of degree t-1 is constructed over GF(p): It is used to compute the participants' shares. By means of this polynomial and the generated shares, the secret can be reconstructed. Such a polynomial consists of t-1 coefficients a(i) from GF(p).")
                     .fixedSize(horizontal: false, vertical: true)
-                Text("Eingabe der t-1 Koeffizienten (getrennt durch Kommata; z.B. 3, 6,19, sofern p>=19)")
+                Text("Enter t-1 coefficients (separated by commas; e.g. 3, 6, 19, if p>=19)")
                 TextField("", text: Binding(get: { coeffText }, set: { coeffText = $0; okEnabled = true }))
             }
             HStack {
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Polynom generieren", action: generateNew).keyboardShortcut(.defaultAction)
+                Button("Generate polynomial", action: generateNew).keyboardShortcut(.defaultAction)
                 Spacer()
                 Button("OK", action: ok).disabled(!okEnabled)
             }
@@ -418,22 +418,22 @@ struct ShamirParameterSheet: View {
     /// CT1 OnButtonGenerateNew.
     private func generateNew() {
         guard let tmpPrime = currentPrime else {
-            Alerts.error("In diesem Feld wird eine Zahl oder ein Ausdruck erwartet,\naus dem sich ein Zahlenwert berechnen lässt.\nBitte geben Sie einen gültigen Ausdruck ein!\n\nBeispiele: 123, 2^15+1, (2^17-5)^2.")
+            Alerts.error("Please enter into this field an integer or an expression, that\nevaluates to an integer!\nExamples: 123, 2^15+1, (2^17-5)^2.")
             return
         }
         let limit = Int(model.primeLimit) ?? 10000
         let s = Int(model.secret) ?? 0, n = Int(model.participants) ?? 0
         if tmpPrime != oldPrime && tmpPrime != 0 {
             if !Primality.isProbablePrime(BigUInt(tmpPrime)) {
-                CRTUtil.message("Bei der von Ihnen eingegebenen Zahl handelt es sich nicht um eine Primzahl.")
+                CRTUtil.message("The number you have entered is no prime number.")
                 return
             }
             if tmpPrime > limit {
-                CRTUtil.message("Die Primzahl p liegt über der von Ihnen gesetzten Obergrenze \(limit).")
+                CRTUtil.message("Your prime exceeds the defined limit of \(limit).")
                 return
             }
             if tmpPrime <= s || tmpPrime <= n {
-                CRTUtil.message("Die von Ihnen gewählte Primzahl ist zu klein. Ihr Wert muss über dem des Geheimnisses und der Anzahl der Teilnehmer liegen.")
+                CRTUtil.message("The chosen prime number is too small. Its value has to exceed the secret and the number of participants. ")
                 prime = ""
                 return
             }
@@ -441,7 +441,7 @@ struct ShamirParameterSheet: View {
             setCoefficients(tmpPrime)
         } else {
             guard let p = ShamirModel.randomPrime(above: max(n, s), upTo: limit) else {
-                CRTUtil.message("Die Obergrenze für die Primzahl p muss sowohl größer als das Geheimnis K\nals auch größer als die Teilnehmerzahl n sein.")
+                CRTUtil.message("The defined limit for your prime p has to be bigger than your secret K and the number of participants n.")
                 return
             }
             prime = String(p)
@@ -455,18 +455,18 @@ struct ShamirParameterSheet: View {
         let parts = filtered.split(separator: ",", omittingEmptySubsequences: true).map(String.init)
         let required = (Int(model.threshold) ?? 1) - 1
         if parts.count != required {
-            CRTUtil.message("Sie benötigen exakt \(required) Koeffizienten!")
+            CRTUtil.message("Exactly \(required) coefficients are required!")
             coeffText = ""; okEnabled = false
             return
         }
         guard let p = currentPrime, p > 1 else { return }
         if !Primality.isProbablePrime(BigUInt(p)) || p <= (Int(model.secret) ?? 0) || p <= (Int(model.participants) ?? 0) {
-            CRTUtil.message("Die von Ihnen gewählte Primzahl ist zu klein. Ihr Wert muss über dem des Geheimnisses und der Anzahl der Teilnehmer liegen.")
+            CRTUtil.message("The chosen prime number is too small. Its value has to exceed the secret and the number of participants. ")
             return
         }
         let coeffs = parts.map { Int($0) ?? Int.max }
         if coeffs.contains(where: { $0 >= p }) {
-            CRTUtil.message("Alle Koeffizienten müssen kleiner sein als die gewählte Primzahl.")
+            CRTUtil.message("All coefficients have to be less than your prime module.")
             coeffText = ""; okEnabled = false
             return
         }
@@ -494,19 +494,19 @@ struct ShamirRevealSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Ausgewählte Teilnehmer")
+            Text("Selected participants")
             VStack(spacing: 0) {
                 HStack {
-                    Text("Teilnehmer").frame(width: 150, alignment: .leading)
-                    Text("Öffentlicher Wert x").frame(width: 150, alignment: .leading)
-                    Text("Share (geheimer Wert f(x))").frame(maxWidth: .infinity, alignment: .leading)
+                    Text("Participant").frame(width: 150, alignment: .leading)
+                    Text("Public value x").frame(width: 150, alignment: .leading)
+                    Text("Share [secret value f(x)]").frame(maxWidth: .infinity, alignment: .leading)
                 }.font(.caption.bold()).padding(4).background(Color(nsColor: .controlBackgroundColor))
                 Divider()
                 ScrollView {
                     VStack(spacing: 0) {
                         ForEach(rows.indices, id: \.self) { r in
                             HStack {
-                                Text("Teilnehmer \(rows[r].i + 1)").frame(width: 150, alignment: .leading)
+                                Text("participant \(rows[r].i + 1)").frame(width: 150, alignment: .leading)
                                 Text("\(rows[r].x)").frame(width: 150, alignment: .leading)
                                 Text(rows[r].y.description).frame(maxWidth: .infinity, alignment: .leading)
                             }.font(.system(.body, design: .monospaced)).padding(.horizontal, 4).padding(.vertical, 1)
@@ -517,16 +517,16 @@ struct ShamirRevealSheet: View {
             .frame(height: 170)
             .background(Color(nsColor: .textBackgroundColor))
             .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color(nsColor: .separatorColor)))
-            CRTGroup(title: "Berechnung des Geheimnisses") {
+            CRTGroup(title: "Reconstruction of your secret") {
                 HStack {
-                    Text("Das von den ausgewählten Teilnehmern rekonstruierte Geheimnis lautet")
+                    Text("The secret reconstructed by the previous selected participants is")
                     CRTOutputField(text: secret).frame(width: 140)
                 }
             }
             HStack {
-                Button("Logdatei anzeigen") {
-                    DocumentFactory.openResult(text: log, title: "Secret-Sharing (Shamir): Logdatei")
-                    CRTUtil.message("Der Protokollverlauf mit Ihren Zahlen wurde erfolgreich in ein Fenster im CrypTool-Hauptprogramm geschrieben.")
+                Button("Show log file") {
+                    DocumentFactory.openResult(text: log, title: "Secret Sharing (Shamir): Log file")
+                    CRTUtil.message("The log text of the procedure was successfully written into the main window of the CrypTool application.")
                     logShown = true
                 }.disabled(logShown)
                 Spacer()

@@ -799,8 +799,8 @@ section("Ergänzende Tests") {
     let tok = CancellationToken(); tok.cancel()
     check(!Primality.test(big("170141183460469231731687303715884105727"), method: .millerRabin, cancel: tok))
     check(Primality.aks(1_000_003, cancel: tok) == nil)
-    checkEqual(PrimeTestMethod.trialDivision.displayName, "Probedivision")
-    checkEqual(FactorizationMethod.quadraticSieve.displayName, "Quadratisches Sieb")
+    checkEqual(PrimeTestMethod.trialDivision.displayName, "Trial division")
+    checkEqual(FactorizationMethod.quadraticSieve.displayName, "Quadratic sieve")
     // Mersenne via expression & trial division of M67 (Cole)
     let m67 = Mersenne.number(exponent: 67)
     let fac67 = try time("factorize M67") { try Factorization.factorize(m67) }

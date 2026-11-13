@@ -29,7 +29,7 @@ final class AESToolModel: ObservableObject {
     var canDecrypt: Bool { keyEntered && isEncrypted && !busy }
 
     var keyHeader: String {
-        hexMode ? "Schlüssel [maximal 64 Hexzeichen (0, 1, ..., 8, 9, A, B, C, D, E, F)]" : "Schlüssel [maximal 32 Zeichen]"
+        hexMode ? "Key [at most 64 hexadecimal digits (0, 1, 2, ..., 8, 9, A, B, C, D, E, F)]" : "Key [at most 32 characters]"
     }
 
     func setInput(_ path: String) { inputPath = path }
@@ -91,7 +91,7 @@ final class AESToolModel: ObservableObject {
         let base = src.deletingPathExtension().lastPathComponent
         guard let dst = savePanel(directory: src.deletingLastPathComponent(), name: base + "." + ext) else { return }
         guard dst.standardizedFileURL.path != src.standardizedFileURL.path else {
-            Alerts.error("Fehler beim Verschlüsseln: Ein- und Ausgabedatei dürfen nicht identisch sein.", title: Self.version)
+            Alerts.error("File encryption error: Input and output file must not be identical.", title: Self.version)
             return
         }
         let key = keyBytes, prefix = selfExtracting ? AESToolSelfExtractor.prefix : [], exec = selfExtracting
@@ -102,10 +102,10 @@ final class AESToolModel: ObservableObject {
         }, done: { [weak self] error in
             guard let self else { return }
             if let error {
-                Alerts.error("Fehler beim Verschlüsseln: \(error.localizedDescription)", title: Self.version)
+                Alerts.error("File encryption error: \(error.localizedDescription)", title: Self.version)
                 return
             }
-            Alerts.info("Die verschlüsselte Datei \(dst.path) wurde erfolgreich erstellt.", title: Self.version)
+            Alerts.info("The encrypted file \(dst.path) has been successfully created.", title: Self.version)
             if deleteSource { self.deleteSourceSecurely(src) }
         })
     }
@@ -116,7 +116,7 @@ final class AESToolModel: ObservableObject {
             try AESToolFile.secureDelete(src)
             inputPath = ""
         } catch {
-            Alerts.info("Die Datei \(src.path) konnte nicht gelöscht werden.", title: "CrypTool")
+            Alerts.info("The file \(src.path) could not be deleted.", title: "CrypTool")
         }
     }
 
@@ -126,23 +126,23 @@ final class AESToolModel: ObservableObject {
         guard canDecrypt, case .encrypted(let info) = probe else { return }
         let src = sourceURL, key = keyBytes
         guard let original = AESToolFile.originalName(info, key: key) else {
-            Alerts.error("Falscher Schlüssel oder Datei \(src.path) beschädigt.", title: Self.version)
+            Alerts.error("Wrong key or file \(src.path) corrupt.", title: Self.version)
             return
         }
         var name = original.replacingOccurrences(of: "/", with: "_").replacingOccurrences(of: ":", with: "_")
-        if name.isEmpty || name.allSatisfy({ $0 == "." }) { name = "entschluesselt" }
+        if name.isEmpty || name.allSatisfy({ $0 == "." }) { name = "decrypted" }
         guard let dst = savePanel(directory: src.deletingLastPathComponent(), name: name) else { return }
         guard dst.standardizedFileURL.path != src.standardizedFileURL.path else {
-            Alerts.error("Fehler beim Entschlüsseln: Ein- und Ausgabedatei dürfen nicht identisch sein.", title: Self.version)
+            Alerts.error("File decryption error: Input and output file must not be identical.", title: Self.version)
             return
         }
         run(work: {
             try AESToolFile.decryptFile(src, info: info, to: dst, key: key)
         }, done: { error in
             if let error {
-                Alerts.error("Fehler beim Entschlüsseln: \(error.localizedDescription)", title: Self.version)
+                Alerts.error("File decryption error: \(error.localizedDescription)", title: Self.version)
             } else {
-                Alerts.info("Die entschlüsselte Datei \(dst.path) wurde erfolgreich erstellt.", title: Self.version)
+                Alerts.info("The decrypted file \(dst.path) has been successfully created.", title: Self.version)
             }
         })
     }
@@ -178,22 +178,22 @@ struct AESToolView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Ver- oder Entschlüsseln einer Datei")
+                Text("Encrypt or decrypt a file")
                 Spacer()
                 if model.busy { ProgressView().controlSize(.small) }
             }
 
             GroupBox(label: Text(model.keyHeader)) {
                 VStack(alignment: .leading, spacing: 6) {
-                    Toggle("Eingegebenen Schlüssel anzeigen", isOn: $model.showKey)
-                    Toggle("Schlüssel hexadezimal eingeben", isOn: $model.hexMode)
+                    Toggle("Show entered key", isOn: $model.showKey)
+                    Toggle("Enter key as hex", isOn: $model.hexMode)
                     keyField
                 }
                 .padding(6)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            GroupBox(label: Text("Eingabedatei")) {
+            GroupBox(label: Text("Input file")) {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
                         TextField("", text: $model.inputPath)
@@ -203,19 +203,19 @@ struct AESToolView: View {
                                 model.inputPath = u.path
                                 return true
                             }
-                        Button("Durchsuchen...") { model.browse() }
+                        Button("Search...") { model.browse() }
                     }
-                    Toggle("Sicheres Löschen der Eingabedatei nach Verschlüsselung", isOn: $model.secureDelete)
+                    Toggle("Securely delete input file after encryption", isOn: $model.secureDelete)
                         .disabled(model.isEncrypted)
                 }
                 .padding(6)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            GroupBox(label: Text("Ausgabeformat")) {
+            GroupBox(label: Text("Output format")) {
                 Picker("", selection: $model.selfExtracting) {
-                    Text("Selbstextrahierend und verschlüsselt").tag(true)
-                    Text("Verschlüsselt").tag(false)
+                    Text("Self-extracting and encrypted").tag(true)
+                    Text("Encrypted").tag(false)
                 }
                 .pickerStyle(.radioGroup)
                 .horizontalRadioGroupLayout()
@@ -225,21 +225,21 @@ struct AESToolView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             Text(model.selfExtracting && !model.isEncrypted
-                 ? "Selbstextrahierend (macOS): Datei „.command“, die sich per Doppelklick im Terminal entschlüsselt (nur perl und openssl von macOS nötig). Sie ist zugleich eine gültige AES-Tool-Datei."
-                 : "Entschlüsselt werden AES-Tool-Dateien (.AES), selbstextrahierende Windows-Archive (.EXE) und „.command“-Dateien.")
+                 ? "Self-extracting (macOS): a \".command\" file that decrypts itself in Terminal when double-clicked (only perl and openssl of macOS are needed). It is also a valid AES-Tool file."
+                 : "AES-Tool files (.AES), self-extracting Windows archives (.EXE) and \".command\" files can be decrypted.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack {
-                Button("Verschlüsseln") { model.encrypt() }
+                Button("Encrypt") { model.encrypt() }
                     .disabled(!model.canEncrypt)
-                Button("Entschlüsseln") { model.decrypt() }
+                Button("Decrypt") { model.decrypt() }
                     .disabled(!model.canDecrypt)
                 Spacer()
-                Button("Beenden") { model.close() }
+                Button("Exit") { model.close() }
                     .keyboardShortcut(.cancelAction)
-                Button("Hilfe") { model.help() }
+                Button("Help") { model.help() }
             }
         }
         .padding(16)

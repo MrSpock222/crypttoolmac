@@ -27,18 +27,18 @@ public struct ADFGVXCipher: Sendable {
     /// the transposition key contains no usable characters (A–Z, 0–9; case-insensitive).
     public init(matrix: [[Character]], transpositionKey: String) throws {
         guard matrix.count == 6, matrix.allSatisfy({ $0.count == 6 }) else {
-            throw CTError("Die ADFGVX-Matrix muss aus 6×6 Zeichen bestehen.")
+            throw CTError("The ADFGVX matrix must consist of 6×6 characters.")
         }
         let flat = matrix.flatMap { $0 }.map(asciiUppercased)
         for ch in flat where !ADFGVXCipher.symbols.contains(ch) {
-            throw CTError("Die ADFGVX-Matrix darf nur die Zeichen A–Z und 0–9 enthalten („\(ch)“ ist ungültig).")
+            throw CTError("The ADFGVX matrix may only contain the characters A-Z and 0-9 (\"\(ch)\" is invalid).")
         }
         guard Set(flat).count == 36 else {
-            throw CTError("Jedes Zeichen A–Z und 0–9 muss in der ADFGVX-Matrix genau einmal vorkommen.")
+            throw CTError("Each character A-Z and 0-9 must occur exactly once in the ADFGVX matrix.")
         }
         let key = ADFGVXCipher.normalizeKey(transpositionKey)
         guard !key.isEmpty else {
-            throw CTError("Das Transpositions-Passwort ist leer. Bitte ein Passwort aus Buchstaben (oder Ziffern) eingeben.")
+            throw CTError("The transposition password is empty. Please enter a password consisting of letters (or digits).")
         }
         var coords: [Character: (Int, Int)] = [:]
         for (i, ch) in flat.enumerated() { coords[ch] = (i / 6, i % 6) }
@@ -120,12 +120,12 @@ public struct ADFGVXCipher: Sendable {
             if ch.isWhitespace { continue }
             let u = asciiUppercased(ch)
             guard ADFGVXCipher.labels.contains(u) else {
-                throw CTError("Der Geheimtext darf nur die Buchstaben A, D, F, G, V und X enthalten („\(ch)“ ist ungültig).")
+                throw CTError("The ciphertext may only contain the letters A, D, F, G, V and X (\"\(ch)\" is invalid).")
             }
             c.append(u)
         }
         guard c.count % 2 == 0 else {
-            throw CTError("Der Geheimtext muss eine gerade Anzahl von Buchstaben A, D, F, G, V, X enthalten.")
+            throw CTError("The ciphertext must contain an even number of letters A, D, F, G, V, X.")
         }
         let cols = transpositionKey.count
         let rows = c.count / cols, extra = c.count % cols

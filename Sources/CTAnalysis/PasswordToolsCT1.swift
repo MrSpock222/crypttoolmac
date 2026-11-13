@@ -87,10 +87,10 @@ extension PasswordTools {
             if a > 25 { return 1 }
             return 0
         }
-        public var keePassText: String { "\(keePass) % (\(keePass * 128 / 100) Bits)" }
+        public var keePassText: String { "\(keePass) % (\(keePass * 128 / 100) bit)" }
         public var mozillaText: String { "\(mozilla) %" }
-        public var pgpText: String { "\(pgp) % (\(pgp * 128 / 100) Bits)" }
-        public var crypToolText: String { "\(crypTool) % (\(crypTool * 128 / 100) Bits)" }
+        public var pgpText: String { "\(pgp) % (\(pgp * 128 / 100) bit)" }
+        public var crypToolText: String { "\(crypTool) % (\(crypTool * 128 / 100) bit)" }
         /// "(Die CrypTool-PQM-Methode bewertet nur die ersten 32 Zeichen)" is shown only for longer passwords.
         public var showsTruncationNote: Bool { length > PasswordTools.ct1CheckerLength }
     }
@@ -106,12 +106,12 @@ extension PasswordTools {
         // compliance (on the truncated password)
         let digits = pw.filter { "1234567890".contains($0) }.count
         let specials = pw.filter { policy.specialCharacters.contains($0) }.count
-        var text = "Passwort-Richtlinie erfüllt:\n"
+        var text = "Compliant with password guidelines:\n"
         var compliant = true
-        if n < policy.minimumLength { compliant = false; text += "- Nein (Passwort ist zu kurz: \(n)/\(policy.minimumLength))\n" }
-        if digits < policy.minimumDigits { compliant = false; text += "- Nein (Passwort enthält zu wenig Ziffern: \(digits)/\(policy.minimumDigits))\n" }
-        if specials < policy.minimumSpecials { compliant = false; text += "- Nein (Passwort enthält zu wenig Sonderzeichen: \(specials)/\(policy.minimumSpecials))\n" }
-        if compliant { text += "- Ja\n" }
+        if n < policy.minimumLength { compliant = false; text += "- No (Password is too short: \(n)/\(policy.minimumLength))\n" }
+        if digits < policy.minimumDigits { compliant = false; text += "- No (Password contains too few digits: \(digits)/\(policy.minimumDigits))\n" }
+        if specials < policy.minimumSpecials { compliant = false; text += "- No (Password contains too few special characters: \(specials)/\(policy.minimumSpecials))\n" }
+        if compliant { text += "- Yes\n" }
 
         // weak substrings
         let lowered: [Character] = pw.map { c in
@@ -175,12 +175,12 @@ extension PasswordTools {
             }
             return items.isEmpty ? " -" : items.joined(separator: ", ")
         }
-        text += "\nRekonstruktion aus Wörtern, Folgen und Mustern:"
-        text += "\nGefunden: " + list(CT1Flag.closure)
-        text += "\nMuster: " + list(CT1Flag.pattern)
-        text += "\nFolgen: " + list(CT1Flag.serial)
-        text += "\nTastatur-Folgen: " + list(CT1Flag.keyboard)
-        text += "\nWörterbuch-Einträge [\(ct1GroupedNumber(dictionarySize))]: " + list(CT1Flag.dict)
+        text += "\nReconstruction from words, sequences and patterns:"
+        text += "\nFound: " + list(CT1Flag.closure)
+        text += "\nPatterns: " + list(CT1Flag.pattern)
+        text += "\nSequences: " + list(CT1Flag.serial)
+        text += "\nKeyboard sequences: " + list(CT1Flag.keyboard)
+        text += "\nDictionary words [\(ct1GroupedNumber(dictionarySize))]: " + list(CT1Flag.dict)
 
         let crypTool = min(100, Int(floor(entropy / 128 * 100)))
         return CT1QualityReport(length: full.count,
@@ -189,11 +189,12 @@ extension PasswordTools {
                                 crypToolEntropy: entropy, components: components, resistance: text, compliant: compliant)
     }
 
-    /// German digit grouping as CT1's `createStringNumberWithDigitGrouping` ("1999" → "1.999").
+    /// Digit grouping as CT1's `createStringNumberWithDigitGrouping` with the English separator
+    /// IDS_INTEGRAL_NUMBER_SEPARATOR "," ("1999" → "1,999").
     public static func ct1GroupedNumber(_ v: Int) -> String {
         var s = String(v)
         var i = s.count - 3
-        while i > 0 { s.insert(".", at: s.index(s.startIndex, offsetBy: i)); i -= 3 }
+        while i > 0 { s.insert(",", at: s.index(s.startIndex, offsetBy: i)); i -= 3 }
         return s
     }
 

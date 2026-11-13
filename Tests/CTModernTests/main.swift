@@ -715,7 +715,7 @@ do {
     checkEq(state(1, "ShiftRows"), h("d4bf5d30e0b452aeb84111f11e2798e5"), "round 1 ShiftRows")
     checkEq(state(1, "MixColumns"), h("046681e5e0cb199a48f8d37a2806264c"), "round 1 MixColumns")
     checkEq(state(1, "AddRoundKey"), h("a49c7ff2689f352b6b5bea43026a5049"), "start of round 2")
-    check(t.steps.first?.operation == "Eingabe" && t.steps.last?.operation == "Ausgabe", "first/last step")
+    check(t.steps.first?.operation == "Input" && t.steps.last?.operation == "Output", "first/last step")
     check(t.steps.count == 2 + 9 * 4 + 3 + 1, "step count AES-128")
     check(!t.steps.contains { $0.round == 10 && $0.operation == "MixColumns" }, "no MixColumns in last round")
     let pt = h("00112233445566778899aabbccddeeff")

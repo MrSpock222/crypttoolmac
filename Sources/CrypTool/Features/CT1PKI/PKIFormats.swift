@@ -98,7 +98,7 @@ enum PKISignMethod: String, CaseIterable, Identifiable {
 enum PKIRSASignature {
     static func encode(_ digest: [UInt8], hash: PKISignHash, k: Int) throws -> [UInt8] {
         let t = hash.digestInfoPrefix + digest
-        guard k >= t.count + 11 else { throw CTError("Der RSA-Modul ist zu klein für die Signatur mit \(hash.rawValue).") }
+        guard k >= t.count + 11 else { throw CTError("The RSA modulus is too small for the signature with \(hash.rawValue).") }
         return [0x00, 0x01] + [UInt8](repeating: 0xFF, count: k - t.count - 3) + [0x00] + t
     }
 
@@ -129,12 +129,12 @@ struct PKISignedDocument {
     var message: [UInt8]
     var legacy = false          // read from the old port container
 
-    static let lSignature = "Signatur:       "
-    static let lLength = "                Signaturlänge:  "
-    static let lMethod = "                Verfahren:      "
-    static let lHash = "                Hashfunktion:   "
-    static let lKey = "                Schlüssel:      "
-    static let lMessage = "                Nachricht:      "
+    static let lSignature = "Signature:       "
+    static let lLength = "                Signature length:  "
+    static let lMethod = "                Algorithm:      "
+    static let lHash = "                Hash function:   "
+    static let lKey = "                Key:      "
+    static let lMessage = "                Message:      "
 
     /// CT1 PrintSignData: every value is followed by 16 − (len mod 16) spaces.
     func serialize(padded: Bool = true) -> [UInt8] {
@@ -164,7 +164,7 @@ struct PKISignedDocument {
 
     /// Parses a CT1 signed document (or the port's former text container).
     static func parse(_ data: [UInt8]) throws -> PKISignedDocument {
-        let missing = CTError("Es konnten nicht alle Schlüsseltexte in dem Signaturblock des signierten Dokuments gefunden werden.\nBitte beachten Sie, dass ein signiertes Dokument aus dem Signaturblock und der eigentlichen Nachricht besteht.\nDer Signaturblock konnte nicht ausgewertet werden, deshalb kann eine Signaturverifikation nicht erfolgen!")
+        let missing = CTError("Not all keywords were found in the information section of the signature.\nPlease consider that a signed document consists of the signature information part and the document itself.\nThe signature information part could not be analyzed, therefore the signature check was not performed!")
         if !data.starts(with: Array(lSignature.utf8)) {
             if let legacy = try? parseLegacy(data) { return legacy }
             throw missing
@@ -200,7 +200,7 @@ struct PKISignedDocument {
     /// The port's former text container "-----BEGIN CRYPTOOL SIGNATUR-----".
     private static func parseLegacy(_ data: [UInt8]) throws -> PKISignedDocument {
         let c = try CTContainer.parse(TextCoding.string(from: data), kind: "SIGNATUR")
-        guard let idText = c.field("Schlüssel-ID"), let id = UUID(uuidString: idText) else { throw CTError("Signaturdaten unvollständig.") }
+        guard let idText = c.field("Schlüssel-ID"), let id = UUID(uuidString: idText) else { throw CTError("Signature data incomplete.") }
         let keyID = MainActor.assumeIsolated { KeyStore.shared.key(id: id)?.ct1Identifier } ?? (c.field("Unterzeichner") ?? "")
         let hash = c.field("Hashverfahren").flatMap { SignatureHash(rawValue: $0) }?.hash.displayName ?? "SHA-1"
         var doc = PKISignedDocument(method: "RSA", hash: hash, keyID: keyID, signature: [], c: nil, d: nil,
@@ -224,12 +224,12 @@ struct PKIHybridDocument {
     var asymmetric = "RSA"
     var ciphertext: [UInt8]
 
-    static let lReceiver = "Empfänger:    "
-    static let lKeyLength = "     Länge des verschlüsselten Session-Key:    "
-    static let lEncKey = "    Verschlüsselter Sessionkey:    "
-    static let lSym = "    Symmetrisches Verfahren:    "
-    static let lAsym = "    Asymmetrisches Verfahren:    "
-    static let lCipher = "    Geheimtext:    "
+    static let lReceiver = "Receiver:    "
+    static let lKeyLength = "     Length of encrypted session key:    "
+    static let lEncKey = "    Encrypted session key:    "
+    static let lSym = "    Symmetric method:    "
+    static let lAsym = "    Asymmetric method:    "
+    static let lCipher = "    Ciphertext:    "
 
     func serialize() -> [UInt8] {
         var out = PKIText.cp1252(Self.lReceiver) + PKIText.cp1252(keyID)
@@ -241,7 +241,7 @@ struct PKIHybridDocument {
         return out
     }
 
-    static let notHybrid = CTError("Die Eingabe ist keine hybridverschlüsselte Datei!\nSie kann deshalb nicht entschlüsselt werden.")
+    static let notHybrid = CTError("Your input is not a valid hybrid encrypted file!\nIt could not be decrypted.\n")
 
     static func parse(_ data: [UInt8]) throws -> PKIHybridDocument {
         guard let (i0, l0) = PKIText.findLabel(lReceiver, in: data), i0 == 0,
@@ -286,12 +286,12 @@ struct PKIECIESDocument {
     var encryptedSessionKey: [UInt8]
     var ciphertext: [UInt8]
 
-    static let lReceiver = "Empfänger:"
-    static let lCurve = "|Kurvenidentifikation:"
-    static let lKeyLen = "|Länge des ECIES-verschlüsselten AES-Sessionkeys:"
-    static let lCipherLen = "Byte|Länge des Geheimtextes:"
-    static let lEncKey = "Byte|ECIES-verschlüsselter AES-Sessionkey:"
-    static let lCipher = "|AES-Geheimtext:"
+    static let lReceiver = "Receiver:"
+    static let lCurve = "|Curve ID:"
+    static let lKeyLen = "|Length of the ECIES-encrypted AES session key:"
+    static let lCipherLen = "Byte|Ciphertext length:"
+    static let lEncKey = "Byte\n\nECIES-encrypted AES session key:\n"
+    static let lCipher = "|AES ciphertext:"
 
     func serialize() -> [UInt8] {
         var out = PKIText.cp1252(Self.lReceiver + receiverName + ", " + receiverFirstName)
@@ -303,7 +303,7 @@ struct PKIECIESDocument {
         return out
     }
 
-    static let badHeader = CTError("Die Entschlüsselung war nicht erfolgreich.\nDie Datei hat ein falsches Format, eventuell ist der Header beschädigt.")
+    static let badHeader = CTError("The decryption was not successful.\nThe file has the wrong format, the header might be damaged.")
 
     static func parse(_ data: [UInt8]) throws -> PKIECIESDocument {
         guard let (i0, l0) = PKIText.findLabel(lReceiver, in: data), i0 == 0,
@@ -315,11 +315,11 @@ struct PKIECIESDocument {
               let cLen = Int(PKIText.string(Array(data[(i3 + l3)..<i4]))) else { throw badHeader }
         let ks = i4 + l4
         guard ks + keyLen <= data.count else {
-            throw CTError("Die Entschlüsselung war nicht erfolgreich, da der AES-Sessionkey beschädigt ist.")
+            throw CTError("The decryption was not successful, the AES session key is damaged.")
         }
         guard let (i5, l5) = PKIText.findLabel(lCipher, in: data, from: ks + keyLen), i5 == ks + keyLen,
               i5 + l5 + cLen <= data.count else {
-            throw CTError("Die Entschlüsselung war nicht erfolgreich, da der AES-Geheimtext beschädigt ist.")
+            throw CTError("The decryption was not successful, the AES ciphertext is damaged.")
         }
         let names = PKIText.string(Array(data[l0..<i1])).components(separatedBy: ", ")
         return PKIECIESDocument(receiverName: names.first ?? "", receiverFirstName: names.dropFirst().joined(separator: ", "),
@@ -334,7 +334,7 @@ struct PKIECIESDocument {
         let eph = ECKeyPair.generate(curve: curve)
         let z = try ECDH.sharedSecret(privateKey: eph.d, publicKey: publicKey, curve: curve)
         let flen = (curve.p.bitLength + 7) / 8
-        guard case let .affine(x, y) = eph.Q else { throw CTError("Interner Fehler (ephemerer Punkt).") }
+        guard case let .affine(x, y) = eph.Q else { throw CTError("Internal error (ephemeral point).") }
         let R = [0x04] + x.bigEndianBytes(length: flen) + y.bigEndianBytes(length: flen)
         let k = kdf2(z.bigEndianBytes(length: flen), length: key.count + 20)
         let enc = zip(key, k.prefix(key.count)).map { $0 ^ $1 }
@@ -345,7 +345,7 @@ struct PKIECIESDocument {
     static func decryptSessionKey(_ blob: [UInt8], curve: EllipticCurve, privateKey d: BigUInt) throws -> [UInt8] {
         let flen = (curve.p.bitLength + 7) / 8
         guard blob.count > 1 + 2 * flen + 20, blob[0] == 0x04 else {
-            throw CTError("Die Entschlüsselung war nicht erfolgreich, da der AES-Sessionkey beschädigt ist.")
+            throw CTError("The decryption was not successful, the AES session key is damaged.")
         }
         let x = BigUInt(bigEndianBytes: Array(blob[1...flen]))
         let y = BigUInt(bigEndianBytes: Array(blob[(1 + flen)...(2 * flen)]))
@@ -353,7 +353,7 @@ struct PKIECIESDocument {
         let z = try ECDH.sharedSecret(privateKey: d, publicKey: .affine(x: x, y: y), curve: curve)
         let k = kdf2(z.bigEndianBytes(length: flen), length: enc.count + 20)
         guard MAC.compute(.hmac, hash: .sha1, key: Array(k.suffix(20)), message: enc) == Array(blob.suffix(20)) else {
-            throw CTError("Die Entschlüsselung war nicht erfolgreich.\nEs wurde ein falscher Schlüssel zum Entschlüsseln benutzt.")
+            throw CTError("The decryption was not successful, a wrong key was used for decryption.")
         }
         return zip(enc, k.prefix(enc.count)).map { $0 ^ $1 }
     }

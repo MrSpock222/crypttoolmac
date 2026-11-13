@@ -2,55 +2,55 @@ import AppKit
 import SwiftUI
 
 // Port of CT1's Java "ECC-Demo 1.1.1" (eccdemo: ECCFrame, GrafikFr/GrafikFp, BedienungsPanelFr/Fp,
-// TextPanel, LogDatei) with the German texts of Texte.java. Pixel geometry (529×529 canvas,
+// TextPanel, LogDatei) with the English texts of Texte.java. Pixel geometry (529×529 canvas,
 // pixelProZelle = 264 / zoom, 25 px margin for F_p) is kept so that hovering/selection behaves alike.
 
 enum ECCText {
-    static let frameTitleFr = "ECC-Demo 1.1.1: Punktaddition auf Elliptischen Kurven über den reellen Zahlenraum R"
-    static let frameTitleFp = "ECC-Demo 1.1.1: Punktaddition auf Elliptischen Kurven über diskreten Gruppen Fp"
-    static let pointsText = "Punkte:"
-    static let labelSpace = "Wählen Sie den Zahlenraum"
-    static let buttonFr = "Reeller Zahlenraum R"
-    static let buttonFp = "Diskrete Gruppe über Fp"
-    static let buttonLog = "Log-Datei"
-    static let buttonDelete = "Lösche Punkte"
-    static let buttonExit = "Beenden"
-    static let intro = ["Dieses Programm visualisiert verschiedene", "Elliptische Kurven und ermöglicht es,",
-                        "Punktadditionen auf diesen durchzuführen.", "Die Kurven können entweder über dem Zahlenraum",
-                        "der reellen Zahlen oder über der diskreten Gruppe", "über Primzahlen zwischen 3 und 97 erzeugt werden.",
-                        "Die Kurvenparameter a und b können Sie mit", "den Reglern verändern."]
-    static let start = ["Nachdem Sie eine Kurve ausgewählt haben,", "legen Sie durch Klick mit der linken Maustaste",
-                        "einen Punkt auf der Kurve fest! In der Grafik", "wird Ihnen jeweils der Punkt rot angezeigt, der",
-                        "Ihrem Mauszeiger am nächsten ist.", "", ""]
-    static let p = ["Sie haben einen Punkt P auf der Kurve", "ausgewählt. Sie können nun den Punkt",
-                    "mit dem Button '2*P' zu sich selbst addieren,", "oder einen weiteren Punkt auswählen.", "", "", ""]
-    static let q = ["Sie haben jetzt einen Punkt P und einen Punkt Q", "auf der Kurve gewählt. Mit dem Button 'P+Q'",
-                    "können Sie die beiden Punkte addieren.", "", "", "", ""]
-    static let rp = ["Die Tangente an den Punkt P schneidet die", "Kurve im Punkt -R. Die Spiegelung von -R an der",
-                     "x-Achse ist der Punkt R.", "R ist das Ergebnis der Punktaddition von P.",
-                     "Durch erneutes Drücken des Buttons können Sie", "die Punktaddition mit dem Punkt P fortsetzen.", ""]
-    static let rpq = ["Die Gerade durch die Punkte P und Q schneidet", "die Kurve im Punkt -R. Die Spiegelung von -R",
-                      "an der x-Achse ist der Punkt R.", "R ist das Ergebnis der Addition von P und Q.", "", "", ""]
-    static let rAus2PNaN = ["Die Tangente an den Punkt P hat keinen weiteren", "Schnittpunkt mit der Kurve.",
-                            "Der Punkt R ist der Punkt im Unendlichen O.", "", "", "", ""]
-    static let rAusPQNaN = ["Die Gerade durch die Punkte P und Q hat keine", "weiteren Schnittpunkte mit der Kurve.",
-                            "Der Punkt R ist der Punkt im Unendlichen O.", "", "", "", ""]
-    static let frp = ["Die Verdopplung des Punktes P ergibt den", "Punkt R.", "Durch erneutes Drücken des Buttons können Sie",
-                      "die Punktaddition mit dem Punkt P fortsetzen.", "", "Eine Erläuterung des mathematischen Verfahrens",
-                      "finden Sie in der Hilfe zu dieser Demo."]
-    static let frpq = ["Die Addition der Punkte P und Q ergibt den", "Punkt R.", "", "Eine Erläuterung des mathematischen Verfahrens",
-                       "finden Sie in der Hilfe zu dieser Demo.", "", ""]
-    static let frAus2PNaN = ["Das Ergebnis der Verdopplung des Punktes P", "ist der Punkt im Unendlichen O, welcher sich",
-                             "nicht im Koordinatensystem darstellen lässt.", "", "", "", ""]
-    static let frAusPQNaN = ["Das Ergebnis der Addition der Punkte P und Q", "ist der Punkt im Unendlichen O, welcher sich",
-                             "nicht im Koordinatensystem darstellen lässt.", "", "", "", ""]
-    static let graph1 = " mit "
-    static let graph2 = " über "
-    static let graph3 = " Punkten."
-    static let logTitle = "Log-Datei: Punktaddition auf Elliptischen Kurven"
-    static let logFrNumberSpace = "----- Berechnung im reellen Zahlenraum R -----\n\n"
-    static let logFpNumberSpace = "----- Berechnung in der diskreten Gruppe Fp mit p = "
-    static let logCurve = "Gewählte Kurve:\n"
+    static let frameTitleFr = "ECC Demonstration 1.1.1: Point addition on elliptic curves over the real number space R"
+    static let frameTitleFp = "ECC Demonstration 1.1.1: Point addition on elliptic curves over discrete groups of prime numbers"
+    static let pointsText = "Points:"
+    static let labelSpace = "Choose the number space"
+    static let buttonFr = "Real number space R"
+    static let buttonFp = "Discrete group over Fp"
+    static let buttonLog = "Logfile"
+    static let buttonDelete = "Delete points"
+    static let buttonExit = "Quit"
+    static let intro = ["This program allows you to generate various", "elliptic curves and to carry out point additions",
+                        "on these curves.", "As number spaces you can use the real numbers",
+                        "or groups over the prime numbers ranging", "from 3 to 97.",
+                        "The curve parameters a and b can be changed", "through the scrollbars."]
+    static let start = ["After choosing an elliptic curve, you can", "select points on this curve by clicking on it",
+                        "with the left mouse button. A red dot on the", "curve indicates the valid point that is closest",
+                        "to the current mouse position.", "", ""]
+    static let p = ["You have chosen a point P on the curve.", "You can now add the point to itself by",
+                    "clicking the button '2*P' or choose", "another point.", "", "", ""]
+    static let q = ["You now have chosen two points P and Q", "on the curve. By clicking the button 'P+Q',",
+                    "you can add the two points.", "", "", "", ""]
+    static let rp = ["The tangent of the point P intersects", "the curve at the point -R. The mirroring",
+                     "at the x-axis is the point R.", "R is the result of the point addition of P.",
+                     "By clicking the button again, you can continue", "the point addition with the point P.", ""]
+    static let rpq = ["The straight line through the points P and Q", "intersects the curve at the point -R. The",
+                      "mirroring at the x-axis is the point R.", "R is the result of the addition of P and Q.", "", "", ""]
+    static let rAus2PNaN = ["The tangent of the point P has no other", "intersection with the curve.",
+                            "The point R is the point at infinity O.", "", "", "", ""]
+    static let rAusPQNaN = ["The straight lint through the points P and", "Q has no other intersection with the curve.",
+                            "The point R is the point at infinity O.", "", "", "", ""]
+    static let frp = ["Doubling the point P results in the point R", "By clicking the button again, you can continue", "the point addition with the point P.",
+                      "", "", "An explanation of the mathematical procedure",
+                      "can be found in the help texts of this program."]
+    static let frpq = ["The addition of the points P and Q results", "in the point R.", "", "An explanation of the mathematical procedure",
+                       "can be found in the help texts of this program.", "", ""]
+    static let frAus2PNaN = ["The result of the doubling of the point P", "is the point at infinity O which is not",
+                             "drawable on the grid.", "", "", "", ""]
+    static let frAusPQNaN = ["The result of the addition of P and Q", "is the point at infinity O which is not",
+                             "drawable on the grid.", "", "", "", ""]
+    static let graph1 = " with "
+    static let graph2 = " over "
+    static let graph3 = " points."
+    static let logTitle = "Point addition over Elliptic Curves"
+    static let logFrNumberSpace = "----- Calculation in the real number space R -----\n\n"
+    static let logFpNumberSpace = "----- Calculation in the discrete group Fp with p = "
+    static let logCurve = "Selected curve:\n"
     static let line = "_______________________________________"
 }
 
@@ -131,7 +131,7 @@ final class ECCDemoModel: ObservableObject {
 
     // MARK: Formatting
 
-    static func fr(_ v: Double) -> String { String(format: "%.2f", v).replacingOccurrences(of: ".", with: ",") }
+    static func fr(_ v: Double) -> String { String(format: "%.2f", v) }
     static func fi(_ v: Double) -> String { String(Int(v.rounded())) }
     func fmt(_ v: Double) -> String { fp ? Self.fi(v) : Self.fr(v) }
     func pair(_ pt: ECCPt) -> String { "(" + fmt(pt.x) + "/" + fmt(pt.y) + ")" }

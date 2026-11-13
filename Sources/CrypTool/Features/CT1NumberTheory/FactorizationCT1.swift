@@ -22,7 +22,7 @@ final class FactorizationCT1Model: ObservableObject {
         var primeMask: Int, bits1: Int, bits2: Int
     }
     /// CT1 checkbox order: Brute-Force, Brent, Pollard, Williams, Lenstra, Quadratisches Sieb.
-    static let names = ["Brute-Force", "Brent", "Pollard", "Williams", "Lenstra", "Quadratisches Sieb"]
+    static let names = ["Brute-force", "Brent", "Pollard", "Williams", "Lenstra", "Quadratic sieve"]
     static let methods: [FactorizationMethod?] = [nil, .pollardRhoBrent, .pollardPMinus1, .williamsPPlus1, .lenstraECM, .quadraticSieve]
 
     @Published var input = ""
@@ -82,24 +82,24 @@ final class FactorizationCT1Model: ObservableObject {
         switch nextComposite() {
         case .none:
             finished = true
-            Alerts.info("Die Eingabe ist jetzt vollständig in ihre Primfaktoren zerlegt.")
+            Alerts.info("The input is now completely factorized.")
             return .complete
         case .some(let v?):
             n = v
         case .some(nil):
             let t = input.trimmingCharacters(in: .whitespaces)
             guard !t.isEmpty, let v = try? BigExpression.evaluate(t) else { Alerts.error(NTMessages.inputFalse); return .stop }
-            if v.isNegative { Alerts.error("Die Eingabe ist keine positive ganze Zahl."); return .stop }
-            if v.magnitude <= 1 { Alerts.error("Bitte geben Sie eine positive ganze Zahl größer 1 ein."); return .stop }
+            if v.isNegative { Alerts.error("The input is not a positive integer."); return .stop }
+            if v.magnitude <= 1 { Alerts.error("Please enter a positive integer greater than 1."); return .stop }
             if !CT1BigNumber.isAllowed(v.magnitude) { Alerts.info(NTMessages.bigNumber); return .stop }
             n = v.magnitude
         }
         if !enabled.contains(true) {
-            Alerts.error("Sie müssen mindestens einen Faktorisierungsalgorithmus wählen.")
+            Alerts.error("Please select at least one factorization algorithm. ")
             return .stop
         }
         if Primality.isProbablePrime(n) {
-            Alerts.error("Die Eingabe ist eine Primzahl.")
+            Alerts.error("The input is a prime number. ")
             return .stop
         }
         let start = Date()
@@ -113,13 +113,13 @@ final class FactorizationCT1Model: ObservableObject {
             let digits = Double(n.bitLength) * log10(2.0)
             if enabled[5] {
                 if digits > 132 {
-                    Alerts.error("Das Quadratische Sieb kann nicht ausgeführt werden und wird deaktiviert (Speicherüberlauf).")
+                    Alerts.error("Due to memory overflow, the quadratic sieve method could not be executed.")
                     enabled[5] = false
                 } else if digits > 93 {
                     let a = NSAlert()
                     a.messageText = "CrypTool"
-                    a.informativeText = "Das Quadratische Sieb benötigt mehr als 128 MB Speicher.\nWir empfehlen diese Methode zu deaktivieren.\n\nMöchten Sie das Quadratische Sieb deaktivieren?"
-                    a.addButton(withTitle: "Ja"); a.addButton(withTitle: "Nein")
+                    a.informativeText = "The quadratic sieve method requires more than 128 megabytes of memory.\nWe recommend to deactivate this method.\n\nWould you like to deactivate the quadratic sieve?"
+                    a.addButton(withTitle: "Yes"); a.addButton(withTitle: "No")
                     if a.runModal() == .alertFirstButtonReturn { enabled[5] = false }
                 }
             }
@@ -131,11 +131,11 @@ final class FactorizationCT1Model: ObservableObject {
             }
             if f1 == nil {
                 if aborted {
-                    Alerts.error("Die Faktorisierung wurde vorzeitig beendet.\nDie jetzige Zerlegung enthält noch mindestens einen zusammengesetzten Faktor.")
+                    Alerts.error("The factorization has been aborted.\nThe present factorization still contains at least one composite factor.")
                 } else if enabled[0] && !enabled[1...].contains(true) {
-                    Alerts.error("Diese Zahl konnte mit dem Brute-Force-Verfahren nicht zerlegt werden. Das Brute-Force-Verfahren ist hier so implementiert, dass es nur Faktoren kleiner 10000 findet.")
+                    Alerts.error("This number could not be factorized using brute-force. Here, brute-force is implemented in a way to find only factors smaller than 10000.")
                 } else {
-                    Alerts.error("Die jetzige Zerlegung enthält noch mindestens einen zusammengesetzten Faktor.\nDieser Faktor konnte mit den von Ihnen ausgewählten Algorithmen nicht zerlegt werden.\nVersuchen Sie bitte ein anderes Verfahren.")
+                    Alerts.error("The present factorization still contains at least one composite factor, which could not be factorized further with the algorithms you selected.\n Please try one other procedure. ")
                 }
             }
         }
@@ -149,11 +149,11 @@ final class FactorizationCT1Model: ObservableObject {
             details.append(Detail(number: n.description, factor1: f1.description, factor2: f2.description, method: name, time: stepTime,
                                   primeMask: (p1 ? 1 : 0) + (p2 ? 2 : 0), bits1: ntCeilLog2(f1), bits2: ntCeilLog2(f2)))
         } else {
-            details.append(Detail(number: n.description, factor1: "", factor2: "", method: aborted ? "abgebrochen" : "ohne Erfolg",
+            details.append(Detail(number: n.description, factor1: "", factor2: "", method: aborted ? "aborted" : "without success",
                                   time: stepTime, primeMask: 0, bits1: 0, bits2: 0))
         }
         let count = factors.reduce(0) { $0 + $1.exponent }
-        timeText = "\(count) Faktoren gefunden in \(ntCT1Time(totalDuration))"
+        timeText = "Found \(count) factors in \(ntCT1Time(totalDuration))"
         return f1 != nil ? .factorized : .stop
     }
 
@@ -186,12 +186,12 @@ final class FactorizationCT1Model: ObservableObject {
     /// Runs the selected algorithms in parallel; the first one finding a factor wins.
     private func runParallel(_ n: BigUInt, indices: [Int], window: NSWindow?) async -> (found: (Int, BigUInt)?, aborted: Bool) {
         let global = CancellationToken()
-        methodStates = indices.map { MethodState(id: $0, name: Self.names[$0], status: "läuft …", token: CancellationToken(), done: false) }
+        methodStates = indices.map { MethodState(id: $0, name: Self.names[$0], status: "running …", token: CancellationToken(), done: false) }
         let s = n.description
         progressNumber = s.count > 21 ? String(s.prefix(9)) + "..." + String(s.suffix(9)) : s
         var globalCancelled = false
         var sheetClose: (() -> Void)?
-        WindowPresenter.sheet(on: window, title: "Faktorisierungstimer") { close in
+        WindowPresenter.sheet(on: window, title: "Factorization timer") { close in
             sheetClose = close
             return FactorizationProgressSheet(model: self) {
                 globalCancelled = true
@@ -204,7 +204,7 @@ final class FactorizationCT1Model: ObservableObject {
             while !Task.isCancelled {
                 let el = Int(Date().timeIntervalSince(start))
                 for i in methodStates.indices where !methodStates[i].done {
-                    methodStates[i].status = "läuft … \(el) s"
+                    methodStates[i].status = "running … \(el) s"
                 }
                 try? await Task.sleep(nanoseconds: 500_000_000)
             }
@@ -228,8 +228,8 @@ final class FactorizationCT1Model: ObservableObject {
                     await MainActor.run {
                         if let i = self.methodStates.firstIndex(where: { $0.id == idx }) {
                             self.methodStates[i].done = true
-                            self.methodStates[i].status = f != nil ? "Faktor gefunden"
-                                : (self.methodStates[i].token.isCancelled || global.isCancelled ? "abgebrochen" : "ohne Erfolg")
+                            self.methodStates[i].status = f != nil ? "Factor found"
+                                : (self.methodStates[i].token.isCancelled || global.isCancelled ? "aborted" : "without success")
                         }
                         race.remaining -= 1
                         if race.resumed { return }
@@ -269,36 +269,36 @@ final class FactorizationCT1Model: ObservableObject {
 
     /// Text of "Liste im Hauptfenster anzeigen".
     func detailsDocument() -> String {
-        var s = "Details zur Faktorisierung der Eingabezahl\n\(input)\n\n"
-        s += "Der jeweils nächste zusammengesetzte Faktor wird in zwei Faktoren zerlegt:\n\n"
+        var s = "Details for the factorization of the \nInput number = \(input)\n\n"
+        s += "The respective next composite factor will be factorized into two factors:\n\n"
         for (i, d) in details.enumerated() {
             s += "\(i + 1). "
             if !d.factor1.isEmpty {
-                s += "Faktorisierte Zahl = \(d.number)\n"
-                s += "Bitlänge = \(BigUInt(d.number).map(ntCeilLog2) ?? 0)\n"
-                s += "Methode: \(d.method).  Zeit: \(d.time)\n"
-                s += "      - Erster Faktor = \(d.factor1)\n"
+                s += "Factorized number = \(d.number)\n"
+                s += "Bit length = \(BigUInt(d.number).map(ntCeilLog2) ?? 0)\n"
+                s += "Method: \(d.method).  Time: \(d.time)\n"
+                s += "      - First factor = \(d.factor1)\n"
                 s += "        " + Self.factorInfo(prime: d.primeMask & 1 != 0, bits: d.bits1) + "\n"
-                s += "      - Zweiter Faktor = \(d.factor2)\n"
+                s += "      - Second factor = \(d.factor2)\n"
                 s += "        " + Self.factorInfo(prime: d.primeMask & 2 != 0, bits: d.bits2) + "\n\n"
             } else {
-                s += "Faktorisierung \(d.method)\nZeit: \(d.time)\n\n\n"
+                s += "Factorization \(d.method)\nTime: \(d.time)\n\n\n"
             }
         }
         s += "\(timeText)\n\n"
-        s += "Die Eingabezahl wurde in die folgenden Faktoren zerlegt:\n"
+        s += "The input integer has been factorized into the following factors:\n"
         s += factorisationText + "\n"
         return s
     }
 
     static func factorInfo(prime: Bool, bits: Int) -> String {
-        prime ? "Bitlänge = \(bits), Primzahl." : "Bitlänge = \(bits), zusammengesetzte Zahl."
+        prime ? "Bit length = \(bits),  prime number." : "Bit length = \(bits),  composite number."
     }
 
     var documentTitle: String {
         let t = input
         let shown = t.count < 20 ? t : String(t.prefix(9)) + "..." + String(t.suffix(8))
-        return "Faktorisierung der Zahl \(shown)."
+        return "Factorization of the integer \(shown)."
     }
 }
 
@@ -314,11 +314,11 @@ struct FactorizationProgressSheet: View {
     var cancelAll: () -> Void
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Zu faktorisierende Zahl")
+            Text("Input for factorization")
             Text(model.progressNumber).font(.system(.body, design: .monospaced)).textSelection(.enabled)
             Grid(alignment: .leading, horizontalSpacing: 14, verticalSpacing: 8) {
                 GridRow {
-                    Text("Algorithmus").bold()
+                    Text("Algorithm").bold()
                     Text("Laufzeit").bold()
                     Text("")
                 }
@@ -326,11 +326,11 @@ struct FactorizationProgressSheet: View {
                     GridRow {
                         Text(m.name)
                         Text(m.status).monospacedDigit().frame(width: 130, alignment: .trailing)
-                        Button("Abbrechen") { m.token.cancel() }.disabled(m.done)
+                        Button("Cancel") { m.token.cancel() }.disabled(m.done)
                     }
                 }
             }
-            HStack { Spacer(); Button("Abbrechen", action: cancelAll).keyboardShortcut(.cancelAction); Spacer() }
+            HStack { Spacer(); Button("Cancel", action: cancelAll).keyboardShortcut(.cancelAction); Spacer() }
         }
         .padding(16)
         .frame(width: 400)
@@ -352,49 +352,49 @@ struct FactorizationView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top, spacing: 12) {
-                GroupBox("Algorithmen zur Faktorisierung") {
+                GroupBox("Algorithms for factorization") {
                     VStack(alignment: .leading, spacing: 6) {
                         ForEach(0..<6, id: \.self) { i in
                             Toggle(FactorizationCT1Model.names[i], isOn: $model.enabled[i])
                         }
                     }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
                 }.frame(width: 190)
-                GroupBox("Eingabe") {
+                GroupBox("Input") {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Geben Sie die zu faktorisierende Zahl ein:")
+                        Text("Enter the number to be factorized:")
                         TextField("", text: $model.input).font(.system(.body, design: .monospaced))
                             .disabled(readOnly || model.running)
-                        Button("Zahl aus Datei laden") {
+                        Button("Load number from file") {
                             if let s = CT1BigNumber.loadFromFile() { model.input = s }
                         }.disabled(readOnly || model.running)
                     }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
                 }
             }
-            GroupBox("Faktorisierung (schrittweise)") {
+            GroupBox("Factorization (stepwise)") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Durch das Anklicken des Buttons \"Weiter\" wird initial die Zahl im Eingabefeld und dann jeweils die nächste zusammengesetzte Zahl im Feld \"Produktdarstellung\" in zwei Faktoren zerlegt.")
+                    Text("Click \"Continue\" to factor the input number. If the result (shown below) can be factored further, click the button again to execute the factorization.")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
-                        Button("Weiter") { Task { await model.singleStep(window: ref.window) } }
+                        Button("Continue") { Task { await model.singleStep(window: ref.window) } }
                             .keyboardShortcut(.defaultAction)
                             .disabled(model.input.isEmpty || model.running || model.finished)
                         Spacer()
-                        Button("Vollständig faktorisieren") { Task { await model.factorizeCompletely(window: ref.window) } }
+                        Button("Complete factorization into primes") { Task { await model.factorizeCompletely(window: ref.window) } }
                             .disabled(model.input.isEmpty || model.running || model.finished)
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Faktorisierungsergebnis") {
+            GroupBox("Factorization") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Die Faktorisierung wird in dem Format   <z1^a1 * z2^a2 * .... * zn^an>  dargestellt.\nZusammengesetzte Zahlen sind rot markiert.")
+                    Text("The factorization is represented in the format <z1^a1 * z2^a2 *.... * zn^an>.\nComposite numbers are highlighted in red.")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
-                        Text("Letzte Faktorisierung durch:")
+                        Text("Last factorization through:")
                         NTReadOnlyText(text: model.lastMethod).frame(width: 150)
                         Text(model.timeText).lineLimit(1)
                         Spacer()
                     }
-                    Text("Produktdarstellung der Faktorisierung:")
+                    Text("Factorization result:")
                     ScrollView {
                         model.factorisationAttributed
                             .font(.system(.body, design: .monospaced))
@@ -411,12 +411,12 @@ struct FactorizationView: View {
             HStack {
                 Spacer()
                 CT1HelpButton(action: .factorization)
-                Button("Schließen") { closeDialog() }.keyboardShortcut(.cancelAction).disabled(model.running)
+                Button("Close") { closeDialog() }.keyboardShortcut(.cancelAction).disabled(model.running)
             }
         }
         .padding(14)
         .frame(width: 640)
-        .ct1Window(title: "Faktorisieren einer Zahl", ref: ref)
+        .ct1Window(title: "Factorization of a Number", ref: ref)
         .onAppear {
             if !didInit { didInit = true; if !initialNumber.isEmpty { model.input = initialNumber } }
         }
@@ -432,7 +432,7 @@ struct FactorizationView: View {
     }
 
     private func showDetails() {
-        ref.sheet("Details zur Faktorisierung") { close in
+        ref.sheet("Details for the Current Factorization") { close in
             FactorizationDetailsView(model: model, close: close) {
                 close()
                 DocumentFactory.openResult(text: model.detailsDocument(), title: model.documentTitle)
@@ -452,27 +452,27 @@ struct FactorizationDetailsView: View {
     var body: some View {
         let sel = model.details.first { $0.id == selection }
         VStack(alignment: .leading, spacing: 8) {
-            Text("Eingabe-Zahl:")
+            Text("Input number:")
             NTReadOnlyText(text: model.input)
             Table(model.details, selection: $selection) {
-                TableColumn("Faktorisierte Zahl") { Text($0.number).font(.system(.body, design: .monospaced)) }
-                TableColumn("Faktor 1") { Text($0.factor1).font(.system(.body, design: .monospaced)) }
-                TableColumn("Faktor 2") { Text($0.factor2).font(.system(.body, design: .monospaced)) }
-                TableColumn("Methode") { Text($0.method) }
-                TableColumn("Zeit") { Text($0.time) }
+                TableColumn("Factorized number") { Text($0.number).font(.system(.body, design: .monospaced)) }
+                TableColumn("Factor 1") { Text($0.factor1).font(.system(.body, design: .monospaced)) }
+                TableColumn("Factor 2") { Text($0.factor2).font(.system(.body, design: .monospaced)) }
+                TableColumn("Method") { Text($0.method) }
+                TableColumn("Time") { Text($0.time) }
             }
             .frame(minHeight: 180)
-            GroupBox("Informationen zur gewählten Faktorisierung (Selektieren einer Zahl durch Doppelklick auf die Zeile) ") {
+            GroupBox("Information on the selected factorization (select by double-click on the row)") {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Faktorisierte Zahl:")
+                    Text("Factorized number:")
                     NTReadOnlyText(text: sel?.number ?? "")
                     HStack {
-                        Text("Erster Faktor:")
+                        Text("First factor:")
                         Text(sel.map { $0.factor1.isEmpty ? "" : FactorizationCT1Model.factorInfo(prime: $0.primeMask & 1 != 0, bits: $0.bits1) } ?? "")
                     }
                     NTReadOnlyText(text: sel?.factor1 ?? "")
                     HStack {
-                        Text("Zweiter Faktor:")
+                        Text("Second factor:")
                         Text(sel.map { $0.factor2.isEmpty ? "" : FactorizationCT1Model.factorInfo(prime: $0.primeMask & 2 != 0, bits: $0.bits2) } ?? "")
                     }
                     NTReadOnlyText(text: sel?.factor2 ?? "")
@@ -480,8 +480,8 @@ struct FactorizationDetailsView: View {
             }
             HStack {
                 Spacer()
-                Button("Liste im Hauptfenster anzeigen", action: showList)
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Save list into main window", action: showList)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(14)

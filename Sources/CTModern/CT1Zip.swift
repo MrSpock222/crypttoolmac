@@ -14,7 +14,7 @@ public enum CT1Zip {
         if data.isEmpty { return magic }
         var s = z_stream()
         guard deflateInit2_(&s, 9, Z_DEFLATED, -15, 8, Z_DEFAULT_STRATEGY, ZLIB_VERSION,
-                            Int32(MemoryLayout<z_stream>.size)) == Z_OK else { throw CTError("ZIP-Fehler") }
+                            Int32(MemoryLayout<z_stream>.size)) == Z_OK else { throw CTError("ZIP error") }
         defer { deflateEnd(&s) }
         var input = data
         var out = [UInt8](repeating: 0, count: Int(deflateBound(&s, uLong(data.count))) + 16)
@@ -26,7 +26,7 @@ public enum CT1Zip {
                 return deflate(&s, Z_FINISH)
             }
         }
-        guard status == Z_STREAM_END else { throw CTError("ZIP-Fehler") }
+        guard status == Z_STREAM_END else { throw CTError("ZIP error") }
         return magic + out.prefix(Int(s.total_out))
     }
 
@@ -35,12 +35,12 @@ public enum CT1Zip {
 
     /// Inverse of `compress`; throws `CTError` with CT1's messages.
     public static func decompress(_ data: [UInt8]) throws -> [UInt8] {
-        guard isCT1Zip(data) else { throw CTError("Keine ZIP-Datei (\"Magic-Number\"-Fehler).") }
+        guard isCT1Zip(data) else { throw CTError("No ZIP file (\"Magic number\" error).") }
         var input = Array(data.dropFirst(3))
         if input.isEmpty { return [] }
         var s = z_stream()
         guard inflateInit2_(&s, -15, ZLIB_VERSION, Int32(MemoryLayout<z_stream>.size)) == Z_OK else {
-            throw CTError("Fehler in der ZIP-Datei")
+            throw CTError("Error in ZIP file")
         }
         defer { inflateEnd(&s) }
         var result: [UInt8] = []
@@ -58,12 +58,12 @@ public enum CT1Zip {
                 if status == Z_BUF_ERROR && s.avail_in == 0 { break }
             }
         }
-        guard status == Z_STREAM_END else { throw CTError("Fehler in der ZIP-Datei") }
+        guard status == Z_STREAM_END else { throw CTError("Error in ZIP file") }
         return result
     }
 
     /// CT1 IDS_STRING_MSG_KOMPRESSION_FACTOR: (before − after) · 100 / before, integer division.
     public static func compressionMessage(original: Int, compressed: Int) -> String {
-        "Kompressionsgrad: \((original - compressed) * 100 / max(original, 1)) %."
+        "Rate of compression: \((original - compressed) * 100 / max(original, 1)) %"
     }
 }

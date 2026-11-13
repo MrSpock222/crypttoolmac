@@ -5,14 +5,14 @@ import CTCommon
 public enum PrimeTestMethod: String, CaseIterable, Codable, Sendable {
     case millerRabin, solovayStrassen, fermat, aks, trialDivision
 
-    /// German display name.
+    /// Display name.
     public var displayName: String {
         switch self {
         case .millerRabin: return "Miller-Rabin"
         case .solovayStrassen: return "Solovay-Strassen"
         case .fermat: return "Fermat"
         case .aks: return "AKS"
-        case .trialDivision: return "Probedivision"
+        case .trialDivision: return "Trial division"
         }
     }
 
@@ -455,7 +455,7 @@ public enum Primality {
 
     /// Random prime with exactly `bits` bits (bits >= 2).
     public static func randomPrime(bits: Int) -> BigUInt {
-        precondition(bits >= 2, "Mindestens 2 Bit")
+        precondition(bits >= 2, "At least 2 bits")
         return randomPrime(bits: bits, topTwoBits: false)
     }
 

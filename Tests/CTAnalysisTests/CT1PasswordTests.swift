@@ -11,62 +11,62 @@ func runCT1PasswordTests() {
     // empty password (CT1 texts of checkPassword)
     let empty = P.ct1Quality(of: "")
     check(empty.resistance == """
-    Passwort-Richtlinie erfüllt:
-    - Nein (Passwort ist zu kurz: 0/8)
-    - Nein (Passwort enthält zu wenig Ziffern: 0/1)
-    - Nein (Passwort enthält zu wenig Sonderzeichen: 0/1)
+    Compliant with password guidelines:
+    - No (Password is too short: 0/8)
+    - No (Password contains too few digits: 0/1)
+    - No (Password contains too few special characters: 0/1)
 
-    Rekonstruktion aus Wörtern, Folgen und Mustern:
-    Gefunden:  -
-    Muster:  -
-    Folgen:  -
-    Tastatur-Folgen:  -
-    Wörterbuch-Einträge [\(dictSize)]:  -
+    Reconstruction from words, sequences and patterns:
+    Found:  -
+    Patterns:  -
+    Sequences:  -
+    Keyboard sequences:  -
+    Dictionary words [\(dictSize)]:  -
     """, "empty resistance: \(empty.resistance)")
-    check(empty.keePassText == "0 % (0 Bits)" && empty.mozillaText == "0 %" && empty.level == 0, "empty meters")
+    check(empty.keePassText == "0 % (0 bit)" && empty.mozillaText == "0 %" && empty.level == 0, "empty meters")
 
     // "abc123": sequences, keyboard run, dictionary word and their closure
     let r = P.ct1Quality(of: "abc123")
     check(r.resistance == """
-    Passwort-Richtlinie erfüllt:
-    - Nein (Passwort ist zu kurz: 6/8)
-    - Nein (Passwort enthält zu wenig Sonderzeichen: 0/1)
+    Compliant with password guidelines:
+    - No (Password is too short: 6/8)
+    - No (Password contains too few special characters: 0/1)
 
-    Rekonstruktion aus Wörtern, Folgen und Mustern:
-    Gefunden: abc123
-    Muster:  -
-    Folgen: abc, 123
-    Tastatur-Folgen: 123
-    Wörterbuch-Einträge [\(dictSize)]: abc
+    Reconstruction from words, sequences and patterns:
+    Found: abc123
+    Patterns:  -
+    Sequences: abc, 123
+    Keyboard sequences: 123
+    Dictionary words [\(dictSize)]: abc
     """, "abc123 resistance: \(r.resistance)")
     approx(r.crypToolEntropy, 2 * log2(26) + 1 + 2 * log2(10) + 1, 1e-9, "abc123 entropy")
     check(r.components == "abc + 123", "abc123 components \(r.components)")
-    check(r.crypTool == 14 && r.crypToolText == "14 % (17 Bits)", "abc123 CrypTool \(r.crypToolText)")
-    check(r.keePass == 25 && r.keePassText == "25 % (32 Bits)", "abc123 KeePass \(r.keePassText)")
+    check(r.crypTool == 14 && r.crypToolText == "14 % (17 bit)", "abc123 CrypTool \(r.crypToolText)")
+    check(r.keePass == 25 && r.keePassText == "25 % (32 bit)", "abc123 KeePass \(r.keePassText)")
     check(r.mozilla == 60 && r.mozillaText == "60 %", "abc123 Mozilla")
     check(r.pgp == P.qualityPGP("abc123"), "abc123 PGP")
     check(r.length == 6 && !r.compliant && !r.showsTruncationNote, "abc123 flags")
 
     // hidden password: CT1 shows '*' instead of the found substrings
     let hidden = P.ct1Quality(of: "abc123", hidePassword: true)
-    check(hidden.resistance.contains("Gefunden: ******\n") && hidden.resistance.contains("Folgen: ***, ***\n"), "hidden")
+    check(hidden.resistance.contains("Found: ******\n") && hidden.resistance.contains("Sequences: ***, ***\n"), "hidden")
 
     // longer closure; "qwertz" is both a keyboard run and a dictionary word
     let k = P.ct1Quality(of: "abc123qwertz")
-    check(k.resistance.contains("\nGefunden: abc123qwertz\n"), "closure: \(k.resistance)")
-    check(k.resistance.contains("\nTastatur-Folgen: 123, qwertz\n"), "keyboard: \(k.resistance)")
+    check(k.resistance.contains("\nFound: abc123qwertz\n"), "closure: \(k.resistance)")
+    check(k.resistance.contains("\nKeyboard sequences: 123, qwertz\n"), "keyboard: \(k.resistance)")
     check(k.resistance.hasSuffix("]: abc, qwertz"), "dictionary: \(k.resistance)")
 
     // compliance, guidelines and truncation
     let ok = P.ct1Quality(of: "Xy7!Qp9#Lm")
-    check(ok.compliant && ok.resistance.hasPrefix("Passwort-Richtlinie erfüllt:\n- Ja\n\n"), "compliant")
+    check(ok.compliant && ok.resistance.hasPrefix("Compliant with password guidelines:\n- Yes\n\n"), "compliant")
     let strict = P.Policy(minimumLength: 12, minimumDigits: 3, minimumSpecials: 0, specialCharacters: "")
     let s = P.ct1Quality(of: "Xy7!Qp9#Lm", policy: strict)
-    check(s.resistance.hasPrefix("Passwort-Richtlinie erfüllt:\n- Nein (Passwort ist zu kurz: 10/12)\n- Nein (Passwort enthält zu wenig Ziffern: 2/3)\n\n"), "policy: \(s.resistance)")
+    check(s.resistance.hasPrefix("Compliant with password guidelines:\n- No (Password is too short: 10/12)\n- No (Password contains too few digits: 2/3)\n\n"), "policy: \(s.resistance)")
     let long = String(repeating: "aZ5!", count: 10)
     let l = P.ct1Quality(of: long)
     check(l.length == 40 && l.showsTruncationNote, "truncation note")
-    check(P.ct1Quality(of: long, policy: P.Policy(minimumLength: 40)).resistance.contains("zu kurz: 32/40"), "compliance on 32 chars")
+    check(P.ct1Quality(of: long, policy: P.Policy(minimumLength: 40)).resistance.contains("too short: 32/40"), "compliance on 32 chars")
 
     // same CrypTool measure as the library for passwords without US keyboard rows
     for pw in ["abc123", "Passwort1!", "Xy7!Qp9#Lm", "12.03.1999abab", "hallo"] {
@@ -82,7 +82,7 @@ func runCT1PasswordTests() {
     check(P.ct1IsSequence(Array("abcd")) && P.ct1IsSequence(Array("cba")) && P.ct1IsSequence(Array("aaa")) && !P.ct1IsSequence(Array("abd")), "sequences")
     check(P.ct1IsPattern(Array("12.03.1999")) && P.ct1IsPattern(Array("abab")) && P.ct1IsPattern(Array("abcabc")) && !P.ct1IsPattern(Array("abcd")), "patterns")
     check(P.ct1CleanPassword("a b\tc\n") == "abc", "clean")
-    check(P.ct1GroupedNumber(999) == "999" && P.ct1GroupedNumber(1999) == "1.999" && P.ct1GroupedNumber(1234567) == "1.234.567", "grouping")
+    check(P.ct1GroupedNumber(999) == "999" && P.ct1GroupedNumber(1999) == "1,999" && P.ct1GroupedNumber(1234567) == "1,234,567", "grouping")
 
     // password generator with given entropy
     let text = TextOptions.uppercaseLetters
@@ -108,6 +108,6 @@ func runCT1PasswordTests() {
 /// Size of the built-in dictionary as shown in "Wörterbuch-Einträge [n]".
 private func dictionaryCount() -> Int {
     let t = PasswordTools.ct1Quality(of: "").resistance
-    guard let a = t.range(of: "Wörterbuch-Einträge ["), let b = t.range(of: "]", range: a.upperBound..<t.endIndex) else { return 0 }
+    guard let a = t.range(of: "Dictionary words ["), let b = t.range(of: "]", range: a.upperBound..<t.endIndex) else { return 0 }
     return Int(t[a.upperBound..<b.lowerBound].replacingOccurrences(of: ".", with: "")) ?? 0
 }

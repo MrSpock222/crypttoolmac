@@ -86,7 +86,7 @@ func runCT1PlayfairAnalysisTests() {
         expectEqual(r.error?.code, 1)
         expectEqual(r.error?.position, 2)
         expectEqual(r.error?.letter, "C")
-        expect(r.error?.message.hasPrefix("Bei Playfair sind Klarbuchstabe und Chiffrezeichen immer verschieden.\nPosition=3, Buchstabe=C") == true)
+        expect(r.error?.message.hasPrefix("Please notice: the Playfair cipher letter and plaintext letter are always different.\nPosition=3, letter=C") == true)
         // digram AB → BC: B right of/below A, C right of/below B
         let t = PlayfairAnalysisSession(ciphertext: "BC")
         expect(t.analyzePlaintext("AB").error == nil)
@@ -115,7 +115,7 @@ func runCT1PlayfairAnalysisTests() {
         let w = PlayfairAnalysisSession(ciphertext: "BCCDDE")
         let rw = w.analyzePlaintext("ABACAD")   // B, C and D all right of/below A
         expectEqual(rw.error?.code, 103)
-        expect(rw.error?.message.contains("Eine der Tabellen ist übergelaufen: Position=0, Buchstabe=A") == true, rw.error?.message ?? "")
+        expect(rw.error?.message.contains("At least one of the lists is overflown: Position=0, letter=A") == true, rw.error?.message ?? "")
     }
 
     group("CT1 Playfair-Analyse: Matrix, Passwort, Größe") {

@@ -9,8 +9,8 @@ public enum HillMultiplication: String, CaseIterable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .matrixTimesVector: return "Matrix × Spaltenvektor"
-        case .vectorTimesMatrix: return "Zeilenvektor × Matrix"
+        case .matrixTimesVector: return "Matrix × column vector"
+        case .vectorTimesMatrix: return "Row vector × matrix"
         }
     }
 }
@@ -39,20 +39,20 @@ public struct HillCipher: Sendable {
     public init(matrix: [[Int]], options: TextOptions, multiplication: HillMultiplication = .matrixTimesVector,
                 paddingCharacter: Character? = nil, firstLetterIsOne: Bool = false) throws {
         let n = options.alphabetSize
-        guard n >= 2 else { throw CTError("Das Alphabet muss mindestens zwei Zeichen enthalten.") }
+        guard n >= 2 else { throw CTError("The alphabet must contain at least two characters.") }
         let d = matrix.count
         guard (1...10).contains(d), matrix.allSatisfy({ $0.count == d }) else {
-            throw CTError("Die Hill-Schlüsselmatrix muss quadratisch sein (Dimension 1 bis 10).")
+            throw CTError("The Hill key matrix must be square (dimension 1 to 10).")
         }
         let m = matrix.map { $0.map { mod($0, n) } }
         guard let inv = HillCipher.inverse(of: m, modulus: n) else {
-            throw CTError("Die Schlüsselmatrix ist modulo \(n) nicht invertierbar (die Determinante muss teilerfremd zur Alphabetlänge sein). Bitte einen anderen Schlüssel wählen.")
+            throw CTError("The key matrix is not invertible modulo \(n) (the determinant must be coprime to the alphabet length). Please choose another key.")
         }
         let mapper = LetterMapper(options)
         var pad = options.alphabetCharacters[firstLetterIsOne ? n - 1 : 0]
         if let p = paddingCharacter {
             guard let (pi, _) = mapper.lookup(p) else {
-                throw CTError("Das Füllzeichen „\(p)“ ist nicht im Alphabet enthalten.")
+                throw CTError("The padding character \"\(p)\" is not contained in the alphabet.")
             }
             pad = options.alphabetCharacters[pi]
         }

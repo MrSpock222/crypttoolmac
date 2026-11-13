@@ -3,7 +3,7 @@ import CTCommon
 import UniformTypeIdentifiers
 
 /// Describes how a document came into existence (CT1 shows this in the window title,
-/// e.g. "Caesar-Verschlüsselung von <Startbeispiel-de.txt>, Schlüssel <B>").
+/// e.g. "Caesar encryption of <Startingexample-en.txt>, key <B>").
 struct DocumentOrigin {
     var title: String
     /// Identifier of the producing method (used to pre-fill keys when decrypting).
@@ -93,11 +93,11 @@ final class CTDocument: NSDocument {
         if origin != nil {
             if untitledName == nil {
                 CTDocument.untitledCounter += 1
-                untitledName = "Unbenannt \(CTDocument.untitledCounter)"
+                untitledName = "Unnamed \(CTDocument.untitledCounter)"
             }
             return untitledName!
         }
-        return displayName ?? "Unbenannt"
+        return displayName ?? "Unnamed"
     }
 
     // MARK: Text access

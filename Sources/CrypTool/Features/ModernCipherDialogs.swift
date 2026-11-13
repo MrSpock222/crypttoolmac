@@ -7,8 +7,8 @@ import CTModern
 extension SymmetricAlgorithm {
     var ct1Name: String {
         switch self {
-        case .tripleDESECB: return "Triple-DES (ECB)"
-        case .tripleDESCBC: return "Triple-DES (CBC)"
+        case .tripleDESECB: return "Triple DES (ECB)"
+        case .tripleDESCBC: return "Triple DES (CBC)"
         case .aes: return "Rijndael (AES)"
         default: return displayName
         }
@@ -17,9 +17,9 @@ extension SymmetricAlgorithm {
     /// CT1 combo entry "%d Bit" plus " (%d Bit effektiv)" for algorithms with DES parity bits.
     func ct1KeyLengthLabel(_ bits: Int) -> String {
         switch self {
-        case .desECB, .desCBC, .desl, .tripleDESECB, .tripleDESCBC: return "\(bits) Bit (\(7 * bits / 8) Bit effektiv)"
-        case .desx, .desxl: return "\(bits) Bit (184 Bit effektiv)"
-        default: return "\(bits) Bit"
+        case .desECB, .desCBC, .desl, .tripleDESECB, .tripleDESCBC: return "\(bits) bits (effectively \(7 * bits / 8) bits)"
+        case .desx, .desxl: return "\(bits) bits (effectively 184 bits)"
+        default: return "\(bits) bits"
         }
     }
 }
@@ -39,15 +39,15 @@ struct SymmetricDialog: View {
 
     private var caption: String {
         switch algorithm {
-        case .mars, .rc6, .serpent, .twofish: return "Schlüsseleingabe: \(algorithm.ct1Name) (AES-Kandidat)"
-        default: return "Schlüsseleingabe: \(algorithm.ct1Name)"
+        case .mars, .rc6, .serpent, .twofish: return "Key Entry: \(algorithm.ct1Name) (AES candidate)"
+        default: return "Key Entry: \(algorithm.ct1Name)"
         }
     }
 
     var body: some View {
         DialogScaffold(title: caption, minWidth: 520) {
-            Text("Geben Sie den Schlüssel mit Hexadezimalzeichen (0..9, A..F) ein.")
-            Picker("Schlüssellänge:", selection: $keyBits) {
+            Text("Enter the key using hexadecimal characters (0..9, A..F).")
+            Picker("Key length:", selection: $keyBits) {
                 ForEach(algorithm.keySizesBits, id: \.self) { Text(algorithm.ct1KeyLengthLabel($0)).tag($0) }
             }
             .frame(width: 320)
@@ -58,9 +58,9 @@ struct SymmetricDialog: View {
                 CT1PasteKeyButton(method: method) { pasteKey($0) }
             }
             HStack {
-                Text(keyValid ? "" : "Der Schlüssel muss \(keyBits / 8) Bytes lang sein.").font(.caption).foregroundStyle(.red)
+                Text(keyValid ? "" : "The key must be \(keyBits / 8) bytes long.").font(.caption).foregroundStyle(.red)
                 Spacer()
-                Button("Zufälliger Schlüssel") { randomKey() }.controlSize(.small)
+                Button("Random key") { randomKey() }.controlSize(.small)
             }
             if algorithm.blockSize > 0 {
                 Text("\(algorithm.modeDescription)").font(.caption).foregroundStyle(.secondary)
@@ -193,8 +193,8 @@ final class BruteForceModel: ObservableObject {
             if error < 60 { return String(format: "%02d:%02d h", s / 3600, (s / 60) % 60) }
             return String(format: "%02d h", s / 3600)
         }
-        if rest < 86_400 * 365 { return String(format: "%.1f Tage", rest / 86_400).replacingOccurrences(of: ".", with: ",") }
-        return String(format: "%.2g Jahre", rest / (86_400 * 365)).replacingOccurrences(of: ".", with: ",")
+        if rest < 86_400 * 365 { return String(format: "%.1f days", rest / 86_400) }
+        return String(format: "%.2g years", rest / (86_400 * 365))
     }
 }
 
@@ -214,22 +214,22 @@ struct BruteForceDialog: View {
     }
 
     var body: some View {
-        DialogScaffold(title: "Brute-Force-Analyse von \(algorithm.ct1Name)", minWidth: 560) {
-            Text("Sie können den Suchraum einschränken, um die Suchzeit zu verkürzen. Geben Sie dazu bekannte Teile des Schlüssels hexadezimal ein, unbekannte mit <*>.")
+        DialogScaffold(title: "Brute-Force Analysis of \(algorithm.ct1Name)", minWidth: 560) {
+            Text("The search space can be limited in order to reduce the search time. To do this, enter known parts of the key in hexadecimal notation, unknown as <*>.")
                 .fixedSize(horizontal: false, vertical: true)
             Grid(alignment: .topLeading, horizontalSpacing: 8, verticalSpacing: 6) {
                 GridRow {
-                    Text("Beispiel:")
-                    Text("Mit der Eingabe <00 ** AB ** ... **>  durchsuchen Sie alle Schlüssel, die mit einem Nullbyte beginnen, gefolgt von einem unbekannten Byte, dem Byte <AB>, und einem unbekannten Rest.")
+                    Text("Example:")
+                    Text("Enter <00 ** AB ** ... **>  to search all keys starting with a zero byte, followed by an unknown byte, the byte <AB>, and an unknown tail.")
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 GridRow {
-                    Text("Tipp:")
-                    Text("Die Suchzeit bewegt sich im Bereich von Minuten oder Stunden, wenn Sie höchstens 6 Sterne (*) (= 24 Bit) verwenden.")
+                    Text("Hint:")
+                    Text("The search time will be in the order of minutes to hours if you use 6 or fewer asterisks (leaving a 24-bit search space).")
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }.font(.callout)
-            Picker("Schlüssellänge:", selection: $keyBits) {
+            Picker("Key length:", selection: $keyBits) {
                 ForEach(algorithm.keySizesBits, id: \.self) { Text(algorithm.ct1KeyLengthLabel($0)).tag($0) }
             }
             .frame(width: 320)
@@ -237,10 +237,10 @@ struct BruteForceDialog: View {
             CT1FixedHexField(text: $pattern, byteLength: keyBits / 8, fill: "*", allowStar: true)
                 .frame(height: keyBits > 192 ? 52 : 36)
         } buttons: {
-            Button("Hilfe") { HelpCenter.show(action: .bruteForce(algorithm.rawValue)) }
-            Button("Analyseoptionen") { OptionsWindows.showAnalysisOptions() }
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Starten") { start() }.keyboardShortcut(.defaultAction)
+            Button("Help") { HelpCenter.show(action: .bruteForce(algorithm.rawValue)) }
+            Button("Analysis Options") { OptionsWindows.showAnalysisOptions() }
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Start") { start() }.keyboardShortcut(.defaultAction)
         }
         .onAppear {
             let bits = algorithm.keySizesBits.first ?? algorithm.defaultKeyBits
@@ -283,18 +283,18 @@ enum BruteForceFlow {
         let model = BruteForceModel()
         let window = CT1.window(of: doc)
         let searchBits = Int(log2(max(1, SymmetricBruteForce.keyspaceSize(pattern: pattern, algorithm: alg))).rounded())
-        WindowPresenter.sheet(on: window, title: "Fortschritt") { close in
-            BruteForceProgressView(model: model, title: "Brute-Force-Analyse von \(alg.ct1Name)", searchBits: searchBits, close: close)
+        WindowPresenter.sheet(on: window, title: "Progress") { close in
+            BruteForceProgressView(model: model, title: "Brute-Force Analysis of \(alg.ct1Name)", searchBits: searchBits, close: close)
         }
         model.onFinish = { [weak model] in
             DispatchQueue.main.async {
                 guard let model else { return }
                 if let e = model.error { Alerts.error(e); return }
                 if model.results.isEmpty {
-                    Alerts.info("Im Suchbereich befinden sich keine gültigen Schlüssel für den verschlüsselten Text!")
+                    Alerts.info("There are no valid keys for the encrypted text in the search range!")
                     return
                 }
-                WindowPresenter.sheet(on: window, title: "Ergebnisse der Brute-Force-Analyse") { close in
+                WindowPresenter.sheet(on: window, title: "Brute-Force Analysis - Results") { close in
                     BruteForceResultsView(algorithm: alg, document: doc, results: model.results, windowLength: model.windowLength, close: close)
                 }
             }
@@ -313,9 +313,9 @@ struct BruteForceProgressView: View {
         VStack(spacing: 12) {
             Text(title).font(.headline)
             ProgressView(value: model.progress)
-            Text("Vollständige \(searchBits) Bit-Suche zu \(Int(model.progress * 100))% erledigt.\nRestzeit: \(model.remainingTime)")
+            Text("\(searchBits)-bit brute-force search \(Int(model.progress * 100))% completed.\nRemaining time: \(model.remainingTime)")
                 .multilineTextAlignment(.center)
-            Button("Abbrechen") { model.cancel() }.keyboardShortcut(.cancelAction)
+            Button("Cancel") { model.cancel() }.keyboardShortcut(.cancelAction)
         }
         .padding(18)
         .frame(width: 380)
@@ -333,25 +333,25 @@ struct BruteForceResultsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Ergebnisse der Brute-Force-Analyse").font(.title3.weight(.semibold))
-            Text("Die Brute-Force-Analyse entschlüsselte die ersten \(windowLength) Zeichen des Chiffrats - indem nacheinander alle möglichen Schlüssel aus dem gegebenen Schlüsselraum angewendet wurden. Danach wurde für jede entschlüsselte Nachricht der Entropiewert bestimmt. Die folgende Liste enthält die entschlüsselten Nachrichten mit den niedrigsten Entropiewerten.\nGerade bei sehr kurzen Chiffraten kann es sein, dass es falsche Kandidaten mit einem kleinen Entropiewert gibt. Sie haben hier die Möglichkeit, den Kandidaten mit der richtigen Entschlüsselung von Hand auszuwählen.")
+            Text("Brute-Force Analysis - Results").font(.title3.weight(.semibold))
+            Text("After a brute-force analysis of the given ciphertext decrypted with all possible keys in the selected key space, the entropy value of each decryption was calculated. This list contains the decrypted messages with the lowest entropy values. It is possible that the decryption with the smallest entropy is not the correct decryption, especially for very short ciphertexts. You can choose here which candidate you believe to be the correct decryption (note that only the first \(windowLength) characters are decrypted and displayed).")
                 .font(.callout).fixedSize(horizontal: false, vertical: true)
             Table(results.enumerated().map { BruteForceRow(id: $0.offset, element: $0.element) }, selection: $selected) {
-                TableColumn("Entropie") { r in Text(String(format: "%3.4f", r.element.entropy)).monospacedDigit() }.width(70)
-                TableColumn("Entschlüsselung: Hex-Dump") { r in
+                TableColumn("Entropy") { r in Text(String(format: "%3.4f", r.element.entropy)).monospacedDigit() }.width(70)
+                TableColumn("Decryption: hex dump") { r in
                     Text(r.element.plaintextPreview.prefix(256).map { String(format: "%02X ", $0) }.joined()).font(.system(.caption, design: .monospaced))
                 }
-                TableColumn("Entschlüsselung") { r in
+                TableColumn("Decryption") { r in
                     Text(String(r.element.plaintextPreview.prefix(256).map { $0 >= 32 && $0 < 128 ? Character(UnicodeScalar($0)) : "." }))
                         .font(.system(.caption, design: .monospaced))
                 }
-                TableColumn("Schlüssel") { r in Text(Hex.encode(r.element.key)).font(.system(.caption, design: .monospaced)) }
+                TableColumn("Key") { r in Text(Hex.encode(r.element.key)).font(.system(.caption, design: .monospaced)) }
             }
             .frame(minHeight: 240)
             HStack {
                 Spacer()
-                Button("Auswahl übernehmen") { accept() }.keyboardShortcut(.defaultAction)
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Accept selection") { accept() }.keyboardShortcut(.defaultAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(18)
@@ -360,13 +360,13 @@ struct BruteForceResultsView: View {
 
     private func accept() {
         guard let i = selected, i < results.count else {
-            Alerts.info("Bitte selektieren Sie einen Entschlüsselungskandidaten, oder\nwählen Sie \"Abbrechen\" in der Maske mit den Analyse-Ergebnissen, wenn der Angriff nicht erfolgreich war.")
+            Alerts.info("Please select a decryption candidate or select 'Cancel' in the dialog with the results\nof the brute-force analysis if the attack was unsuccessful.")
             return
         }
         let key = results[i].key
         let keyHex = Hex.encode(key)
-        // CT1 IDS_STRING_AUTOMATIC_ANALYSE "%s-Analyse von <%s>, Schlüssel <%s>"
-        let title = DocumentFactory.title("\(algorithm.ct1Name)-Analyse", of: document, key: keyHex)
+        // CT1 IDS_STRING_AUTOMATIC_ANALYSE "%s Analysis of <%s>, key: <%s>"
+        let title = DocumentFactory.title("\(algorithm.ct1Name) Analysis", of: document, key: keyHex, keyLabel: "key:")
         if CipherRun.open(bytes: document, method: "sym." + algorithm.rawValue, title: title, key: keyHex, {
             try SymmetricCipher.decrypt(algorithm, key: key, data: document.bytes)
         }) != nil { close() }

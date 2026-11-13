@@ -13,7 +13,7 @@ enum PKIPKCS12 {
 
     static func export(_ k: StoredKey) {
         guard let pin = PKIPinAccess.ask(for: k), let material = PKIPinAccess.open(k, pin: pin) else { return }
-        guard let pw = askPasswords(first: "Bitte geben Sie die PIN für die PKCS#12-Datei ein.", second: nil) else { return }
+        guard let pw = askPasswords(first: "Please enter the PIN for the PKCS#12 file.", second: nil) else { return }
         let save = NSSavePanel()
         save.nameFieldStringValue = k.ct1Identifier + ".p12"
         guard save.runModal() == .OK, let url = save.url else { return }
@@ -29,7 +29,7 @@ enum PKIPKCS12 {
             keyDER = PKIDER.seq([PKIDER.int(0), PKIDER.int(pr.p), PKIDER.int(pr.q), PKIDER.int(pr.g), PKIDER.int(d.y), PKIDER.int(d.x)])
             pemType = "DSA PRIVATE KEY"
         case .ecc:
-            return PKIModal.warning("PKCS#12-Struktur konnte nicht erzeugt werden.")
+            return PKIModal.warning("PKCS#12 structure could not be created.")
         }
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent("ctp12-" + UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: dir) }
@@ -41,9 +41,9 @@ enum PKIPKCS12 {
             _ = try openssl(["req", "-new", "-x509", "-utf8", "-key", keyURL.path, "-subj", subject, "-days", "365", "-sha1", "-out", certURL.path])
             _ = try openssl(["pkcs12", "-export", "-inkey", keyURL.path, "-in", certURL.path, "-name", k.ct1Identifier,
                              "-out", url.path, "-passout", "env:CTP12PASS"], password: pw)
-            PKIModal.info("Die PSE wurde als PKCS#12-Datei gespeichert:\n\(url.path)")
+            PKIModal.info("The PSE has been saved as a PKCS#12 file:\n\(url.path)")
         } catch {
-            PKIModal.warning("PKCS#12-Struktur konnte nicht erzeugt werden.\n\n\(error.localizedDescription)")
+            PKIModal.warning("PKCS#12 structure could not be created.\n\n\(error.localizedDescription)")
         }
     }
 
@@ -54,13 +54,13 @@ enum PKIPKCS12 {
         open.allowedContentTypes = ["p12", "pfx"].compactMap { UTType(filenameExtension: $0) }
         open.allowsOtherFileTypes = true
         guard open.runModal() == .OK, let url = open.url else { return }
-        guard let p12pw = askPasswords(first: "Bitte geben Sie die PIN für die PKCS#12-Datei ein.", second: nil, verify: false),
-              let psePin = askPasswords(first: "Bitte geben Sie die PSE-PIN ein.", second: nil), !psePin.isEmpty else { return }
+        guard let p12pw = askPasswords(first: "Please enter the PIN for the PKCS#12 file.", second: nil, verify: false),
+              let psePin = askPasswords(first: "Please enter the PSE PIN.", second: nil), !psePin.isEmpty else { return }
         do {
             let out = try openssl(["pkcs12", "-in", url.path, "-nodes", "-passin", "env:CTP12PASS"], password: p12pw)
             let text = String(decoding: out, as: UTF8.self)
             guard let (der, type) = pemBlock(text, types: ["PRIVATE KEY", "RSA PRIVATE KEY", "DSA PRIVATE KEY"]) else {
-                throw CTError("Die PKCS#12-Datei enthält keinen privaten Schlüssel.")
+                throw CTError("The PKCS#12 file does not contain a private key.")
             }
             let material = try parsePrivateKey(der, type: type)
             var (name, first, label, created) = (defaultName.isEmpty ? "Import" : defaultName,
@@ -79,7 +79,7 @@ enum PKIPKCS12 {
                 if words.count >= 2 { first = String(words[0]); name = words.dropFirst().joined(separator: " ") }
             }
             let k = try KeyStore.shared.add(lastName: name, firstName: first, label: label, material: material, pin: psePin, created: created)
-            PKIModal.info("Die von ihnen gewählten Parameter und das erzeugte\nSchlüsselpaar wurden erfolgreich abgespeichert.\nDer zugewiesene Schlüsselbezeichner ist:\n'\(k.ct1Identifier)'")
+            PKIModal.info("The parameters chosen by you and the new\nkey pair have been successfully saved.\nThe assigned key identifier is \n'\(k.ct1Identifier)'.")
             completion(k)
         } catch {
             PKIModal.warning("Could not decode PKCS#12 file\n\n\(error.localizedDescription)")
@@ -91,21 +91,21 @@ enum PKIPKCS12 {
     /// CT1 IDD_CHANGE_PIN style prompt: PIN (+ verification).
     static func askPasswords(first: String, second: String?, verify: Bool = true) -> String? {
         let a = NSAlert()
-        a.messageText = "PIN-Eingabe"
+        a.messageText = "PIN Request"
         a.informativeText = first
         let f1 = NSSecureTextField(frame: NSRect(x: 0, y: 30, width: 240, height: 24))
         let f2 = NSSecureTextField(frame: NSRect(x: 0, y: 0, width: 240, height: 24))
         f1.placeholderString = "PIN"
-        f2.placeholderString = "Verifikation"
+        f2.placeholderString = "Verification"
         let box = NSView(frame: NSRect(x: 0, y: 0, width: 240, height: verify ? 54 : 24))
         if verify { box.addSubview(f1); box.addSubview(f2) } else { f1.frame.origin.y = 0; box.addSubview(f1) }
         a.accessoryView = box
         a.addButton(withTitle: "OK")
-        a.addButton(withTitle: "Abbrechen")
+        a.addButton(withTitle: "Cancel")
         a.window.initialFirstResponder = f1
         guard a.runModal() == .alertFirstButtonReturn else { return nil }
         if verify && f1.stringValue != f2.stringValue {
-            PKIModal.warning("PIN und PIN-Verifikation stimmen nicht überein.\nBitte nochmal eingeben.")
+            PKIModal.warning("PIN and PIN confirmation do not agree.\\Please enter again.")
             return nil
         }
         return f1.stringValue
@@ -127,7 +127,7 @@ enum PKIPKCS12 {
         let errData = err.fileHandleForReading.readDataToEndOfFile()
         p.waitUntilExit()
         guard p.terminationStatus == 0 else {
-            let msg = String(decoding: errData, as: UTF8.self).split(separator: "\n").first.map(String.init) ?? "openssl-Fehler"
+            let msg = String(decoding: errData, as: UTF8.self).split(separator: "\n").first.map(String.init) ?? "openssl error"
             throw CTError(msg)
         }
         return data
@@ -155,7 +155,7 @@ enum PKIPKCS12 {
     }
 
     private static func parsePrivateKey(_ der: [UInt8], type: String) throws -> PrivateKeyMaterial {
-        let bad = CTError("Der private Schlüssel konnte nicht gelesen werden.")
+        let bad = CTError("The private key could not be read.")
         guard let top = PKIDER.parse(der) else { throw bad }
         func ints(_ n: PKIDER.Node) -> [BigUInt] { n.children.filter { $0.tag == 0x02 }.map { BigUInt(bigEndianBytes: $0.value) } }
         switch type {
@@ -181,7 +181,7 @@ enum PKIPKCS12 {
                 guard pqg.count == 3, inner.tag == 0x02 else { throw bad }
                 return .dsa(DSAKeyPair(parameters: DSAParameters(p: pqg[0], q: pqg[1], g: pqg[2]), x: BigUInt(bigEndianBytes: inner.value)))
             }
-            throw CTError("Nur RSA- und DSA-Schlüssel können importiert werden.")
+            throw CTError("Only RSA and DSA keys can be imported.")
         }
     }
 }

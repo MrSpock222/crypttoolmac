@@ -40,7 +40,7 @@ extension CT1Analysis {
             present = h.filter { $0 > 0 }.count
             entropy = Statistics.entropy(counts: h)
             guard !document.bytes.isEmpty else {
-                Alerts.error("Die Eingabe muss mindestens 1 (nicht unbedingt verschiedene) Buchstaben des eingestellten Alphabets enthalten. Das Alphabet können Sie unter Optionen \\ Textoptionen ändern.")
+                Alerts.error("The input must contain at least 1 (not necessarily different) character(s) from the current alphabet. The alphabet can be configured in Options \\ Text Options.")
                 return
             }
         } else {
@@ -50,29 +50,29 @@ extension CT1Analysis {
             present = counts.filter { $0 > 0 }.count
             entropy = Statistics.entropy(counts: counts)
             guard counts.reduce(0, +) > 0 else {
-                Alerts.error("Die Eingabe muss mindestens 1 (nicht unbedingt verschiedene) Buchstaben des eingestellten Alphabets enthalten. Das Alphabet können Sie unter Optionen \\ Textoptionen ändern.")
+                Alerts.error("The input must contain at least 1 (not necessarily different) character(s) from the current alphabet. The alphabet can be configured in Options \\ Text Options.")
                 return
             }
         }
         var info: String
         if alphabetSize < 256 {
             info = present < alphabetSize
-                ? "Das analysierte Dokument enthält \(present) der \(alphabetSize) Zeichen des eingestellten Alphabets."
-                : "Das analysierte Dokument enthält alle \(alphabetSize) Zeichen des eingestellten Alphabets."
+                ? "This document contains \(present) different characters compared to the \(alphabetSize) characters of the selected alphabet."
+                : "This document contains all \(alphabetSize) different characters of the selected alphabet."
         } else {
             info = present < alphabetSize
-                ? "Das analysierte Dokument enthält \(present) unterschiedliche Bytes von \(alphabetSize) möglichen."
-                : "Das analysierte Dokument enthält alle \(alphabetSize) möglichen Bytes."
+                ? "This document contains \(present) different byte values (there are \(alphabetSize) different byte values)."
+                : "This document contains all \(alphabetSize) possible byte values."
         }
-        info += "\n\nSeine Entropie beträgt \(CT1Format.double(entropy, decimals: 2))\n(maximal mögliche Entropie \(CT1Format.double(log2(Double(max(alphabetSize, 1))), decimals: 2)))."
-        Alerts.info(info, title: "Entropie <\(document.shortName)>")
+        info += "\n\nThe entropy of the whole document is \(CT1Format.double(entropy, decimals: 2))\n(maximum possible entropy \(CT1Format.double(log2(Double(max(alphabetSize, 1))), decimals: 2)))."
+        Alerts.info(info, title: "Entropy <\(document.shortName)>")
     }
 
     // MARK: N-Gramm
 
     /// Analyse ▸ Werkzeuge ▸ N-Gramm (CT1 IDD_NGRAM_ANALYSIS, "N-Gramm-Liste von %s").
     static func openNGram(document: CTDocument) {
-        toolWindow(id: nil, title: "N-Gramm-Liste von \(document.shortName)", size: CGSize(width: 760, height: 560)) { close in
+        toolWindow(id: nil, title: "N-Gram List of \(document.shortName)", size: CGSize(width: 760, height: 560)) { close in
             CT1NGramListView(document: document, binary: isBinaryView(document), close: close)
         }
     }
@@ -83,15 +83,15 @@ extension CT1Analysis {
     static func openPeriodicity(document: CTDocument) {
         let bytes = document.bytes
         guard bytes.count >= 4 else {
-            Alerts.error("Die zu analysierende Datei muss mindestens 4 Bytes groß sein!")
+            Alerts.error("The file to be analyzed must be at least 4 bytes large!")
             return
         }
         let results = Statistics.periodicity(bytes)
         guard !results.isEmpty else {
-            Alerts.info("Keine Periodizität gefunden.")
+            Alerts.info("No periodicity found.")
             return
         }
-        toolWindow(id: nil, title: "Ausgabe der gefundenen Perioden", size: CGSize(width: 860, height: 520)) { close in
+        toolWindow(id: nil, title: "Results of Periodicity Analysis", size: CGSize(width: 860, height: 520)) { close in
             CT1PeriodicityView(document: document, results: results, close: close)
         }
     }
@@ -102,7 +102,7 @@ extension CT1Analysis {
     static func openFrequencyTest(document: CTDocument) {
         guard checkRandomTestSize(document) else { return }
         if document.bytes.count * 8 < 10_000 {
-            Alerts.info("Für den Frequency-Test wird eine Dateigröße von mindestens 1250 Bytes empfohlen.")
+            Alerts.info("For frequency test it is recommended to examine at least 1250 bytes.")
         }
         openRandomTest(.frequency, document)
     }
@@ -122,7 +122,7 @@ extension CT1Analysis {
     /// Analyse ▸ Zufallsanalyse ▸ Runs-Test (Runs- und Long-Runs-Test).
     static func openRunsTest(document: CTDocument) {
         guard checkRandomTestSize(document) else { return }
-        toolWindow(id: nil, title: "Runs-Tests von \(document.shortName)", size: CGSize(width: 520, height: 600)) { close in
+        toolWindow(id: nil, title: "Runs Tests of \(document.shortName)", size: CGSize(width: 520, height: 600)) { close in
             CT1RunsTestView(document: document, close: close)
         }
     }
@@ -131,13 +131,13 @@ extension CT1Analysis {
     static func openFIPSTest(document: CTDocument) {
         let n = document.bytes.count
         guard n >= 2500 else {
-            Alerts.error("Die FIPS-PUB-140-1 Testbatterie analysiert nach Spezifikation genau 2.500 Bytes.\nDie zu dem ausgewählten Fenster gehörende Datei ist nur \(CT1Format.integer(n)) Bytes groß.\nDer Test kann deshalb nicht ausgeführt werden!")
+            Alerts.error("The FIPS-PUB-140-1 test battery is specified for exactly 2,500 bytes.\nThe currently selected file has a length of only \(CT1Format.integer(n)) bytes.\nTherefore the test cannot be performed.")
             return
         }
         if n > 2500 {
-            Alerts.info("Die FIPS-PUB-140-1 Testbatterie analysiert nach Spezifikation genau 2.500 Bytes.\nDa die zu dem ausgewählten Fenster gehörende Datei größer (\(CT1Format.integer(n)) Bytes) ist,\nwerden nach OK nur die ersten 2.500 Byte der gesamten Datei getestet.")
+            Alerts.info("The FIPS-PUB-140-1 test battery is specified for exactly 2,500 bytes.\nBecause the currently selected document (\(CT1Format.integer(n)) bytes) is bigger,\nCrypTool will test only the first 2,500 bytes of the whole document.")
         }
-        toolWindow(id: nil, title: "FIPS-PUB-140-1 Testbatterie von \(document.shortName)", size: CGSize(width: 460, height: 500)) { close in
+        toolWindow(id: nil, title: "FIPS-PUB-140-1 test battery of \(document.shortName)", size: CGSize(width: 460, height: 500)) { close in
             CT1FIPSView(document: document, close: close)
         }
     }
@@ -145,24 +145,24 @@ extension CT1Analysis {
     /// Analyse ▸ Zufallsanalyse ▸ Vitányi.
     static func openVitanyi(document: CTDocument) {
         guard document.bytes.count >= 500 else {
-            Alerts.error("Für die Vitányi-Analyse muss die Eingabedatei mindestens 500 Bytes lang sein!")
+            Alerts.error("For Vitányi analysis, the input file size must exceed 500 bytes!")
             return
         }
-        WindowPresenter.tool(id: nil, title: "Vitányi-Diagramm von <\(document.shortName)>", size: CGSize(width: 640, height: 560)) {
+        WindowPresenter.tool(id: nil, title: "Vitányi Diagram of <\(document.shortName)>", size: CGSize(width: 640, height: 560)) {
             RandomTestView(kind: .vitanyi, document: document)
         }
     }
 
     /// Analyse ▸ Zufallsanalyse ▸ 3D-Visualisierung.
     static func open3DVisualization(document: CTDocument) {
-        WindowPresenter.tool(id: nil, title: "3-D-Visualisierung: \(document.shortName)", size: CGSize(width: 760, height: 680)) {
+        WindowPresenter.tool(id: nil, title: "3-D Visualization: \(document.shortName)", size: CGSize(width: 760, height: 680)) {
             Random3DView(document: document)
         }
     }
 
     private static func checkRandomTestSize(_ document: CTDocument) -> Bool {
         if document.bytes.count < 16 {
-            Alerts.error("Die Datei muss mindestens 16 Bytes groß sein !")
+            Alerts.error("The file size must be at least 16 bytes !")
             return false
         }
         return true
@@ -171,9 +171,9 @@ extension CT1Analysis {
     private static func openRandomTest(_ kind: CT1RandomTestView.TestKind, _ document: CTDocument) {
         let title: String
         switch kind {
-        case .frequency: title = "Frequency-Test von \(document.shortName)"
-        case .poker: title = "Poker-Test von \(document.shortName)"
-        case .serial: title = "Serial-Test (überlappend) von \(document.shortName)"
+        case .frequency: title = "Frequency test of \(document.shortName)"
+        case .poker: title = "Poker Test of \(document.shortName)"
+        case .serial: title = "Serial Test (overlapping) of \(document.shortName)"
         }
         toolWindow(id: nil, title: title, size: CGSize(width: 500, height: 430)) { close in
             CT1RandomTestView(kind: kind, document: document, close: close)
@@ -214,45 +214,45 @@ struct CT1NGramListView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .leading, spacing: 10) {
-                GroupBox("Auswahl") {
+                GroupBox("Selection") {
                     VStack(alignment: .leading, spacing: 6) {
-                        radio(0) { Text("Histogramm (\(counts[0]))") }
-                        radio(1) { Text("Digramm (\(counts[1]))") }
-                        radio(2) { Text("Trigramm (\(counts[2]))") }
+                        radio(0) { Text("Histogram (\(counts[0]))") }
+                        radio(1) { Text("Digram (\(counts[1]))") }
+                        radio(2) { Text("Trigram (\(counts[2]))") }
                         radio(3) {
                             HStack(spacing: 2) {
                                 TextField("", text: $freeN).frame(width: 30)
-                                Text("-Gramm (\(counts[3]))")
+                                Text("-gram (\(counts[3]))")
                             }
                         }
                         HStack(spacing: 4) {
-                            Text("Anzeige der")
+                            Text("Display of the")
                             TextField("", text: $showCount).frame(width: 50)
                         }
-                        Text("häufigsten N-Gramme (erlaubte Werte: 1-5000).")
+                        Text("most common N-grams (allowed values: 1-5000)")
                             .font(.callout).fixedSize(horizontal: false, vertical: true)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(4)
                 }
-                Button("Textoptionen") { OptionsWindows.showTextOptions() }
+                Button("Text options") { OptionsWindows.showTextOptions() }
                     .frame(maxWidth: .infinity)
                     .disabled(binary)
                 Spacer().frame(height: 8)
-                Button("Liste berechnen", action: evaluate)
+                Button("Compute list", action: evaluate)
                     .keyboardShortcut(.defaultAction)
                     .frame(maxWidth: .infinity)
-                Button("Liste speichern", action: save)
+                Button("Save list", action: save)
                     .disabled(result == nil)
-                Button("Schließen", action: close).keyboardShortcut(.cancelAction)
+                Button("Close", action: close).keyboardShortcut(.cancelAction)
                 Spacer()
             }
             .frame(width: 200)
             Table(rows) {
-                TableColumn("Nr.") { Text(String(format: "%3d", $0.id + 1)).font(.system(.body, design: .monospaced)) }.width(45)
-                TableColumn("Zeichenfolge") { Text($0.label).font(.system(.body, design: .monospaced)) }
-                TableColumn("Häufigkeit in %") { Text($0.percent).font(.system(.body, design: .monospaced)) }.width(110)
-                TableColumn("Häufigkeit") { Text("\($0.count)").font(.system(.body, design: .monospaced)) }.width(90)
+                TableColumn("No.") { Text(String(format: "%3d", $0.id + 1)).font(.system(.body, design: .monospaced)) }.width(45)
+                TableColumn("Character sequence") { Text($0.label).font(.system(.body, design: .monospaced)) }
+                TableColumn("Frequency in %") { Text($0.percent).font(.system(.body, design: .monospaced)) }.width(110)
+                TableColumn("Frequency") { Text("\($0.count)").font(.system(.body, design: .monospaced)) }.width(90)
             }
         }
         .padding(12)
@@ -285,11 +285,11 @@ struct CT1NGramListView: View {
     /// "Liste berechnen" (CT1 OnEvalNGram).
     private func evaluate() {
         guard let n = nValue() else {
-            Alerts.error("Bitte geben Sie eine ganze Zahl zwischen 3 und 16 ein.")
+            Alerts.error("Please enter an integer between 3 and 16.")
             return
         }
         guard let cnt = Int(showCount.trimmingCharacters(in: .whitespaces)), cnt > 0, cnt <= 5000 else {
-            Alerts.error("Die Anzahl der Tabelleneinträge ist auf 5.000 Zeilen beschränkt!\nBitte geben Sie eine Zahl zwischen 1 und 5.000 ein.")
+            Alerts.error("The number of Rows is bounded by 5,000!\nPlease enter a number between 1 and 5,000.")
             return
         }
         let selected = choice == 3 ? n : choice + 1
@@ -310,7 +310,7 @@ struct CT1NGramListView: View {
         let size = binary ? min(document.bytes.count, CT1NGram.maxBytes)
                           : min(document.text.data(using: .windowsCP1252)?.count ?? document.bytes.count, CT1NGram.maxBytes)
         let text = CT1NGram.listDocument(r, rows: rows, method: method, title: document.shortName, fileSize: size)
-        DocumentFactory.openResult(text: text, title: "\(method)Analyse von <\(document.shortName)>", parent: document)
+        DocumentFactory.openResult(text: text, title: "\(method) Analysis of <\(document.shortName)>", parent: document)
         close()
     }
 }
@@ -327,31 +327,31 @@ struct CT1PeriodicityView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Jede Zeile der Ausgabe unten enthält pro gefundener Periode folgende Informationen:")
-                Text("- die erste Position in der Datei, wo die Periode startet (das erste Zeichen in der Datei hat den Offset-Wert 0)")
-                Text("- die Länge der Periode")
-                Text("- die Anzahl, wie häufig die Periode vorkommt")
-                Text("- die ersten maximal 20 Bytes, mit der die Periode beginnt (ausgegeben im ASCII- und Hexformat)")
+                Text("Each line below contains the following characteristics of the found cycles:")
+                Text("- the first position in the file, where the cycle starts (the first character within the file has the offset value 1)")
+                Text("- the length of the cycle")
+                Text("- the number, how often the cycle appears")
+                Text("- the first maximum 20 bytes of the cycle (presented in ASCII and hex format)")
             }
             .font(.callout)
             Table(results.enumerated().map { Row(id: $0.offset, r: $0.element) }) {
-                TableColumn("Nr.") { Text("\($0.id + 1)") }.width(40)
+                TableColumn("No.") { Text("\($0.id + 1)") }.width(40)
                 TableColumn("Offset") { Text("\($0.r.offset + 1)") }.width(60)
-                TableColumn("Länge") { Text("\($0.r.length)") }.width(60)
-                TableColumn("Periodenzahl") { Text("\($0.r.repetitions)") }.width(90)
-                TableColumn("Periodeninhalt") { Text(CT1Periodicity.text($0.r)).font(.system(.body, design: .monospaced)) }.width(170)
-                TableColumn("Periodeninhalt (Hex)") { Text(CT1Periodicity.hex($0.r)).font(.system(.body, design: .monospaced)) }
+                TableColumn("Length") { Text("\($0.r.length)") }.width(60)
+                TableColumn("Number of cycles") { Text("\($0.r.repetitions)") }.width(90)
+                TableColumn("Cycle content") { Text(CT1Periodicity.text($0.r)).font(.system(.body, design: .monospaced)) }.width(170)
+                TableColumn("Cycle content (hex)") { Text(CT1Periodicity.hex($0.r)).font(.system(.body, design: .monospaced)) }
             }
             HStack {
-                Button("Liste im Hauptfenster anzeigen") {
-                    let header = "Periodenanalyse von \(document.shortName):"
+                Button("Save list into main window") {
+                    let header = "Periodicity analysis of \(document.shortName):"
                     DocumentFactory.openResult(text: CT1Periodicity.listDocument(results, title: document.shortName),
                                                title: header, parent: document)
                     close()
                 }
                 .keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.cancelAction)
+                Button("Close", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(12)
@@ -388,39 +388,39 @@ struct CT1RandomTestView: View {
     @CTState private var passed: Bool?
 
     private var testName: String {
-        switch kind { case .frequency: return "Frequency-Test"; case .poker: return "Poker-Test"; case .serial: return "Serial-Test" }
+        switch kind { case .frequency: return "Frequency test"; case .poker: return "Poker test"; case .serial: return "Serial test" }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Parameterwahl") {
+            GroupBox("Parameter options") {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Signifikanzniveau alpha:")
+                        Text("Significance level alpha:")
                         Picker("", selection: $alpha) {
                             ForEach(CT1RandomTests.alphaLevels, id: \.self) { Text($0).tag($0) }
                         }.labelsHidden().frame(width: 80)
                         Spacer()
-                        Text("Tupelgröße:").foregroundStyle(kind == .poker ? .primary : .secondary)
+                        Text("Tuple size").foregroundStyle(kind == .poker ? .primary : .secondary)
                         Picker("", selection: $tupel) {
                             ForEach(1...4, id: \.self) { Text("\($0)").tag($0) }
                         }.labelsHidden().frame(width: 55).disabled(kind != .poker)
                     }
-                    Toggle("Default-Offset und -Testlänge", isOn: $useDefaults)
+                    Toggle("Default offset and test length", isOn: $useDefaults)
                         .onChange(of: useDefaults) { _, on in if on { resetRange() } }
-                    Toggle("Zufällige Blöcke aus der Datei verwenden", isOn: $randomBlocks)
+                    Toggle("Use randomly chosen sections from file", isOn: $randomBlocks)
                     HStack {
                         Text("Offset:")
                         TextField("", text: $offset).frame(width: 90)
                         Spacer()
-                        Text("Testlänge:")
+                        Text("Test length")
                         TextField("", text: $length).frame(width: 90)
                     }
                     .disabled(useDefaults)
                 }
                 .padding(4)
             }
-            GroupBox("Teststatus") {
+            GroupBox("Test results") {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(info.isEmpty ? " \n " : info).font(.system(.body, design: .monospaced))
                     HStack {
@@ -432,9 +432,9 @@ struct CT1RandomTestView: View {
                 .padding(4)
             }
             HStack {
-                Button("Test durchführen", action: runTest)
+                Button("Execute test", action: runTest)
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(14)
@@ -460,9 +460,9 @@ struct CT1RandomTestView: View {
                                          offset: off, length: useDefaults ? document.bytes.count : len,
                                          randomBlocks: randomBlocks, using: &g) else {
             info = ""
-            verdict = "Falsche Offset/Testlänge!"
+            verdict = "Wrong offset or test length !"
             passed = false
-            Alerts.error("Offset + Testlänge muss <= Dateilänge oder\nTestlänge muss nicht gleich Null sein !")
+            Alerts.error("Offset + test length must be smaller than the file size !")
             return
         }
         info = o.info
@@ -485,7 +485,7 @@ struct CT1RunsTestView: View {
     @CTState private var defaultLongRun = true
     @CTState private var longRunLength = "34"
     @CTState private var runInfo = ""
-    @CTState private var runVerdict = "\nBitte auf die \"Tests durchführen\"\ntaste drücken !!!"
+    @CTState private var runVerdict = "\nPlease select \"Execute tests\""
     @CTState private var runPassed: Bool?
     @CTState private var longInfo = ""
     @CTState private var longVerdict = ""
@@ -493,27 +493,27 @@ struct CT1RunsTestView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Runs-Parameter") {
+            GroupBox("Runs parameter") {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Signifikanzniveau alpha:")
+                        Text("Significance level alpha:")
                         Picker("", selection: $alpha) {
                             ForEach(CT1RandomTests.alphaLevels, id: \.self) { Text($0).tag($0) }
                         }.labelsHidden().frame(width: 80)
                     }
-                    Toggle("Default-Runs-Test-Parameter", isOn: $defaultRun)
+                    Toggle("Default run test parameter", isOn: $defaultRun)
                         .onChange(of: defaultRun) { _, on in if on { resetRuns() } }
-                    Toggle("Zufällige Blöcke aus der Datei verwenden", isOn: $randomBlocks)
+                    Toggle("Use randomly chosen sections from file", isOn: $randomBlocks)
                     Group {
                         HStack {
                             Text("Offset:")
                             TextField("", text: $offset).frame(width: 90)
                             Spacer()
-                            Text("Testlänge:")
+                            Text("Length:")
                             TextField("", text: $length).frame(width: 90)
                         }
                         HStack {
-                            Text("Run-Länge:")
+                            Text("Run length:")
                             TextField("", text: $runLength).frame(width: 60)
                         }
                     }
@@ -521,19 +521,19 @@ struct CT1RunsTestView: View {
                 }
                 .padding(4)
             }
-            GroupBox("Long-Runs-Parameter") {
+            GroupBox("Long runs parameter") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Toggle("Default-Long-Runs-Parameter", isOn: $defaultLongRun)
+                    Toggle("Default long runs parameter", isOn: $defaultLongRun)
                         .onChange(of: defaultLongRun) { _, on in if on { longRunLength = "34" } }
                     HStack {
-                        Text("Long-Runs-Länge:")
+                        Text("Maximal run length:")
                         TextField("", text: $longRunLength).frame(width: 70).disabled(defaultLongRun)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(4)
             }
-            GroupBox("Teststatus") {
+            GroupBox("Test status") {
                 VStack(alignment: .leading, spacing: 8) {
                     if !runInfo.isEmpty { Text(runInfo).font(.system(.body, design: .monospaced)) }
                     HStack {
@@ -550,9 +550,9 @@ struct CT1RunsTestView: View {
                 .padding(4)
             }
             HStack {
-                Button("Tests durchführen", action: runTests)
+                Button("Execute tests", action: runTests)
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(14)
@@ -573,13 +573,13 @@ struct CT1RunsTestView: View {
         if !defaultLongRun && (lrl > fileLength || lrl <= 0) {
             longPassed = false
             longInfo = ""
-            longVerdict = "Falsche Longrun-Länge!"
-            Alerts.error("Der Paramater der maximalen Run-Länge ist zu groß gewählt !\nBitte wählen Sie die maximale Run-Länge aus dem Wertebereich [1..\(fileLength)].")
+            longVerdict = "Wrong long runs length !"
+            Alerts.error("The selected parameter for the maximal run length exceeds the  possible values !\nPlease select an integer between [1..\(fileLength)].")
         } else {
             let r = CT1RandomTests.longRunTest(data, maxRun: defaultLongRun ? 34 : lrl)
             longPassed = r.passed
             longInfo = r.info
-            longVerdict = r.passed ? "Long-Runs-Test bestanden!" : "Long-Runs-Test nicht bestanden!"
+            longVerdict = r.passed ? "Long runs test passed!" : "Long runs test failed!"
         }
         let off = Int(offset.trimmingCharacters(in: .whitespaces)) ?? -1
         let len = Int(length.trimmingCharacters(in: .whitespaces)) ?? 0
@@ -590,13 +590,13 @@ struct CT1RunsTestView: View {
                                          offset: off, length: defaultRun ? fileLength : len, randomBlocks: randomBlocks, using: &g) else {
             runPassed = false
             runInfo = ""
-            runVerdict = "Falsche Offset/Testlänge!"
-            Alerts.error("Offset + Testlänge muss <= Dateilänge oder\nTestlänge muss nicht gleich Null sein !")
+            runVerdict = "Wrong offset or test length !"
+            Alerts.error("Offset + test length must be smaller than the file size !")
             return
         }
         runPassed = o.passed
         runInfo = o.info
-        runVerdict = o.passed ? "Runs-Test bestanden!" : "Runs-Test nicht bestanden!"
+        runVerdict = o.passed ? "Runs test passed!" : "Runs test failed!"
     }
 }
 
@@ -609,32 +609,32 @@ struct CT1FIPSView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Entropiestatus") {
+            GroupBox("Entropy state") {
                 Text(result?.entropyLine ?? " ")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(4)
             }
-            GroupBox("Ergebnisse der einzelnen FIPS-PUB-140-1 Tests") {
+            GroupBox("Result of the individual FIPS-PUB-140-1 tests") {
                 VStack(alignment: .leading, spacing: 10) {
-                    line("Longrun Testergebnis:", result?.longRunLine, result?.longRunPassed)
-                    line("Mono-Bit Testergebnis:", result?.monobitLine, result?.monobitPassed)
-                    line("Poker Testergebnis:", result?.pokerLine, result?.pokerPassed)
-                    line("Runs Testergebnis:", result?.runsLine, result?.runsPassed)
+                    line("Longrun test result:", result?.longRunLine, result?.longRunPassed)
+                    line("Mono bit test result:", result?.monobitLine, result?.monobitPassed)
+                    line("Poker test result:", result?.pokerLine, result?.pokerPassed)
+                    line("Runs test result:", result?.runsLine, result?.runsPassed)
                 }
                 .padding(4)
             }
-            GroupBox("Testbatterie Status") {
-                line("FIPS-PUB-140-1 Testbatterie Status:", result?.batteryLine, result?.batteryPassed)
+            GroupBox("Test battery state") {
+                line("FIPS-PUB-140-1 Test battery result:", result?.batteryLine, result?.batteryPassed)
                     .padding(4)
             }
             if let r = result {
-                Text("Einsen: \(r.monobitOnes) (9654 < n < 10346) · Poker: \(String(format: "%.2f", r.pokerStatistic)) (1,03 < X < 57,4) · längster Run: \(r.longestRun) (< 34)")
+                Text("Ones: \(r.monobitOnes) (9654 < n < 10346) · Poker: \(String(format: "%.2f", r.pokerStatistic)) (1.03 < X < 57.4) · longest run: \(r.longestRun) (< 34)")
                     .font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
             }
             HStack {
-                Button("Testbatterie starten", action: run)
+                Button("Start test battery", action: run)
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(14)

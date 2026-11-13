@@ -4,7 +4,7 @@ import CTCommon
 import CTClassic
 
 // Native replacement for CT1's Flash visualisation "Enigma" by Frank Spieß (enigma v6.0, see
-// Enigma-Help_de.html): Enigma I with reflector B and three of the rotors I–V. For every typed
+// Enigma-Help_en.html): Enigma I with reflector B and three of the rotors I–V. For every typed
 // letter the current path is drawn – red from the keyboard through plugboard, rotors (right → left)
 // to the reflector, green back to the lamp. Ring settings are an addition (default A = Flash).
 
@@ -51,7 +51,7 @@ final class EnigmaVisModel: ObservableObject {
     var validPairs: [(Character, Character)] { (try? Enigma.parsePlugboard(plugText)) ?? [] }
 
     private func machine() -> Enigma? {
-        guard let pairs = try? Enigma.parsePlugboard(plugText) else { plugError = "Das Steckerbrett muss aus Buchstabenpaaren bestehen."; return nil }
+        guard let pairs = try? Enigma.parsePlugboard(plugText) else { plugError = "The plugboard must consist of pairs of letters."; return nil }
         do {
             let m = try Enigma(rotors: rotors, reflector: .B, ringSettings: rings, positions: start, plugboard: pairs)
             plugError = nil
@@ -142,7 +142,7 @@ final class EnigmaVisModel: ObservableObject {
     func press(_ letter: Character) { input.append(letter) }
     func backspace() { if !input.isEmpty { input.removeLast() } }
 
-    /// "Zurück": the whole machine back to its initial state.
+    /// "Reset": the whole machine back to its initial state.
     func reset() {
         rotors = [.I, .II, .III]
         rings = [0, 0, 0]
@@ -171,26 +171,26 @@ final class EnigmaVisModel: ObservableObject {
     var keyLine1: String {
         let r = rotors.map(\.rawValue).joined(separator: ",")
         let s = start.map { String(Self.letters[$0]) }.joined(separator: ",")
-        var t = "Rotoren: \(r), Startpositionen: \(s)"
-        if rings != [0, 0, 0] { t += ", Ringe: " + rings.map { String(Self.letters[$0]) }.joined(separator: ",") }
+        var t = "Rotors: \(r), Indicators: \(s)"
+        if rings != [0, 0, 0] { t += ", Rings: " + rings.map { String(Self.letters[$0]) }.joined(separator: ",") }
         return t
     }
 
     var keyLine2: String {
         let pairs = validPairs.map { String([$0.0, $0.1]) }
-        return "Stecker: " + (pairs.isEmpty ? "-" : pairs.joined(separator: " "))
+        return "Steckers: " + (pairs.isEmpty ? "-" : pairs.joined(separator: " "))
     }
 
     var keyDescription: String {
-        "UKW B, Walzen \(rotors.map(\.rawValue).joined(separator: "-")), Ringe \(String(rings.map { Self.letters[$0] })), Start \(String(start.map { Self.letters[$0] }))"
-            + (validPairs.isEmpty ? "" : ", Stecker \(validPairs.map { String([$0.0, $0.1]) }.joined(separator: " "))")
+        "Reflector B, rotors \(rotors.map(\.rawValue).joined(separator: "-")), rings \(String(rings.map { Self.letters[$0] })), start \(String(start.map { Self.letters[$0] }))"
+            + (validPairs.isEmpty ? "" : ", plugs \(validPairs.map { String([$0.0, $0.1]) }.joined(separator: " "))")
     }
 
     func encryptDocument() {
         guard let d = document, let pairs = try? Enigma.parsePlugboard(plugText),
               var m = try? Enigma(rotors: rotors, reflector: .B, ringSettings: rings, positions: start, plugboard: pairs) else { return }
         let r = m.encrypt(d.text)
-        DocumentFactory.openResult(text: r, title: DocumentFactory.title("Enigma-Verschlüsselung", of: d, key: keyDescription),
+        DocumentFactory.openResult(text: r, title: DocumentFactory.title("Enigma encryption", of: d, key: keyDescription),
                                    parent: d, method: "enigma", key: keyDescription)
     }
 }
@@ -224,7 +224,7 @@ struct CT1EnigmaView: View {
                     .gesture(SpatialTapGesture().onEnded { e in tap(e.location) })
                 rotorControls
                 Button { CT1Games.showEnigmaHelp() } label: {
-                    Text("? Hilfe").font(.system(size: 20, weight: .bold)).foregroundColor(.white)
+                    Text("? Help").font(.system(size: 20, weight: .bold)).foregroundColor(.white)
                 }
                 .buttonStyle(.plain)
                 .keyboardShortcut(KeyEquivalent(Character(UnicodeScalar(UInt16(NSF1FunctionKey))!)), modifiers: [])
@@ -253,7 +253,7 @@ struct CT1EnigmaView: View {
         }
     }
 
-    // MARK: Key band (Akt. Schlüssel)
+    // MARK: Key band (Chosen key)
 
     private var keyBand: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -262,11 +262,11 @@ struct CT1EnigmaView: View {
                     .frame(width: 38, height: 30).background(Color.yellow)
             }
             .buttonStyle(.plain)
-            .help("Aktuellen Schlüssel anzeigen/ausblenden")
+            .help("Show/hide the currently chosen key")
             VStack(alignment: .leading, spacing: 2) {
                 if model.showKey {
                     HStack(alignment: .top, spacing: 0) {
-                        Text("Akt. Schlüssel: ").underline()
+                        Text("Chosen key: ").underline()
                         VStack(alignment: .leading, spacing: 2) {
                             Text(model.keyLine1)
                             Text(model.keyLine2)
@@ -284,14 +284,14 @@ struct CT1EnigmaView: View {
                     .frame(width: 38, height: 30).background(Color.yellow)
             }
             .buttonStyle(.plain)
-            .help("Walzen tauschen (Exchange Rotors) und Ringstellung")
+            .help("Exchange rotors and ring setting")
             .popover(isPresented: $showRotors, arrowEdge: .bottom) { rotorSettings.foregroundColor(.primary) }
             Button { showPlugs = true } label: {
                 Image(systemName: "wrench.fill").font(.system(size: 16)).foregroundColor(.black)
                     .frame(width: 38, height: 30).background(Color.yellow)
             }
             .buttonStyle(.plain)
-            .help("Steckerbrett einstellen")
+            .help("Set the plugboard")
             .popover(isPresented: $showPlugs, arrowEdge: .bottom) { plugSettings.foregroundColor(.primary) }
         }
         .padding(.horizontal, 8)
@@ -299,14 +299,14 @@ struct CT1EnigmaView: View {
     }
 
     private var rotorSettings: some View {
-        let names = ["Linker Rotor", "Mittlerer Rotor", "Rechter Rotor"]
+        let names = ["Left rotor", "Middle rotor", "Right rotor"]
         return VStack(alignment: .leading, spacing: 10) {
-            Text("Walzen tauschen").font(.headline)
+            Text("Exchange rotors").font(.headline)
             Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 8) {
                 GridRow {
                     Text("")
-                    Text("Walze")
-                    Text("Ringstellung")
+                    Text("Rotor")
+                    Text("Ring setting")
                 }
                 ForEach(0..<3, id: \.self) { slot in
                     GridRow {
@@ -322,7 +322,7 @@ struct CT1EnigmaView: View {
                     }
                 }
             }
-            Text("Umkehrwalze (Reflektor): B. Die Flash-Version kannte keine Ringe – Ringstellung A entspricht ihr.")
+            Text("Reflector: B. The Flash version had no rings – ring setting A corresponds to it.")
                 .font(.caption).foregroundColor(.secondary).fixedSize(horizontal: false, vertical: true)
         }
         .padding(14)
@@ -331,14 +331,14 @@ struct CT1EnigmaView: View {
 
     private var plugSettings: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Steckerbrett").font(.headline)
-            TextField("z. B. AB FX", text: $model.plugText)
+            Text("Plugboard").font(.headline)
+            TextField("e.g. AB FX", text: $model.plugText)
                 .font(.system(.body, design: .monospaced))
                 .frame(width: 300)
             if let e = model.plugError { Text(e).font(.caption).foregroundColor(.red) }
-            Text("Buchstabenpaare (höchstens 13). Sie können auch im Steckerbrett der Grafik nacheinander auf zwei Buchstaben klicken; ein Klick auf einen gesteckten Buchstaben entfernt die Verbindung.")
+            Text("Pairs of letters (at most 13). You can also click two letters one after the other in the plugboard of the graphic; a click on a connected letter removes the connection.")
                 .font(.caption).foregroundColor(.secondary).fixedSize(horizontal: false, vertical: true)
-            Button("Alle Stecker entfernen") { model.plugText = ""; model.pendingPlug = nil }
+            Button("Remove all plugs") { model.plugText = ""; model.pendingPlug = nil }
         }
         .padding(14)
         .frame(width: 330)
@@ -383,32 +383,32 @@ struct CT1EnigmaView: View {
     private var bottomPanel: some View {
         HStack(alignment: .top, spacing: 14) {
             VStack(spacing: 6) {
-                Text("Lampenfeld").font(.caption)
+                Text("Lampboard").font(.caption)
                 keyRows(lamps: true)
             }
             VStack(spacing: 6) {
-                Text("Tastatur").font(.caption)
+                Text("Keyboard").font(.caption)
                 keyRows(lamps: false)
             }
             VStack(alignment: .leading, spacing: 4) {
-                Text("Eingabe:")
+                Text("Input:")
                 HStack {
                     TextField("", text: $model.input)
                         .font(.system(size: 14, design: .monospaced))
                         .foregroundColor(Self.red)
                         .textFieldStyle(.roundedBorder)
                     Button { model.backspace() } label: { Image(systemName: "delete.left") }
-                        .help("Letzten Buchstaben löschen (die Rotoren drehen sich zurück)")
-                    Button("Zurück") { model.reset() }
-                        .help("Setzt die gesamte Maschine in den Urzustand.")
+                        .help("Delete the last letter (the rotors turn backwards)")
+                    Button("Reset") { model.reset() }
+                        .help("Puts the whole machine to the \"initial state\".")
                 }
                 HStack {
-                    Text("Ausgabe:")
+                    Text("Output:")
                     Spacer()
                     if let d = model.document {
-                        Button("Dokument <\(d.shortName)> verschlüsseln") { model.encryptDocument() }
+                        Button("Encrypt document <\(d.shortName)>") { model.encryptDocument() }
                             .controlSize(.small)
-                            .help("Verschlüsselt das Dokument mit dem aktuellen Schlüssel (Startpositionen).")
+                            .help("Encrypts the document with the chosen key (indicators).")
                     }
                 }
                 Text(model.output.isEmpty ? " " : model.output)
@@ -422,7 +422,7 @@ struct CT1EnigmaView: View {
                     .overlay(Rectangle().stroke(Color.black.opacity(0.6)))
                 HStack {
                     Text("Status:")
-                    Text(model.trace == nil ? "" : "Markierte Drähte zeigen Verschlüsselungsschritte.")
+                    Text(model.trace == nil ? "" : "Highlighted wires show encryption steps.")
                         .font(.system(size: 13, design: .monospaced))
                         .lineLimit(1)
                     Spacer(minLength: 0)
@@ -497,7 +497,7 @@ struct CT1EnigmaView: View {
             }
         }
 
-        // Reflector (UKW B)
+        // Reflector B
         let rc = Self.reflCenter
         for k in 0..<26 where EnigmaVisModel.reflector[k] > k {
             stroke(&ctx, Self.point(rc, Self.rReflContact, k), Self.point(rc, Self.rReflContact, EnigmaVisModel.reflector[k]), Self.wire, 0.6)
@@ -505,7 +505,7 @@ struct CT1EnigmaView: View {
         for k in 0..<26 {
             letter(&ctx, String(EnigmaVisModel.letters[k]), Self.point(rc, Self.rReflLetter, k), size: 17, rotate: k)
         }
-        ctx.draw(Text("UKW B").font(.system(size: 13, weight: .bold)).foregroundColor(Color(white: 0.35)), at: rc)
+        ctx.draw(Text("Reflector B").font(.system(size: 13, weight: .bold)).foregroundColor(Color(white: 0.35)), at: rc)
 
         // Plugboard
         for k in 0..<26 {
@@ -521,7 +521,7 @@ struct CT1EnigmaView: View {
             stroke(&ctx, CGPoint(x: Self.plugX(m.plug[k]), y: Self.plugTopY + 20), CGPoint(x: x, y: Self.plugBottomY - 10),
                    m.plug[k] == k ? Self.wire : Color(white: 0.3), m.plug[k] == k ? 0.6 : 1.1)
         }
-        ctx.draw(Text("Steckerbrett").font(.system(size: 11)).foregroundColor(Color(white: 0.3)),
+        ctx.draw(Text("Plugboard").font(.system(size: 11)).foregroundColor(Color(white: 0.3)),
                  at: CGPoint(x: Self.plugX(25) - 30, y: Self.plugTopY - 22))
         // Faint connections entry wheel → right rotor
         for k in 0..<26 {

@@ -41,6 +41,117 @@ section("LLL: Determinante erhalten (3D)") {
     check(before == after, "det vorher \(before.toString()) ≠ nachher \(after.toString())")
 }
 
+// MARK: - LLL: optimierte Fassung = schlichte Referenz
+
+/// Cohen, Algorithmus 2.6.7, ohne jede Beschleunigung (Stand vor der Optimierung von `Lattice.reduce`).
+func referenceLLL(_ basis: [[BigInt]], deltaNum: Int, deltaDen: Int) -> [[BigInt]] {
+    let n = basis.count
+    let dim = basis[0].count
+    var b = [[BigInt]](repeating: [], count: n + 1)
+    for i in 1...n { b[i] = basis[i - 1] }
+    var d = [BigInt](repeating: BigInt(0), count: n + 1)
+    d[0] = BigInt(1)
+    var lambda = [[BigInt]](repeating: [BigInt](repeating: BigInt(0), count: n + 1), count: n + 1)
+    func dot(_ x: [BigInt], _ y: [BigInt]) -> BigInt {
+        var s = BigInt(0)
+        for k in 0..<dim { s += x[k] * y[k] }
+        return s
+    }
+    func reduceStep(_ k: Int, _ l: Int) {
+        if (BigInt(2) * lambda[k][l].absoluteValue) <= d[l] { return }
+        let q = (BigInt(2) * lambda[k][l] + d[l]).floorDivided(by: BigInt(2) * d[l])
+        for t in 0..<dim { b[k][t] = b[k][t] - q * b[l][t] }
+        lambda[k][l] = lambda[k][l] - q * d[l]
+        if l >= 2 { for i in 1...(l - 1) { lambda[k][i] = lambda[k][i] - q * lambda[l][i] } }
+    }
+    var kMax = 1
+    d[1] = dot(b[1], b[1])
+    var k = 2
+    while k <= n {
+        if k > kMax {
+            kMax = k
+            for j in 1...k {
+                var u = dot(b[k], b[j])
+                if j >= 2 { for i in 1...(j - 1) { u = (d[i] * u - lambda[k][i] * lambda[j][i]) / d[i - 1] } }
+                if j < k { lambda[k][j] = u } else { d[k] = u }
+            }
+        }
+        reduceStep(k, k - 1)
+        let dn = BigInt(deltaNum), dd = BigInt(deltaDen)
+        if dd * d[k] * d[k - 2] < dn * d[k - 1] * d[k - 1] - dd * lambda[k][k - 1] * lambda[k][k - 1] {
+            let lam = lambda[k][k - 1]
+            let B = (d[k - 2] * d[k] + lam * lam) / d[k - 1]
+            b.swapAt(k, k - 1)
+            if k > 2 { for j in 1...(k - 2) { let t = lambda[k][j]; lambda[k][j] = lambda[k - 1][j]; lambda[k - 1][j] = t } }
+            if k < kMax {
+                for i in (k + 1)...kMax {
+                    let t = lambda[i][k]
+                    lambda[i][k] = (d[k] * lambda[i][k - 1] - lam * t) / d[k - 1]
+                    lambda[i][k - 1] = (B * t + lam * lambda[i][k]) / d[k]
+                }
+            }
+            d[k - 1] = B
+            k = max(2, k - 1)
+        } else {
+            var l = k - 2
+            while l >= 1 { reduceStep(k, l); l -= 1 }
+            k += 1
+        }
+    }
+    return Array(b[1...n])
+}
+
+/// Fester Zufallsgenerator, damit die Testgitter bei jedem Lauf dieselben sind.
+nonisolated(unsafe) var latticeSeed: UInt64 = 0x1234_5678_9ABC_DEF0
+func fixedRandom(bits: Int) -> BigUInt {
+    var v = BigUInt(0)
+    var left = bits
+    while left > 0 {
+        latticeSeed ^= latticeSeed << 13; latticeSeed ^= latticeSeed >> 7; latticeSeed ^= latticeSeed << 17
+        let take = min(left, 32)
+        v = (v << take) + BigUInt(latticeSeed & ((1 << UInt64(take)) - 1))
+        left -= take
+    }
+    return v | (BigUInt(1) << (bits - 1)) | BigUInt(1)
+}
+
+section("LLL: optimiert = Referenz (bitgenau)") {
+    // kleine Zahlen (serieller Zweig) und große Zahlen (paralleler Zweig mit gemeinsamem Kehrwert)
+    for (n, bits, dn, dd) in [(8, 120, 3, 4), (12, 300, 99, 100), (7, 1400, 3, 4), (8, 1100, 99, 100)] {
+        var basis = [[BigInt]]()
+        for i in 0..<n {
+            var row = [BigInt](repeating: BigInt(0), count: n)
+            row[i] = BigInt(1)
+            row[n - 1] = BigInt(fixedRandom(bits: bits))
+            // dichtere Zeilen, damit auch Einträge außerhalb der letzten Spalte groß werden
+            if i % 3 == 1 { row[0] = BigInt(fixedRandom(bits: bits / 2)) }
+            basis.append(row)
+        }
+        let fast = Lattice.reduce(basis, deltaNum: dn, deltaDen: dd)
+        let ref = referenceLLL(basis, deltaNum: dn, deltaDen: dd)
+        check(fast == ref, "LLL n=\(n) bits=\(bits) δ=\(dn)/\(dd): Basis weicht von der Referenz ab")
+    }
+}
+
+section("Exakte Division mit gemeinsamem Kehrwert") {
+    var wrong = 0, cases = 0
+    for trial in 0..<1500 {
+        let dl = 1 + Int(fixedRandom(bits: 16).low64 % 40), ql = Int(fixedRandom(bits: 16).low64 % 60)
+        var dv = fixedRandom(bits: 64 * dl - Int(fixedRandom(bits: 16).low64 % 63))
+        if trial % 7 == 0 { dv = dv << (64 * Int(fixedRandom(bits: 16).low64 % 3)) }   // niederwertiges Wort 0
+        if trial % 11 == 0 { dv = (dv >> 1) << 1 }                                     // gerader Divisor
+        if trial % 13 == 0 { dv = BigUInt(1) << (64 * dl - 1) }                        // Zweierpotenz
+        var qs = [BigUInt]()
+        for _ in 0..<3 {
+            qs.append(ql == 0 ? BigUInt(fixedRandom(bits: 16).low64 % 3)
+                              : fixedRandom(bits: max(1, 64 * ql - Int(fixedRandom(bits: 16).low64 % 64))) - BigUInt(fixedRandom(bits: 16).low64 % 2))
+        }
+        let got = Lattice.exactQuotients(of: qs.map { $0 * dv }, by: dv)
+        for (q, g) in zip(qs, got) { cases += 1; if q != g { wrong += 1 } }
+    }
+    check(wrong == 0, "\(wrong) von \(cases) Quotienten falsch")
+}
+
 // MARK: - Angriff auf stereotype Nachrichten (Coppersmith, e = 3)
 
 section("Stereotype Nachrichten (e=3)") {

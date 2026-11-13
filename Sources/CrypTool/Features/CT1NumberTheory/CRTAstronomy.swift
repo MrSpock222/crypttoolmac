@@ -6,10 +6,10 @@ import CTBigNum
 /// CT1 IDD_CRT_ASTRONOMY: "Anwendungsbeispiel des Chinesischen Restsatze aus der Astronomie:
 /// Planetenumlaufbahn" (DlgCrtAstronomy.cpp).
 struct CT1CRTAstronomyDialog: View {
-    static let title = "Anwendungsbeispiel des Chinesischen Restsatze aus der Astronomie: Planetenumlaufbahn"
+    static let title = "Planetary Motion and the Chinese Remainder Theorem"
     static let planets: [(name: String, period: String)] = [
-        ("Merkur", "88"), ("Venus", "225"), ("Erde", "365"), ("Mars", "687"), ("Jupiter", "4327"),
-        ("Saturn", "10751"), ("Uranus", "30661"), ("Neptun", "60149"), ("Pluto", "90491"),
+        ("Mercury", "88"), ("Venus", "225"), ("Earth", "365"), ("Mars", "687"), ("Jupiter", "4327"),
+        ("Saturn", "10751"), ("Uranus", "30661"), ("Neptune", "60149"), ("Pluto", "90491"),
     ]
     static let initialA = ["15", "", "100", "", "", "", "", "", ""]
     static let initialM = ["88", "", "365", "", "", "", "", "", ""]
@@ -37,12 +37,12 @@ struct CT1CRTAstronomyDialog: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             GroupBox {
-                Text("Mit dem Chinesischen Restsatz (CRT) kann man lineare modulare Gleichungssysteme lösen. Unten können Sie 9 Gleichungen der Form x = a[i] mod m[i] (i=1, ..., 9) eingeben und anschließend lösen. Solche Gleichungssysteme kann man z.B. nutzen, um herauszufinden, in wie viel Tagen bestimmte Planeten aufgereiht wie auf einer Perlenschnur hintereinander in einer Linie (Strahl) stehen.")
+                Text("The Chinese Remainder Theorem (CRT) can be used to solve systems of linear modular equations. Enter up to 9 equations x = a[i] mod m[i] (i=1, ..., 9) below. Such a system of equations can be used to determine the number of days until certain planets become aligned.")
                     .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 10) {
-                    CRTGroup(title: "Simultane Kongruenzen/ Modulare lineare Gleichungssysteme") {
+                    CRTGroup(title: "Simultaneous congruences / linear modular equations") {
                         ForEach(0..<9, id: \.self) { i in
                             HStack(spacing: 6) {
                                 Text("x ≡")
@@ -52,32 +52,32 @@ struct CT1CRTAstronomyDialog: View {
                             }.font(.system(.body, design: .monospaced))
                         }
                     }
-                    CRTGroup(title: "Lösung") { CRTOutputField(text: x) }
+                    CRTGroup(title: "Solution") { CRTOutputField(text: x) }
                     HStack {
-                        Button("Lösen", action: solve).keyboardShortcut(.defaultAction).disabled(!canSolve)
-                        Button("Beenden") { win.window?.close() }
+                        Button("Solve", action: solve).keyboardShortcut(.defaultAction).disabled(!canSolve)
+                        Button("Exit") { win.window?.close() }
                         Spacer()
                         CT1HelpButton(action: .crtAstronomy)
                     }
                     HStack {
-                        Button("Löschen aller Parameter", action: clearAll)
-                        Button("Zurücksetzen auf den Initialzustand", action: resetInitial)
+                        Button("Clear all parameters ", action: clearAll)
+                        Button("Restore default settings ", action: resetInitial)
                     }
                 }
                 .frame(width: 400)
-                CRTGroup(title: "Anwendungsbeispiel aus der Astronomie / Film-Visualisierung ist fix") {
+                CRTGroup(title: "Astronomical visualization") {
                     CRTOrbitSketch().frame(height: 150).frame(maxWidth: .infinity)
-                    Text("Die Umlaufzeiten der Planeten Merkur und Erde um die Sonne betragen 88 und 365 Tage. Bis zum Erreichen eines bestimmten Bahnradiusvektors s (rot) vergehen")
+                    Text("The periods of the planets Mercury and Earth around the Sun are 88 and 365 days, respectively. If it will take the planets ")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
                         CRTOutputField(text: merkurTag).frame(width: 80)
-                        Text("und")
+                        Text("and")
                         CRTOutputField(text: erdeTag).frame(width: 80)
-                        Text("Tage.")
+                        Text("days,")
                     }
-                    Text("Kann es vorkommen, dass sich Merkur und Erde irgendwann einmal auf dem Strahl s befinden?")
+                    Text("respectively, to reach a given radius vector s (in red), is it possible that the planets will ever lie simultaneously on s?")
                         .fixedSize(horizontal: false, vertical: true)
-                    CRTGroup(title: "Planetenauswahl") {
+                    CRTGroup(title: "Choose a planet") {
                         Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 2) {
                             ForEach(0..<3, id: \.self) { r in
                                 GridRow {
@@ -89,7 +89,7 @@ struct CT1CRTAstronomyDialog: View {
                             }
                         }
                     }
-                    Text("In welchen Zeitabständen (Tagen) wiederholt sich das Ereignis?")
+                    Text("In what time interval (in days) will this incident repeat itself?")
                     CRTOutputField(text: period)
                 }
                 .frame(minWidth: 330)
@@ -141,7 +141,7 @@ struct CT1CRTAstronomyDialog: View {
 
     private func solve() {
         if m.contains(where: { $0 == "0" || $0 == "1" }) {
-            CRTUtil.message("Das Modul m muss größer als 1 sein !")
+            CRTUtil.message("The module m has to be larger than 1!")
             return
         }
         var rows: [Int] = []
@@ -155,19 +155,19 @@ struct CT1CRTAstronomyDialog: View {
             for j in (i + 1)..<9 where !m[i].isEmpty && !m[j].isEmpty {
                 let mi = BigUInt(m[i]) ?? 1, mj = BigUInt(m[j]) ?? 1
                 if !mi.gcd(mj).isOne {
-                    text += "Die Umlaufzeiten von \(Self.planets[i].name) (\(m[i])) und \(Self.planets[j].name) (\(m[j])) sind nicht teilerfremd.\n"
+                    text += "The periods of \(Self.planets[i].name) (\(m[i])) and \(Self.planets[j].name) (\(m[j])) are not coprime.\n"
                 }
             }
         }
         if !text.isEmpty {
-            CRTUtil.message(text + "\nDie Moduln sind nicht teilerfremd.\n\nDeshalb ist die Anwendbarkeit des Chinesischen Restsatzes nicht garantiert. \n\nEine Lösung wird jetzt gesucht.\n")
+            CRTUtil.message(text + "\nThe modules are a non coprime. \n\nBecause of this is a solution is not guarantied.\nThe algorithm now tries to find a solution.")
         }
         if let (sol, M) = ChineseRemainder.solve(remainders: rems, moduli: mods) {
             x = CRTUtil.thousands(sol.description)
             period = CRTUtil.thousands(M.description)
         } else {
-            CRTUtil.message("Das Brute-Force-Verfahren konnte keine Lösung finden.\n")
-            x = "Es existiert keine Lösung!"
+            CRTUtil.message("The brute-force method was not able to find a solution.\n")
+            x = "There is no solution!"
             period = ""
         }
     }

@@ -51,12 +51,12 @@ enum ActionRouter {
         case .helpScenarios: HelpLink.scenarios()
         case .contextHelp: HelpLink.contextHelp()
         case .about: AboutDialog.show()
-        case .helpWebsite: NSWorkspace.shared.open(URL(string: "https://www.cryptool.org/de/ct1/")!)
+        case .helpWebsite: NSWorkspace.shared.open(URL(string: "https://www.cryptool.org/en/ct1/")!)
         case .helpReadme: HelpCenter.show(action: action)
         case .helpLicense: HelpActions.showLicense()
         case .helpBook, .helpPresentation:
             // CT1 opens the PDF documents in the default PDF viewer
-            let file = action == .helpBook ? "Docs/CT-Book-de.pdf" : "Docs/CrypTool1-Presentation-de.pdf"
+            let file = action == .helpBook ? "Docs/CT-Book-en.pdf" : "Docs/CrypTool1-Presentation-en.pdf"
             if let url = Resources.url(file) { NSWorkspace.shared.open(url) } else { HelpCenter.show(action: action) }
         case .show3DBox:
             let d = UserDefaults.standard
@@ -92,30 +92,30 @@ enum ActionRouter {
 enum DocumentActions {
     static func showProperties(_ doc: CTDocument) {
         var lines: [String] = []
-        lines.append("Titel: \(doc.displayName ?? "")")
-        if let url = doc.fileURL { lines.append("Datei: \(url.path)") }
-        lines.append("Größe: \(doc.bytes.count) Bytes")
-        lines.append("Inhalt: \(doc.isText ? "Text" : "Binärdaten")")
+        lines.append("Window title: \(doc.displayName ?? "")")
+        if let url = doc.fileURL { lines.append("Name of the file: \(url.path)") }
+        lines.append("Document size: \(doc.bytes.count) bytes")
+        lines.append("Document type: \(doc.isText ? "Text" : "Binary data")")
         if let o = doc.origin {
-            if let p = o.parent { lines.append("Erzeugt aus: \(p.displayName ?? "")") }
-            if let k = o.key { lines.append("Schlüssel: \(k)") }
+            if let p = o.parent { lines.append("Created from: \(p.displayName ?? "")") }
+            if let k = o.key { lines.append("Key: \(k)") }
         }
-        Alerts.info(lines.joined(separator: "\n"), title: "Dokument-Eigenschaften")
+        Alerts.info(lines.joined(separator: "\n"), title: "Document Properties")
     }
 
     static func showKey(_ doc: CTDocument) {
         guard let key = doc.origin?.key else { return }
-        Alerts.infoWithCopy("Schlüssel: \(key)", title: "Schlüssel anzeigen", copyValue: key)
+        Alerts.infoWithCopy("Key: \(key)", title: "Show key", copyValue: key)
     }
 
     static func editHex(_ doc: CTDocument, window: NSWindow?) {
-        WindowPresenter.sheet(on: window, title: "Hex-Werte bearbeiten") { close in
+        WindowPresenter.sheet(on: window, title: "Edit hex values") { close in
             HexEditSheet(document: doc, close: close)
         }
     }
 
     static func formatText(_ doc: CTDocument, window: NSWindow?) {
-        WindowPresenter.sheet(on: window, title: "Textdokument formatieren") { close in
+        WindowPresenter.sheet(on: window, title: "Format Text Document") { close in
             FormatTextDialog(document: doc, close: close)
         }
     }
@@ -128,15 +128,15 @@ struct HexEditSheet: View {
     @CTState private var error: String?
 
     var body: some View {
-        DialogScaffold(title: "Hex-Werte bearbeiten",
-                       subtitle: "Bytes als Hexadezimalziffern (Leerzeichen und Zeilenumbrüche werden ignoriert).",
+        DialogScaffold(title: "Edit hex values",
+                       subtitle: "Bytes as hexadecimal digits (spaces and line breaks are ignored).",
                        minWidth: 560) {
             CodeEditor(text: $hex, minHeight: 300)
             if let error { Text(error).foregroundStyle(.red) }
         } buttons: {
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Übernehmen") {
-                guard let bytes = Hex.decode(hex) else { error = "Ungültige Hex-Eingabe (nur 0-9, A-F, gerade Anzahl Ziffern)."; return }
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Apply") {
+                guard let bytes = Hex.decode(hex) else { error = "Invalid hex input (only 0-9, A-F, even number of digits)."; return }
                 document.bytes = bytes
                 document.updateChangeCount(.changeDone)
                 close()
@@ -158,25 +158,25 @@ struct FormatTextDialog: View {
     @CTState private var blockSize = 5
 
     var body: some View {
-        DialogScaffold(title: "Textdokument formatieren", minWidth: 420) {
-            GroupBox("Formatierungsoptionen") {
+        DialogScaffold(title: "Format Text Document", minWidth: 420) {
+            GroupBox("Formatting options") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Toggle("Nicht im Alphabet enthaltene Zeichen entfernen", isOn: $removeNonAlphabet)
-                    Toggle("Konvertierung in Großbuchstaben", isOn: $toUpper)
+                    Toggle("Remove characters not in alphabet", isOn: $removeNonAlphabet)
+                    Toggle("Convert to uppercase", isOn: $toUpper)
                         .onChange(of: toUpper) { _, on in if on { toLower = false } }
-                    Toggle("Konvertierung in Kleinbuchstaben", isOn: $toLower)
+                    Toggle("Convert to lowercase", isOn: $toLower)
                         .onChange(of: toLower) { _, on in if on { toUpper = false } }
                     HStack {
-                        Toggle("Unterteilung in Blöcke der Breite", isOn: $blocks)
+                        Toggle("Divide in blocks of size", isOn: $blocks)
                         TextField("", value: $blockSize, format: .number).frame(width: 44).disabled(!blocks)
                     }
                 }.padding(6).frame(maxWidth: .infinity, alignment: .leading)
             }
             AlphabetNote()
         } buttons: {
-            Button("Textoptionen") { OptionsWindows.showTextOptions() }
+            Button("Text options") { OptionsWindows.showTextOptions() }
             Spacer()
-            Button("Schließen", action: close).keyboardShortcut(.cancelAction)
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             Button("OK", action: apply).keyboardShortcut(.defaultAction)
         }
     }
@@ -198,7 +198,7 @@ struct FormatTextDialog: View {
             }
             out = grouped
         }
-        DocumentFactory.openResult(text: out, title: DocumentFactory.title("Formatierung", of: document), parent: document)
+        DocumentFactory.openResult(text: out, title: DocumentFactory.title("Formatting", of: document), parent: document)
         close()
     }
 }
@@ -207,13 +207,13 @@ struct FormatTextDialog: View {
 enum HelpActions {
     static func about() {
         let credits = NSAttributedString(string: """
-        Native macOS-Portierung (Apple Silicon) von CrypTool 1.
+        Native macOS port (Apple Silicon) of CrypTool 1.
 
-        CrypTool 1 © CrypTool-Team (www.cryptool.org), Apache License 2.0.
-        AES-Kandidaten MARS, RC6, Serpent, Twofish: Referenzimplementierungen der jeweiligen Autoren.
+        CrypTool 1 © CrypTool Team (www.cryptool.org), Apache License 2.0.
+        AES candidates MARS, RC6, Serpent, Twofish: reference implementations of the respective authors.
         """, attributes: [.font: NSFont.systemFont(ofSize: 11), .foregroundColor: NSColor.labelColor])
         NSApp.orderFrontStandardAboutPanel(options: [
-            .applicationName: "CrypTool für macOS",
+            .applicationName: "CrypTool for macOS",
             .credits: credits,
         ])
     }
@@ -228,7 +228,7 @@ enum HelpActions {
 
     static func showLicense() {
         if let t = Resources.text("LICENSE") {
-            DocumentFactory.openResult(text: t, title: "Lizenz")
+            DocumentFactory.openResult(text: t, title: "License")
         }
     }
 }

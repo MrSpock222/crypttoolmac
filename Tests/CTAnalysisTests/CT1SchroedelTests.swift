@@ -74,19 +74,19 @@ func runCT1SchroedelTests() {
         }
         check(ordered, "\(c.plain): result order")
         check(r.results.first.map { !$0.longestDictionaryMatch.isEmpty } == true, "\(c.plain): best result has a match")
-        check(r.log.hasPrefix(VigenereSchroedel.headerTag + "\nBenötigte Zeit für die Durchführung der Analyse: "), "\(c.plain): log header")
-        check(r.log.contains("Länge des analysierten Geheimtexts: \(c.plain.count) Zeichen\n"), "\(c.plain): log length")
-        check(r.log.contains("Sprache für Geheimtext: \(c.lang)\n\nGeheimtext:\n\(ct)\n\n"), "\(c.plain): log ciphertext")
-        check(r.log.contains("Möglicher Schlüssel:\n\(c.key)\nGefundener Klartext:\n\(c.plain)\n"), "\(c.plain): log result entry")
-        check(r.debugLog.hasPrefix("Lade Geheimtext...\nLade Wörterbuch...\nLade Digramme...\nLade Trigramme...\n\n1. Zeichen des Geheimtexts: \(ct.first!)\n26 mögliche Paare:\n"),
+        check(r.log.hasPrefix(VigenereSchroedel.headerTag + "\nTime needed to perform analysis:"), "\(c.plain): log header")
+        check(r.log.contains("Length of analyzed ciphertext: \(c.plain.count) characters\n"), "\(c.plain): log length")
+        check(r.log.contains("Ciphertext language: \(c.lang)\n\nCiphertext:\n\(ct)\n\n"), "\(c.plain): log ciphertext")
+        check(r.log.contains("Possible key:\n\(c.key)\nFound cleartext:\n\(c.plain)\n"), "\(c.plain): log result entry")
+        check(r.debugLog.hasPrefix("Loading ciphertext...\nLoading dictionary...\nLoading digrams...\nLoading trigrams...\n\n1st character of the ciphertext: \(ct.first!)\n26 possible pairs: \n"),
               "\(c.plain): debug log start")
-        check(r.debugLog.contains("Mögliche Lösungen mit dem Wörterbuch abgleichen:") && !r.log.contains("Sortierte Liste"), "\(c.plain): debug vs. standard log")
+        check(r.debugLog.contains("Checking dictionary for possible solutions:") && !r.log.contains("Sorted list"), "\(c.plain): debug vs. standard log")
     }
 
     // first step: pairs for "A": A-A B-Z … ; mirror images removed → 14 pairs (2·p ≡ 0 has two solutions)
     if let r = try? VigenereSchroedel.analyze(ciphertext: "AAAA", data: data, keywordLanguages: ["English"], ciphertextLanguage: "English") {
-        check(r.debugLog.contains("26 mögliche Paare:\nA-A B-Z C-Y D-X E-W F-V G-U H-T I-S J-R K-Q L-P M-O N-N O-M P-L "), "pairs of the first letter")
-        check(r.debugLog.contains("12 entfernte Duplikate:\nO-M P-L Q-K R-J S-I T-H U-G V-F W-E X-D Y-C Z-B \nVerbleibende Paare: 14\n"), "mirror pairs removed")
+        check(r.debugLog.contains("26 possible pairs: \nA-A B-Z C-Y D-X E-W F-V G-U H-T I-S J-R K-Q L-P M-O N-N O-M P-L "), "pairs of the first letter")
+        check(r.debugLog.contains("12 removed duplicates:\nO-M P-L Q-K R-J S-I T-H U-G V-F W-E X-D Y-C Z-B \nRemaining pairs: 14\n"), "mirror pairs removed")
         check(r.completed, "short text completes")
     } else {
         check(false, "AAAA analysis threw")
@@ -94,7 +94,7 @@ func runCT1SchroedelTests() {
     // extensive logging puts every step into the result log; cancellation keeps the partial log
     if let r = try? VigenereSchroedel.analyze(ciphertext: vigenere("SECRET", "KEY"), data: data, keywordLanguages: ["English"],
                                               ciphertextLanguage: "English", extensiveLogging: true) {
-        check(r.log == r.debugLog && r.log.contains("Sortierte Liste der besten Paare:"), "extensive logging")
+        check(r.log == r.debugLog && r.log.contains("Sorted list of the best pairs:"), "extensive logging")
     }
     let token = CancellationToken()
     token.cancel()

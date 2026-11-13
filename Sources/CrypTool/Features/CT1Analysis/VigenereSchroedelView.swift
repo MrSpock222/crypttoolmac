@@ -12,7 +12,7 @@ extension CT1Analysis {
     /// Opens the Schrödel analysis dialog for the document (sheet on its window).
     static func openVigenereSchroedel(document: CTDocument) {
         let window = document.windowControllers.first?.window
-        WindowPresenter.sheet(on: window, title: "Vigenère (Analyse nach Schrödel)") { close in
+        WindowPresenter.sheet(on: window, title: "Vigenère (Analysis according to Schroedel)") { close in
             VigenereSchroedelView(document: document, close: close)
         }
     }
@@ -35,7 +35,7 @@ enum VigenereSchroedelSettings {
     /// Contents of a data file: user-chosen file (UTF-8 or CP1252) or the bundled CT1 file.
     @MainActor
     static func load(customPath: String, defaultName: String) throws -> String {
-        let fileError = "Die folgende Datei konnte nicht geöffnet werden:\n"
+        let fileError = "The following file could not be opened:\n"
         if !customPath.isEmpty {
             guard let d = FileManager.default.contents(atPath: customPath) else { throw CTError(fileError + customPath) }
             return TextCoding.string(from: [UInt8](d))
@@ -57,7 +57,7 @@ final class VigenereSchroedelModel: ObservableObject {
     @Published var progress = 0.0
     /// Possible results with a dictionary match, newest first (CT1 inserts at the top).
     @Published var listed: [VigenereSchroedelResult] = []
-    @Published var cleartextHeader = "Klartext:"
+    @Published var cleartextHeader = "Cleartext:"
     @Published var showLanguageChooser = false
     @Published var report: VigenereSchroedelReport?
     private(set) var data: SchroedelLanguageData?
@@ -71,7 +71,7 @@ final class VigenereSchroedelModel: ObservableObject {
         self.text = text
         listed = []
         report = nil
-        cleartextHeader = "Klartext:"
+        cleartextHeader = "Cleartext:"
         progress = 0.01
         phase = .loading
         token = CancellationToken()
@@ -111,7 +111,7 @@ final class VigenereSchroedelModel: ObservableObject {
         if d.keywordLanguages.isEmpty || d.ciphertextLanguages.isEmpty {
             phase = .idle
             progress = 0
-            Alerts.info("Die Wörterbuch-, Digramm- und Trigramm-Dateien enthalten keine Abschnitte „[LANGUAGE …]“.")
+            Alerts.info("The dictionary, digram and trigram files do not contain any \"[LANGUAGE …]\" sections.")
             return
         }
         phase = .choosingLanguages
@@ -122,13 +122,16 @@ final class VigenereSchroedelModel: ObservableObject {
     func run(keywordLanguages: [String], ciphertextLanguage: String) {
         guard let data else { return }
         showLanguageChooser = false
-        cleartextHeader = "Klartext (vermutete Sprache: \"\(ciphertextLanguage)\"):"
+        cleartextHeader = "Cleartext (assumed language: \"\(ciphertextLanguage)\"):"
         phase = .running
         let t = token
         let text = self.text
         let extensive = VigenereSchroedelSettings.extensiveLogging
         Task.detached(priority: .userInitiated) {
             let outcome: Result<VigenereSchroedelReport, Error> = Result {
+                // CT1 rates unseen digrams differently if the Windows region format is
+                // "German (Germany)" (GetThreadLocale() == 1031) – independent of CT1's language.
+                // The class runs CT1 with that region format, so the flag is on.
                 try VigenereSchroedel.analyze(
                     ciphertext: text, data: data, keywordLanguages: keywordLanguages, ciphertextLanguage: ciphertextLanguage,
                     extensiveLogging: extensive, germanLocale: true, cancel: t,
@@ -166,12 +169,12 @@ final class VigenereSchroedelModel: ObservableObject {
             phase = .finished
             var message: String
             if r.completed {
-                message = "Die Analyse ist beendet."
+                message = "The analysis is complete."
                 if !r.isSuccessful {
-                    message += "\n\nEs wurden leider keine möglichen Lösungen gefunden.\n\nÜberprüfen Sie, ob Sie die richtige(n) Sprache(n) für Schlüsselwort und Geheimtext ausgewählt haben."
+                    message += "\n\nUnfortunately, there were no possible results found.\n\nMake sure you have chosen the correct language(s) for keyword and ciphertext."
                 }
             } else {
-                message = "Die Analyse wurde nicht beendet."
+                message = "The analysis was not completed."
             }
             DispatchQueue.main.async { Alerts.info(message) }
         }
@@ -187,40 +190,40 @@ struct VigenereSchroedelView: View {
     @CTState private var showOptions = false
 
     var body: some View {
-        DialogScaffold(title: "Vigenère (Analyse nach Schrödel)",
-                       subtitle: "Sobald Sie die Analyse starten, werden mögliche Lösungen in die nachstehende Liste eingetragen. Detaillierte Informationen können Sie sich anzeigen lassen, wenn die Analyse vollständig beendet wurde.",
+        DialogScaffold(title: "Vigenère (Analysis according to Schroedel)",
+                       subtitle: "As soon as you start the analysis, possible results are written into the list below. Detailed information can be obtained after the analysis is complete.",
                        minWidth: 660) {
             Table(model.listed, selection: $selection) {
-                TableColumn("Schlüssel:", value: \.key)
+                TableColumn("Key:", value: \.key)
                     .width(min: 120, ideal: 200)
                 TableColumn(model.cleartextHeader, value: \.cleartext)
             }
             .font(.system(.body, design: .monospaced))
             .frame(minHeight: 230)
             ProgressView(value: model.progress)
-            DisclosureGroup("Optionen für die Vigenère-Analyse nach Schrödel", isExpanded: $showOptions) {
+            DisclosureGroup("Options for the Vigenère analysis according to Schroedel", isExpanded: $showOptions) {
                 VigenereSchroedelOptionsView()
                     .disabled(model.isBusy)
                     .padding(.top, 4)
             }
-            Text("Schrödels Verfahren knackt kurze Geheimtexte, deren Schlüssel ein Wort aus dem Wörterbuch ist (Buchstaben A–Z; die Textoptionen werden nicht verwendet).")
+            Text("Schroedel's method breaks short ciphertexts whose key is a word from the dictionary (letters A–Z; the text options are not used).")
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         } buttons: {
-            Button("Analyse starten") { model.start(text: document.text) }
+            Button("Start analysis") { model.start(text: document.text) }
                 .disabled(model.isBusy)
-            Button("Analyse abbrechen") { model.cancel() }
+            Button("Cancel analysis") { model.cancel() }
                 .disabled(!model.isBusy)
             Spacer()
-            Button("Analyse-Ergebnisse anzeigen") {
+            Button("Show analysis results") {
                 guard let r = model.report else { return }
                 DocumentFactory.openResult(text: r.documentText,
-                                           title: DocumentFactory.title("Vigenère-Analyse nach Schrödel", of: document),
+                                           title: DocumentFactory.title("Vigenère analysis according to Schroedel", of: document),
                                            parent: document)
                 close()
             }
             .disabled(model.report == nil || model.isBusy)
-            Button("Schließen") { model.cancel(); close() }
+            Button("Close") { model.cancel(); close() }
                 .keyboardShortcut(.cancelAction)
                 .disabled(model.isBusy)
         }
@@ -230,7 +233,7 @@ struct VigenereSchroedelView: View {
                 VigenereSchroedelLanguageChooser(
                     keywordLanguages: data.keywordLanguages,
                     ciphertextLanguages: data.ciphertextLanguages,
-                    preferredCiphertextLanguage: settings.referenceLanguage == .german ? "German" : "English",
+                    preferredCiphertextLanguage: settings.referenceLanguage == .german ? "English" : "English",
                     done: { k, c in model.run(keywordLanguages: k, ciphertextLanguage: c) },
                     cancel: { model.languageChoiceCancelled() })
             }
@@ -262,19 +265,19 @@ struct VigenereSchroedelLanguageChooser: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Sprachen auswählen").font(.title3.weight(.semibold))
-            Text("Wählen Sie mindestens eine Sprache aus, in der nach möglichen Schlüsselworten gesucht werden soll; und wählen Sie genau eine Sprache, in welcher der Geheimtext ursprünglich verfasst wurde.")
+            Text("Choose Languages").font(.title3.weight(.semibold))
+            Text("Please choose at least one language that is searched for possible keywords, and choose exactly one language in which the ciphertext was originally written.")
                 .fixedSize(horizontal: false, vertical: true)
             HStack(alignment: .top, spacing: 16) {
-                checklist("Sprache(n) für Schlüsselworte:", keywordLanguages, $keyword)
-                checklist("Sprache für Klartext:", ciphertextLanguages, $ciphertext)
+                checklist("Language(s) for keywords:", keywordLanguages, $keyword)
+                checklist("Language for cleartext:", ciphertextLanguages, $ciphertext)
             }
             HStack {
                 Spacer()
-                Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: cancel).keyboardShortcut(.cancelAction)
                 Button("OK") {
                     guard !keyword.isEmpty, ciphertext.count == 1, let c = ciphertext.first else {
-                        Alerts.info("Bitte wählen Sie MINDESTENS EINE Schlüsselwort-Sprache und GENAU EINE Geheimtext-Sprache aus.")
+                        Alerts.info("Please choose AT LEAST ONE keyword language and EXACTLY ONE ciphertext language.")
                         return
                     }
                     done(keywordLanguages.filter { keyword.contains($0) }, c)
@@ -320,13 +323,13 @@ struct VigenereSchroedelOptionsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Toggle("Ausführliche Protokollierung", isOn: $extensiveLogging)
-            fileRow("Wörterbuch:", $dictionaryFile, VigenereSchroedelSettings.dictionaryName, "Wörterbuch-Datei auswählen")
-            fileRow("Digramm-Datei:", $digramsFile, VigenereSchroedelSettings.digramsName, "Digramm-Datei auswählen")
-            fileRow("Trigramm-Datei:", $trigramsFile, VigenereSchroedelSettings.trigramsName, "Trigramm-Datei auswählen")
+            Toggle("Extensive logging", isOn: $extensiveLogging)
+            fileRow("Dictionary:", $dictionaryFile, VigenereSchroedelSettings.dictionaryName, "Choose dictionary file")
+            fileRow("Digram file:", $digramsFile, VigenereSchroedelSettings.digramsName, "Choose digram file")
+            fileRow("Trigram file:", $trigramsFile, VigenereSchroedelSettings.trigramsName, "Choose trigram file")
             HStack {
                 Spacer()
-                Button("Standard wiederherstellen") {
+                Button("Restore default") {
                     extensiveLogging = false
                     dictionaryFile = ""; digramsFile = ""; trigramsFile = ""
                 }
@@ -341,8 +344,8 @@ struct VigenereSchroedelOptionsView: View {
                 .lineLimit(1).truncationMode(.middle)
                 .foregroundStyle(path.wrappedValue.isEmpty ? .secondary : .primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .help(path.wrappedValue.isEmpty ? "Mitgelieferte CT1-Datei" : path.wrappedValue)
-            Button("Suchen …") {
+                .help(path.wrappedValue.isEmpty ? "File shipped with CT1" : path.wrappedValue)
+            Button("Search...") {
                 let panel = NSOpenPanel()
                 panel.title = panelTitle
                 panel.canChooseFiles = true

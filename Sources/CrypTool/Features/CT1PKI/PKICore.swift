@@ -45,9 +45,9 @@ enum PKIText {
         return best
     }
 
-    /// CT1's double_fmt(duration, 3) in German notation.
+    /// CT1's double_fmt(duration, 3); the English program uses a decimal point (IDS_STRING_COMMA).
     static func seconds(_ t: TimeInterval) -> String {
-        String(format: "%.3f", t).replacingOccurrences(of: ".", with: ",")
+        String(format: "%.3f", t)
     }
 
     /// Byte string as "A1 B2 C3" (CT1 hex dump of keys and hash values).
@@ -60,9 +60,9 @@ enum PKINumberBase: Int, CaseIterable, Identifiable {
     var id: Int { rawValue }
     var title: String {
         switch self {
-        case .octal: return "Oktal"
-        case .decimal: return "Dezimal"
-        case .hex: return "Hexadezimal"
+        case .octal: return "Octal"
+        case .decimal: return "Decimal"
+        case .hex: return "Hexadecimal"
         }
     }
     var radix: Int { [8, 10, 16][rawValue] }
@@ -107,7 +107,7 @@ struct PKIBasePicker: View {
 struct PKIHelpButton: View {
     let action: CTAction
     var body: some View {
-        Button("Hilfe") { HelpCenter.show(action: action) }
+        Button("Help") { HelpCenter.show(action: action) }
     }
 }
 
@@ -188,10 +188,10 @@ struct PKIKeyFilterBox: View {
     @Binding var filter: PKIKeyFilter
     var hyphen = true
     var body: some View {
-        PKIGroup("Aufgelistete Schlüsseltypen:") {
-            Toggle(hyphen ? "RSA-Schlüssel" : "RSA Schlüssel", isOn: $filter.rsa)
-            Toggle(hyphen ? "DSA-Schlüssel" : "DSA Schlüssel", isOn: $filter.dsa)
-            Toggle(hyphen ? "EC-Schlüssel" : "EC Schlüssel", isOn: $filter.ec)
+        PKIGroup("Listed key types:") {
+            Toggle(hyphen ? "RSA keys" : "RSA keys", isOn: $filter.rsa)
+            Toggle(hyphen ? "DSA keys" : "DSA keys", isOn: $filter.dsa)
+            Toggle(hyphen ? "EC keys" : "EC keys", isOn: $filter.ec)
         }
         .fixedSize()
     }
@@ -219,12 +219,12 @@ struct PKIKeyTable: View {
 
     var body: some View {
         Table(rows, selection: $selection, sortOrder: $order) {
-            TableColumn("Name", value: \.name)
-            TableColumn("Vorname", value: \.firstName)
-            TableColumn("Schlüsseltyp", value: \.keyType)
-            TableColumn("Schlüsselkennung", value: \.label)
-            TableColumn("Erstellt am", value: \.created) { Text($0.createdString) }
-            TableColumn("Interne ID-Nr.", value: \.internalID)
+            TableColumn("Last name", value: \.name)
+            TableColumn("First name", value: \.firstName)
+            TableColumn("Key type", value: \.keyType)
+            TableColumn("Key identifier", value: \.label)
+            TableColumn("Created", value: \.created) { Text($0.createdString) }
+            TableColumn("Internal ID no.", value: \.internalID)
         }
         .contextMenu(forSelectionType: UUID.self) { _ in } primaryAction: { ids in
             if let id = ids.first, let k = store.key(id: id) { onDoubleClick?(k) }
@@ -258,12 +258,12 @@ enum PKIPinAccess {
     /// Asks for the PIN of `key`; nil if cancelled.
     static func ask(for key: StoredKey) -> String? {
         let a = NSAlert()
-        a.messageText = "Autorisierung"
-        a.informativeText = "Schlüsselbezeichner:\n\(key.ct1Identifier)\n\nDer geheime Schlüssel ist durch Ihren PIN-Code geschützt.\n\nGeben Sie den PIN-Code ein:"
+        a.messageText = "Authorization"
+        a.informativeText = "Key identifier:\n\(key.ct1Identifier)\n\nThe private key is protected by your PIN code.\n\nEnter the PIN code:"
         let field = NSSecureTextField(frame: NSRect(x: 0, y: 0, width: 240, height: 24))
         a.accessoryView = field
-        a.addButton(withTitle: "Weiter")
-        a.addButton(withTitle: "Abbrechen")
+        a.addButton(withTitle: "Continue")
+        a.addButton(withTitle: "Cancel")
         a.window.initialFirstResponder = field
         return a.runModal() == .alertFirstButtonReturn ? field.stringValue : nil
     }
@@ -271,7 +271,7 @@ enum PKIPinAccess {
     /// Opens the private key; shows CT1's "Falscher PIN-Code eingegeben." on failure.
     static func open(_ key: StoredKey, pin: String) -> PrivateKeyMaterial? {
         do { return try KeyStore.shared.privateKey(of: key, pin: pin) } catch {
-            PKIModal.warning("Falscher PIN-Code eingegeben.")
+            PKIModal.warning("Incorrect PIN code entered.")
             return nil
         }
     }
@@ -285,44 +285,44 @@ enum PKICertificate {
         f.locale = Locale(identifier: "de_DE")
         f.dateFormat = "dd.MM.yyyy HH:mm:ss"
         let until = Calendar.current.date(byAdding: .year, value: 1, to: k.created) ?? k.created
-        var s = "Ihre Zertifikatsdaten:\n\n"
-        s += "Zertifikat:\n"
+        var s = "Your Certificate Data:\n\n"
+        s += "Certificate:\n"
         s += "   Version:               1\n"
-        s += "   Seriennummer:          \(k.internalID)\n"
+        s += "   Serial number:         \(k.internalID)\n"
         let alg: String
         switch k.type.kind {
         case .rsa: alg = "md5WithRsaEncryption"
         case .dsa: alg = "dsaWithSHA1"
         case .ec: alg = "ecdsa-with-SHA1"
         }
-        s += "   Signatur-Algorithmus:  \(alg)\n"
-        s += "   Aussteller:            CN=CrypTool CA, DC=cryptool, DC=org\n"
-        s += "   Gültig ab:             \(f.string(from: k.created))\n"
-        s += "   Gültig bis:            \(f.string(from: until))\n"
-        s += "   Inhaber:               \(k.distinguishedName)\n"
-        s += "   Schlüsselbezeichner:   \(k.ct1Identifier)\n\n"
-        s += "Öffentlicher Schlüssel des Inhabers:\n"
+        s += "   Signature algorithm:   \(alg)\n"
+        s += "   Issuer:                CN=CrypTool CA, DC=cryptool, DC=org\n"
+        s += "   Valid from:            \(f.string(from: k.created))\n"
+        s += "   Valid until:           \(f.string(from: until))\n"
+        s += "   Subject:               \(k.distinguishedName)\n"
+        s += "   Key identifier:        \(k.ct1Identifier)\n\n"
+        s += "Public key of the subject:\n"
         if let p = k.rsaPublic {
-            s += "   Algorithmus:  rsaEncryption (\(p.n.bitLength) Bit)\n"
-            s += "   Modul N:      \(p.n.toString(radix: 16))\n"
+            s += "   Algorithm:    rsaEncryption (\(p.n.bitLength) bits)\n"
+            s += "   Modulus N:    \(p.n.toString(radix: 16))\n"
             s += "   Exponent e:   \(p.e.toString(radix: 16))\n"
         }
         if let d = k.dsaParameters, let y = k.dsaPublic {
-            s += "   Algorithmus:  dsa (\(d.p.bitLength) Bit)\n"
+            s += "   Algorithm:    dsa (\(d.p.bitLength) bits)\n"
             s += "   p: \(d.p.toString(radix: 16))\n   q: \(d.q.toString(radix: 16))\n   g: \(d.g.toString(radix: 16))\n   y: \(y.toString(radix: 16))\n"
         }
         if let c = k.curve, case let .affine(x, y)? = k.ecPublic {
-            s += "   Algorithmus:  ecPublicKey (\(c.name))\n"
+            s += "   Algorithm:    ecPublicKey (\(c.name))\n"
             s += "   Wx: \(x.toString(radix: 16))\n   Wy: \(y.toString(radix: 16))\n"
         }
         return s
     }
 
     @MainActor static func show(_ k: StoredKey) {
-        PKIModal.run(title: "Zertifikatsdaten") { close in
+        PKIModal.run(title: "Certificate Data") { close in
             VStack(alignment: .leading, spacing: 10) {
                 ResultBox(text: text(k), minHeight: 300)
-                HStack { Spacer(); Button("Schließen", action: close).keyboardShortcut(.defaultAction); Spacer() }
+                HStack { Spacer(); Button("Close", action: close).keyboardShortcut(.defaultAction); Spacer() }
             }
             .padding()
             .frame(width: 620)
@@ -340,23 +340,23 @@ struct PKIPublicParameterView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Öffentliche Parameter von: \(key.firstLast)").font(.headline)
+            Text("Public Parameters of: \(key.firstLast)").font(.headline)
             if let p = key.rsaPublic {
-                Text("Modul:")
+                Text("Modulus:")
                 ResultBox(text: base.format(p.n), minHeight: 70)
                 Text("Exponent:")
                 ResultBox(text: base.format(p.e), minHeight: 26)
             }
             if let d = key.dsaParameters, let y = key.dsaPublic {
-                ForEach([("Primzahl p:", d.p), ("Primzahl q:", d.q), ("Generator g:", d.g), ("Öffentlicher Wert y:", y)], id: \.0) { item in
+                ForEach([("Prime number p:", d.p), ("Prime number q:", d.q), ("Generator g:", d.g), ("Public value y:", y)], id: \.0) { item in
                     Text(item.0)
                     ResultBox(text: base.format(item.1), minHeight: 34)
                 }
             }
-            PKIGroup("Zahlensystem der Parameterdarstellung") { PKIBasePicker(base: $base) }
+            PKIGroup("Base for presentation of numbers") { PKIBasePicker(base: $base) }
             HStack {
                 Spacer()
-                Button("Zurück", action: close).keyboardShortcut(.defaultAction)
+                Button("Back", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding()
@@ -371,15 +371,15 @@ struct PKIECParameterTable: View {
     var body: some View {
         let items = rows.enumerated().map { PKIParamRow(id: $0.offset, name: $0.element.0, value: base.format($0.element.1), bits: $0.element.1.bitLength) }
         Table(items) {
-            TableColumn("Parameter") { Text($0.name) }.width(min: 90, ideal: 130)
-            TableColumn("Wert des Parameters") { Text($0.value).font(.system(.body, design: .monospaced)).textSelection(.enabled) }
-            TableColumn("Bitlänge") { Text("\($0.bits)") }.width(60)
+            TableColumn("Parameters") { Text($0.name) }.width(min: 90, ideal: 130)
+            TableColumn("Value of the parameter") { Text($0.value).font(.system(.body, design: .monospaced)).textSelection(.enabled) }
+            TableColumn("Bit length") { Text("\($0.bits)") }.width(60)
         }
     }
 
     static func domainRows(_ c: EllipticCurve) -> [(String, BigUInt)] {
-        [("a", c.a), ("b", c.b), ("p", c.p), ("x-Koordinate von G", c.gx), ("y-Koordinate von G", c.gy),
-         ("k (Kofaktor)", c.h), ("r (Ordnung von G)", c.n)]
+        [("a", c.a), ("b", c.b), ("p", c.p), ("x coordinates of G", c.gx), ("y coordinates of G", c.gy),
+         ("k (cofactor)", c.h), ("r (order of G)", c.n)]
     }
 }
 
@@ -400,19 +400,19 @@ struct PKIECKeyView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if let c = key.curve {
-                Text("Domain-Parameter der durch '\(c.name)' spezifizierten Elliptischen Kurve:").font(.headline)
+                Text("Domain parameters of elliptic curve '\(c.name)':").font(.headline)
                 PKIECParameterTable(rows: PKIECParameterTable.domainRows(c), base: base).frame(height: 190)
-                Text("Öffentlicher Schlüssel W = (Wx, Wy) von \(key.firstLast):")
+                Text("Public key W = (Wx, Wy) of \(key.firstLast):")
                 if case let .affine(x, y)? = key.ecPublic {
                     PKIECParameterTable(rows: [("Wx", x), ("Wy", y)], base: base).frame(height: 80)
                 }
                 if let d = privateKey {
-                    Text("Geheimer Schlüssel s:")
+                    Text("Secret key s:")
                     PKIECParameterTable(rows: [("s", d)], base: base).frame(height: 56)
                 }
             }
-            PKIGroup("Zahlensystem der Parameterdarstellung") { PKIBasePicker(base: $base) }
-            HStack { Spacer(); Button("Schließen", action: close).keyboardShortcut(.defaultAction) }
+            PKIGroup("Base for presentation of numbers") { PKIBasePicker(base: $base) }
+            HStack { Spacer(); Button("Close", action: close).keyboardShortcut(.defaultAction) }
         }
         .padding()
         .frame(width: 720)

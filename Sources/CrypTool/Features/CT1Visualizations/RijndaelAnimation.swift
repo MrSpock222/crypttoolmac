@@ -3,14 +3,14 @@ import SwiftUI
 import CTCommon
 import CTModern
 
-// Native version of CT1's Flash animation "Rijndael-Animation" (Enrique Zabala, version 4.0,
-// Rijndael_Animation_v4_ger.swf): intro, the encryption process (initial round, round 1 in
+// Native version of CT1's Flash animation "Rijndael Animation" (Enrique Zabala, version 4.0,
+// Rijndael_Animation_v4_eng.swf): intro, the encryption process (initial round, round 1 in
 // detail, rounds 2–9, final round) and the key expansion. Data: FIPS-197 Appendix B as in CT1;
 // own data (128-bit key) can be entered. Values come from CTModern.AESInspector.
 
 extension CT1Visualizations {
     static func openRijndaelAnimation() {
-        WindowPresenter.tool(id: "ct1-rijndael-anim", title: "Rijndael-Animation", size: CGSize(width: 1120, height: 860)) {
+        WindowPresenter.tool(id: "ct1-rijndael-anim", title: "Rijndael Animation", size: CGSize(width: 1120, height: 860)) {
             RijndaelAnimationView()
         }
     }
@@ -125,31 +125,30 @@ enum RijndaelAnimationScript {
         func intro() {
             slide(1, "Rijndael")
             label("big", "Rijndael", x: 60, y: 90, size: 54, bold: true)
-            label("win", "(Gewinner der AES-Ausschreibung)", x: 64, y: 160, size: 18)
+            label("win", "(winner of the AES selection)", x: 64, y: 160, size: 18)
             b.commit()
-            label("len1", "In der Animation wurde sowohl für", x: 64, y: 220, size: 16)
-            label("len2", "den Datenblock als auch für den Schlüssel", x: 64, y: 242, size: 16)
-            label("len3", "eine Länge von 128 Bit angenommen.", x: 64, y: 264, size: 16)
+            label("len1", "Animation using a 128 bit size", x: 64, y: 220, size: 16)
+            label("len2", "for each the data block and the key", x: 64, y: 242, size: 16)
             b.commit()
-            label("hexT", "Hexadezimal-Darstellung (Beispiel):", x: 64, y: 320, size: 16)
+            label("hexT", "Hexadecimal notation (sample):", x: 64, y: 320, size: 16)
             b.box(s("hexB"), x: 64, y: 350, w: 44, h: 32, fill: .highlight)
             b.cellText(s("hexV"), "32", x: 64, y: 350, w: 44, h: 32, size: 17)
             label("hexE", "=  00110010 (1 byte)", x: 120, y: 356, size: 16)
-            label("ver", "Animation: Enrique Zabala · Version 4.0 – Erstellt für das CrypTool-Projekt (www.cryptool.de) mithilfe von Bernhard Esslinger",
+            label("ver", "Animation by Enrique Zabala · Version 4.0 - made for the CrypTool project (www.cryptool.org) with the help of Bernhard Esslinger",
                   x: 20, y: 500, size: 11, color: .secondary)
-            say("Navigation: Mit „Weiter“ (Eingabetaste) zum nächsten Dia; über das Kapitelmenü direkt zu einzelnen Dias springen.")
+            say("How to navigate through the animation: use \"Continue\" (Enter key) to advance; use the chapter menu to jump directly to individual slides.")
             b.commit()
         }
 
         func dataSlide() {
-            slide(2, "Klartextblock (State) und Hauptschlüssel (Cipher Key)")
+            slide(2, "Plaintext block (State) and Cipher key")
             for i in 0..<16 {
                 b.cellText(s("inRow\(i)"), h(block[i]), x: 60 + CGFloat(i) * 30, y: 80, w: 30, h: 22, size: 14)
                 b.cellText(s("keyRow\(i)"), h(key[i]), x: 60 + CGFloat(i) * 30, y: 300, w: 30, h: 22, size: 14)
             }
             label("inL", "Input:", x: 4, y: 82, size: 13, color: .secondary)
             label("keyL", "Key:", x: 4, y: 302, size: 13, color: .secondary)
-            say("Dies ist ein Block vom Klartext (State), der verschlüsselt werden soll, und der Hauptschlüssel (Cipher Key).")
+            say("This is a block from the plaintext message (State) to be encrypted, and the Cipher key.")
             b.commit()
             // the bytes move column by column into the matrices
             for i in 0..<16 {
@@ -164,42 +163,42 @@ enum RijndaelAnimationScript {
                 b.box(s("kyb\(i)"), x: x0, y: y1, w: 40, h: 30, fill: .cellAlt)
                 b.setSize("ky\(i)", w: 40, h: 30); b.move("ky\(i)", x: x0, y: y1)
             }
-            label("stT", "Klartextblock (State)", x: 600, y: 46, size: 13)
-            label("kyT", "Hauptschlüssel (Cipher Key)", x: 600, y: 266, size: 13)
-            say("Die 16 Bytes werden spaltenweise (!) in eine 4×4-Byte-Matrix geschrieben (16 Byte = 128 Bit).")
+            label("stT", "Plaintext block (State)", x: 600, y: 46, size: 13)
+            label("kyT", "Cipher key", x: 600, y: 266, size: 13)
+            say("The 16 bytes are written column by column (!) into a 4×4 byte matrix (16 bytes = 128 bits).")
             b.commit()
         }
 
         func overview() {
-            slide(3, "Verschlüsseler")
-            matrix("st", block, x: 60, y: 110, title: "Klartextblock (State)")
-            matrix("ky", key, x: 60, y: 300, fill: .cellAlt, title: "Hauptschlüssel")
+            slide(3, "Encryptor")
+            matrix("st", block, x: 60, y: 110, title: "Plaintext block (State)")
+            matrix("ky", key, x: 60, y: 300, fill: .cellAlt, title: "Cipher key")
             b.box(s("encB"), x: 300, y: 110, w: 560, h: 120, fill: .cellAlt)
-            label("encT", "Verschlüsselungs-Prozess", x: 316, y: 120, size: 17, bold: true)
-            label("enc1", "(Durchführung der Verschlüsselung für den gegebenen Klartextblock mit Hilfe", x: 316, y: 150, size: 14)
-            label("enc2", "von 4 verschiedenen Transformationen in der Initial-Runde, den 9 Haupt-Runden", x: 316, y: 170, size: 14)
-            label("enc3", "und in der Final-Runde)", x: 316, y: 190, size: 14)
+            label("encT", "Encryption Process", x: 316, y: 120, size: 17, bold: true)
+            label("enc1", "(Performing the encryption of the given plaintext block using", x: 316, y: 150, size: 14)
+            label("enc2", "4 different transformations in the initial round, the 9 main rounds", x: 316, y: 170, size: 14)
+            label("enc3", "and the final round)", x: 316, y: 190, size: 14)
             b.line(s("encA"), [CGPoint(x: 222, y: 170), CGPoint(x: 296, y: 170)])
             b.commit()
             b.box(s("expB"), x: 300, y: 300, w: 560, h: 120, fill: .cell)
-            label("expT", "Schlüsselgenerierung", x: 316, y: 310, size: 17, bold: true)
-            label("exp1", "(Expandierung des gegebenen Hauptschlüssels in 11 Teilschlüssel, die in der", x: 316, y: 340, size: 14)
-            label("exp2", "Initial-Runde, den 9 Haupt-Runden und in der Final-Runde benutzt werden)", x: 316, y: 360, size: 14)
+            label("expT", "Key Schedule", x: 316, y: 310, size: 17, bold: true)
+            label("exp1", "(Expansion of the given Cipher key into 11 partial keys, used in the", x: 316, y: 340, size: 14)
+            label("exp2", "initial round, the 9 main rounds and the final round)", x: 316, y: 360, size: 14)
             b.line(s("expA"), [CGPoint(x: 222, y: 360), CGPoint(x: 296, y: 360)])
             b.line(s("expA2"), [CGPoint(x: 580, y: 300), CGPoint(x: 580, y: 234)])
-            label("expA2t", "Rundenschlüssel", x: 590, y: 256, size: 12, color: .secondary)
+            label("expA2t", "Round key", x: 590, y: 256, size: 12, color: .secondary)
             b.commit()
         }
 
         func transformations() {
-            slide(4, "Verschlüsselungs-Prozess: Transformationen")
-            label("tT", "Transformationen:", x: 60, y: 80, size: 17, bold: true)
+            slide(4, "Encryption Process: Transformations")
+            label("tT", "The 4 types of transformations:", x: 60, y: 80, size: 17, bold: true)
             let names = ["1 - SubBytes", "2 - ShiftRows", "3 - MixColumns", "4 - AddRoundKey"]
             for (i, n) in names.enumerated() { label("tn\(i)", n, x: 80, y: 112 + CGFloat(i) * 26, size: 16) }
             b.commit()
-            let col: [(String, [String])] = [("Initial-Runde", ["AddRoundKey"]),
-                                             ("9 Haupt-Runden", ["SubBytes", "ShiftRows", "MixColumns", "AddRoundKey"]),
-                                             ("Final-Runde", ["SubBytes", "ShiftRows", "AddRoundKey"])]
+            let col: [(String, [String])] = [("initial round", ["AddRoundKey"]),
+                                             ("9 main rounds", ["SubBytes", "ShiftRows", "MixColumns", "AddRoundKey"]),
+                                             ("final round", ["SubBytes", "ShiftRows", "AddRoundKey"])]
             for (j, c) in col.enumerated() {
                 let x = 340 + CGFloat(j) * 210
                 b.box(s("rb\(j)"), x: x, y: 80, w: 180, h: 30, fill: .cellAlt)
@@ -211,8 +210,8 @@ enum RijndaelAnimationScript {
             }
             b.line(s("ra1"), [CGPoint(x: 522, y: 95), CGPoint(x: 548, y: 95)])
             b.line(s("ra2"), [CGPoint(x: 732, y: 95), CGPoint(x: 758, y: 95)])
-            say("Diese vier Transformationen werden in den 9 Hauptrunden auf den Klartextblock angewandt.",
-                "Die MixColumns-Transformation wird in der Final-Runde nicht benutzt.")
+            say("These transformations are applied to the State for 9 more rounds.",
+                "The final round does not include the MixColumns transformation.")
             b.setColor("rot2_2", .text)
             b.commit()
         }
@@ -241,20 +240,20 @@ enum RijndaelAnimationScript {
         }
 
         func initialRound() {
-            slide(5, "Initial-Runde: AddRoundKey", subtitle: "Runde 0")
+            slide(5, "Initial round: AddRoundKey", subtitle: "Round 0")
             matrix("st", block, x: 60, y: 120, title: "State")
-            say("AddRoundKey: Jedes Byte des State wird mit dem entsprechenden Byte des Rundenschlüssels XOR-verknüpft.",
-                "In der Initial-Runde wird der Hauptschlüssel als Rundenschlüssel benutzt.")
-            addRoundKeySteps(prefixState: "st", before: block, roundKey: roundKeys[0], after: state(0, "AddRoundKey"), keyTitle: "Hauptschlüssel")
+            say("AddRoundKey: Each byte of the State is XORed with the corresponding byte of the Round key.",
+                "In the initial round the Cipher key is used as Round key.")
+            addRoundKeySteps(prefixState: "st", before: block, roundKey: roundKeys[0], after: state(0, "AddRoundKey"), keyTitle: "Cipher key")
         }
 
         func subBytes() {
-            slide(6, "Runde 1: SubBytes", subtitle: "1 - SubBytes")
+            slide(6, "Round 1: SubBytes", subtitle: "1 - SubBytes")
             let before = state(0, "AddRoundKey"), after = state(1, "SubBytes")
             matrix("st", before, x: 60, y: 120, title: "State")
             // S-box
             let sx: CGFloat = 400, sy: CGFloat = 96, cw: CGFloat = 34, ch: CGFloat = 20
-            label("sbT", "Byte-Ersetzungstabelle (S-Box)", x: sx, y: sy - 34, size: 14, bold: true)
+            label("sbT", "Byte substitution table (S-Box)", x: sx, y: sy - 34, size: 14, bold: true)
             label("sbY", "y", x: sx + 20 + 8 * cw, y: sy - 16, size: 11, color: .secondary)
             label("sbX", "x", x: sx - 14, y: sy + 8 * ch, size: 11, color: .secondary)
             for j in 0..<16 {
@@ -266,7 +265,7 @@ enum RijndaelAnimationScript {
                                w: cw, h: ch, size: 11)
                 }
             }
-            say("SubBytes: Jedes Byte des State wird mit Hilfe der Byte-Ersetzungstabelle (S-Box) durch ein anderes Byte ersetzt.")
+            say("SubBytes: Each byte of the State is replaced by another byte using the byte substitution table (S-Box).")
             b.commit()
             for ex in [0, 1] {
                 let v = before[ex], x = Int(v >> 4), y = Int(v & 0x0f)
@@ -274,7 +273,7 @@ enum RijndaelAnimationScript {
                 for i in 0..<16 { b.setFill("sbb\(x)_\(i)", .highlight) }
                 for j in 0..<16 { b.setFill("sbb\(j)_\(y)", .highlight) }
                 b.setColor("sbv\(x)_\(y)", .red)
-                label("sbEx\(ex)", "\(h(v)): Zeile x = \(String(x, radix: 16)), Spalte y = \(String(y, radix: 16))  →  \(h(after[ex]))",
+                label("sbEx\(ex)", "\(h(v)): row x = \(String(x, radix: 16)), column y = \(String(y, radix: 16))  →  \(h(after[ex]))",
                       x: 60, y: 280 + CGFloat(ex) * 24, size: 14, color: .red)
                 b.commit()
                 b.setText("st\(ex)", h(after[ex]))
@@ -292,7 +291,7 @@ enum RijndaelAnimationScript {
         }
 
         func shiftRows() {
-            slide(7, "Runde 1: ShiftRows", subtitle: "2 - ShiftRows")
+            slide(7, "Round 1: ShiftRows", subtitle: "2 - ShiftRows")
             let before = state(1, "SubBytes")
             let x0: CGFloat = 200, y0: CGFloat = 120, cw: CGFloat = 50, ch: CGFloat = 40
             for i in 0..<16 {
@@ -301,10 +300,10 @@ enum RijndaelAnimationScript {
                 b.cellText(s("sr\(i)"), h(before[i]), x: x0 + CGFloat(c) * cw, y: y0 + CGFloat(r) * ch, w: cw, h: ch, size: 17, z: 4)
             }
             label("srT", "State", x: x0, y: y0 - 24, size: 13)
-            say("ShiftRows: Die Zeilen des State werden zyklisch nach links verschoben – Zeile 0 bleibt unverändert,",
-                "Zeile 1 wird um 1 Byte, Zeile 2 um 2 Bytes und Zeile 3 um 3 Bytes rotiert.")
+            say("ShiftRows: The rows of the State are cyclically shifted to the left – row 0 remains unchanged,",
+                "row 1 is rotated over 1 byte, row 2 over 2 bytes and row 3 over 3 bytes.")
             b.commit()
-            let names = ["", "Rotation um 1 Byte", "Rotation um 2 Bytes", "Rotation um 3 Bytes"]
+            let names = ["", "rotate over 1 byte", "rotate over 2 bytes", "rotate over 3 bytes"]
             for r in 1..<4 {
                 label("srL\(r)", names[r], x: x0 + 4 * cw + 30, y: y0 + CGFloat(r) * ch + 10, size: 14, color: .red)
                 for c in 0..<4 {
@@ -321,7 +320,7 @@ enum RijndaelAnimationScript {
         }
 
         func mixColumns() {
-            slide(8, "Runde 1: MixColumns", subtitle: "3 - MixColumns")
+            slide(8, "Round 1: MixColumns", subtitle: "3 - MixColumns")
             let before = state(1, "ShiftRows"), after = state(1, "MixColumns")
             matrix("st", before, x: 60, y: 120, title: "State")
             label("mmT", "Matrix", x: 300, y: 98, size: 13)
@@ -333,7 +332,7 @@ enum RijndaelAnimationScript {
                 }
             }
             label("mmX", "·", x: 450, y: 160, size: 30)
-            say("Die 4 Zahlen einer Spalte werden mit einer gegebenen Matrix modulo multipliziert in einem Rijndael-Galois-Feld.")
+            say("The four numbers of one column are modulo multiplied in Rijndael's Galois Field by a given matrix.")
             b.commit()
             // column 0
             for r in 0..<4 { b.setColor("st\(r)", .red); b.setFill("stb\(r)", .highlight) }
@@ -362,45 +361,45 @@ enum RijndaelAnimationScript {
             for r in 0..<4 { b.setColor("st\(r)", .text) }
             b.commit()
             colorMatrix("st", .text)
-            say("Der MixColumns-Schritt ist zusammen mit dem ShiftRows-Schritt die Hauptursache für die Diffusion in der Rijndael-Chiffre.")
+            say("The MixColumns step along with the ShiftRows step is the primary source of diffusion in Rijndael.")
             b.commit()
         }
 
         func addRoundKey1() {
-            slide(9, "Runde 1: AddRoundKey", subtitle: "4 - AddRoundKey")
+            slide(9, "Round 1: AddRoundKey", subtitle: "4 - AddRoundKey")
             let before = state(1, "MixColumns")
             matrix("st", before, x: 60, y: 120, title: "State")
-            say("Der State wird mit dem Rundenschlüssel 1 XOR-verknüpft",
-                "(hergeleitet als Rundenschlüssel bei der Schlüsselgenerierung).")
-            addRoundKeySteps(prefixState: "st", before: before, roundKey: roundKeys[1], after: state(1, "AddRoundKey"), keyTitle: "Rundenschlüssel 1")
+            say("The State is XORed with Round key 1",
+                "(produced as Round key during the Key Schedule).")
+            addRoundKeySteps(prefixState: "st", before: before, roundKey: roundKeys[1], after: state(1, "AddRoundKey"), keyTitle: "Round key 1")
         }
 
         /// One FIPS-197 Appendix B style row: start, SubBytes, ShiftRows, (MixColumns), round key → result.
         func roundRow(_ r: Int, y: CGFloat) {
             let start = state(r - 1, "AddRoundKey")
-            var cols: [(String, [UInt8], AnimColor)] = [("Rundenbeginn", start, .cell),
-                                                        ("nach SubBytes", state(r, "SubBytes"), .cell),
-                                                        ("nach ShiftRows", state(r, "ShiftRows"), .cell)]
-            if r < roundKeys.count - 1 { cols.append(("nach MixColumns", state(r, "MixColumns"), .cell)) }
-            cols.append(("Rundenschlüssel \(r)", roundKeys[r], .cellAlt))
-            cols.append(("Ergebnis", state(r, "AddRoundKey"), .highlight))
+            var cols: [(String, [UInt8], AnimColor)] = [("Start of round", start, .cell),
+                                                        ("After SubBytes", state(r, "SubBytes"), .cell),
+                                                        ("After ShiftRows", state(r, "ShiftRows"), .cell)]
+            if r < roundKeys.count - 1 { cols.append(("After MixColumns", state(r, "MixColumns"), .cell)) }
+            cols.append(("Round key \(r)", roundKeys[r], .cellAlt))
+            cols.append(("Result", state(r, "AddRoundKey"), .highlight))
             for (k, c) in cols.enumerated() {
                 matrix("r\(r)m\(k)", c.1, x: 40 + CGFloat(k) * 155, y: y, cw: 30, ch: 24, fill: c.2, size: 13, title: c.0)
                 if k > 0 {
-                    let sym = c.0.hasPrefix("Rundenschlüssel") ? "⊕" : (c.0 == "Ergebnis" ? "=" : "→")
+                    let sym = c.0.hasPrefix("Round key") ? "⊕" : (c.0 == "Result" ? "=" : "→")
                     label("r\(r)a\(k)", sym, x: 40 + CGFloat(k) * 155 - 30, y: y + 34, size: 20, color: .secondary)
                 }
             }
         }
 
         func rounds2to9() {
-            slide(10, "Runden 2 bis 9", subtitle: "SubBytes → ShiftRows → MixColumns → AddRoundKey")
-            say("Die restlichen Haupt-Runden laufen nach dem gleichen Schema ab.")
+            slide(10, "Rounds 2 to 9", subtitle: "SubBytes → ShiftRows → MixColumns → AddRoundKey")
+            say("The remaining main rounds follow the same scheme.")
             let last = roundKeys.count - 1
             for r in 2..<last {
                 b.remove(slideIDs.filter { $0.hasPrefix("r\(r - 1)") || $0 == "roundL" })
                 slideIDs.removeAll { $0.hasPrefix("r\(r - 1)") || $0 == "roundL" }
-                label("roundL", "Runde \(r)", x: 40, y: 110, size: 20, color: .red, bold: true)
+                label("roundL", "Round \(r)", x: 40, y: 110, size: 20, color: .red, bold: true)
                 roundRow(r, y: 190)
                 b.commit()
             }
@@ -408,23 +407,23 @@ enum RijndaelAnimationScript {
 
         func finalRound() {
             let last = roundKeys.count - 1
-            slide(11, "Final-Runde (Runde \(last))", subtitle: "SubBytes → ShiftRows → AddRoundKey (ohne MixColumns)")
-            label("roundL", "Runde \(last)", x: 40, y: 110, size: 20, color: .red, bold: true)
+            slide(11, "Final round (Round \(last))", subtitle: "SubBytes → ShiftRows → AddRoundKey (without MixColumns)")
+            label("roundL", "Round \(last)", x: 40, y: 110, size: 20, color: .red, bold: true)
             roundRow(last, y: 190)
-            say("Die MixColumns-Transformation wird in der Final-Runde nicht benutzt.")
+            say("The final round does not include the MixColumns transformation.")
             b.commit()
         }
 
         func ciphertext() {
-            slide(12, "Geheimtext (Ciphertext)")
+            slide(12, "Ciphertext")
             matrix("ct", cipher, x: 80, y: 120, cw: 50, ch: 38, fill: .highlight, size: 18, title: "Ciphertext")
-            label("ctT", "Dies ist der verschlüsselte Block:", x: 340, y: 130, size: 15)
+            label("ctT", "This is the encrypted block:", x: 340, y: 130, size: 15)
             label("ctH", cipher.map { h($0) }.joined(separator: " "), x: 340, y: 160, size: 16, bold: true)
             if let it = b.item("ctH") { var m = it; m.mono = true; b.put(m) }
-            label("ctN", "(spaltenweise aus der Matrix gelesen)", x: 340, y: 188, size: 13, color: .secondary)
-            say("Als Output erhält man wieder 16 Bytes. Die Matrix wird spaltenweise ausgelesen.")
+            label("ctN", "(read from the matrix column by column)", x: 340, y: 188, size: 13, color: .secondary)
+            say("The output is again 16 bytes. The matrix is read column by column.")
             if block == RijndaelAnimationScript.exampleBlock && key == RijndaelAnimationScript.exampleKey {
-                say("Die Daten stammen aus FIPS-197, Anhang B.")
+                say("The data is taken from FIPS-197, Appendix B.")
             }
             b.commit()
         }
@@ -447,7 +446,7 @@ enum RijndaelAnimationScript {
                 if i < filled { fillWord(i, color: .text) }
             }
             for k in 0..<11 {
-                b.cellText(s("rkL\(k)"), k == 0 ? "Hauptschl." : "RK \(k)", x: wx0 + CGFloat(4 * k) * wcw, y: wy0 + 4 * wch + 2,
+                b.cellText(s("rkL\(k)"), k == 0 ? "Cipher key" : "RK \(k)", x: wx0 + CGFloat(4 * k) * wcw, y: wy0 + 4 * wch + 2,
                            w: 4 * wcw, h: 14, size: 9, color: .secondary, mono: false)
             }
         }
@@ -468,17 +467,17 @@ enum RijndaelAnimationScript {
         }
 
         func keyScheduleIntro() {
-            slide(13, "Schlüsselgenerierung", subtitle: "(Expandierung des gegebenen Hauptschlüssels in 11 Teilschlüssel)")
+            slide(13, "Key Schedule", subtitle: "(Expansion of the given Cipher key into 11 partial keys)")
             wordGrid(filled: 0)
-            say("Der expandierte Schlüssel kann als Vektor von 32-Bit-Worten (Spalten) betrachtet werden.",
-                "Die Indizes der Spalten laufen von 0 bis 43.")
+            say("The expanded key can be seen as an array of 32-bit words (columns),",
+                "numbered from 0 to 43.")
             b.commit()
         }
 
         func keyFirstWords() {
-            slide(14, "Schlüsselgenerierung: Hauptschlüssel", subtitle: "Die Spalten 0 bis 3")
+            slide(14, "Key Schedule: Cipher key", subtitle: "Columns 0 to 3")
             wordGrid(filled: 0)
-            matrix("ky", key, x: 60, y: 300, fill: .cellAlt, title: "Hauptschlüssel")
+            matrix("ky", key, x: 60, y: 300, fill: .cellAlt, title: "Cipher key")
             b.commit()
             for i in 0..<4 {
                 for r in 0..<4 { b.spawnCopy(of: "ky\(i * 4 + r)", as: s("w\(i)_\(r)"), z: 6) }
@@ -487,19 +486,19 @@ enum RijndaelAnimationScript {
                     b.move("w\(i)_\(r)", x: wx0 + CGFloat(i) * wcw, y: wy0 + CGFloat(r) * wch)
                 }
             }
-            say("Die ersten vier Spalten werden mit dem gegebenen Hauptschlüssel gefüllt.")
+            say("The first four columns are filled with the given Cipher key.")
             b.commit()
         }
 
         func keyRotSub() {
-            slide(15, "Schlüsselgenerierung: RotWord und SubBytes", subtitle: "Spalte 4")
+            slide(15, "Key Schedule: RotWord and SubBytes", subtitle: "Column 4")
             wordGrid(filled: 4)
             let w = words()
             for r in 0..<4 { b.setColor("w3_\(r)", .red) }
-            say("Die Worte auf durch 4 teilbaren Positionen werden folgendermaßen berechnet:",
-                "a) Anwenden der Funktion RotWord und der Transformation SubBytes auf das vorausgehende Wort.")
+            say("Words in positions that are a multiple of 4 are calculated by:",
+                "a) applying the RotWord and SubBytes transformation to the previous word.")
             b.commit()
-            colWord("cw3", w[3], x: 80, title: "Spalte 3")
+            colWord("cw3", w[3], x: 80, title: "Column 3")
             b.commit()
             let rot = [w[3][1], w[3][2], w[3][3], w[3][0]]
             label("a1", "→", x: 128, y: 310, size: 22, color: .secondary)
@@ -515,51 +514,51 @@ enum RijndaelAnimationScript {
         }
 
         func keyXorRcon() {
-            slide(16, "Schlüsselgenerierung: XOR mit Rcon", subtitle: "Spalte 4")
+            slide(16, "Key Schedule: XOR with Rcon", subtitle: "Column 4")
             wordGrid(filled: 4)
             let w = words()
             let rot = [w[3][1], w[3][2], w[3][3], w[3][0]]
             let sub = rot.map { AESInspector.sbox[Int($0)] }
             colWord("csub", sub, x: 80, title: "SubBytes")
-            say("b) Mit der XOR-Funktion das erste Ergebnis mit dem Vorgängerwort (vier Positionen vorher) verknüpfen.",
-                "Danach die XOR-Funktion auf das folgende Ergebnis und auf Elemente der Rundenkonstante Rcon anwenden.")
+            say("b) Adding (XOR) this result to the word 4 positions earlier,",
+                "plus a round constant Rcon.")
             b.commit()
             for r in 0..<4 { b.setColor("w0_\(r)", .red) }
             label("x1", "⊕", x: 126, y: 312, size: 22)
-            colWord("cw0", w[0], x: 160, title: "Spalte 0", color: .red)
+            colWord("cw0", w[0], x: 160, title: "Column 0", color: .red)
             b.commit()
             let rcon: [UInt8] = [1, 0, 0, 0]
             label("x2", "⊕", x: 206, y: 312, size: 22)
             colWord("crc", rcon, x: 240, title: "Rcon(1)", fill: .cellAlt, color: .red)
             b.commit()
             label("x3", "=", x: 286, y: 312, size: 22)
-            colWord("cw4", w[4], x: 320, title: "Spalte 4", fill: .highlight, color: .red)
+            colWord("cw4", w[4], x: 320, title: "Column 4", fill: .highlight, color: .red)
             b.commit()
             for r in 0..<4 { b.spawnCopy(of: "cw4\(r)", as: s("w4_\(r)"), z: 6) }
             for r in 0..<4 {
                 b.setSize("w4_\(r)", w: wcw, h: wch); b.move("w4_\(r)", x: wx0 + 4 * wcw, y: wy0 + CGFloat(r) * wch)
                 b.setColor("w0_\(r)", .text)
             }
-            label("rconT", "Rcon: 01 02 04 08 10 20 40 80 1b 36 (je erstes Byte, Rest 00)", x: 420, y: 290, size: 12, color: .secondary)
+            label("rconT", "Rcon: 01 02 04 08 10 20 40 80 1b 36 (first byte each, rest 00)", x: 420, y: 290, size: 12, color: .secondary)
             b.commit()
         }
 
         func keyRest() {
-            slide(17, "Schlüsselgenerierung: die übrigen Spalten", subtitle: "Spalten 5 bis 7")
+            slide(17, "Key Schedule: the remaining columns", subtitle: "Columns 5 to 7")
             wordGrid(filled: 5)
             let w = words()
-            say("Die restlichen 32-Bit-Worte werden berechnet, indem das jeweilige Vorgängerwort",
-                "XOR-verknüpft wird mit dem Wort vier Positionen vorher.")
+            say("The remaining 32-bit words are calculated by adding (XOR) the previous word",
+                "with the word 4 positions earlier.")
             b.commit()
             for i in 5..<8 {
                 b.remove(slideIDs.filter { $0.hasPrefix("cA") || $0.hasPrefix("cB") || $0.hasPrefix("cC") || $0.hasPrefix("xx") })
                 slideIDs.removeAll { $0.hasPrefix("cA") || $0.hasPrefix("cB") || $0.hasPrefix("cC") || $0.hasPrefix("xx") }
                 for r in 0..<4 { b.setColor("w\(i - 1)_\(r)", .red); b.setColor("w\(i - 4)_\(r)", .blue) }
-                colWord("cA", w[i - 1], x: 80, title: "Spalte \(i - 1)", color: .red)
+                colWord("cA", w[i - 1], x: 80, title: "Column \(i - 1)", color: .red)
                 label("xx1", "⊕", x: 126, y: 312, size: 22)
-                colWord("cB", w[i - 4], x: 160, title: "Spalte \(i - 4)", color: .blue)
+                colWord("cB", w[i - 4], x: 160, title: "Column \(i - 4)", color: .blue)
                 label("xx2", "=", x: 206, y: 312, size: 22)
-                colWord("cC", w[i], x: 240, title: "Spalte \(i)", fill: .highlight)
+                colWord("cC", w[i], x: 240, title: "Column \(i)", fill: .highlight)
                 b.commit()
                 for r in 0..<4 { b.spawnCopy(of: "cC\(r)", as: s("w\(i)_\(r)"), z: 6) }
                 for r in 0..<4 {
@@ -571,9 +570,9 @@ enum RijndaelAnimationScript {
         }
 
         func keyAll() {
-            slide(18, "Schlüsselgenerierung: alle Rundenschlüssel", subtitle: "Spalten 8 bis 43")
+            slide(18, "Key Schedule: all Round keys", subtitle: "Columns 8 to 43")
             wordGrid(filled: 8)
-            say("Nach dem gleichen Schema entstehen die Spalten 8 bis 43, also die Rundenschlüssel 2 bis 10.")
+            say("Columns 8 to 43, i.e. Round keys 2 to 10, are produced by the same scheme.")
             b.commit()
             for k in 2..<11 {
                 for i in (4 * k)..<(4 * k + 4) { fillWord(i, color: .red) }
@@ -584,7 +583,7 @@ enum RijndaelAnimationScript {
             }
             var rows: [String] = []
             for (k, rk) in roundKeys.enumerated() {
-                rows.append((k == 0 ? "Hauptschlüssel     " : String(format: "Rundenschlüssel %2d ", k)) + rk.map { h($0) }.joined(separator: " "))
+                rows.append((k == 0 ? "Cipher key   " : String(format: "Round key %2d ", k)) + rk.map { h($0) }.joined(separator: " "))
             }
             for (i, r) in rows.enumerated() {
                 label("rkrow\(i)", r, x: 40, y: 246 + CGFloat(i) * 21, size: 13)
@@ -604,17 +603,17 @@ struct RijndaelAnimationView: View {
 
     var body: some View {
         ScriptedAnimationView(script: script, player: player) {
-            AnimationInputBar(note: error ?? "Wie in CT1 ist das Beispiel aus FIPS-197, Anhang B, vorbelegt. Klartextblock und Schlüssel: je 16 Byte hexadezimal.",
+            AnimationInputBar(note: error ?? "As in CT1, the example from FIPS-197, Appendix B, is preset. Plaintext block and key: 16 bytes hexadecimal each.",
                               rebuild: rebuild,
                               resetToExample: {
                                   blockHex = RijndaelAnimationScript.exampleBlock.ct1Hex
                                   keyHex = RijndaelAnimationScript.exampleKey.ct1Hex
                                   rebuild()
                               }) {
-                Text("Klartext").foregroundStyle(.secondary)
-                TextField("16 Byte hex", text: $blockHex).font(.system(.body, design: .monospaced)).frame(width: 300)
-                Text("Schlüssel").foregroundStyle(.secondary)
-                TextField("16 Byte hex", text: $keyHex).font(.system(.body, design: .monospaced)).frame(width: 300)
+                Text("Plaintext").foregroundStyle(.secondary)
+                TextField("16 bytes hex", text: $blockHex).font(.system(.body, design: .monospaced)).frame(width: 300)
+                Text("Key").foregroundStyle(.secondary)
+                TextField("16 bytes hex", text: $keyHex).font(.system(.body, design: .monospaced)).frame(width: 300)
             }
         }
         .onAppear(perform: rebuild)
@@ -622,7 +621,7 @@ struct RijndaelAnimationView: View {
 
     private func rebuild() {
         guard let blk = Hex.decode(blockHex), blk.count == 16, let k = Hex.decode(keyHex), k.count == 16 else {
-            error = "Bitte Klartextblock und Schlüssel mit je genau 16 Byte (128 Bit) hexadezimal eingeben."
+            error = "Please enter plaintext block and key with exactly 16 bytes (128 bits) hexadecimal each."
             return
         }
         do {

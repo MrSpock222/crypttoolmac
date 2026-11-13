@@ -14,7 +14,7 @@ extension CT1Analysis {
         if let w = session.warning { Alerts.info(w.message) }
         let model = PlayfairAnalysisModel(document: document, session: session)
         let window = WindowPresenter.tool(id: "ct1-playfair-analysis-\(ObjectIdentifier(document).hashValue)",
-                                          title: "Playfair-Analyse: Manuelle Nachbearbeitung",
+                                          title: "Playfair Analysis: Manual Post-Processing",
                                           size: CGSize(width: 960, height: 720)) {
             PlayfairAnalysisView(model: model)
         }
@@ -132,11 +132,11 @@ struct PlayfairAnalysisView: View {
             HStack(alignment: .top, spacing: 14) {
                 leftColumn.frame(width: 250)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Buchstabeninformationen")
+                    Text("Letter information")
                     letterTable
                 }
             }
-            Text("Analyseergebnis: Die folgenden drei Zeilen enthalten Chiffrat, Eingabe bzw. Ergebnis der Häufigkeitsanalyse, ermittelter Klartext.")
+            Text("Analysis result: The following three rows contain ciphertext, input or result of the frequency analysis, found plaintext.")
                 .font(.callout)
                 .fixedSize(horizontal: false, vertical: true)
             PlayfairAnalysisTextPanel(lines: lines.cipher + "\n" + lines.guess + "\n" + lines.plain,
@@ -151,11 +151,11 @@ struct PlayfairAnalysisView: View {
                     .lineLimit(2)
             }
             HStack {
-                Button("Ergebnis der Analyse ausgeben") { model.outputResult() }
+                Button("Output results of analysis") { model.outputResult() }
                     .keyboardShortcut(.defaultAction)
-                Button("Synchronisiere Analyseergebnis / Vermuteter Klartext") { model.synchronize() }
+                Button("Synchronize analysis result / Expected plaintext") { model.synchronize() }
                 Spacer()
-                Button("Abbrechen") { model.cancel() }
+                Button("Cancel") { model.cancel() }
                     .keyboardShortcut(.cancelAction)
             }
         }
@@ -167,28 +167,28 @@ struct PlayfairAnalysisView: View {
 
     private var leftColumn: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Passwort")
+            Text("Password:")
             TextField("", text: Binding(get: { session.password }, set: { model.passwordEdited($0) }))
                 .font(.system(.body, design: .monospaced))
                 .textFieldStyle(.roundedBorder)
-            GroupBox("Schlüsselmatrix") {
+            GroupBox("Key matrix") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Toggle("Doppelte wurden ignoriert",
+                    Toggle("Duplicates are ignored",
                            isOn: Binding(get: { session.ignoreDuplicateLetters }, set: { model.setIgnoreDuplicates($0) }))
                     Picker("", selection: Binding(get: { session.size }, set: { model.setSize($0) })) {
-                        Text("5x5 Matrix").tag(PlayfairCipher.Size.fiveByFive)
-                        Text("6x6 Matrix").tag(PlayfairCipher.Size.sixBySix)
+                        Text("5x5 matrix").tag(PlayfairCipher.Size.fiveByFive)
+                        Text("6x6 matrix").tag(PlayfairCipher.Size.sixBySix)
                     }
                     .pickerStyle(.radioGroup)
                     .horizontalRadioGroupLayout()
                     .labelsHidden()
                     matrixGrid
                         .frame(maxWidth: .infinity)
-                    Toggle("Vermuteten Klartext anhand der Matrix aktualisieren", isOn: $model.updateExpectedPlaintext)
+                    Toggle("Update expected plaintext using the key matrix", isOn: $model.updateExpectedPlaintext)
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
                         Spacer()
-                        Button("Erzeuge Matrix") { model.createMatrix() }
+                        Button("Generate matrix") { model.createMatrix() }
                         Spacer()
                     }
                 }
@@ -223,7 +223,7 @@ struct PlayfairAnalysisView: View {
             TableColumn("LROU") { (i: PlayfairAnalysisLetterInfo) in Text(i.neighbours) }.width(48)
             TableColumn("Nb?") { (i: PlayfairAnalysisLetterInfo) in Text(i.possibleNeighbours) }.width(55)
             TableColumn("Horizontal") { (i: PlayfairAnalysisLetterInfo) in Text(i.horizontal) }.width(min: 80, ideal: 110)
-            TableColumn("Vertikal") { (i: PlayfairAnalysisLetterInfo) in Text(i.vertical) }.width(min: 70, ideal: 90)
+            TableColumn("Vertical") { (i: PlayfairAnalysisLetterInfo) in Text(i.vertical) }.width(min: 70, ideal: 90)
             TableColumn("row or col?") { (i: PlayfairAnalysisLetterInfo) in Text(i.rowOrColumn) }.width(min: 90, ideal: 130)
             TableColumn("Metrik") { (i: PlayfairAnalysisLetterInfo) in Text("\(i.weight)") }.width(50)
         }
@@ -401,7 +401,7 @@ struct PlayfairAnalysisTextPanel: NSViewRepresentable {
         let pScroll = NSScrollView(frame: .zero)
         Self.configure(plain, scroll: pScroll, lines: 1)
         plain.delegate = c
-        let label = NSTextField(labelWithString: "Vermuteter Klartext:")
+        let label = NSTextField(labelWithString: "Expected plaintext:")
         let stack = NSStackView(views: [aScroll, label, pScroll])
         stack.orientation = .vertical
         stack.alignment = .leading

@@ -28,11 +28,11 @@ func runCT1ClassicFlowTests() {
     approx(corr.reduce(0, +), 1.0, 1e-9, "Σ correlation = Σd·Σt = 1")
     check(A.findPeak([1, 3, 3, 2]) == 1, "FindPeak: first maximum")
     check(A.caesarKeyOffsetRemark(derivedKey: "A", alphabet: az) ==
-          "Durch das bei der Verschlüsselung eingestellte Key-Offset existieren zwei mögliche Schlüssel: Für ein Key-Offset von 1 gilt der Schlüssel 'A', für ein Key-Offset von 0 gilt der Schlüssel 'B'.",
+          "Because of the key offset which was used during encryption, there are two keys possible: For a key offset of 1 the key is 'A', for a key offset of 0 the key is 'B'.",
           "Caesar key offset remark")
-    check(A.caesarKeyOffsetRemark(derivedKey: "Z", alphabet: az).hasSuffix("von 0 gilt der Schlüssel 'A'."), "remark wraps Z → A")
+    check(A.caesarKeyOffsetRemark(derivedKey: "Z", alphabet: az).hasSuffix("of 0 the key is 'A'."), "remark wraps Z → A")
     check(A.resultTitle(.caesar, document: "Startbeispiel-de.txt", key: "D") ==
-          "Automatische Caesar-Analyse von <Startbeispiel-de.txt>, Schlüssel: <D>", "Caesar result title")
+          "Automatic Caesar Analysis of <Startbeispiel-de.txt>, key: <Key: <D>>", "Caesar result title")
 
     // --- Vigenère: CT1 scenario CrypTool-de.txt / CRYPTOOL → key length 8, key CRYPTOOL ---
     let keyIdx = opts.indices(of: "CRYPTOOL")
@@ -48,8 +48,8 @@ func runCT1ClassicFlowTests() {
         let k16 = A.vigenereKey(vSeq, period: 16, referenceCounts: refCounts)
         check(A.reducedKey(k16).map { opts.string(from: $0) } == "CRYPTOOL", "period 16 → iterated key reduced to CRYPTOOL")
     } else { check(false, "autocorrelation not computed") }
-    check(A.resultTitle(.vigenere, document: "x", key: "AB") == "Automatische Vigenère-Analyse von <x>, Schlüssel: <AB>", "Vigenère title")
-    check(A.repeatedKeyMessage("AB") == "Der Schlüssel weist Wiederholungen auf und wird durch den äquivalenten Schlüssel <AB> ersetzt!", "repeated key message")
+    check(A.resultTitle(.vigenere, document: "x", key: "AB") == "Automatic Vigenère Analysis of <x>, key: <AB>", "Vigenère title")
+    check(A.repeatedKeyMessage("AB") == "The key shows recurring elements and will be replaced by the equivalent key <AB>!", "repeated key message")
 
     // --- key length rule details ---
     check(A.keyLength(autocorrelation: [10, 0, 0, 0]) == 4, "no shift above threshold → size")
@@ -104,13 +104,13 @@ func runCT1ClassicFlowTests() {
     check(A.mostFrequentByte([Int](repeating: 0, count: 256), previous: 0x42) == 0x42, "empty column keeps previous value")
     check(A.byteKey([0x00, 0x10, 0x00, 0x10], period: 2, expected: 0x01, xor: false) == [0xFF, 0x0F], "ADD key = c − e mod 256")
     check(A.hexKeyString([0x1A, 0x02, 0xFF]) == "1A 02 FF", "hex key format")
-    check(A.resultTitle(.xor, document: "d", key: "1A 2B") == "Automatische XOR-Analyse von <d>, Schlüssel: <1A 2B>", "XOR title")
-    check(A.resultTitle(.addition, document: "d", key: "1A") == "Automatische ADD-Analyse von <d>, Schlüssel: <1A>", "ADD title")
+    check(A.resultTitle(.xor, document: "d", key: "1A 2B") == "Automatic XOR Analysis of <d>, key: <1A 2B>", "XOR title")
+    check(A.resultTitle(.addition, document: "d", key: "1A") == "Automatic Addition Analysis of <d>, key: <1A>", "ADD title")
 
     // --- CT1 MakeNewName2 truncation (256-byte buffer, key is cut) ---
     let longKey = String(repeating: "K", count: 300)
     let t = A.resultTitle(.vigenere, document: "doc", key: longKey)
-    let fmtLen = "Automatische Vigenère-Analyse von <%s>, Schlüssel: <%s>".count
+    let fmtLen = "Automatic Vigenère Analysis of <%s>, key: <%s>".count
     check(t.hasSuffix("...>") && t.count == fmtLen - 4 + 3 + (256 - (fmtLen + 3 + 4)) + 3, "long key truncated like CT1 (\(t.count))")
-    check(A.inputTooShortMessage(8).hasPrefix("Die Eingabe muss mindestens 8 (nicht unbedingt verschiedene) Buchstaben"), "too short message")
+    check(A.inputTooShortMessage(8).hasPrefix("The input must contain at least 8 (not necessarily different) character(s)"), "too short message")
 }

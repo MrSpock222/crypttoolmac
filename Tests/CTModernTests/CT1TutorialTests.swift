@@ -75,7 +75,7 @@ func runCT1TutorialTests() {
         let plain = example("CrypTool-de.txt")
         let z = try CT1Zip.compress(plain)
         check(z.count == 731 && z.starts(with: Array("CTZ".utf8)), "CrypTool-de.txt → 731 Bytes wie CT1 (got \(z.count))")
-        check(CT1Zip.compressionMessage(original: plain.count, compressed: z.count) == "Kompressionsgrad: 51 %.", "Meldung")
+        check(CT1Zip.compressionMessage(original: plain.count, compressed: z.count) == "Rate of compression: 51 %", "Meldung")
         checkEq(try CT1Zip.decompress(z), plain, "UnZip")
         check(try CT1Zip.compress([]) == Array("CTZ".utf8), "leeres Dokument")
         checkThrows("UnZip ohne Magic-Number") { _ = try CT1Zip.decompress([1, 2, 3, 4]) }

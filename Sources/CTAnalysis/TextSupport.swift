@@ -122,7 +122,7 @@ struct SplitMix64: RandomNumberGenerator {
     }
 }
 
-/// Formats a double with a fixed number of decimals using a German decimal comma.
+/// Formats a double with a fixed number of decimals (decimal point, as the English CT1).
 func fmt(_ x: Double, _ decimals: Int = 4) -> String {
-    String(format: "%.\(decimals)f", x).replacingOccurrences(of: ".", with: ",")
+    String(format: "%.\(decimals)f", x)
 }

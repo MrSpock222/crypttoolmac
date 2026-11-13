@@ -235,7 +235,7 @@ final class QuadraticSieve: @unchecked Sendable {
         while let p = it.next() {
             if N.remainder(dividingBy: p) == 0 { return BigUInt(p) }
         }
-        log?("Quadratisches Sieb: \(N.digitCount()) Stellen, Multiplikator \(k), Faktorbasis \(fb.count) Primzahlen bis \(fb.last!), Siebintervall 2·\(M)")
+        log?("Quadratic sieve: \(N.digitCount()) digits, multiplier \(k), factor base \(fb.count) primes up to \(fb.last!), sieve interval 2·\(M)")
         let start = Date()
         let done = ParallelSearchState()
         DispatchQueue.concurrentPerform(iterations: Factorization.workerCount) { _ in
@@ -254,7 +254,7 @@ final class QuadraticSieve: @unchecked Sendable {
         }
         if let f = foundFactor { return f }
         if deadline.expired && relationCount < needed { return nil }
-        log?(String(format: "Quadratisches Sieb: %d Relationen aus %d Polynomen in %.2f s gesammelt, lineare Algebra …",
+        log?(String(format: "Quadratic sieve: %d relations from %d polynomials collected in %.2f s, linear algebra ...",
                     fulls.count, polyCount, Date().timeIntervalSince(start)))
         return linearAlgebra()
     }

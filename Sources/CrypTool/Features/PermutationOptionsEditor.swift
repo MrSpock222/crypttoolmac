@@ -8,17 +8,17 @@ struct PermutationStageGrid: View {
 
     var body: some View {
         Grid(alignment: .leading, horizontalSpacing: 14, verticalSpacing: 4) {
-            row("Zeilenweise", .rowWise)
-            row("Spaltenweise", .columnWise)
+            row("line by line:", .rowWise)
+            row("column by column:", .columnWise)
         }
     }
 
     private func row(_ title: String, _ d: PermutationOptions.Direction) -> some View {
         GridRow {
             Text(title).frame(width: 90, alignment: .trailing)
-            CT1Radio(title: "einlesen", selected: stage.readIn == d) { stage.readIn = d }
-            CT1Radio(title: "permutieren", selected: stage.permute == d) { stage.permute = d }
-            CT1Radio(title: "auslesen", selected: stage.readOut == d) { stage.readOut = d }
+            CT1Radio(title: "Input", selected: stage.readIn == d) { stage.readIn = d }
+            CT1Radio(title: "Permute", selected: stage.permute == d) { stage.permute = d }
+            CT1Radio(title: "Output", selected: stage.readOut == d) { stage.readOut = d }
         }
     }
 }
@@ -29,11 +29,11 @@ struct PermutationOptionsEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("1. Permutation").font(.caption)
+            Text("1st Permutation").font(.caption)
             PermutationStageGrid(stage: $options.first)
-            Text("2. Permutation").font(.caption)
+            Text("2nd Permutation").font(.caption)
             PermutationStageGrid(stage: $options.second)
-            Toggle("Jeweils die inverse Permutation anwenden", isOn: $options.applyInverse)
+            Toggle("Apply the respective inverse permutation", isOn: $options.applyInverse)
         }
     }
 }

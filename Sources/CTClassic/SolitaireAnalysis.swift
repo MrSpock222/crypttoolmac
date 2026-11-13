@@ -69,12 +69,12 @@ public enum SolitaireAnalysis {
 
     /// Parses a deck in CT1's file notation ("…,A,B", as written by the CT1 Solitaire dialog) or in
     /// purely numeric notation ("1,2,…,54", jokers = n − 1 and n). Separators: commas, semicolons,
-    /// whitespace. Throws a German error message for invalid decks.
+    /// whitespace. Throws an error message for invalid decks.
     public static func parseDeck(_ s: String) throws -> [Int] {
         let tokens = s.split(whereSeparator: { $0 == "," || $0 == ";" || $0.isWhitespace }).map { String($0).uppercased() }
-        guard !tokens.isEmpty else { throw CTError("Das Solitaire-Deck konnte nicht geladen werden (keine Karten gefunden).") }
+        guard !tokens.isEmpty else { throw CTError("Could not load the Solitaire deck (no cards found).") }
         guard tokens.count <= 54 else {
-            throw CTError("Das Solitaire-Deck konnte nicht geladen werden (mehr als 54 Karten).")
+            throw CTError("Could not load the Solitaire deck (more than 54 cards).")
         }
         let hasLetters = tokens.contains("A") || tokens.contains("B")
         let n = tokens.count
@@ -83,20 +83,20 @@ public enum SolitaireAnalysis {
             if t == "A" { deck.append(n - 1); continue }
             if t == "B" { deck.append(n); continue }
             guard let v = Int(t) else {
-                throw CTError("Das Solitaire-Deck konnte nicht geladen werden („\(t)“ ist keine gültige Karte).")
+                throw CTError("Could not load the Solitaire deck (\"\(t)\" is not a valid card).")
             }
             if hasLetters && (v < 1 || v > n - 2) {
-                throw CTError("Das Solitaire-Deck konnte nicht geladen werden (Karte \(v) passt nicht zu \(n) Karten; die Joker heißen A und B).")
+                throw CTError("Could not load the Solitaire deck (card \(v) does not match \(n) cards; the jokers are called A and B).")
             }
             deck.append(v)
         }
         if hasLetters && !(tokens.contains("A") && tokens.contains("B")) {
-            throw CTError("Das Solitaire-Deck konnte nicht geladen werden (beide Joker A und B müssen enthalten sein).")
+            throw CTError("Could not load the Solitaire deck (both jokers A and B must be included).")
         }
         do {
             return try Solitaire.validated(deck)
         } catch {
-            throw CTError("Das Solitaire-Deck konnte nicht geladen werden. \(error.localizedDescription)")
+            throw CTError("Could not load the Solitaire deck. \(error.localizedDescription)")
         }
     }
 

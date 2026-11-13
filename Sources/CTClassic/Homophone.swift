@@ -61,10 +61,10 @@ public struct HomophoneKey: Codable, Equatable, Sendable {
         for (ch, codes) in table {
             for c in codes {
                 guard c >= 0 && c < codeCount else {
-                    throw CTError("Der Code \(c) für „\(ch)“ liegt außerhalb des Bereichs 0…\(codeCount - 1).")
+                    throw CTError("The code \(c) for \"\(ch)\" is outside the range 0…\(codeCount - 1).")
                 }
                 guard seen.insert(c).inserted else {
-                    throw CTError("Der Code \(c) ist im Homophon-Schlüssel mehreren Zeichen zugeordnet.")
+                    throw CTError("The code \(c) is assigned to several characters in the homophone key.")
                 }
             }
         }
@@ -94,7 +94,7 @@ public struct HomophoneKey: Codable, Equatable, Sendable {
         var t: [Character: [Int]] = [:]
         for (k, v) in raw {
             guard k.count == 1, let ch = k.first else {
-                throw DecodingError.dataCorruptedError(forKey: .table, in: c, debugDescription: "Ungültiges Zeichen im Homophon-Schlüssel")
+                throw DecodingError.dataCorruptedError(forKey: .table, in: c, debugDescription: "Invalid character in the homophone key")
             }
             t[ch] = v
         }
@@ -123,8 +123,8 @@ public enum HomophoneOutputFormat: String, CaseIterable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .decimal: return "Dezimal"
-        case .hex: return "Hexadezimal"
+        case .decimal: return "Decimal"
+        case .hex: return "Hexadecimal"
         case .bytes: return "Bytes"
         }
     }
@@ -261,7 +261,7 @@ public enum Homophone {
             var out: [Int] = []
             for token in text.split(whereSeparator: { $0.isWhitespace || $0 == "," || $0 == ";" }) {
                 guard let v = Int(token, radix: radix), v >= 0 else {
-                    throw CTError("„\(token)“ ist kein gültiger \(radix == 10 ? "Dezimal" : "Hexadezimal")-Code.")
+                    throw CTError("\"\(token)\" is not a valid \(radix == 10 ? "decimal" : "hexadecimal") code.")
                 }
                 out.append(v)
             }
@@ -270,7 +270,7 @@ public enum Homophone {
             var out: [Int] = []
             for s in text.unicodeScalars {
                 guard s.value <= 255 else {
-                    throw CTError("Das Zeichen „\(s)“ ist kein gültiger Byte-Code (U+0000 … U+00FF).")
+                    throw CTError("The character \"\(s)\" is not a valid byte code (U+0000 … U+00FF).")
                 }
                 out.append(Int(s.value))
             }

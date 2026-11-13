@@ -29,7 +29,7 @@ public struct Solitaire: Sendable {
         self.deck = (try? Solitaire.validated(deck)) ?? Solitaire.orderedDeck
     }
 
-    /// Throws a German error message if `deck` is not a permutation of 1…n (3 ≤ n ≤ 54).
+    /// Throws an error message if `deck` is not a permutation of 1…n (3 ≤ n ≤ 54).
     public init(validating deck: [Int]) throws {
         self.deck = try Solitaire.validated(deck)
     }
@@ -51,10 +51,10 @@ public struct Solitaire: Sendable {
     public static func validated(_ deck: [Int]) throws -> [Int] {
         let n = deck.count
         guard n >= 3 && n <= 54 else {
-            throw CTError("Ein Solitaire-Kartenspiel muss aus 3 bis 54 Karten bestehen (hier: \(n)).")
+            throw CTError("A Solitaire deck must consist of 3 to 54 cards (here: \(n)).")
         }
         guard Set(deck) == Set(1...n) else {
-            throw CTError("Das Kartenspiel muss jede Karte 1…\(n) genau einmal enthalten (die Joker sind \(n - 1) und \(n)).")
+            throw CTError("The deck must contain each card 1…\(n) exactly once (the jokers are \(n - 1) and \(n)).")
         }
         return deck
     }
@@ -63,7 +63,7 @@ public struct Solitaire: Sendable {
     public static func parseDeck(_ s: String) throws -> [Int] {
         var out: [Int] = []
         for t in s.split(whereSeparator: { $0 == "," || $0 == ";" || $0.isWhitespace }) {
-            guard let v = Int(t) else { throw CTError("„\(t)“ ist keine gültige Kartennummer.") }
+            guard let v = Int(t) else { throw CTError("\"\(t)\" is not a valid card number.") }
             out.append(v)
         }
         return try validated(out)

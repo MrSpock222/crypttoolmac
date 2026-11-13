@@ -1,21 +1,34 @@
 # HANDOFF
 
 ## Stand
-- Branch: `main`, synchron mit `origin/main`.
-- Letzter Code-Commit: `9ea4410` „Blömer/May-Gitterverfahren für kleine geheime Schlüssel“ (App = v1.4.0).
-- Tests: **alle grün** (Details unten).
+- Branch: `main`, synchron mit `origin/main`. Letzter Code-Commit: „CrypTool 2.0.0: englische Fassung …“
+  (App = **v2.0.0**, englisch mit den Texten der englischen CT1-Fassung; v1.4.0 = letzte deutsche Fassung).
+- Tests: **alle grün** (für den Release-Stand gelaufen, 2026-11-13).
 
 ## Tests (einmal gelaufen)
 `swift run -c release --scratch-path .build-release <Target>`:
 - CTBigNumTests → 3080 bestanden, 0 fehlgeschlagen ✅
-- CTLatticeTests → 12 bestanden, 0 fehlgeschlagen ✅
-- CTClassicTests → 18923 Prüfungen, 0 Fehler ✅
+- CTLatticeTests → 17 bestanden, 0 fehlgeschlagen ✅ (5 neue: LLL bitgenau gegen Referenz, exakte Division)
+- CTClassicTests → 18373 Prüfungen, 0 Fehler ✅ (Anzahl schwankt: zufällige Textlängen in `main.swift`)
 - CTModernTests → 2416 passed, 0 failed ✅
 - CTAnalysisTests → 428 passed, 0 failed ✅
-- `python3 -I scripts/check-help.py Resources/Help/de Sources/CrypTool/Help/HelpTopics.swift` → 0 errors, 0 warnings ✅
+- `python3 -I scripts/check-help.py Resources/Help/en Sources/CrypTool/Help/HelpTopics.swift` → 0 errors,
+  2 warnings (fehlende Anker im Original-Readme) ✅
+- `scripts/build-app.sh` baut; App gestartet: englische Menüleiste, „How to Start“, `Startingexample-en.txt`.
 
-## In diesem Chat geändert
-Nur Doku in diesem Abschluss-Commit (kein Anwendungscode). Vorher in diesem Chat (bereits committet+gepusht):
+## Erledigt in diesem Chat (v2.0.0)
+- Alle UI-Texte englisch, wo vorhanden wörtlich aus den englischen Originalen (CrypTool.rc per Ressourcen-ID,
+  NumberShark/AES-Tool, `NT.exe`, `*_en.aml`, englische SWF/Java-Texte). Menü = englisches `IDR_TEXTTYPE`.
+- Ressourcen: `Help/en` statt `Help/de`, `CT-Book-en.pdf`/`CrypTool1-Presentation-en.pdf`,
+  `CrypToolStartLogo-en.png`, `original.txt`/`fake.txt`; `import-ct1-help.py` kennt jetzt `en` und `de`.
+- Verhalten wie englisches CT1: Referenzdatei `english.txt` als Standard, Zahlenformat „1,234.5“;
+  Schroedel-Analyse wie CT1 mit Windows-Regionsformat „Deutsch (Deutschland)“ (`germanLocale: true`,
+  Entscheidung des Nutzers: CT1 englisch, Region zählt → ein).
+- LLL: Zeilen-Updates parallel + gemeinsamer Kehrwert (`SharedExactDivisor.swift`); Blömer/May ca. 4–5× schneller
+  (256-Bit-N, m=4: ~20 s → ~5 s), reduzierte Basis bitgleich.
+- Doku: README, `NICHT-ENTHALTEN.md` (Abschnitt „Sprache“), `PROJECT_STATE.md`.
+
+## Vorherige Chats (committet + gepusht)
 - `972a344` v1.1.1 – Parität (Menü „Speichern als …“, Kontextmenüs, Über-Dialog, CT-Buch/Präsentation-PDF,
   „Zuletzt geöffnete Dateien“), neue `NICHT-ENTHALTEN.md`.
 - `60351bf` v1.2.0 – Gitterbasierte RSA-Angriffe: `Lattice.swift`, `Coppersmith.swift`, `DurandKerner.swift`,
@@ -24,41 +37,31 @@ Nur Doku in diesem Abschluss-Commit (kein Anwendungscode). Vorher in diesem Chat
 - `9ea4410` v1.4.0 – `BloemerMay.swift` (Boneh/Durfee), `Lattice.reduce` mit δ-Parameter.
 
 ## Offene Probleme (mit bisherigen Versuchen)
-- **Englisch-Umstellung noch nicht gemacht** (eigentlicher nächster Auftrag, s. u.). Nicht begonnen, da der
-  Abschluss-Auftrag „keinen Anwendungscode mehr ändern“ vorschreibt.
-- **Blömer/May-Performance:** exakte Ganzzahl-LLL ist bei δ≈0,29 / großen N langsam (~30 s bei 128-Bit-N).
-  Versucht: δ=0,99, Prüfung aller reduzierten Zeilen, dichteres Raster, m/t einstellbar. Eine schnellere
-  Fließkomma-/XD-LLL (wie NTL) wäre nötig, wurde als zu großer/riskanter Eingriff **nicht** umgesetzt.
-  Ergebnis bleibt identisch zu CT1; nur Laufzeit betroffen.
+- **Englische Dialoge nicht einzeln am Bildschirm geprüft.** Mögliche abgeschnittene Texte bei festen Breiten
+  (PKI-Flussdiagramm-Schaltflächen, Tabellenspalten Signaturangriff, lange Animationszeilen).
+- Dialoge der Gitterangriffe/Seitenkanal sind vereinfacht gegenüber CT1 (fehlende Felder/Statuszeilen) –
+  nur Texte angeglichen, Struktur unverändert. Histogramm-Fenstertitel ohne Zeichenzahl („Histogram of <…>“).
+- Blömer/May bleibt für δ≈0,29 / große N langsam (512-Bit-N, m=4: ~28 s). Fließkomma-LLL nicht umgesetzt.
+- Automatische Erstzuordnung DE→EN hatte einzelne Fehlpaare (abweichendes Dialoglayout, falscher Kontext);
+  alle Bereiche wurden gegengeprüft, Restfehler bei selten genutzten Dialogen sind möglich.
 
 ## Nächste Schritte (in Reihenfolge)
-1. **UI auf Englisch umstellen, Benennung exakt wie englische CT1-Originalversion** (inkl. Menü-/Button-Reihenfolge).
-   - Lesen: PROJECT_STATE.md §2 und §5; Dateien `Sources/CrypTool/App/MainMenu.swift` (Menütexte),
-     `Sources/CrypTool/App/CTAction.swift`, alle Dialoge in `Sources/CrypTool/Features/**` und
-     `Sources/CrypTool/Support/*.swift` (Titel/Buttons), `Sources/CrypTool/Help/HelpTopics.swift` + `HelpBook.swift`.
-   - Referenz (exakte englische Strings): CT1-Quelltext, `CrypTool/CrypTool.rc` (englische STRINGTABLE und
-     IDR_*-MENÜs) sowie `CrypTool/hlp_en/` für die englische Hilfe. Repo neu klonen:
-     `git clone https://github.com/cryptool-org/cryptool1` (CP1252/CRLF → `iconv -f cp1252`, `/usr/bin/grep -a`).
-   - Erst `MainMenu.swift` Menüpunkt für Menüpunkt auf die englischen `.rc`-Texte mappen, dann Dialoge/Buttons,
-     dann Hilfe (englischen Hilfebaum über `scripts/import-ct1-help.py` prüfen/importieren, danach
-     `scripts/check-help.py`), zuletzt `swift build` + `scripts/build-app.sh` + Tests.
-   - Jede unklare/mehrdeutige Benennung in NICHT-ENTHALTEN.md bzw. als Codekommentar „unklar/zu prüfen“ festhalten.
-2. Erlaubte Optimierungen (nur wenn Verfahren **und** Ergebnisse unverändert): LLL/`BloemerMay` Laufzeit/Speicher.
-   Vor/nach jeder Optimierung `CTLatticeTests` laufen lassen (müssen identisch grün bleiben).
-3. Optional: `PROJECT_STATE.md` kürzen, falls > ~400 Zeilen (aktuell darunter – noch nichts nötig).
+1. Dialoge am Bildschirm durchklicken (v. a. PKI-Demos, Signaturangriff, Animationen, Zahlenhai, NT-Lernprogramm)
+   und abgeschnittene Texte korrigieren.
+2. Optional: Dialogstruktur der Gitterangriffe an CT1 angleichen; `PROJECT_STATE.md` kürzen, falls > ~400 Zeilen.
 
 ## Deployment
-- GitHub-Releases **v1.0.0–v1.4.0** veröffentlicht (je `CrypTool.dmg` + `CrypTool-macOS-arm64.zip`), v1.4.0 = Latest.
+- GitHub-Releases **v1.0.0–v1.4.0** (deutsch) und **v2.0.0** (englisch, Latest) veröffentlicht
+  (je `CrypTool.dmg` + `CrypTool-macOS-arm64.zip`).
 - `main` ist gepusht. Kein Server/Backend. Lokal unversioniert: `build/` (Bundle/DMG) und `graphify-out/` – bewusst
   in `.gitignore`, nicht einchecken.
 
 ## Offene Entscheidungen (nur durch Nutzer)
-- Englisch **ersetzt** Deutsch vollständig, oder zweisprachig? (CT1 ist pro Sprache ein eigener Build –
-  Annahme: reine Englisch-Variante gewünscht. Bis zur Klärung: **unklar/zu prüfen**.)
-- Soll in eine schnellere LLL investiert werden (größerer Aufwand)?
+- Soll in eine schnellere (Fließkomma-)LLL investiert werden (größerer Aufwand)?
 
 ## Dateien außerhalb des Repos
-- **CT1-Quelltext** (Referenz für englische Strings + Korrektheitsabgleich): von
-  https://github.com/cryptool-org/cryptool1 neu klonen. War im Session-Scratchpad abgelegt (flüchtig, weg).
-- UI-Testhelfer (winshot/click/listmenu/sweep.applescript) lagen im Scratchpad (flüchtig); bei Bedarf neu bauen,
-  nicht essenziell. Keine `.env`/Schlüssel/Modelle nötig.
+- **CT1-Quelltext** (Referenz): https://github.com/cryptool-org/cryptool1 – Klon lag in
+  `/private/tmp/claude-501/-Users-rudi-Documents-GitHub-crypttoolmac/b82b4504-ba6e-4567-a96d-297690f55a9c/scratchpad/upstream/cryptool1`
+  (flüchtig; bei Bedarf neu klonen).
+- Hilfsskripte der Umstellung (DE→EN-Tabelle aus der `.rc`, Prüf- und Suchskripte) lagen im Session-Scratchpad
+  (flüchtig, nicht essenziell). Keine `.env`/Schlüssel/Modelle nötig.

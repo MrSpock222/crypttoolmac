@@ -6,7 +6,7 @@ import SwiftUI
 @MainActor
 enum AboutDialog {
     static func show() {
-        WindowPresenter.tool(id: "about", title: "Über CrypTool", size: CGSize(width: 560, height: 500), resizable: false) {
+        WindowPresenter.tool(id: "about", title: "About CrypTool", size: CGSize(width: 560, height: 500), resizable: false) {
             AboutView()
         }
     }
@@ -44,7 +44,7 @@ private struct AboutView: View {
     var body: some View {
         VStack(spacing: 10) {
             Text("CrypTool \(AboutDialog.version)").font(.system(size: 28, weight: .bold))
-            Text("CrypTool ist ein kostenloses und umfangreiches Lernprogramm\nzu klassischer und moderner Kryptographie/Kryptoanalyse.\n\nGemeinsam mit den Sponsoren")
+            Text("CrypTool is a free and comprehensive e-learning program about\nclassic and contemporary cryptography and cryptanalysis.\n\nIn a joint effort with the sponsors")
                 .multilineTextAlignment(.center)
             HStack(spacing: 40) {
                 logo("logo_db")
@@ -53,30 +53,30 @@ private struct AboutView: View {
             .padding(8)
             .frame(maxWidth: .infinity)
             .background(Color.white)
-            Text("haben es die Universitäten Siegen und Darmstadt\nund viele freiwillige Entwickler in einem Open-Source-Projekt entwickelt.")
+            Text("the universities Siegen and Darmstadt developed it within an\nopen source project thanks to the help of many voluntary developers.")
                 .multilineTextAlignment(.center)
-            Text("CrypTool wird weltweit zur Lehre an Schulen und Hochschulen, und zur Ausbildung und Mitarbeiter-Awareness in Firmen und Behörden eingesetzt.")
+            Text("CrypTool is used world-wide for education in schools and universities, and for education and employee awareness in companies and government organizations.")
                 .multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
             HStack(alignment: .top, spacing: 10) {
-                GroupBox("Release-Informationen") {
-                    Text("CrypTool \(AboutDialog.version) für macOS (Apple Silicon),\nnative Portierung von CrypTool 1.4.x")
+                GroupBox("Release information") {
+                    Text("CrypTool \(AboutDialog.version) for macOS (Apple Silicon),\nnative port of CrypTool 1.4.x")
                         .font(.callout).frame(maxWidth: .infinity, alignment: .center).fixedSize(horizontal: false, vertical: true)
                 }
-                GroupBox("Kontakt-Informationen") {
-                    Text("bernhard.esslinger@uni-siegen.de\nInternet: http://www.cryptool.de")
+                GroupBox("Contact information") {
+                    Text("bernhard.esslinger@uni-siegen.de\nInternet: http://www.cryptool.org")
                         .font(.callout).frame(maxWidth: .infinity, alignment: .center).textSelection(.enabled).fixedSize(horizontal: false, vertical: true)
                 }
             }
-            Text("(C) 1998-2022 CrypTool-Team\nOpen-Source anhand der Apache-Lizenz 2.0")
+            Text("(C) 1998-2022 CrypTool Team\nDistributed as open source under the terms of the Apache License 2.0")
                 .font(.callout).multilineTextAlignment(.center)
-            Text("macOS-Portierung: inoffiziell, ebenfalls Apache-Lizenz 2.0")
+            Text("macOS port: unofficial, also Apache License 2.0")
                 .font(.caption).foregroundStyle(.secondary)
             Spacer(minLength: 0)
             HStack {
-                Button("Mitwirkende") { showAuthors = true }
-                Button("Übersetzungen") { showTranslations = true }
+                Button("Contributors") { showAuthors = true }
+                Button("Translations") { showTranslations = true }
                 Spacer()
-                Button("Schließen", action: closeKeyWindow).keyboardShortcut(.defaultAction)
+                Button("Close", action: closeKeyWindow).keyboardShortcut(.defaultAction)
             }
         }
         .padding(16)
@@ -99,17 +99,17 @@ private struct AuthorsView: View {
     var body: some View {
         let (impl, review) = AboutDialog.authors()
         VStack(spacing: 8) {
-            Text("Personen, die zu CrypTool beitrugen").font(.headline)
+            Text("Persons Contributing to CrypTool").font(.headline)
                 .frame(maxWidth: .infinity).padding(4)
                 .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color(nsColor: .separatorColor)))
-            group(" Idee, Sponsoring, Challenges, QA, Leitung", "Bernhard Esslinger")
-            group(" Planung, Betreuung und Architektur", "Peer Wichmann (bis Version 1.2)\nJoerg Cornelius Schneider (ab Version 1.3)")
-            group(" Kümmerer Version 1.3 und 1.4", "Henrik Koy\nFlorian Marchal")
+            group(" Idea, Sponsoring, Challenges, QA, Lead ", "Bernhard Esslinger")
+            group(" Design, Support and Architecture", "Peer Wichmann (till release 1.2)\nJoerg Cornelius Schneider (from release 1.3)")
+            group(" Main Persons Taking Overall Care for Version 1.3 and 1.4", "Henrik Koy\nFlorian Marchal")
             HStack(alignment: .top, spacing: 10) {
-                list(" Entwicklung, Dokumentation, Übersetzung ", impl)
-                list(" Review und Feedback", review)
+                list(" Implementation, Documentation, Translation ", impl)
+                list(" Review and Feedback", review)
             }
-            HStack { Spacer(); Button("Schließen", action: close).keyboardShortcut(.defaultAction) }
+            HStack { Spacer(); Button("Close", action: close).keyboardShortcut(.defaultAction) }
         }
         .padding(16)
         .frame(width: 560, height: 520)
@@ -126,41 +126,53 @@ private struct AuthorsView: View {
     }
 }
 
+/// Text assembled as in CT1 (DlgTranslations.cpp): heading, "=" underline of 2/3 heading length,
+/// initial work, further work; order French, Greek, Polish, Serbian, Spanish.
 private struct TranslationsView: View {
     let close: () -> Void
     private let text = """
-    Polnische Übersetzung
-    Erstübersetzung: Universität Warschau, Polen (http://www.ee.pw.edu.pl),
-    Dr. Bartosz Sawicki und seine Studenten
-    Weitere Updates: Pawel Polewski
+    French Translation
+    ============
+    Initial translation: Alain Stephan
+    Further updates: Alain Stephan
 
-    Serbische Übersetzung
-    Erstübersetzung: Advanced School of Electrical Engineering, Belgrad, Serbien (http://www.viser.edu.rs),
-    Prof. Dragan Pleskonjic, Bojan Dimitrovski und seine Kommilitonen
-    Weitere Updates: Bojan Dimitrovski, Vesna Milosavljevic
 
-    Spanische Übersetzung
-    Erstübersetzung: Universität Madrid, Spanien (http://www.csic.es),
-    Dr. Gonzalo Alvarez Maranon und seine Studenten
-    Weitere Updates: Raphael Labaca Castro
-
-    Französische Übersetzung
-    Erstübersetzung: Alain Stephan
-    Weitere Updates: Alain Stephan
-
-    Griechische Übersetzung
-    Erstübersetzung: Universität von Mazedonien, Thessaloniki, Griechenland (http://infosec.uom.gr),
+    Greek Translation
+    ===========
+    Initial translation: University of Macedonia, Thessaloniki, Greece (http://infosec.uom.gr),
     Prof. Ioannis Mavridis
-    Weitere Updates: Vasilios Mavroudis, Dr. Theodoros Mastoras
+    Further updates: Vasilios Mavroudis, Dr. Theodoros Mastoras
 
-    Die macOS-Version enthält nur die deutsche Sprachversion.
+
+    Polish Translation
+    ============
+    Initial translation: Warsaw University, Poland (http://www.ee.pw.edu.pl),
+    Dr. Bartosz Sawicki and his students
+    Further updates: Pawel Polewski
+
+
+    Serbian Translation
+    ============
+    Initial translation: Advanced School of Electrical Engineering, Belgrade, Serbia (http://www.viser.edu.rs),
+    Prof. Dragan Pleskonjic, Bojan Dimitrovski and his fellow students
+    Further updates: Bojan Dimitrovski, Vesna Milosavljevic
+
+
+    Spanish Translation
+    ============
+    Initial translation: Madrid University, Spain (http://www.csic.es),
+    Dr. Gonzalo Alvarez Maranon and his students
+    Further updates: Raphael Labaca Castro
+
+
+    The macOS version contains the English language version only.
     """
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Die Sprachversionen Deutsch und Englisch wurden vom CrypTool-Kernteam entwickelt.")
+            Text("The CrypTool versions in English and German have been created by the CrypTool core team.")
             ResultBox(text: text, minHeight: 380)
-            HStack { Spacer(); Button("Schließen", action: close).keyboardShortcut(.defaultAction) }
+            HStack { Spacer(); Button("Close", action: close).keyboardShortcut(.defaultAction) }
         }
         .padding(16)
         .frame(width: 560, height: 500)

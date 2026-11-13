@@ -17,7 +17,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation, 
         MainMenu.adoptSystemRecentMenu()
         DispatchQueue.main.async { MainMenu.adoptSystemRecentMenu() }
         if AppSettings.shared.showStartExample, NSDocumentController.shared.documents.isEmpty {
-            DocumentFactory.openExample("Startbeispiel-de.txt")
+            DocumentFactory.openExample("Startingexample-en.txt")
         }
         // CT1's cracklib dictionary for the password quality meter (loaded in the background)
         DispatchQueue.global(qos: .utility).async {
@@ -78,7 +78,7 @@ enum DocumentFactory {
 
     static func openExample(_ name: String) {
         guard let url = Resources.url("Examples/\(name)") else {
-            Alerts.error("Beispieldatei \(name) nicht gefunden.")
+            Alerts.error("Sample file \(name) not found.")
             return
         }
         // Open a copy so the bundled example is never modified. Text examples are stored as UTF-8
@@ -93,13 +93,14 @@ enum DocumentFactory {
         doc.showWindows()
     }
 
-    /// CT1 title pattern: "<Verfahren> von <Dokument>, Schlüssel <Key>".
-    static func title(_ operation: String, of doc: CTDocument?, key: String? = nil) -> String {
+    /// CT1 title pattern: "<method> of <document>, key <key>" (IDS_STRING_ENCRYPTION_OF_USING_KEY).
+    /// Some CT1 titles write "key: <…>" instead (IDS_STRING_AUTOMATIC_ANALYSE) – pass `keyLabel: "key:"`.
+    static func title(_ operation: String, of doc: CTDocument?, key: String? = nil, keyLabel: String = "key") -> String {
         var t = operation
-        if let d = doc { t += " von <\(d.shortName)>" }
+        if let d = doc { t += " of <\(d.shortName)>" }
         if let k = key, !k.isEmpty {
             let shown = k.count > 60 ? String(k.prefix(57)) + "…" : k
-            t += ", Schlüssel <\(shown)>"
+            t += ", \(keyLabel) <\(shown)>"
         }
         return t
     }
@@ -129,7 +130,7 @@ enum Alerts {
         a.messageText = title
         a.informativeText = message
         a.addButton(withTitle: "OK")
-        a.addButton(withTitle: "In Zwischenablage kopieren")
+        a.addButton(withTitle: "Copy to clipboard")
         if a.runModal() == .alertSecondButtonReturn {
             NSPasteboard.general.clearContents()
             NSPasteboard.general.setString(copyValue, forType: .string)
@@ -141,7 +142,7 @@ enum Alerts {
         a.messageText = title
         a.informativeText = message
         a.addButton(withTitle: ok)
-        a.addButton(withTitle: "Abbrechen")
+        a.addButton(withTitle: "Cancel")
         return a.runModal() == .alertFirstButtonReturn
     }
 }

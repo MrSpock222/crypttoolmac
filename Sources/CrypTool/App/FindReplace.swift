@@ -18,7 +18,7 @@ final class FindState: ObservableObject {
 enum FindReplace {
     static func show(for controller: DocumentWindowController) {
         FindState.shared.hexMode = controller.viewMode == .hex
-        WindowPresenter.tool(id: "findreplace", title: "Suchen und Ersetzen", size: CGSize(width: 520, height: 300), resizable: false) {
+        WindowPresenter.tool(id: "findreplace", title: "Find and Replace", size: CGSize(width: 520, height: 300), resizable: false) {
             FindReplaceView()
         }
     }
@@ -41,39 +41,39 @@ struct FindReplaceView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Picker("Modus", selection: $state.hexMode) {
+            Picker("Mode", selection: $state.hexMode) {
                 Text("Text").tag(false)
                 Text("Hex").tag(true)
             }.pickerStyle(.segmented).frame(width: 200)
             HStack {
-                Text("Suchen nach:").frame(width: 100, alignment: .leading)
-                TextField(state.hexMode ? "z. B. 4B 45 59" : "", text: $state.search).font(.system(.body, design: .monospaced))
+                Text("Find:").frame(width: 100, alignment: .leading)
+                TextField(state.hexMode ? "e.g. 4B 45 59" : "", text: $state.search).font(.system(.body, design: .monospaced))
             }
             HStack {
-                Text("Ersetzen durch:").frame(width: 100, alignment: .leading)
+                Text("Replace:").frame(width: 100, alignment: .leading)
                 TextField("", text: $state.replace).font(.system(.body, design: .monospaced))
             }
             HStack(spacing: 18) {
-                Toggle("Groß-/Kleinschreibung beachten", isOn: $state.caseSensitive).disabled(state.hexMode)
-                Toggle("Rückwärtssuche", isOn: $state.backwards)
+                Toggle("Case sensitive", isOn: $state.caseSensitive).disabled(state.hexMode)
+                Toggle("Find backwards", isOn: $state.backwards)
             }
-            Toggle("Reguläre Ausdrücke im Suchfeld erlauben (nur in der Text-Ansicht)", isOn: $state.regex).disabled(state.hexMode)
+            Toggle("Regular expressions (text view only)", isOn: $state.regex).disabled(state.hexMode)
             if !message.isEmpty { Text(message).font(.callout).foregroundStyle(.secondary) }
             Spacer(minLength: 0)
             HStack {
-                Button("Weitersuchen") { run { $0.find(state) ? "" : "Nicht gefunden." } }.keyboardShortcut(.defaultAction)
-                Button("Ersetzen") { run { $0.replaceCurrent(state) ? "" : "Nicht gefunden." } }
-                Button("Alle ersetzen") { run { "\($0.replaceAll(state)) Stelle(n) ersetzt." } }
+                Button("Find") { run { $0.find(state) ? "" : "The desired text was not found!" } }.keyboardShortcut(.defaultAction)
+                Button("Replace") { run { $0.replaceCurrent(state) ? "" : "The desired text was not found!" } }
+                Button("Replace all") { run { "The desired text was replaced \($0.replaceAll(state)) times." } }
                 Spacer()
-                Button("Schließen", action: closeKeyWindow).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: closeKeyWindow).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
     }
 
     private func run(_ f: (DocumentWindowController) -> String) {
-        guard let c = FindReplace.target else { message = "Kein Dokument geöffnet."; return }
-        if state.hexMode && Hex.decode(state.search) == nil { message = "Ungültige Hex-Eingabe."; return }
+        guard let c = FindReplace.target else { message = "No document open."; return }
+        if state.hexMode && Hex.decode(state.search) == nil { message = "Invalid hex input."; return }
         message = f(c)
     }
 }

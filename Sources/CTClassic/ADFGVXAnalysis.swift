@@ -53,7 +53,7 @@ public struct ADFGVXAnalysis: Sendable {
     }
 
     /// CT1 IDS_STRING_ADFGVX_ERROR_10.
-    public static let invalidCiphertextMessage = "Der von Ihnen zum Entschlüsseln angegebene Text ist kein gültiges ADFGVX-Chiffrat."
+    public static let invalidCiphertextMessage = "The input text is not a valid AFXGVX ciphertext."
 
     // MARK: - Reference statistics (CDlgAdfgvxManual::SetFrequenciesFromReference)
 

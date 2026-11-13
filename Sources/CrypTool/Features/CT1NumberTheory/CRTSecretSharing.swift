@@ -29,7 +29,7 @@ final class CRTSSModel: ObservableObject {
     @Published var safeState: Int? = nil
     @Published var showIntro = CT1Prefs.bool(CRTSSModel.prefIntro, true)
 
-    var title: String { "Secret-Sharing mittels CRT: Ein Geheimnis mit \(k) von \(n) Schlüsseln rekonstruieren" }
+    var title: String { "Secret Sharing by CRT: Reconstructing a secret with \(k) of \(n) keys" }
 
     func clearValues() {
         minK = ""; maxK1 = ""; w = ""; s = ""; a = ""; sPrime = ""
@@ -41,8 +41,8 @@ final class CRTSSModel: ObservableObject {
         clearValues(); log = ""; computed = false; safeState = nil
     }
 
-    private static let inputFalse = "In diesem Feld wird eine Zahl oder ein Ausdruck erwartet,\naus dem sich ein Zahlenwert berechnen lässt.\nBitte geben Sie einen gültigen Ausdruck ein!\n\nBeispiele: 123, 2^15+1, (2^17-5)^2."
-    static let generatePrimeMsg = "Die Demonstration unterstützt nur Primzahlen der Bitlänge kleiner 109.\nDas sind Zahlen mit höchstens 33 Dezimalstellen.\nBitte verringern Sie den Wertebereich im Optionen-Dialog."
+    private static let inputFalse = "Please enter into this field an integer or an expression, that\nevaluates to an integer!\nExamples: 123, 2^15+1, (2^17-5)^2."
+    static let generatePrimeMsg = "This demonstration supports prime numbers with a bit length up to 109.\nThese numbers have up to 33 decimal places.\nPlease go to the 'Options'-dialog and decrease the Co-domain."
 
     /// "Berechnen" (OnBnClickedSecretsharingShare).
     func share() {
@@ -53,10 +53,10 @@ final class CRTSSModel: ObservableObject {
     /// CT1 GeneratePrime(): n distinct random primes from [lower, upper], ascending.
     private func generatePrimes() -> [BigUInt]? {
         if lower.trimmingCharacters(in: .whitespaces).isEmpty || upper.trimmingCharacters(in: .whitespaces).isEmpty {
-            CRTUtil.message("Geben Sie Ober- und Untergrenze ein!"); return nil
+            CRTUtil.message("Enter an upper limit and a lower limit."); return nil
         }
         guard let lo = CRTUtil.formula(lower), let hi = CRTUtil.formula(upper) else { Alerts.error(Self.inputFalse); return nil }
-        if lo > hi { Alerts.error("Die Untergrenze darf nicht größer als die Obergrenze sein!"); return nil }
+        if lo > hi { Alerts.error("The lower limit must not be greater than the upper limit!"); return nil }
         var primes: [BigUInt] = []
         for _ in 0..<n {
             var found: BigUInt?
@@ -65,7 +65,7 @@ final class CRTSSModel: ObservableObject {
             }
             guard let p = found else {
                 reset()
-                CRTUtil.message("Bei der zufälligen Erzeugung der Primzahlen für die \(n) Kennungen sind Primzahlen doppelt aufgetreten.\nFür die Anwendung des Chinesischen Restsatzes müssen die Kennungen jedoch alle verschieden sein.\nBitte drücken Sie (evtl. mehrfach) erneut den Button 'Berechnen' oder erhöhen Sie den Wertebereich im Optionen-Dialog.\n")
+                CRTUtil.message("While generating prime numbers for \(n) identifiers, some of these numbers arose doubly.\nTo apply the Chinese remainder theorem, all these identifiers have to be different.\nPlease click 'Calculate' once again or go to the dialog 'options' and increase the Co-domain. .\n")
                 return nil
             }
             primes.append(p)
@@ -83,19 +83,19 @@ final class CRTSSModel: ObservableObject {
     /// CT1 PrepareManual(): identifiers typed by the student.
     private func prepareManual() {
         if ids.prefix(n).contains(where: { $0.isEmpty }) {
-            CRTUtil.message("Bitte ausreichend Kennungen angeben."); return
+            CRTUtil.message("Please enter enough identifiers."); return
         }
         let primes = ids.prefix(n).map { BigUInt($0) ?? 0 }
         for i in 0..<n {
             for j in (i + 1)..<n where primes[i] == primes[j] {
-                CRTUtil.message("Jede Kennung muss eine Primzahl sein und alle Eingaben müssen verschieden sein. \nDie Kennung wurde \(primes[i]) doppelt angegeben.")
+                CRTUtil.message("Each identifier has to be a prime number and all of entered numbers have to be different.\n The identifier \(primes[i]) was entered twice.")
                 return
             }
         }
         var nonPrimes = 0
         for p in primes where !Primality.millerRabin(p, rounds: 100) {
             nonPrimes += 1
-            CRTUtil.message("Bitte nur Primzahlen eingeben. Die Kennung \(p) ist nicht prim.")
+            CRTUtil.message("Please enter only prime numbers. Identifier \(p) is a non prime.")
         }
         guard nonPrimes == 0 else { return }
         let sorted = primes.sorted()
@@ -120,22 +120,22 @@ final class CRTSSModel: ObservableObject {
         s = sv.description; a = av.description; sPrime = sp.description
         for i in 0..<7 { pw[i] = i < t ? (sp % primes[i]).description : "" }
 
-        var l = "----- Berechnung beginnt ----- \n\n"
-        l += "Anzahl gegebene Schlüssel:  \(n)\n"
-        l += "Anzahl benötigte Schlüssel: \(k)\n\n"
-        l += "KLEINSTE mögliche Kennung: \(lower)\n"
-        l += "GRÖßTE mögliche Kennung:   \(upper)\n\n"
-        for i in 0..<t { l += "Kennung_\(i + 1): \n\(ids[i])\n" }
+        var l = "----- starting calculation ----- \n\n"
+        l += "number of keys given:  \(n)\n"
+        l += "number of keys needed: \(k)\n\n"
+        l += "SMALLEST possible identifier: \(lower)\n"
+        l += "BIGGEST possible identifier:   \(upper)\n\n"
+        for i in 0..<t { l += "Identifier_\(i + 1): \n\(ids[i])\n" }
         l += "\nmin(k):\n\(minK)\n"
         l += "max(k-1):\n\(maxK1)\n"
         l += "Quotient w:\n\(w)\n"
-        l += "Geheimnis s:\n\(s)\n"
-        l += "Faktor a:\n\(a)\n"
-        l += "Basis für Shares (s'):\n\(sPrime)\n"
+        l += "Secret s:\n\(s)\n"
+        l += "Multiplier a:\n\(a)\n"
+        l += "basis for shares (s'):\n\(sPrime)\n"
         l += "\n"
-        for i in 0..<t { l += "Passwort_\(i + 1):\n\(pw[i])\n" }
+        for i in 0..<t { l += "Password_\(i + 1):\n\(pw[i])\n" }
         if t == 7 { l += "\n\n" }
-        l += "\n----- Berechnung der Kennungen und Passwörter abgeschlossen -----\n\n"
+        l += "\n----- calculation of identifiers and passwords is finished -----\n\n"
         log = l
         computed = true
         safeState = 0
@@ -156,7 +156,7 @@ final class CRTSSModel: ObservableObject {
 
     /// "Geheimnis rekonstruieren" (OnBnClickedSecretsharingSolve).
     func reconstruct() {
-        log += "----- Rekonstruktion beginnt -----\n\n"
+        log += "\n\n\n----- Reconstruction started -----\n\n"
         guard !ids[0].isEmpty else { return }
         let primesAll = (0..<n).map { BigUInt(ids[$0]) ?? 1 }
         var minKv = BigUInt(1)
@@ -164,40 +164,40 @@ final class CRTSSModel: ObservableObject {
         var used: [Int] = []
         for i in 0..<n where !rek[i].isEmpty { used.append(i) }
         if used.isEmpty {
-            CRTUtil.message("Bitte geben Sie in der Gruppierung 'Rekonstruktion des Geheimnisses' mindestens \(k) richtige Schlüssel ein!")
-            log += "Kein Schlüssel angegeben.\n\n----- Rekonstruktion gescheitert -----\n\n"
+            CRTUtil.message("Please enter at least \(k) correct keys into the 'Rebuilding the secret' - groupbox")
+            log += "No keys entered.\n\n----- Reconstruction failed -----\n\n"
             return
         }
         safeState = used.count
-        CRTUtil.message("Die Schlüssel werden zusammengefügt.\n\nNachdem Sie OK klicken, bekommen Sie das Ergebnis (Geheimnis) angezeigt.")
-        log += "Benutze Passwörter zu den \(used.count) Kennungen  " + used.map { " \($0 + 1)" }.joined(separator: ",") + "\n\n"
+        CRTUtil.message("The keys are joined together.\n\nAfter clicking OK, the resulting secret will be shown.")
+        log += "Using the \(used.count) passwords to identifiers    " + used.map { " \($0 + 1)" }.joined(separator: ",") + "\n\n"
         let mods = used.map { primesAll[$0] }
         let shares = used.map { BigUInt(rek[$0]) ?? 0 }
         var M = BigUInt(1)
         for m in mods { M *= m }
-        log += "M wird nun aus den gegebenen Kennungen rekonstruiert:\n\(M)\n\n"
+        log += "M is now rebuilt from the given identifiers:\n\(M)\n\n"
         let wv = BigUInt(w) ?? 1, sv = BigUInt(s) ?? 0
         if M >= minKv {
             let sp = ChineseRemainder.solve(remainders: shares, moduli: mods)?.solution ?? 0
-            log += "Es wurden ausreichend viele Passwörter eingegeben. s' wird errechnet:\n\(sp)\n\n"
+            log += "Enough passwords have been entered. s' can be calculated now using the Chinese remainder theorem:\n\(sp)\n\n"
             if sp % wv == sv {
-                log += "Überprüfung (s' mod w = s) wird ausgeführt-.......................Erfolgreich!\n\n"
+                log += "Checking (s' mod w = s) .......................Successful!\n\n"
                 safeState = 100
-                CRTUtil.message("Folgendes Geheimnis wurde rekonstruiert:\n\(sv)")
-                log += "Das folgende Geheimnis konnte rekonstruiert werden:\n\(sv)\n\n----- Rekonstruktion erfolgreich abgeschlossen -----"
+                CRTUtil.message("The following secret was rebuilt:\n\(sv)")
+                log += "The following secret was rebuilt:\n\(sv)\n\n----- Reconstruction successfully finished -----"
             } else {
-                log += "Überprüfung (s' mod w = s) wird ausgeführt-.......................NICHT Erfolgreich!\n\n\n"
+                log += "Checking (s' mod w = s) .......................NOT Successful!\n\n\n"
                 safeState = -1
-                CRTUtil.message("Sie haben \(used.count) Schlüssel eingegeben.\nDas entspricht der Mindestanzahl, aber es sind nicht alle Schlüssel korrekt.\n")
-                log += "Mindestens ein Passwort war falsch.\n\n----- Rekonstruktion gescheitert -----\n\n"
+                CRTUtil.message("You've entered \(used.count) keys.\nThis is conform to the minimum number, but at least one key is wrong.\n")
+                log += "At least one wrong key has been entered.\n\n----- Reconstruction failed -----\n\n"
             }
         } else {
             safeState = -1
             var missing = k - used.count
             var remaining = BigUInt(1)
             for i in 0..<n where missing > 0 && rek[i].isEmpty { remaining *= primesAll[i]; missing -= 1 }
-            CRTUtil.message("Sie haben \(used.count) Schlüssel eingegeben. Es werden aber mindestens \(k) richtige Schlüssel für eine eindeutige \nBerechnung benötigt. Mit diesen Schlüsseln bleiben \(remaining) Möglichkeiten offen.")
-            log += "Es wurden zu wenige Schlüssel benutzt.\n Mit diesen Schlüsseln bleiben \(remaining) Möglichkeiten offen.\n\n----- Rekonstruktion gescheitert -----\n\n"
+            CRTUtil.message("You've entered \(used.count) keys.\nAt least \(k) correct keys are needed for a definite calculation.\nWith the given keys, there are \(remaining) possibilities remaining.")
+            log += "Number of keys used is too small. With these keys, there are \(remaining) possibilities remaining.\n\n----- Reconstruction failed -----\n\n"
         }
     }
 }
@@ -211,15 +211,15 @@ struct CT1CRTSecretSharingDialog: View {
         VStack(alignment: .leading, spacing: 10) {
             GroupBox {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Secret-Sharing erlaubt es, ein Geheimnis so auf n Schlüssel zu verteilen, dass das ursprüngliche Geheimnis wieder rekonstruiert werden kann, wenn später eine beliebige Teilmenge von k<n Schlüsselinhabern zusammenkommt.")
-                    Text("Um das Geheimnis erzeugen und verteilen zu lassen, klicken Sie auf 'Berechnen'. Über einen Klick auf 'Optionen' können Sie den Wertebereich, aus dem die Schlüssel erzeugt werden, und die Anzahl der Parteien verändern.")
-                    Text("Wenn Sie danach in der unteren Gruppierung \"Rekonstruktion...\" über die linken Buttons die Mindestanzahl an Schlüsseln zur Verfügung stellen, können Sie daraus durch einen Klick auf 'Geheimnis rekonstruieren' das Geheimnis rekonstruieren.")
+                    Text("Secret sharing with the Chinese Remainder Theorem (CRT) allows a secret to be divided among n keys, such that the secret can be reconstructed if a given subset k<=n share their keys with each other.")
+                    Text("Click the \"Calculate\" button to generate and distribute the secret. Click on \"Options\" to change the number of involved parties and the range of values for the identifiers.")
+                    Text("Once the secret has been distributed, use the \"+/-\" buttons to add or remove participating parties. You can try to rebuild the secret if enough parties are present by clicking \"Rebuild secret\".")
                 }.fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            CRTGroup(title: "Konstruktion und Verteilung des Geheimnisses auf n = \(model.n) Schlüssel") {
+            CRTGroup(title: "Constructing and sharing the secret with n = \(model.n) parties") {
                 HStack(alignment: .top, spacing: 10) {
                     Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 3) {
-                        GridRow { Text("Kennung (= Primzahl)"); Text("Passwort (= Schlüssel)") }
+                        GridRow { Text("Identifier (= Prime number)"); Text("Password (= Key)") }
                         ForEach(0..<7, id: \.self) { i in
                             GridRow {
                                 if model.manual && i < model.n {
@@ -233,19 +233,19 @@ struct CT1CRTSecretSharingDialog: View {
                         }
                     }
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(" Verteilung erfolgt:")
+                        Text("Distribute keys:")
                         Picker("", selection: Binding(get: { model.manual }, set: { model.manual = $0; model.reset() })) {
-                            Text("Automatisch").tag(false); Text("Manuell").tag(true)
+                            Text("automatically").tag(false); Text("manually").tag(true)
                         }.pickerStyle(.radioGroup).labelsHidden()
-                        Button("Berechnen") { model.share() }.keyboardShortcut(.defaultAction).frame(maxWidth: .infinity)
-                        Button("Optionen", action: showOptions).frame(maxWidth: .infinity)
-                        Button("Rechenweg", action: showFacts).disabled(!model.computed).frame(maxWidth: .infinity)
-                        Button("Zurücksetzen") { model.reset() }.disabled(!model.computed).frame(maxWidth: .infinity)
+                        Button("Calculate") { model.share() }.keyboardShortcut(.defaultAction).frame(maxWidth: .infinity)
+                        Button("Options", action: showOptions).frame(maxWidth: .infinity)
+                        Button("Calc. steps", action: showFacts).disabled(!model.computed).frame(maxWidth: .infinity)
+                        Button("Reset") { model.reset() }.disabled(!model.computed).frame(maxWidth: .infinity)
                     }.frame(width: 120)
                 }
             }
-            CRTGroup(title: "Rekonstruktion des Geheimnisses aus mindestens k = \(model.k) Schlüsseln") {
-                Text("Wählen Sie unter den n = \(model.n) Kennungen die aus, deren Schlüssel für die Rekonstruktion genutzt werden sollen:")
+            CRTGroup(title: "Rebuilding the secret with a minimum of k = \(model.k) keys") {
+                Text("Choose which of the n = \(model.n) identifiers will participate in rebuilding the secret.")
                 HStack(alignment: .top, spacing: 10) {
                     Grid(alignment: .leading, horizontalSpacing: 6, verticalSpacing: 3) {
                         ForEach(0..<7, id: \.self) { i in
@@ -260,19 +260,19 @@ struct CT1CRTSecretSharingDialog: View {
                     }
                     VStack(spacing: 8) {
                         CRTSafeView(state: model.safeState).frame(maxWidth: .infinity, minHeight: 140)
-                        Button("Geheimnis rekonstruieren") { model.reconstruct() }.disabled(!model.computed)
+                        Button("Rebuild secret") { model.reconstruct() }.disabled(!model.computed)
                     }.frame(width: 250)
                 }
             }
-            Toggle("Einführungsdialog beim nächsten Start anzeigen", isOn: Binding(get: { model.showIntro }, set: {
+            Toggle("Show intro on next startup", isOn: Binding(get: { model.showIntro }, set: {
                 model.showIntro = $0; CT1Prefs.set(CRTSSModel.prefIntro, $0)
             }))
             HStack {
                 CT1HelpButton(action: .crtSecretSharing)
                 Spacer()
-                Button("Log-Datei", action: showLog).disabled(!model.computed)
+                Button("Log file", action: showLog).disabled(!model.computed)
                 Spacer()
-                Button("Beenden") {
+                Button("Exit") {
                     CT1Prefs.set(CRTSSModel.prefIntro, model.showIntro)
                     win.window?.close()
                 }
@@ -289,7 +289,7 @@ struct CT1CRTSecretSharingDialog: View {
     }
 
     private func showIntro() {
-        win.sheet("Verteilte Geheimnisse: Secret-Sharing mittels CRT") { close in
+        win.sheet("Sharing a Secret Using the CRT") { close in
             CRTSSIntroSheet(close: { show in
                 CT1Prefs.set(CRTSSModel.prefIntro, show)
                 model.showIntro = show
@@ -300,7 +300,7 @@ struct CT1CRTSecretSharingDialog: View {
 
     private func showOptions() {
         let m = model
-        win.sheet("Secret-Sharing mittels CRT: Optionen festlegen") { close in
+        win.sheet("Secret Sharing by CRT: Controlling the Basic Conditions") { close in
             CRTSSOptionsSheet(n: String(m.n), k: String(m.k), lower: m.manual ? "" : m.lower, upper: m.manual ? "" : m.upper,
                               manual: m.manual, close: close) { n, k, lo, hi in
                 if n != m.n || k != m.k || lo != m.lower || hi != m.upper {
@@ -318,16 +318,16 @@ struct CT1CRTSecretSharingDialog: View {
 
     private func showFacts() {
         let m = model
-        win.sheet("Secret-Sharing mittels CRT: Zwischenrechnung - Von der Kennung zum Passwort") { close in
+        win.sheet("Secret Sharing by CRT: Calculation Method: How to Get a Password") { close in
             CRTSSFactsSheet(model: m, close: close)
         }
     }
 
     private func showLog() {
         let m = model
-        win.sheet("Secret-Sharing mittels CRT: Log-Datei anzeigen") { close in
-            CRTLogSheet(title: "Secret-Sharing mittels CRT: Log-Datei anzeigen", text: m.log, saveTitle: "SecretSharing-Log",
-                        savedMessage: "Die Log-Datei wurde erfolgreich in das CrypTool-Hauptfenster geschrieben.", close: close)
+        win.sheet("Secret Sharing by CRT: Show log file") { close in
+            CRTLogSheet(title: "Secret Sharing by CRT: Show log file", text: m.log, saveTitle: "SecretSharing-Log",
+                        savedMessage: "Log file successfully written to the main window.", close: close)
         }
     }
 }
@@ -342,7 +342,7 @@ struct CRTSafeView: View {
                 Image(systemName: "lock.fill").font(.system(size: 48)).foregroundStyle(.secondary)
             case 0:
                 Image(systemName: "lock.fill").font(.system(size: 48))
-                Text("Geheimnis verteilt").font(.caption)
+                Text("Secret distributed").font(.caption)
             case 100:
                 Image(systemName: "lock.open.fill").font(.system(size: 48)).foregroundStyle(.green)
             case -1:
@@ -365,12 +365,12 @@ struct CRTSSIntroSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Mit dieser Beispiel-Implementierung kann ein Geheimnis auf maximal 7 Personen so verteilt werden, dass eine vorher festgelegte kleinere Anzahl ausreicht, das Geheimnis wieder herzustellen. Dabei ist vorher nicht festgelegt, wer später in der kleineren Teilmenge zusammenkommt.")
-            Text("Vergleichen kann man dies mit einer Bank, in der 5 Personen aus dem Vorstand jeweils einen Schlüssel für den Tresor bekommen. Um sicher zu stellen, dass nicht eine Person allein Zugang zum Vermögen der Bank hat, fordert man, dass zum Beispiel immer drei der Personen ihren persönlichen Schlüsseln gleichzeitig benutzen.")
-            Text("Hier ist dieses System mit Zahlen umgesetzt: Jede Person ist durch eine Kennung identifiziert und hat ein persönliches Passwort, welches nur in Verbindung mit ihrer Kennung gültig ist.")
-            Text("Sie können sich jederzeit mit F1 Hilfe zur Bedienung des Dialogs und zur Erläuterung des Verfahrens anzeigen lassen.")
+            Text("Using this application a secret can be distributed to a maximum of 7 people, so that it may be solved with a smaller number, that was specified before. Certainly it`s not fixed, which of these people are involved in this subset.")
+            Text("You can compare this proceeding to a bank, where 5 people from the executive committee own keys for the safe deposit. To  ensure, that one single person is not able to open it up, one demands that e.g. three of these persons have to use their keys at the same time.")
+            Text("In this scheme, we are using number-keys: each person is 'marked' with an identifier an has got a personal key, that can only be validated, when it is used with the correct identifier.")
+            Text("In case of uncertainties while using this application, simply hit the F1-key to get a context-specific help.")
             HStack { Spacer(); Button("OK") { close(showAgain) }.keyboardShortcut(.defaultAction); Spacer() }
-            Toggle("Diesen Dialog beim nächsten Start wieder anzeigen", isOn: $showAgain)
+            Toggle("Display this dialog on next startup", isOn: $showAgain)
         }
         .fixedSize(horizontal: false, vertical: true)
         .padding(16)
@@ -397,15 +397,15 @@ struct CRTSSOptionsSheet: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            CRTGroup(title: "Notwendige Angaben zum Generieren der n Schlüssel") {
+            CRTGroup(title: "Required values") {
                 HStack {
-                    Text("Anzahl Parteien (n):")
+                    Text("Number of parties (n):")
                     TextField("", text: Binding(get: { n }, set: { n = CRTUtil.digits($0) })).frame(width: 40)
-                    Text("Benötigte Parteien (k):")
+                    Text("Parties needed (k):")
                     TextField("", text: Binding(get: { k }, set: { k = CRTUtil.digits($0) })).frame(width: 40)
                 }
                 HStack {
-                    Text("Geben Sie ein geschlossenes Intervall für die zu erzeugenden Primzahl-Kennungen vor:")
+                    Text("Closed interval in which the prime identifiers will be generated:")
                         .fixedSize(horizontal: false, vertical: true).frame(width: 220, alignment: .leading)
                     TextField("", text: $lower).frame(width: 70)
                     Text("-")
@@ -415,7 +415,7 @@ struct CRTSSOptionsSheet: View {
             VStack {
                 Button("OK", action: ok).keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
@@ -425,30 +425,30 @@ struct CRTSSOptionsSheet: View {
     private func ok() {
         let nn = Int(n) ?? 0, kk = Int(k) ?? 0
         if nn == kk {
-            CRTUtil.message("Bitte wählen Sie k<n (hier: k<\(nn)).\n\nSind k und n bei diesem speziellen Secret-Sharing-Verfahren identisch, dann gleicht das Geheimnis dem Passwort des ersten Teilnehmers.")
+            CRTUtil.message("Please choose k<n (here: k<\(nn)).\n\nIf k and n are identical in this secret sharing procedure, the secret equals the password of the first participant.")
             return
         }
         guard nn >= 2, kk <= nn, kk >= 2, nn <= 7 else {
             var msg = ""
-            if nn < 2 { msg += "Sie haben für die Anzahl der Parteien \(nn) eingegeben.\nBitte geben Sie für die Anzahl der Parteien mindestens 2 Parteien ein.\n" }
-            if nn > 7 { msg += "Sie haben für die Anzahl der Parteien \(nn) eingegeben.\nBitte geben Sie für die Anzahl der Parteien maximal 7 Parteien ein.\n" }
-            if kk > nn { msg += "Sie haben für die benötigten Parteien \(kk) eingegeben.\nDie benötigten Parteien dürfen aber nicht größer als die Anzahl der Parteien sein.\n" }
-            if kk < 2 && kk > nn { msg += "Bitte geben Sie für die benötigten Parteien mindestens 2 Parteien ein.\n" }
-            if kk < 2 && kk <= nn { msg += "Sie haben für die benötigten Parteien \(kk) eingegeben.\nBitte geben Sie für die benötigten Parteien mindestens 2 Parteien ein.\n" }
+            if nn < 2 { msg += "You have entered \(nn) as number of parties.\nPlease enter 2 as minimum for this parameter.\n" }
+            if nn > 7 { msg += "You have entered \(nn) as number of parties.\nPlease choose 7 as maximum.\n" }
+            if kk > nn { msg += "You have entered \(kk) as the number of parties needed.\nThis number mustn't be bigger than the over all number of parties.\n" }
+            if kk < 2 && kk > nn { msg += "Please enter a minimum of 2 for the number of parties needed.\n" }
+            if kk < 2 && kk <= nn { msg += "You have entered \(kk) for the number of parties needed.\nPlease enter a minimum of 2 for the number of parties needed.\n" }
             CRTUtil.message(msg)
             return
         }
         var lo = lower, hi = upper
         if manual { lo = "2^108"; hi = "2^109" }
         if lo.trimmingCharacters(in: .whitespaces).isEmpty || hi.trimmingCharacters(in: .whitespaces).isEmpty {
-            CRTUtil.message("Geben Sie Ober- und Untergrenze ein!"); return
+            CRTUtil.message("Enter an upper limit and a lower limit."); return
         }
-        let inputFalse = "In diesem Feld wird eine Zahl oder ein Ausdruck erwartet,\naus dem sich ein Zahlenwert berechnen lässt.\nBitte geben Sie einen gültigen Ausdruck ein!\n\nBeispiele: 123, 2^15+1, (2^17-5)^2."
+        let inputFalse = "Please enter into this field an integer or an expression, that\nevaluates to an integer!\nExamples: 123, 2^15+1, (2^17-5)^2."
         guard let x = CRTUtil.formula(lo), let y = CRTUtil.formula(hi) else { CRTUtil.message(inputFalse); return }
         if y.isZero || y.description.count > 33 || (lo != "0" && (x.isZero || x.description.count > 33)) {
             CRTUtil.message(CRTSSModel.generatePrimeMsg); return
         }
-        if x > y { Alerts.error("Die Untergrenze darf nicht größer als die Obergrenze sein!"); return }
+        if x > y { Alerts.error("The lower limit must not be greater than the upper limit!"); return }
         apply(nn, kk, lo, hi)
         close()
     }
@@ -463,32 +463,32 @@ struct CRTSSFactsSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("1. Produkt der k = \(model.k) kleinsten Primzahlen (min[k]):")
+            Text("1. Product of the k = \(model.k) smallest prime numbers (min[k]):")
             CRTOutputField(text: model.minK, multiline: true, minHeight: 44)
-            Text("2. Produkt der (k-1) = \(model.k - 1) größten Primzahlen (max[k-1]):")
+            Text("2. Product of the (k-1) = \(model.k - 1) biggest prime numbers (max[k-1]):")
             CRTOutputField(text: model.maxK1, multiline: true, minHeight: 44)
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
-                    Text("3. Quotient der beiden obigen Zahlen (w):")
+                    Text("3. Quotient of these upper numbers (w):")
                     CRTOutputField(text: model.w)
                 }
                 VStack(alignment: .leading) {
-                    Text("4. Geheimnis (s) ist eine Zufallszahl zwischen 0 und w:")
+                    Text("4. Secret (s) is a random number between 0 and w:")
                     TextField("", text: Binding(get: { s }, set: { s = CRTUtil.digits($0) })).font(.system(.body, design: .monospaced))
                 }
             }
-            Text("5. Multiplikator (a) mit 0 <= a <= (min[k] / w):")
+            Text("5. Multiplicator (a) with 0 <= a <= (min[k] / w):")
             TextField("", text: Binding(get: { a }, set: { a = CRTUtil.digits($0) })).font(.system(.body, design: .monospaced))
-            Text("6. Die Zahl (s' = a*w+s) ist Basis für die Ermittlung der Passwörter: ")
+            Text("6. The number (s' = a*w+s) now serves as a base for calculating the passwords:")
             CRTOutputField(text: model.sPrime, multiline: true, minHeight: 44)
             HStack {
-                Text("7. Passwort_i wird nun durch (s' mod Kennung_i) ermittelt.")
+                Text("7. Password_i is now calculated through (s' mod Identifier_i).")
                 Spacer()
-                Button("Log-Datei") {
+                Button("Log-File") {
                     let text = model.log
-                    WindowPresenter.sheet(on: NSApp.keyWindow, title: "Secret-Sharing mittels CRT: Log-Datei anzeigen") { c in
-                        CRTLogSheet(title: "Secret-Sharing mittels CRT: Log-Datei anzeigen", text: text, saveTitle: "SecretSharing-Log",
-                                    savedMessage: "Die Log-Datei wurde erfolgreich in das CrypTool-Hauptfenster geschrieben.", close: c)
+                    WindowPresenter.sheet(on: NSApp.keyWindow, title: "Secret Sharing by CRT: Show log file") { c in
+                        CRTLogSheet(title: "Secret Sharing by CRT: Show log file", text: text, saveTitle: "SecretSharing-Log",
+                                    savedMessage: "Log file successfully written to the main window.", close: c)
                     }
                 }
                 Button("OK", action: ok).keyboardShortcut(.defaultAction)
@@ -502,7 +502,7 @@ struct CRTSSFactsSheet: View {
     private func ok() {
         let wv = BigUInt(model.w) ?? 1, mk = BigUInt(model.minK) ?? 0
         guard !s.isEmpty, !a.isEmpty, let sv = BigUInt(s), let av = BigUInt(a), sv <= wv, !wv.isZero, av <= mk / wv else {
-            CRTUtil.message("Bitte beachten Sie die Nebenbedingungen."); return
+            CRTUtil.message("Please notice the formal restrictions."); return
         }
         model.applyFacts(s: s, a: a)
         close()

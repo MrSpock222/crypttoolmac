@@ -12,7 +12,7 @@ import CTModern
 
 extension CT1Visualizations {
     static func openRijndaelFlow() {
-        WindowPresenter.tool(id: "ct1-aes-flow", title: "Rijndael-Flussvisualisierung", size: CGSize(width: 1000, height: 820)) {
+        WindowPresenter.tool(id: "ct1-aes-flow", title: "Rijndael Flow Visualization", size: CGSize(width: 1000, height: 820)) {
             AESFlowView()
         }
     }
@@ -190,7 +190,7 @@ enum AESFlowDrawing {
             }
         }
         if !colored {
-            ctx.draw(Text("Rundenschlüssel").font(.system(size: 5 * s)).foregroundColor(.secondary), at: P(458, yKey), anchor: .leading)
+            ctx.draw(Text("Round key").font(.system(size: 5 * s)).foregroundColor(.secondary), at: P(458, yKey), anchor: .leading)
         }
     }
 }
@@ -289,7 +289,7 @@ struct AESFlowView: View {
             HStack {
                 Text(message).font(.system(.callout, design: .monospaced)).textSelection(.enabled)
                 Spacer()
-                Text("Farbe eines Bytes x: R = (x mod 8)·32, G = (⌊x/8⌋ mod 8)·32, B = (⌊x/64⌋ mod 3)·64")
+                Text("Color of a byte x: R = (x mod 8)·32, G = (⌊x/8⌋ mod 8)·32, B = (⌊x/64⌋ mod 3)·64")
                     .font(.caption).foregroundStyle(.secondary)
             }
             .padding(.horizontal, 12).padding(.vertical, 6)
@@ -301,30 +301,30 @@ struct AESFlowView: View {
     private var controls: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 4) {
-                Text("Daten:").frame(width: 72, alignment: .trailing)
+                Text("Data:").frame(width: 72, alignment: .trailing)
                 ForEach(0..<16, id: \.self) { i in
                     TextField("", text: $data[i]).frame(width: 30).font(.system(.body, design: .monospaced))
                         .disabled(running)
                 }
             }
             HStack(spacing: 4) {
-                Text("Schlüssel:").frame(width: 72, alignment: .trailing)
+                Text("Key:").frame(width: 72, alignment: .trailing)
                 ForEach(0..<16, id: \.self) { i in
                     TextField("", text: $key[i]).frame(width: 30).font(.system(.body, design: .monospaced))
                         .disabled(running || keyLocked)
                 }
             }
             HStack(spacing: 8) {
-                Text("\(roundIndex + 1). Runde").font(.headline).frame(width: 80, alignment: .leading)
-                Button(computed ? "Neue Runde" : "Berechnung") { computed ? newRound() : calculate() }
+                Text("Round \(roundIndex + 1)").font(.headline).frame(width: 80, alignment: .leading)
+                Button(computed ? "New Round" : "Calculation") { computed ? newRound() : calculate() }
                     .disabled(running).keyboardShortcut(.defaultAction)
                 Button("Reset") { reset() }.disabled(running && !pauses)
-                Button("0-Eingabe") { data = Array(repeating: "00", count: 16) }.disabled(running)
-                Button("Zufällige Eingabe") { data = Self.randomHex() }.disabled(running)
-                Button("0-Schlüssel") { reset(); key = Array(repeating: "00", count: 16) }.disabled(running)
-                Button("Zufälliger Schlüssel") { key = Self.randomHex() }
+                Button("0-Input") { data = Array(repeating: "00", count: 16) }.disabled(running)
+                Button("Random Input") { data = Self.randomHex() }.disabled(running)
+                Button("0-Key") { reset(); key = Array(repeating: "00", count: 16) }.disabled(running)
+                Button("Random Key") { key = Self.randomHex() }
                     .disabled(running || keyLocked)
-                Toggle("Pausen", isOn: $pauses).onChange(of: pauses) { _, v in if !v { continueAutomatically() } }
+                Toggle("Stops", isOn: $pauses).onChange(of: pauses) { _, v in if !v { continueAutomatically() } }
                 Spacer()
                 Image(systemName: "tortoise").foregroundStyle(.secondary)
                 Slider(value: Binding(get: { log2(anim.speed) }, set: { anim.speed = pow(2, $0) }), in: -2...2).frame(width: 90)
@@ -355,9 +355,9 @@ struct AESFlowView: View {
     }
 
     private func calculate() {
-        guard let d = parse(data) else { message = "Ungültige Daten: bitte 16 Hex-Bytes eingeben."; return }
+        guard let d = parse(data) else { message = "Invalid data: please enter 16 hex bytes."; return }
         if roundIndex == 0 {
-            guard let k = parse(key) else { message = "Ungültiger Schlüssel: bitte 16 Hex-Bytes eingeben."; return }
+            guard let k = parse(key) else { message = "Invalid key: please enter 16 hex bytes."; return }
             roundKeys = AESInspector.expandKey(k)
             keyLocked = true
             runPlaintext = d
@@ -375,10 +375,10 @@ struct AESFlowView: View {
 
     private func showResult() {
         guard let c = current else { return }
-        var m = "Runde \(c.round): " + c.start.ct1Hex + "  →  " + c.result.ct1Hex
+        var m = "Round \(c.round): " + c.start.ct1Hex + "  →  " + c.result.ct1Hex
         if c.last, let p = runPlaintext, let k = parse(key),
            let tr = try? AESInspector.trace(key: k, block: p), tr.ciphertext == c.result {
-            m = "Geheimtext (AES-128): " + c.result.ct1Hex + "  ✓"
+            m = "Ciphertext (AES-128): " + c.result.ct1Hex + "  ✓"
         }
         message = m
     }

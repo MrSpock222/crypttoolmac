@@ -31,7 +31,7 @@ struct CT1PasteKeyButton: View {
         } label: {
             Image(systemName: "doc.on.clipboard")
         }
-        .help("Schlüssel aus Schlüsselspeicher einfügen")
+        .help("Paste key from keystore")
         .disabled(store.key(for: method) == nil)
     }
 }
@@ -152,7 +152,7 @@ enum CT1 {
 
     /// CT1 title "%s-Verschlüsselung von <%s>, Schlüssel <%s>" / "…-Entschlüsselung …".
     static func title(_ name: String, encrypt: Bool, of doc: CTDocument, key: String) -> String {
-        DocumentFactory.title("\(name)-\(encrypt ? "Verschlüsselung" : "Entschlüsselung")", of: doc, key: key)
+        DocumentFactory.title("\(name) \(encrypt ? "encryption" : "decryption")", of: doc, key: key)
     }
 
     /// Writes `blockSize` characters per block followed by a blank or a line break (also after the

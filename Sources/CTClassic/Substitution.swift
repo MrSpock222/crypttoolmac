@@ -13,22 +13,22 @@ public struct SubstitutionCipher: Sendable {
     public init(keyAlphabet: String, options: TextOptions) throws {
         let alphabet = options.alphabetCharacters
         let n = alphabet.count
-        guard n > 0 else { throw CTError("Das Alphabet ist leer.") }
+        guard n > 0 else { throw CTError("The alphabet is empty.") }
         let mapper = LetterMapper(options)
         var idx: [Int] = []
         for ch in keyAlphabet {
             guard let (i, _) = mapper.lookup(ch) else {
-                throw CTError("Das Zeichen „\(ch)“ des Schlüssels ist nicht im Alphabet enthalten.")
+                throw CTError("The character \"\(ch)\" of the key is not contained in the alphabet.")
             }
             idx.append(i)
         }
         guard idx.count == n else {
-            throw CTError("Der Schlüssel muss genau \(n) Zeichen enthalten (eines je Alphabetzeichen), er enthält \(idx.count).")
+            throw CTError("The key must contain exactly \(n) characters (one per alphabet character), it contains \(idx.count).")
         }
         var inv = [Int](repeating: -1, count: n)
         for (pos, i) in idx.enumerated() {
             guard inv[i] < 0 else {
-                throw CTError("Das Zeichen „\(alphabet[i])“ kommt im Schlüssel mehrfach vor. Der Schlüssel muss eine Permutation des Alphabets sein.")
+                throw CTError("The character \"\(alphabet[i])\" occurs more than once in the key. The key must be a permutation of the alphabet.")
             }
             inv[i] = pos
         }

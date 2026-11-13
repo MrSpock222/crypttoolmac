@@ -12,7 +12,7 @@ public enum RandomnessTests {
 
     /// Result of one test.
     public struct TestResult: Sendable {
-        /// Test name (e.g. "Frequency-Test").
+        /// Test name (e.g. "Frequency test").
         public let name: String
         /// Value of the test statistic.
         public let statistic: Double
@@ -20,7 +20,7 @@ public enum RandomnessTests {
         public let threshold: Double
         /// True if the data passed the test.
         public let passed: Bool
-        /// Human readable details (German).
+        /// Human readable details.
         public let details: String
         public init(name: String, statistic: Double, threshold: Double, passed: Bool, details: String) {
             self.name = name
@@ -41,7 +41,7 @@ public enum RandomnessTests {
 
     /// Frequency (monobit) test: X₁ = (n₀ − n₁)² / n, χ² with 1 degree of freedom.
     public static func frequencyTest(_ bytes: [UInt8], alpha: Double = 0.05) -> TestResult {
-        let name = "Frequency-Test"
+        let name = "Frequency test"
         if let r = tooShort(name, bytes) { return r }
         let n = bytes.count * 8
         var ones = 0
@@ -50,13 +50,13 @@ public enum RandomnessTests {
         let d = Double(zeros - ones)
         let x = d * d / Double(n)
         return chiResult(name, x, df: 1, alpha: alpha,
-                         info: "Bits: \(n), Nullen: \(zeros), Einsen: \(ones)")
+                         info: "Bits: \(n), zeros: \(zeros), ones: \(ones)")
     }
 
     /// Serial (two-bit) test:
     /// X₂ = 4/(n−1)·(n₀₀²+n₀₁²+n₁₀²+n₁₁²) − 2/n·(n₀²+n₁²) + 1, χ² with 2 degrees of freedom.
     public static func serialTest(_ bytes: [UInt8], alpha: Double = 0.05) -> TestResult {
-        let name = "Serial-Test"
+        let name = "Serial test"
         if let r = tooShort(name, bytes) { return r }
         let bits = bitArray(bytes)
         let n = bits.count
@@ -77,12 +77,12 @@ public enum RandomnessTests {
     /// X₃ = 2^m/k · Σ nᵢ² − k, χ² with 2^m − 1 degrees of freedom.
     /// CT1's dialog default is m = 3 (tuple size 1 … 4 selectable; FIPS uses 4).
     public static func pokerTest(_ bytes: [UInt8], m: Int = 3, alpha: Double = 0.05) -> TestResult {
-        let name = "Poker-Test"
+        let name = "Poker test"
         if let r = tooShort(name, bytes) { return r }
         let mm = max(1, min(m, 16))
         let bits = bitArray(bytes)
         let k = bits.count / mm
-        guard k > 0 else { return TestResult(name: name, statistic: 0, threshold: 0, passed: false, details: "Zu wenige Daten.") }
+        guard k > 0 else { return TestResult(name: name, statistic: 0, threshold: 0, passed: false, details: "Not enough data.") }
         var counts = [Int](repeating: 0, count: 1 << mm)
         for b in 0..<k {
             var v = 0
@@ -91,8 +91,8 @@ public enum RandomnessTests {
         }
         let sum = counts.reduce(0.0) { $0 + Double($1) * Double($1) }
         let x = Double(1 << mm) / Double(k) * sum - Double(k)
-        var info = "Tupelgröße m = \(mm), Blöcke k = \(k)"
-        if k < 5 * (1 << mm) { info += " (empfohlen: k ≥ 5·2^m = \(5 * (1 << mm)))" }
+        var info = "Tuple size m = \(mm), blocks k = \(k)"
+        if k < 5 * (1 << mm) { info += " (recommended: k ≥ 5·2^m = \(5 * (1 << mm)))" }
         return chiResult(name, x, df: (1 << mm) - 1, alpha: alpha, info: info)
     }
 
@@ -101,13 +101,13 @@ public enum RandomnessTests {
     /// X₄ = Σ (Bᵢ − eᵢ)²/eᵢ + Σ (Gᵢ − eᵢ)²/eᵢ, χ² with 2k − 2 degrees of freedom.
     /// `maxRunLength` = k (CT1 default 3; HAC suggests the largest i with eᵢ ≥ 5).
     public static func runsTest(_ bytes: [UInt8], alpha: Double = 0.05, maxRunLength: Int = 3) -> TestResult {
-        let name = "Runs-Test"
+        let name = "Runs test"
         if let r = tooShort(name, bytes) { return r }
         let k = max(2, maxRunLength)
         let (blocks, gaps, _) = runCounts(bitArray(bytes), maxLength: k)
         let n = Double(bytes.count * 8)
         var x = 0.0
-        var info = "Länge | Blöcke | Lücken | erwartet\n"
+        var info = "Length | Blocks | Gaps | expected\n"
         for i in 1...k {
             let e = (n - Double(i) + 3) / pow(2, Double(i + 2))
             let b = Double(blocks[i]), g = Double(gaps[i])
@@ -120,12 +120,12 @@ public enum RandomnessTests {
     /// Long-run test: fails if a run (of zeros or ones) of length ≥ `maxRun` occurs
     /// (CT1/FIPS 140-1 default 34). `statistic` = longest run, `passed` = statistic < threshold.
     public static func longRunTest(_ bytes: [UInt8], maxRun: Int = 34) -> TestResult {
-        let name = "Long-Runs-Test"
+        let name = "Long runs test"
         if let r = tooShort(name, bytes) { return r }
         let (_, _, longest) = runCounts(bitArray(bytes), maxLength: 1)
         let passed = longest < maxRun
         return TestResult(name: name, statistic: Double(longest), threshold: Double(maxRun), passed: passed,
-                          details: "Maximaler Testwert: \(maxRun)\nLängster Run: \(longest)\n" + verdict(name, passed))
+                          details: "Maximal test value: \(maxRun)\nLongest Run: \(longest)\n" + verdict(name, passed))
     }
 
     // MARK: FIPS PUB 140-1
@@ -136,8 +136,8 @@ public enum RandomnessTests {
     public static func fips140_1(_ bytes: [UInt8]) -> [TestResult] {
         guard bytes.count >= 2500 else {
             return [TestResult(name: "FIPS-PUB-140-1", statistic: Double(bytes.count), threshold: 2500, passed: false,
-                               details: "Die FIPS-PUB-140-1 Testbatterie analysiert nach Spezifikation genau 2.500 Bytes. "
-                                   + "Die Daten umfassen nur \(bytes.count) Bytes. Der Test kann deshalb nicht ausgeführt werden!")]
+                               details: "The FIPS-PUB-140-1 test battery is specified for exactly 2,500 bytes. "
+                                   + "The data has a length of only \(bytes.count) bytes. Therefore the test cannot be performed.")]
         }
         let data = Array(bytes.prefix(2500))
         let bits = bitArray(data)
@@ -146,8 +146,8 @@ public enum RandomnessTests {
         // Monobit
         let ones = data.reduce(0) { $0 + $1.nonzeroBitCount }
         let monoPassed = ones > 9654 && ones < 10346
-        results.append(TestResult(name: "Mono-Bit-Test", statistic: Double(ones), threshold: 10346, passed: monoPassed,
-                                  details: "Anzahl Einsen: \(ones) (erlaubt: 9654 < X < 10346)\n" + verdict("Mono-Bit-Test", monoPassed)))
+        results.append(TestResult(name: "Mono-Bit Test", statistic: Double(ones), threshold: 10346, passed: monoPassed,
+                                  details: "Number of ones: \(ones) (allowed: 9654 < X < 10346)\n" + verdict("Mono-Bit Test", monoPassed)))
 
         // Poker m = 4
         var counts = [Int](repeating: 0, count: 16)
@@ -158,14 +158,14 @@ public enum RandomnessTests {
         }
         let x3 = 16.0 / 5000.0 * counts.reduce(0.0) { $0 + Double($1) * Double($1) } - 5000
         let pokerPassed = x3 > 1.03 && x3 < 57.4
-        results.append(TestResult(name: "Poker-Test", statistic: x3, threshold: 57.4, passed: pokerPassed,
-                                  details: "Testwert: \(fmt(x3, 4)) (erlaubt: 1,03 < X < 57,4)\n" + verdict("Poker-Test", pokerPassed)))
+        results.append(TestResult(name: "Poker test", statistic: x3, threshold: 57.4, passed: pokerPassed,
+                                  details: "Test value: \(fmt(x3, 4)) (allowed: 1.03 < X < 57.4)\n" + verdict("Poker test", pokerPassed)))
 
         // Runs
         let (blocks, gaps, longest) = runCounts(bits, maxLength: 6, aggregateLast: true)
         let bounds: [(Int, Int)] = [(2267, 2733), (1079, 1421), (502, 748), (223, 402), (90, 223), (90, 223)]
         var violations = 0
-        var info = "Länge | Blöcke | Lücken | erlaubt\n"
+        var info = "Length | Blocks | Gaps | allowed\n"
         for i in 1...6 {
             let (lo, hi) = bounds[i - 1]
             if blocks[i] < lo || blocks[i] > hi { violations += 1 }
@@ -173,13 +173,13 @@ public enum RandomnessTests {
             info += "\(i == 6 ? "6+" : String(i)) | \(blocks[i]) | \(gaps[i]) | \(lo) … \(hi)\n"
         }
         let runsPassed = violations == 0
-        results.append(TestResult(name: "Runs-Test", statistic: Double(violations), threshold: 0, passed: runsPassed,
-                                  details: info + "Abweichungen: \(violations)\n" + verdict("Runs-Test", runsPassed)))
+        results.append(TestResult(name: "Runs Test", statistic: Double(violations), threshold: 0, passed: runsPassed,
+                                  details: info + "Deviations: \(violations)\n" + verdict("Runs Test", runsPassed)))
 
         // Long run
         let longPassed = longest < 34
-        results.append(TestResult(name: "Long-Runs-Test", statistic: Double(longest), threshold: 34, passed: longPassed,
-                                  details: "Längster Run: \(longest) (erlaubt: < 34)\n" + verdict("Long-Runs-Test", longPassed)))
+        results.append(TestResult(name: "Longrun Test", statistic: Double(longest), threshold: 34, passed: longPassed,
+                                  details: "Longest Run: \(longest) (allowed: < 34)\n" + verdict("Longrun Test", longPassed)))
         return results
     }
 
@@ -379,18 +379,18 @@ public enum RandomnessTests {
     private static func tooShort(_ name: String, _ bytes: [UInt8]) -> TestResult? {
         guard bytes.count < minimumByteCount else { return nil }
         return TestResult(name: name, statistic: 0, threshold: 0, passed: false,
-                          details: "Die Daten müssen mindestens \(minimumByteCount) Bytes groß sein!")
+                          details: "The data size must be at least \(minimumByteCount) bytes!")
     }
 
     private static func verdict(_ name: String, _ passed: Bool) -> String {
-        passed ? "\(name) bestanden!" : "\(name) nicht bestanden!"
+        passed ? "\(name) passed!" : "\(name) failed!"
     }
 
     private static func chiResult(_ name: String, _ x: Double, df: Int, alpha: Double, info: String) -> TestResult {
         let t = chiSquareThreshold(alpha: alpha, df: df)
         let passed = x <= t
-        let details = "Signifikanzniveau α = \(fmt(alpha, 2)), Freiheitsgrade: \(df)\n"
-            + "Maximaler Testwert: \(fmt(t, 4))\nTestergebnis: \(fmt(x, 4))\n"
+        let details = "Significance level α = \(fmt(alpha, 2)), degrees of freedom: \(df)\n"
+            + "Maximal test value: \(fmt(t, 4))\nTest result: \(fmt(x, 4))\n"
             + info + "\n" + verdict(name, passed)
         return TestResult(name: name, statistic: x, threshold: t, passed: passed, details: details)
     }

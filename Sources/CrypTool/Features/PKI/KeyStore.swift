@@ -164,7 +164,7 @@ final class KeyStore: ObservableObject {
         let k = try KeyStore.pinKey(pin, salt: [UInt8](entry.salt))
         guard let d = try? SymmetricCipher.decrypt(.aes, key: k, data: [UInt8](entry.encryptedPrivate)),
               d.starts(with: Array("CTKEY1".utf8)) else {
-            throw CTError("Falscher PIN-Code eingegeben.")
+            throw CTError("Incorrect PIN code entered.")
         }
         return try JSONDecoder().decode(PrivateKeyMaterial.self, from: Data(d.dropFirst(6)))
     }

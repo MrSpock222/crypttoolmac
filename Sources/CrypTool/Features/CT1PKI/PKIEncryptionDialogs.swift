@@ -15,27 +15,27 @@ struct PKIRSACryptDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(decrypt ? "RSA-Entschlüsselung" : "RSA-Verschlüsselung").font(.title3.weight(.semibold))
-            Text(decrypt ? "Wählen Sie Ihren geheimen Schlüssel aus der Liste der PSEs aus:" : "Wählen Sie den Empfänger:")
+            Text(decrypt ? "Decryption with RSA" : "RSA Encryption").font(.title3.weight(.semibold))
+            Text(decrypt ? "Select your secret key from the PSE list." : "Choose the recipient:")
             PKIKeyTable(selection: $keyID, filter: .rsaOnly, minHeight: 200) { _ in run() }
             HStack {
-                Text(decrypt ? "Bemerkung: Es werden nur Namen mit einem RSA Schlüssel angezeigt."
-                             : "Bemerkung: Es werden nur Namen angezeigt, die einen RSA-Schlüssel haben.")
+                Text(decrypt ? "Note: Only PSEs containing an RSA key are shown."
+                             : "Note: Here only names are displayed, which have an RSA key.")
                     .font(.callout)
                 Spacer()
                 if decrypt {
-                    Text("PIN-Code:")
+                    Text("PIN code:")
                     SecureField("", text: $pin).frame(width: 110)
                 }
             }
-            Toggle(decrypt ? "Zum Entschlüsseln benötigte Zeit anzeigen" : "Zum Verschlüsseln benötigte Zeit anzeigen", isOn: $showTime)
+            Toggle(decrypt ? "Display decryption time" : "Display encryption time", isOn: $showTime)
             Divider()
             HStack {
-                Button(decrypt ? "Entschlüsseln" : "Verschlüsseln") { run() }
+                Button(decrypt ? "Decrypt" : "Encrypt") { run() }
                     .keyboardShortcut(.defaultAction).disabled(keyID == nil)
                 Spacer()
                 PKIHelpButton(action: decrypt ? .rsaDecrypt : .rsaEncrypt)
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -44,7 +44,7 @@ struct PKIRSACryptDialog: View {
 
     private func run() {
         guard let id = keyID, let k = KeyStore.shared.key(id: id), let pub = k.rsaPublic else {
-            PKIModal.info("Wählen Sie einen Schlüsselbezeichner aus der Liste.")
+            PKIModal.info("Choose a key identifier from the list.")
             return
         }
         do {
@@ -53,17 +53,17 @@ struct PKIRSACryptDialog: View {
                 guard case .rsa(let pair)? = PKIPinAccess.open(k, pin: pin) else { pin = ""; return }
                 let r = try AsymmetricOps.rsaDecrypt(document.bytes, key: pair)
                 let t = Date().timeIntervalSince(start)
-                DocumentFactory.openResult(r, title: "RSA-Entschlüsselung von <\(document.shortName)>", parent: document,
+                DocumentFactory.openResult(r, title: "RSA decryption of <\(document.shortName)>", parent: document,
                                            viewMode: TextCoding.looksLikeText(r) ? .text : .hex)
                 close()
-                if showTime { PKIModal.info("Für die RSA-Entschlüsselung benötigte Zeit: \(PKIText.seconds(t)) Sekunden.") }
+                if showTime { PKIModal.info("RSA decryption time:  \(PKIText.seconds(t)) seconds.") }
             } else {
                 let r = try AsymmetricOps.rsaEncrypt(document.bytes, key: pub)
                 let t = Date().timeIntervalSince(start)
-                DocumentFactory.openResult(r, title: "RSA-Verschlüsselung von <\(document.shortName)> für <\(k.firstLast)>",
+                DocumentFactory.openResult(r, title: "RSA encryption of <\(document.shortName)> for <\(k.firstLast)>",
                                            parent: document, viewMode: .hex)
                 close()
-                if showTime { PKIModal.info("Für die RSA-Verschlüsselung benötigte Zeit: \(PKIText.seconds(t)) Sekunden.") }
+                if showTime { PKIModal.info("RSA encryption time: \(PKIText.seconds(t)) seconds.") }
             }
         } catch { Alerts.error(error.localizedDescription) }
     }
@@ -80,28 +80,28 @@ struct PKIECCHybridDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(decrypt ? "Hybridentschlüsselung mit ECC-AES" : "Hybridverschlüsselung mit ECC-AES").font(.title3.weight(.semibold))
-            Text(decrypt ? "Wählen Sie Ihren geheimen Schlüssel aus der Liste der PSEs aus und geben Sie die PIN ein:"
-                         : "Wählen Sie den Empfänger aus:")
+            Text(decrypt ? "Hybrid Decryption with ECC-AES" : "Hybrid Encryption with ECC-AES").font(.title3.weight(.semibold))
+            Text(decrypt ? "Select your secret key from the PSE list."
+                         : "Choose a destination:")
             PKIKeyTable(selection: $keyID, filter: .ecOnly, minHeight: 200) { _ in run() }
             HStack {
-                Text(decrypt ? "Bemerkung: Es werden nur Namen mit einem ECC Schlüssel angezeigt."
-                             : "Bemerkung: Es werden nur Namen angezeigt, die einen ECC-Schlüssel haben.")
+                Text(decrypt ? "Note: Only PSEs containing an ECC key are shown."
+                             : "Note: Only PSEs containing an ECC key are shown.")
                     .font(.callout)
                 Spacer()
                 if decrypt {
-                    Text("PIN-Code:")
+                    Text("PIN code:")
                     SecureField("", text: $pin).frame(width: 110)
                 }
             }
-            Toggle(decrypt ? "Zum Entschlüsseln benötigte Zeit anzeigen" : "Zum Verschlüsseln benötigte Zeit anzeigen", isOn: $showTime)
+            Toggle(decrypt ? "Display decryption time" : "Display encryption time", isOn: $showTime)
             Divider()
             HStack {
-                Button(decrypt ? "Entschlüsseln" : "Verschlüsseln") { run() }
+                Button(decrypt ? "Decrypt" : "Encrypt") { run() }
                     .keyboardShortcut(.defaultAction).disabled(keyID == nil)
                 Spacer()
                 PKIHelpButton(action: decrypt ? .hybridECCDecrypt : .hybridECCEncrypt)
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -112,7 +112,7 @@ struct PKIECCHybridDialog: View {
 
     private func run() {
         guard let id = keyID, let k = KeyStore.shared.key(id: id), let curve = k.curve, let q = k.ecPublic else {
-            PKIModal.info("Wählen Sie einen Schlüsselbezeichner aus der Liste.")
+            PKIModal.info("Choose a key identifier from the list.")
             return
         }
         do {
@@ -125,19 +125,19 @@ struct PKIECCHybridDialog: View {
                 } else {
                     let doc = try PKIECIESDocument.parse(document.bytes)
                     guard doc.curveID == curve.name else {
-                        throw CTError("Sender und Empfänger müssen die gleiche elliptische Kurve verwenden.\n\n Bitte wählen Sie einen Empfängerschlüssel mit dem Kurvenparameter \(doc.curveID)!")
+                        throw CTError("Sender and receiver must use the same elliptic curve.\n\nPlease choose a receiver key with the curve parameter \(doc.curveID)!")
                     }
                     let session = try PKIECIESDocument.decryptSessionKey(doc.encryptedSessionKey, curve: curve, privateKey: pair.d)
                     guard let p = try? SymmetricCipher.decrypt(.aes, key: session, data: doc.ciphertext) else {
-                        throw CTError("Der AES-Geheimtext konnte nicht mit dem AES-Sessionkey entschlüsselt werden.\nEventuell ist einer der beiden oder beide beschädigt.")
+                        throw CTError("The AES ciphertext could not be decrypted with the AES session key.\nOne or both components might be damaged.")
                     }
                     plain = p
                 }
                 let t = Date().timeIntervalSince(start)
-                DocumentFactory.openResult(plain, title: DocumentFactory.title("ECC-AES-Hybrid-Entschlüsselung", of: document, key: keyTitle(k)),
+                DocumentFactory.openResult(plain, title: DocumentFactory.title("ECC-AES hybrid decryption", of: document, key: keyTitle(k)),
                                            parent: document, viewMode: TextCoding.looksLikeText(plain) ? .text : .hex)
                 close()
-                if showTime { PKIModal.info("Für die ECC-AES-Entschlüsselung benötigte Zeit: \(PKIText.seconds(t)) Sekunden.") }
+                if showTime { PKIModal.info("ECC-AES decryption time: \(PKIText.seconds(t)) seconds.") }
             } else {
                 var session = [UInt8](repeating: 0, count: 32)   // CT1: AES with KEYSIZE 32
                 _ = SecRandomCopyBytes(kSecRandomDefault, session.count, &session)
@@ -146,10 +146,10 @@ struct PKIECCHybridDialog: View {
                 let out = PKIECIESDocument(receiverName: k.lastName, receiverFirstName: k.firstName, curveID: curve.name,
                                            encryptedSessionKey: enc, ciphertext: cipher).serialize()
                 let t = Date().timeIntervalSince(start)
-                DocumentFactory.openResult(out, title: DocumentFactory.title("ECC-AES-Hybrid-Verschlüsselung", of: document, key: keyTitle(k)),
+                DocumentFactory.openResult(out, title: DocumentFactory.title("ECC-AES hybrid encryption", of: document, key: keyTitle(k)),
                                            parent: document, method: "hybrid", key: "Sessionkey: " + PKIText.hex(session), viewMode: .hex)
                 close()
-                if showTime { PKIModal.info("Für die ECC-AES-Verschlüsselung benötigte Zeit: \(PKIText.seconds(t)) Sekunden.") }
+                if showTime { PKIModal.info("ECC-AES encryption time: \(PKIText.seconds(t)) seconds.") }
             }
         } catch { Alerts.error(error.localizedDescription) }
     }

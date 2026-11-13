@@ -8,7 +8,7 @@ final class NTProgressModel: ObservableObject {
     @Published var fraction: Double = 0
     @Published var message = ""
     /// Message format: "%d" placeholders are not used – the closure builds the text from percent and remaining time.
-    var format: (Int, String) -> String = { p, rest in "\(p)% erledigt.\nRestzeit: \(rest)" }
+    var format: (Int, String) -> String = { p, rest in "\(p)% completed.\nRemaining time: \(rest)" }
     let token = CancellationToken()
     private var start = Date()
     private var dismissAction: (() -> Void)?
@@ -21,7 +21,7 @@ final class NTProgressModel: ObservableObject {
 
     private func remaining() -> String {
         let elapsed = Date().timeIntervalSince(start)
-        guard fraction > 0.0001 else { return "wird berechnet …" }
+        guard fraction > 0.0001 else { return "calculating …" }
         let rest = elapsed * (1 - fraction) / fraction
         return ntRemainingTime(rest)
     }
@@ -47,17 +47,17 @@ final class NTProgressModel: ObservableObject {
 
 /// Formats a remaining time like CT1's progress dialog (days / h:mm:ss).
 func ntRemainingTime(_ seconds: Double) -> String {
-    if !seconds.isFinite || seconds > 1e12 { return "unbekannt" }
+    if !seconds.isFinite || seconds > 1e12 { return "unknown" }
     var s = Int(seconds.rounded())
     let years = s / (365 * 86400)
-    if years >= 1 { return "\(years) Jahre" }
+    if years >= 1 { return "\(years) years" }
     let d = s / 86400; s %= 86400
     let h = s / 3600; s %= 3600
     let m = s / 60; s %= 60
-    if d > 0 { return String(format: "%d Tage, %02d:%02d:%02d Stunden", d, h, m, s) }
-    if h > 0 { return String(format: "%d:%02d:%02d Stunden", h, m, s) }
-    if m > 0 { return String(format: "%d:%02d Minuten", m, s) }
-    return "\(s) Sekunden"
+    if d > 0 { return String(format: "%d days, %02d:%02d:%02d hours", d, h, m, s) }
+    if h > 0 { return String(format: "%d:%02d:%02d hours", h, m, s) }
+    if m > 0 { return String(format: "%d:%02d minutes", m, s) }
+    return "\(s) seconds"
 }
 
 struct NTProgressSheet: View {
@@ -69,7 +69,7 @@ struct NTProgressSheet: View {
             ProgressView(value: model.fraction)
             HStack {
                 Spacer()
-                Button("Abbrechen") {
+                Button("Cancel") {
                     model.token.cancel()
                     model.dismiss()
                 }.keyboardShortcut(.cancelAction)
@@ -89,10 +89,10 @@ func ntCT1Time(_ seconds: Double) -> String {
     let h = (whole % 86400) / 3600
     let m = (whole % 3600) / 60
     let s = whole % 60
-    if d >= 1 { return String(format: "%4d Tage, %02d:%02d:%02d Stunden.", d, h, m, s).trimmingCharacters(in: .whitespaces) }
-    if h >= 1 { return String(format: "%2d:%02d:%02d Stunden.", h, m, s).trimmingCharacters(in: .whitespaces) }
-    if m >= 1 { return String(format: "%2d:%02d Minuten.", m, s).trimmingCharacters(in: .whitespaces) }
-    return String(format: "%2d,%03d Sekunden.", s, ms).trimmingCharacters(in: .whitespaces)
+    if d >= 1 { return String(format: "%4d days, %02d:%02d:%02d hours.", d, h, m, s).trimmingCharacters(in: .whitespaces) }
+    if h >= 1 { return String(format: "%2d:%02d:%02d hours.", h, m, s).trimmingCharacters(in: .whitespaces) }
+    if m >= 1 { return String(format: "%2d:%02d minutes.", m, s).trimmingCharacters(in: .whitespaces) }
+    return String(format: "%2d.%03d seconds.", s, ms).trimmingCharacters(in: .whitespaces)
 }
 
 /// Read-only result line as in CT1's "Ergebnis" edit fields.

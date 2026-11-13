@@ -74,7 +74,7 @@ public enum SymmetricAlgorithm: String, CaseIterable, Codable, Sendable {
     /// Mode of operation as human readable text.
     public var modeDescription: String {
         switch self {
-        case .rc4: return "Stromchiffre"
+        case .rc4: return "Stream cipher"
         case .desECB, .tripleDESECB, .idea: return "ECB"
         default: return "CBC, IV = 0"
         }
@@ -111,13 +111,13 @@ public enum SymmetricAlgorithm: String, CaseIterable, Codable, Sendable {
         return keySizesBits.contains(byteCount * 8)
     }
 
-    /// Valid key lengths as text, e.g. "128, 192, 256 Bit".
+    /// Valid key lengths as text, e.g. "128, 192, 256 bits".
     var keySizesText: String {
         switch self {
-        case .rc2: return "8 bis 1024 Bit (Vielfache von 8)"
-        case .rc4: return "8 bis 2048 Bit (Vielfache von 8)"
-        case .tripleDESECB, .tripleDESCBC: return "128 oder 192 Bit"
-        default: return keySizesBits.map(String.init).joined(separator: ", ") + " Bit"
+        case .rc2: return "8 to 1024 bits (multiples of 8)"
+        case .rc4: return "8 to 2048 bits (multiples of 8)"
+        case .tripleDESECB, .tripleDESCBC: return "128 or 192 bits"
+        default: return keySizesBits.map(String.init).joined(separator: ", ") + " bits"
         }
     }
 }

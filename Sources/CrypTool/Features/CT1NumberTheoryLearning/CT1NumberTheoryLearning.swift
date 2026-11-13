@@ -1,13 +1,13 @@
 import AppKit
 import SwiftUI
 
-/// "Lernprogramm für Zahlentheorie" – native re-creation of CT1's Authorware program ZT
-/// (Martin Ramberger). The page texts were recovered from ZT.exe and are shown verbatim;
+/// "Learning Tool for Number Theory" – native re-creation of CT1's Authorware program NT, the English
+/// edition of ZT (Martin Ramberger). The page texts were recovered from NT.exe and are shown verbatim;
 /// the interactive parts are rebuilt in SwiftUI on top of CTBigNum.
 @MainActor
 enum CT1NumberTheoryLearning {
     static func open() {
-        WindowPresenter.tool(id: "ct1.zt.learning", title: "Lernprogramm für Zahlentheorie",
+        WindowPresenter.tool(id: "ct1.zt.learning", title: "Learning Tool for Number Theory",
                              size: CGSize(width: 1080, height: 760)) {
             ZTLearningView()
         }
@@ -46,7 +46,7 @@ struct ZTGlossaryEntry: Identifiable {
 enum ZTContent {
     static let lessons: [ZTLesson] = [lesson1(), lesson2(), lesson3(), lesson4(), lesson5(), lesson6()]
 
-    /// Flat page sequence (the order of "Seite vor" / "Zurück").
+    /// Flat page sequence (the order of "Next page" / "Back").
     static let flat: [(lesson: ZTLesson, chapter: ZTChapter, page: ZTPage)] =
         lessons.flatMap { l in l.chapters.flatMap { c in c.pages.map { (l, c, $0) } } }
 
@@ -118,20 +118,20 @@ struct ZTLearningView: View {
 
     private var navigationBar: some View {
         HStack(spacing: 10) {
-            Button { go(-1) } label: { Label("Zurück", systemImage: "chevron.left") }
+            Button { go(-1) } label: { Label("Back", systemImage: "chevron.left") }
                 .keyboardShortcut(.leftArrow, modifiers: [.command])
                 .disabled(current == nil)
-            Button { selection = nil } label: { Label("Lektionsverzeichnis", systemImage: "list.bullet") }
-            Button { showGlossary = true } label: { Label("Begriffe", systemImage: "character.book.closed") }
+            Button { selection = nil } label: { Label("Table of Contents", systemImage: "list.bullet") }
+            Button { showGlossary = true } label: { Label("Words", systemImage: "character.book.closed") }
             Spacer()
             if let i = current {
                 let e = ZTContent.flat[i]
                 let n = (e.chapter.pages.firstIndex { $0.id == e.page.id } ?? 0) + 1
-                Text("Seite \(n) von \(e.chapter.pages.count)").foregroundStyle(.secondary).monospacedDigit()
+                Text("page \(n) of \(e.chapter.pages.count)").foregroundStyle(.secondary).monospacedDigit()
             }
             Spacer()
             Button { go(1) } label: {
-                HStack(spacing: 4) { Text("Seite vor"); Image(systemName: "chevron.right") }
+                HStack(spacing: 4) { Text("Next page"); Image(systemName: "chevron.right") }
             }
             .keyboardShortcut(.rightArrow, modifiers: [.command])
             .disabled((current ?? -1) >= ZTContent.flat.count - 1)
@@ -154,7 +154,7 @@ struct ZTLearningView: View {
     }
 }
 
-// MARK: - Start page (Lektionsverzeichnis)
+// MARK: - Start page (table of contents)
 
 struct ZTStartView: View {
     let open: (String) -> Void
@@ -162,12 +162,12 @@ struct ZTStartView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Zahlentheorie zur asymmetrischen Verschlüsselung").font(.largeTitle.weight(.semibold))
-                Text("Lernprogramm für Zahlentheorie – nach ZT von Martin Ramberger")
+                Text("Number Theory and Public Key Cryptography").font(.largeTitle.weight(.semibold))
+                Text("Learning Tool for Number Theory – after NT by Martin Ramberger")
                     .font(.title3).foregroundStyle(.secondary)
-                Text("Die Seitentexte stammen aus dem Original-Lernprogramm ZT (CrypTool 1). Die Mitmach-Teile "
-                     + "(„Ausprobieren“) wurden für macOS nachgebaut: Geben Sie eigene kleine Zahlen ein und verfolgen "
-                     + "Sie die Verfahren Schritt für Schritt. Blättern mit „Seite vor“/„Zurück“ (⌘→ / ⌘←).")
+                Text("The page texts are taken from the original learning tool NT (CrypTool 1). The interactive parts "
+                     + "(\"Try it\") were rebuilt for macOS: Enter your own small numbers and follow "
+                     + "the methods step by step. Turn the pages with \"Next page\"/\"Back\" (⌘→ / ⌘←).")
                     .fixedSize(horizontal: false, vertical: true)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: 14)], alignment: .leading, spacing: 14) {
                     ForEach(ZTContent.lessons) { lesson in
@@ -207,7 +207,7 @@ struct ZTPageView: View {
                     .font(.callout).foregroundStyle(.secondary)
                 Text(entry.page.title).font(.title.weight(.semibold))
                 if entry.page.blocks.isEmpty {
-                    Text("(Diese Seite des Originals besteht nur aus einer Animation; Text siehe Ausprobieren.)")
+                    Text("(This page of the original consists only of an animation; for the text see Try it.)")
                         .foregroundStyle(.secondary)
                 }
                 ForEach(Array(entry.page.blocks.enumerated()), id: \.offset) { _, block in
@@ -221,11 +221,11 @@ struct ZTPageView: View {
                     GroupBox {
                         ZTToolView(tool: tool).padding(6)
                     } label: {
-                        Label("Ausprobieren – \(tool.title)", systemImage: "hand.point.up.left").font(.headline)
+                        Label("Try it – \(tool.title)", systemImage: "hand.point.up.left").font(.headline)
                     }
                     .padding(.top, 6)
                 }
-                Text("Seitentext aus ZT (Martin Ramberger, Diplomarbeit Uni Koblenz 2005); Mitmach-Teil nachgebaut.")
+                Text("Page text from NT (Martin Ramberger, diploma thesis, University of Koblenz 2005); interactive part rebuilt.")
                     .font(.caption2).foregroundStyle(.tertiary)
             }
             .padding(20)
@@ -278,7 +278,7 @@ struct ZTRichText: View {
     }
 }
 
-// MARK: - Glossary ("Begriffe")
+// MARK: - Glossary ("Words")
 
 struct ZTGlossaryView: View {
     let open: (String) -> Void
@@ -292,8 +292,8 @@ struct ZTGlossaryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Begriffe").font(.title2.weight(.semibold))
-            TextField("Suchen", text: $filter).textFieldStyle(.roundedBorder)
+            Text("Words").font(.title2.weight(.semibold))
+            TextField("Find", text: $filter).textFieldStyle(.roundedBorder)
             List(entries) { e in
                 Button {
                     open(e.pageID)
@@ -313,7 +313,7 @@ struct ZTGlossaryView: View {
             .frame(minHeight: 360)
             HStack {
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.cancelAction)
+                Button("Close", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)

@@ -64,11 +64,11 @@ func runCT1TutorialTests() {
 
     // Präsentation (22): Passwort-Qualitätsmesser (Folie 95)
     let q1 = PasswordTools.ct1Quality(of: "1234")
-    check([q1.keePassText, q1.mozillaText, q1.pgpText, q1.crypToolText] == ["10 % (12 Bits)", "50 %", "9 % (11 Bits)", "6 % (7 Bits)"],
+    check([q1.keePassText, q1.mozillaText, q1.pgpText, q1.crypToolText] == ["10 % (12 bit)", "50 %", "9 % (11 bit)", "6 % (7 bit)"],
           "PQM 1234 wie Folie 95 (got \(q1.keePassText), \(q1.mozillaText), \(q1.pgpText), \(q1.crypToolText))")
     // CT1's CrypTool measure shows 77 % (98 Bits): it finds "bTR" and "Rds" in the cracklib dictionary
     // (1.65 million words, setup/template/words) – the port's built-in word list is much smaller.
     let q2 = PasswordTools.ct1Quality(of: "X40bTRds&11w_dks")
-    check([q2.keePassText, q2.mozillaText, q2.pgpText] == ["82 % (104 Bits)", "100 %", "63 % (80 Bits)"],
+    check([q2.keePassText, q2.mozillaText, q2.pgpText] == ["82 % (104 bit)", "100 %", "63 % (80 bit)"],
           "PQM X40bTRds&11w_dks wie Folie 95 (got \(q2.keePassText), \(q2.mozillaText), \(q2.pgpText))")
 }

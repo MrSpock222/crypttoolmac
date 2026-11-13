@@ -26,12 +26,12 @@ enum CRTUtil {
         return d
     }
 
-    /// CT1 "tausender": thousands separator ".".
+    /// CT1 "tausender": thousands separator IDS_STRING_PT (English: ",").
     static func thousands(_ s: String) -> String {
         var t = s
         var i = t.count - 3
         while i > 0 {
-            t.insert(".", at: t.index(t.startIndex, offsetBy: i))
+            t.insert(",", at: t.index(t.startIndex, offsetBy: i))
             i -= 3
         }
         return t
@@ -134,13 +134,13 @@ struct CRTLogSheet: View {
             ResultBox(text: text, minHeight: 300)
             HStack {
                 Spacer()
-                Button("Speichern") {
+                Button("Save") {
                     DocumentFactory.openResult(text: text.replacingOccurrences(of: "\r\n", with: "\n"), title: saveTitle)
                     saved = true
                     CRTUtil.message(savedMessage)
                     close()
                 }.disabled(saved)
-                Button("Schließen", action: close).keyboardShortcut(.cancelAction)
+                Button("Close", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)

@@ -20,15 +20,15 @@ public enum CT1AutoAnalysis {
 
     /// IDS_STRING_ERR_INPUT_TEXT_LENGTH.
     public static func inputTooShortMessage(_ minimum: Int) -> String {
-        "Die Eingabe muss mindestens \(minimum) (nicht unbedingt verschiedene) Buchstaben des eingestellten Alphabets enthalten. Das Alphabet können Sie unter Optionen \\ Textoptionen ändern."
+        "The input must contain at least \(minimum) (not necessarily different) character(s) from the current alphabet. The alphabet can be configured in Options \\ Text Options."
     }
 
     /// IDS_ERRON_OPEN_REFERENCE_FILE.
-    public static let referenceFileError = "Fehler beim Öffnen der Referenzdatei! Bitte wählen Sie unter dem Menü Optionen / Textoptionen eine geeignete Datei."
+    public static let referenceFileError = "Error opening the reference file! Please select a valid reference file via the menu Options / Text Options."
 
     /// IDS_STRING_MSG_ON_CONVERT_KEY.
     public static func repeatedKeyMessage(_ key: String) -> String {
-        "Der Schlüssel weist Wiederholungen auf und wird durch den äquivalenten Schlüssel <\(key)> ersetzt!"
+        "The key shows recurring elements and will be replaced by the equivalent key <\(key)>!"
     }
 
     /// IDS_CAESAR_ANALYSIS_REMARK, filled like `CDlgCaesarAnalysis::createKeyOffsetRemark`
@@ -40,12 +40,12 @@ public enum CT1AutoAnalysis {
         } else {
             alt = alphabet.first.map { String($0) } ?? ""   // CT1: Find() = -1 → position 0
         }
-        return "Durch das bei der Verschlüsselung eingestellte Key-Offset existieren zwei mögliche Schlüssel: Für ein Key-Offset von 1 gilt der Schlüssel '\(derivedKey)', für ein Key-Offset von 0 gilt der Schlüssel '\(alt)'."
+        return "Because of the key offset which was used during encryption, there are two keys possible: For a key offset of 1 the key is '\(derivedKey)', for a key offset of 0 the key is '\(alt)'."
     }
 
     /// IDS_STRING_ASCERTAINED_KEY_CHARACTER.
     public static func ascertainedKeyCharacterMessage(position: Int, key: Character) -> String {
-        "Ermitteltes \(position)-tes Schlüsselzeichen: <\(key)>"
+        "Calculated \(position)th key character: <\(key)>"
     }
 
     /// The four ciphertext-only analyses.
@@ -55,20 +55,20 @@ public enum CT1AutoAnalysis {
         /// Title of CT1's message boxes / dialogs (IDS_STRING_ANALYSE_…).
         public var analysisTitle: String {
             switch self {
-            case .caesar: return "Caesar-Analyse"
-            case .vigenere: return "Vigenère-Analyse"
-            case .xor: return "XOR-Analyse"
-            case .addition: return "Analyse der Byteweisen Addition"
+            case .caesar: return "Caesar Analysis"
+            case .vigenere: return "Vigenère Analysis"
+            case .xor: return "XOR Analysis"
+            case .addition: return "Byte-by-byte Addition Analysis"
             }
         }
 
         /// Format of the result window title (IDS_STRING_AUTOMATIC_…_ANALYSE_OF), `%1` = document, `%2` = key.
         var resultFormat: String {
             switch self {
-            case .caesar: return "Automatische Caesar-Analyse von <%s>, %s"
-            case .vigenere: return "Automatische Vigenère-Analyse von <%s>, Schlüssel: <%s>"
-            case .xor: return "Automatische XOR-Analyse von <%s>, Schlüssel: <%s>"
-            case .addition: return "Automatische ADD-Analyse von <%s>, Schlüssel: <%s>"
+            case .caesar: return "Automatic Caesar Analysis of <%s>, key: <%s>"
+            case .vigenere: return "Automatic Vigenère Analysis of <%s>, key: <%s>"
+            case .xor: return "Automatic XOR Analysis of <%s>, key: <%s>"
+            case .addition: return "Automatic Addition Analysis of <%s>, key: <%s>"
             }
         }
 
@@ -77,7 +77,7 @@ public enum CT1AutoAnalysis {
             switch self {
             case .caesar, .vigenere: return "Caesar"
             case .xor: return "XOR"
-            case .addition: return "Byteweise Addition"
+            case .addition: return "Byte-by-byte Addition"
             }
         }
     }
@@ -103,7 +103,7 @@ public enum CT1AutoAnalysis {
 
     /// Result window title, e.g. "Automatische Caesar-Analyse von <doc>, Schlüssel: <K>".
     public static func resultTitle(_ kind: Kind, document: String, key: String) -> String {
-        if kind == .caesar { return makeNewName2(kind.resultFormat, document: document, key: "Schlüssel: <\(key)>") }
+        if kind == .caesar { return makeNewName2(kind.resultFormat, document: document, key: "Key: <\(key)>") }
         return makeNewName2(kind.resultFormat, document: document, key: key)
     }
 

@@ -12,8 +12,8 @@ struct DiffieHellmanView: View {
     @StateObject private var m = DHModel()
 
     private static let stepTitles = [
-        "Öffentliche Parameter setzen", "Geheimnisse wählen", "Öffentliche Teilschlüssel erzeugen",
-        "Öffentliche Teilschlüssel austauschen", "Geheimen Schlüssel generieren",
+        "Set Public Parameters", "Choose Secrets", "Create Shared Keys",
+        "Exchange Shared Keys", "Generate Common Session Key",
     ]
     private let rowHeight: CGFloat = 62
     private let panel = Color(nsColor: .controlBackgroundColor)
@@ -37,15 +37,15 @@ struct DiffieHellmanView: View {
                 }
                 GridRow {
                     stepButton(1)
-                    partyCell(button: 5, icon: "lock.fill", tip: "Geheimnis wählen", label: "a:", value: masked(m.shownSecretA)) { m.chooseSecret(alice: true) }
+                    partyCell(button: 5, icon: "lock.fill", tip: "Choose secret", label: "a:", value: masked(m.shownSecretA)) { m.chooseSecret(alice: true) }
                     Color.clear.frame(width: 90)
-                    partyCell(button: 6, icon: "lock.fill", tip: "Geheimnis wählen", label: "b:", value: masked(m.shownSecretB)) { m.chooseSecret(alice: false) }
+                    partyCell(button: 6, icon: "lock.fill", tip: "Choose secret", label: "b:", value: masked(m.shownSecretB)) { m.chooseSecret(alice: false) }
                 }
                 GridRow {
                     stepButton(2)
-                    partyCell(button: 7, icon: "function", tip: "A = g^a mod p berechnen", label: "A:", value: m.sharedA) { m.computePublic(alice: true) }
+                    partyCell(button: 7, icon: "function", tip: "Calculate A = g^a mod p", label: "A:", value: m.sharedA) { m.computePublic(alice: true) }
                     Color.clear.frame(width: 90)
-                    partyCell(button: 8, icon: "function", tip: "B = g^b mod p berechnen", label: "B:", value: m.sharedB) { m.computePublic(alice: false) }
+                    partyCell(button: 8, icon: "function", tip: "Calculate B = g^b mod p", label: "B:", value: m.sharedB) { m.computePublic(alice: false) }
                 }
                 GridRow {
                     stepButton(3)
@@ -55,19 +55,19 @@ struct DiffieHellmanView: View {
                 }
                 GridRow {
                     stepButton(4)
-                    partyCell(button: 9, icon: "function", tip: "S = B^a mod p berechnen", label: "S:", value: m.sessionA) { m.computeSession(alice: true) }
+                    partyCell(button: 9, icon: "function", tip: "Calculate S = B^a mod p", label: "S:", value: m.sessionA) { m.computeSession(alice: true) }
                     keyButton
-                    partyCell(button: 10, icon: "function", tip: "S = A^b mod p berechnen", label: "S:", value: m.sessionB) { m.computeSession(alice: false) }
+                    partyCell(button: 10, icon: "function", tip: "Calculate S = A^b mod p", label: "S:", value: m.sessionB) { m.computeSession(alice: false) }
                 }
             }
             Spacer(minLength: 0)
             HStack {
-                Button("Beenden") { m.window.window?.close() }
+                Button("Close") { m.window.window?.close() }
                 CT1HelpButton(action: .diffieHellman)
                 Spacer()
                 VStack(alignment: .trailing, spacing: 4) {
-                    Toggle("Einleitungsdialog anzeigen", isOn: $m.showIntro)
-                    Toggle("Informationsdialoge anzeigen", isOn: $m.showInfo)
+                    Toggle("Show introduction dialog", isOn: $m.showIntro)
+                    Toggle("Show information dialogs", isOn: $m.showInfo)
                 }
             }
         }
@@ -80,10 +80,10 @@ struct DiffieHellmanView: View {
     private func masked(_ s: String) -> String { String(repeating: "*", count: s.count) }
 
     private var publicParameters: some View {
-        GroupBox("Von beiden benutzte öffentliche Parameter") {
+        GroupBox("Public parameters:") {
             VStack(spacing: 6) {
                 HStack {
-                    Text("Primzahlmodul p:").frame(width: 120, alignment: .leading)
+                    Text("Prime module p:").frame(width: 120, alignment: .leading)
                     DHReadOnly(text: m.prime)
                 }
                 HStack {

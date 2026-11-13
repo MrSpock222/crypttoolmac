@@ -58,29 +58,29 @@ struct CT1ToolsPasswordGuidelinesSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Passwort-Richtlinien").font(.headline)
-            GroupBox("Beschreibung") {
-                Text("Hier können Sie einstellen, welche Mindestanforderungen der in CrypTool integrierte Passwort-Qualitätsmesser an Ihre Passwörter stellt.")
+            Text("Password Guidelines").font(.headline)
+            GroupBox("Description") {
+                Text("Here you can adjust the minimum requirements for passwords checked by the password quality meter that is integrated in CrypTool.")
                     .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Mindestanforderung an Passwörter") {
+            GroupBox("Minimum requirements for passwords") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
-                    GridRow { Text("Länge:").gridColumnAlignment(.trailing); small($length) }
-                    GridRow { Text("Anzahl Ziffern:"); small($digits) }
-                    GridRow { Text("Anzahl Sonderzeichen:"); small($specials) }
-                    GridRow { Text("Gültige Sonderzeichen:"); TextField("", text: $group).frame(width: 220) }
+                    GridRow { Text("Length:").gridColumnAlignment(.trailing); small($length) }
+                    GridRow { Text("Number of digits:"); small($digits) }
+                    GridRow { Text("Number of special characters:"); small($specials) }
+                    GridRow { Text("Valid special characters:"); TextField("", text: $group).frame(width: 220) }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack {
                 Button("OK", action: ok).keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Standard") {
+                Button("Default") {
                     // CT1 OnBnClickedDefault: 8 / 1 / 1 and the special characters of the text options
                     (length, digits, specials, group) = ("8", "1", "1", TextOptions.specialCharacters)
                 }
                 Spacer()
-                Button("Abbrechen") { dismiss() }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { dismiss() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(18)
@@ -94,7 +94,7 @@ struct CT1ToolsPasswordGuidelinesSheet: View {
     private func ok() {
         let s = CT1ToolsPasswordGuidelines.atoi(specials)
         if s > 0 && group.isEmpty {
-            Alerts.error("Die Liste der Sonderzeichen ist leer!\nBitte geben Sie Sonderzeichen an, oder verringern Sie die Minimalzahl der Sonderzeichen auf Null.")
+            Alerts.error("The special character list is empty!\nPlease provide some special characters or reduce the minimal number of special characters to zero.")
             return
         }
         // negative values would make every password non-compliant in CT1 (unsigned comparison)
@@ -121,29 +121,29 @@ struct PasswordQualityView: View {
     var body: some View {
         let r = PasswordTools.ct1Quality(of: password, policy: policy, hidePassword: !showPassword)
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Beschreibung") {
+            GroupBox("Description") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Es ist nicht möglich, die Sicherheit von Passwörtern quantitativ eindeutig zu bestimmen. Allerdings ist es möglich, die Sicherheit von Passwörtern basierend auf bestimmten Hypothesen zu schätzen.")
-                    Text("Unten finden Sie vier implementierte Hypothesen für Passwort-Qualitätsmesser, mit denen Sie die Sicherheit Ihres Passwortes einschätzen können.")
+                    Text("It is not possible to exactly determine and quantify the security of passwords. But it is possible to estimate the security of passwords based on certain assumptions.")
+                    Text("Below you can see four implementations of password quality meters, helping you to estimate the security of your password.")
                 }
                 .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Eingabe des Passworts") {
+            GroupBox("Password input") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Bitte geben Sie Ihr Passwort in das Eingabefeld ein. Die Qualität des Passworts wird prozentual angezeigt und nach jedem Tastendruck automatisch aktualisiert.")
+                    Text("Please enter your password here. The password quality is shown in percent and updated with every key stroke.")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
-                        Text("Passwort:").frame(width: 70, alignment: .trailing)
+                        Text("Password:").frame(width: 70, alignment: .trailing)
                         Group {
                             if showPassword { TextField("", text: $password) } else { SecureField("", text: $password) }
                         }
                         .font(.system(.body, design: .monospaced))
                     }
                     HStack {
-                        Toggle("Passwort im Klartext anzeigen", isOn: $showPassword).toggleStyle(.checkbox)
+                        Toggle("Show password", isOn: $showPassword).toggleStyle(.checkbox)
                             .padding(.leading, 78)
                         Spacer()
-                        Text("Passwortlänge:")
+                        Text("Password length:")
                         Text("\(password.count)").monospacedDigit()
                             .frame(width: 40, alignment: .trailing).padding(.horizontal, 4).padding(.vertical, 2)
                             .background(Color(nsColor: .controlBackgroundColor))
@@ -152,7 +152,7 @@ struct PasswordQualityView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Qualität des Passworts basierend auf Hypothesen (und Entropie des Passworts in Bits)") {
+            GroupBox("Password quality based on assumptions (and password entropy in bit)") {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(alignment: .center, spacing: 16) {
                         Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 7) {
@@ -163,24 +163,24 @@ struct PasswordQualityView: View {
                         }
                         Spacer(minLength: 0)
                         CT1ToolsQualityFace(level: r.level).frame(width: 44, height: 44)
-                            .help("Mittelwert der vier Verfahren: \(r.average) %")
+                            .help("Average of the four methods: \(r.average) %")
                         Spacer(minLength: 0)
                     }
                     if r.showsTruncationNote {
-                        Text("(Die CrypTool-PQM-Methode bewertet nur die ersten 32 Zeichen)")
+                        Text("(The CrypTool-PQM method evaluates only the first 32 characters)")
                             .font(.callout).padding(.leading, 78)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Resistenz gegen Wörterbuch-Attacken (bewertet nur die ersten 32 Zeichen)") {
+            GroupBox("Resistance against dictionary attacks (evaluates only the first 32 characters)") {
                 ResultBox(text: r.resistance, minHeight: 150).padding(4)
             }
             HStack {
                 Spacer()
-                Button("Passwort-Richtlinien") { showGuidelines = true }
+                Button("Password guidelines") { showGuidelines = true }
                 Spacer()
-                Button("Schließen") { windowRef.close() }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { windowRef.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
@@ -244,7 +244,7 @@ struct CT1ToolsQualityFace: View {
             mouth.addQuadCurve(to: CGPoint(x: w * 0.72, y: h * 0.66), control: CGPoint(x: w * 0.5, y: h * 0.66 + 2 * curve))
             ctx.stroke(mouth, with: .color(.black), style: StrokeStyle(lineWidth: max(1.5, w / 22), lineCap: .round))
         }
-        .accessibilityLabel(["schlecht", "niedrig", "durchschnittlich", "hoch", "sehr hoch"][min(max(level, 0), 4)])
+        .accessibilityLabel(["bad", "low", "average", "high", "very high"][min(max(level, 0), 4)])
     }
 }
 
@@ -268,20 +268,20 @@ struct PasswordEntropyView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Beschreibung") {
+            GroupBox("Description") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Dieser Dialog berechnet ein zufälliges Passwort.")
-                    Text("Die Passwort-Entropie beschreibt, wie schwer das Passwort zu erraten ist. Das Passwort-Alphabet bestimmt, welche Zeichen für das Passwort verwendet werden. Durch Entropie und Alphabet ergibt sich die Passwort-Länge.")
+                    Text("This dialog computes a random password.")
+                    Text("The password entropy describes how hard it is to guess the password. The password alphabet defines which characters are used to create the password. The combination of entropy and alphabet yield the password length.")
                 }
                 .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Input-Parameter zur Generierung des Passworts") {
+            GroupBox("Input parameters for password generation") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 7) {
                     GridRow {
-                        Text("Entropie:").gridColumnAlignment(.trailing)
+                        Text("Entropy:").gridColumnAlignment(.trailing)
                         HStack {
                             TextField("", text: $bits).frame(width: 60).multilineTextAlignment(.trailing)
-                            Text("Bits")
+                            Text("bit")
                         }
                     }
                     GridRow {
@@ -291,37 +291,37 @@ struct PasswordEntropyView: View {
                     GridRow {
                         Color.clear.frame(width: 1, height: 1)
                         HStack {
-                            Toggle("Aktuelles Text-Alphabet verwenden", isOn: $useTextAlphabet).toggleStyle(.checkbox)
+                            Toggle("Use current text alphabet", isOn: $useTextAlphabet).toggleStyle(.checkbox)
                             Spacer()
-                            Button("Textoptionen") { OptionsWindows.showTextOptions() }.disabled(!useTextAlphabet)
+                            Button("Text options") { OptionsWindows.showTextOptions() }.disabled(!useTextAlphabet)
                         }
                     }
                     GridRow {
                         Color.clear.frame(width: 1, height: 1)
-                        Toggle("Keine verwechselbaren Zeichen verwenden (schriftliche Übertragung)", isOn: $written).toggleStyle(.checkbox)
+                        Toggle("Don't use confusable characters (written transmission)", isOn: $written).toggleStyle(.checkbox)
                     }
                     GridRow {
                         Color.clear.frame(width: 1, height: 1)
-                        Toggle("Keine verwechselbaren Zeichen verwenden (telefonische Übertragung)", isOn: $telephonic).toggleStyle(.checkbox)
+                        Toggle("Don't use confusable characters (telephonic transmission)", isOn: $telephonic).toggleStyle(.checkbox)
                     }
                     GridRow {
                         Color.clear.frame(width: 1, height: 1)
-                        Toggle("Alphabet für WLAN-Passwörter verwenden (64 Zeichen)", isOn: $wlan).toggleStyle(.checkbox)
+                        Toggle("Use alphabet for WLAN passwords (64 characters)", isOn: $wlan).toggleStyle(.checkbox)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Generiertes Passwort") {
+            GroupBox("Generated password") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 7) {
                     GridRow {
-                        Text("Passwort-Länge:").gridColumnAlignment(.trailing)
+                        Text("Password length:").gridColumnAlignment(.trailing)
                         HStack {
                             readOnly(passwordLength.map(String.init) ?? "", width: 60, trailing: true)
-                            Text("Zeichen")
+                            Text("characters")
                         }
                     }
                     GridRow {
-                        Text("Passwort-Beispiel:")
+                        Text("Password example:")
                         readOnly(example, width: nil, trailing: false)
                     }
                 }
@@ -329,15 +329,15 @@ struct PasswordEntropyView: View {
             }
             Spacer(minLength: 0)
             HStack {
-                Button("Passwort generieren", action: generate).keyboardShortcut(.defaultAction)
-                Button("Passwort-Qualität messen", action: measure).disabled(example.isEmpty)
+                Button("Generate password", action: generate).keyboardShortcut(.defaultAction)
+                Button("Measure password quality", action: measure).disabled(example.isEmpty)
                 Spacer()
-                Button("Schließen") { windowRef.close() }.keyboardShortcut(.cancelAction)
+                Button("Close") { windowRef.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
         .frame(minWidth: 640, minHeight: 500)
-        .background(CT1ToolsWindowAccessor(title: "Passwörter mit bestimmter Entropie erzeugen",
+        .background(CT1ToolsWindowAccessor(title: "Generate Passwords with Given Entropy",
                                            minContentSize: CGSize(width: 680, height: 540)) { windowRef.window = $0 })
         .onAppear {
             guard !initialized else { return }
@@ -383,7 +383,7 @@ struct PasswordEntropyView: View {
 
     private func generate() {
         guard !bits.isEmpty, !alphabet.isEmpty else {
-            Alerts.info("Bitte stellen Sie sicher, dass Sie\n- die gewünschte Passwort-Entropie und\n- das gewünschte Passwort-Alphabet\nangegeben haben.")
+            Alerts.info("Please make sure you have specified\n- the desired password entropy and\n- the desired password alphabet.")
             return
         }
         example = PasswordTools.ct1RandomPassword(length: passwordLength ?? 0, alphabet: alphabet)
@@ -392,7 +392,7 @@ struct PasswordEntropyView: View {
     /// "Passwort-Qualität messen": opens (or updates) the quality meter with the generated password.
     private func measure() {
         let pw = example
-        WindowPresenter.tool(id: "pwquality", title: "Passwort-Qualitätsmesser", size: CGSize(width: 520, height: 440)) {
+        WindowPresenter.tool(id: "pwquality", title: "Password Quality Meter", size: CGSize(width: 520, height: 440)) {
             PasswordQualityView(initialPassword: pw)
         }
         NotificationCenter.default.post(name: .ct1ToolsMeasurePassword, object: pw)

@@ -78,7 +78,7 @@ enum CT1Prefs {
 enum CT1BigNumber {
     static let maxBits = 8192
     static let maxDigits = 2467
-    static let message = "CrypTool unterstützt hier nur positive ganze Zahlen der Bitlänge kleiner 8192. Das sind Zahlen mit höchstens 2467 Dezimalstellen."
+    static let message = "CrypTool only supports positive integers of bit length smaller than 8192. These are decimal numbers with at most 2467 digits."
 
     static func isAllowed(_ n: BigUInt) -> Bool { n.bitLength < maxBits }
 
@@ -88,10 +88,10 @@ enum CT1BigNumber {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
-        panel.title = "Zahl aus Datei laden"
+        panel.title = "Load number from file"
         guard panel.runModal() == .OK, let url = panel.url else { return nil }
         guard let data = try? Data(contentsOf: url) else {
-            Alerts.error("Die Datei konnte nicht geöffnet werden!")
+            Alerts.error("The file could not be opened.")
             return nil
         }
         var digits = String(decoding: data.filter { $0 >= 0x30 && $0 <= 0x39 }, as: UTF8.self)
@@ -107,7 +107,7 @@ enum CT1BigNumber {
 struct CT1IntroDialog: View {
     var heading: String? = nil
     var text: String
-    var checkboxLabel = "Diesen Dialog in Zukunft nicht mehr anzeigen!"
+    var checkboxLabel = "Do not show this message box again!"
     /// Preference key storing whether the dialog is shown; nil hides the checkbox.
     var prefKey: String?
     /// Checkbox semantics: true = checked means "show again" (CT1 CRT secret sharing).
@@ -174,18 +174,18 @@ struct CT1Field: View {
 /// "Hilfe" button calling the CT1 help page of a menu command.
 struct CT1HelpButton: View {
     let action: CTAction
-    var body: some View { Button("Hilfe") { HelpCenter.show(action: action) } }
+    var body: some View { Button("Help") { HelpCenter.show(action: action) } }
 }
 
 /// Formats a duration like CT1's time strings ("1 Stunde 3 Minuten 5 Sekunden" – simplified).
 func ct1Duration(_ seconds: Double) -> String {
-    if seconds < 1 { return String(format: "%.3f Sekunden", seconds) }
+    if seconds < 1 { return String(format: "%.3f seconds", seconds) }
     var s = Int(seconds.rounded())
     let h = s / 3600; s %= 3600
     let m = s / 60; s %= 60
     var parts: [String] = []
-    if h > 0 { parts.append("\(h) Stunde\(h == 1 ? "" : "n")") }
-    if m > 0 { parts.append("\(m) Minute\(m == 1 ? "" : "n")") }
-    parts.append("\(s) Sekunde\(s == 1 ? "" : "n")")
+    if h > 0 { parts.append("\(h) hour\(h == 1 ? "" : "s")") }
+    if m > 0 { parts.append("\(m) minute\(m == 1 ? "" : "s")") }
+    parts.append("\(s) second\(s == 1 ? "" : "s")")
     return parts.joined(separator: " ")
 }

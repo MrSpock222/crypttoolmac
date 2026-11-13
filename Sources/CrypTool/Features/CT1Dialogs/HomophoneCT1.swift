@@ -31,57 +31,57 @@ struct HomophoneDialog: View {
     private var bitLength: Int { Homophone.bitLength(codeCount) }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Homophone Substitution", minWidth: 680) {
+        DialogScaffold(title: "Key Entry: Homophonic Substitution", minWidth: 680) {
             HStack(alignment: .top) {
-                CT1Group(title: "Gesamtzahl und Bitlänge der Homophonen") {
+                CT1Group(title: "Total count and bit length of the homophones") {
                     HStack {
-                        Text("Gesamtzahl:").frame(width: 80, alignment: .leading)
+                        Text("Total number:").frame(width: 80, alignment: .leading)
                         TextField("", text: $countText).frame(width: 50)
                             .ct1Filter($countText) { s in
                                 let d = s.filter { $0.isASCII && $0.isNumber }
                                 return (String(d.prefix(5)), d.count != s.count)
                             }
-                        Button("Aktualisieren") { actualize() }
+                        Button("Update") { actualize() }
                     }
                     HStack {
-                        Text("Bitlänge:").frame(width: 80, alignment: .leading)
+                        Text("Bit length:").frame(width: 80, alignment: .leading)
                         Text("\(bitLength)").frame(width: 50, alignment: .trailing).font(.system(.body, design: .monospaced))
-                        Text("Bit")
+                        Text("bits")
                     }
                 }
-                CT1Group(title: "Verschlüsselungsoption") {
+                CT1Group(title: "Encryption options") {
                     HStack(alignment: .top) {
                         VStack(alignment: .leading) {
-                            Text("Betrachte Eingabe-\nDokument als:")
+                            Text("Consider input document as")
                             HStack {
                                 CT1Radio(title: "Text", selected: !binaryInput) { binaryInput = false }
-                                CT1Radio(title: "Binäre Daten", selected: binaryInput) { binaryInput = true }
+                                CT1Radio(title: "Binary data", selected: binaryInput) { binaryInput = true }
                             }
                         }
                         VStack(alignment: .leading) {
-                            Toggle("Formatierungen mit\nverschlüsseln", isOn: $formatChars)
-                            Toggle("Umlaute codieren", isOn: $umlauts)
+                            Toggle("Include formatting\nwith encryption", isOn: $formatChars)
+                            Toggle("Encode umlauts", isOn: $umlauts)
                         }.disabled(binaryInput)
                     }
                 }
             }
-            Text("Schlüsseltabelle für die Homophone Substitution:")
+            Text("Key table for homophonic substitution")
             keyTable.frame(height: 220)
-            CT1Group(title: "Anzeige der Homophonen") {
+            CT1Group(title: "Display of homophones") {
                 HStack {
-                    CT1Radio(title: "Hexadezimal", selected: hexDisplay) { hexDisplay = true }
-                    CT1Radio(title: "Dezimal", selected: !hexDisplay) { hexDisplay = false }
+                    CT1Radio(title: "Hexadecimal", selected: hexDisplay) { hexDisplay = true }
+                    CT1Radio(title: "Decimal", selected: !hexDisplay) { hexDisplay = false }
                 }
             }
-            Text("Anzeige der Homophonen-Liste für ein einzelnes Zeichen (Auswahl der entsprechenden Zeile oben per Doppelklick):")
+            Text("Character:")
                 .font(.callout)
             HStack(alignment: .top) {
-                VStack(alignment: .leading) { Text("Zeichen:").font(.caption); CT1ReadOnlyLine(text: selected.map(display) ?? "") }.frame(width: 60)
-                VStack(alignment: .leading) { Text("Anzahl:").font(.caption); CT1ReadOnlyLine(text: selected.map { String(key?.table[$0]?.count ?? 0) } ?? "") }.frame(width: 60)
-                VStack(alignment: .leading) { Text("Liste der Homophonen:").font(.caption); CT1ReadOnlyLine(text: selected.map { codesText($0) } ?? "") }
+                VStack(alignment: .leading) { Text("Show the list of homophones for an individual character (select according line above via double click):").font(.caption); CT1ReadOnlyLine(text: selected.map(display) ?? "") }.frame(width: 60)
+                VStack(alignment: .leading) { Text("Number:").font(.caption); CT1ReadOnlyLine(text: selected.map { String(key?.table[$0]?.count ?? 0) } ?? "") }.frame(width: 60)
+                VStack(alignment: .leading) { Text("List of homophones:").font(.caption); CT1ReadOnlyLine(text: selected.map { codesText($0) } ?? "") }
             }
             HStack {
-                Button("Zufälligen Schlüssel erzeugen") { generate() }
+                Button("Generate random key") { generate() }
                 CT1PasteKeyButton(method: "homophone") { pasteKey($0) }
             }
         } buttons: {
@@ -132,10 +132,10 @@ struct HomophoneDialog: View {
         return VStack(spacing: 0) {
             HStack {
                 Text("Ord").frame(width: 44, alignment: .leading)
-                Text("Zeichen").frame(width: 60, alignment: .leading)
-                Text("Häufigkeit").frame(width: 80, alignment: .leading)
-                Text("Anzahl").frame(width: 50, alignment: .leading)
-                Text("Liste der Homophone").frame(maxWidth: .infinity, alignment: .leading)
+                Text("Character").frame(width: 60, alignment: .leading)
+                Text("Frequency").frame(width: 80, alignment: .leading)
+                Text("Count").frame(width: 50, alignment: .leading)
+                Text("List of homophones").frame(maxWidth: .infinity, alignment: .leading)
             }.font(.caption.bold()).padding(4)
             Divider()
             ScrollView {

@@ -216,10 +216,10 @@ struct CT1SharkView: View {
                 .frame(height: 86)
                 .overlay(Rectangle().stroke(Color.gray.opacity(0.6)))
         } else {
-            GroupBox(label: Text("Einstellungen für ein neues Spiel")) {
+            GroupBox(label: Text("Settings for a new game")) {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 6) {
-                        Text("Zahlenvorrat von 1 bis:")
+                        Text("Number stack from 1 to:")
                         TextField("", text: $model.limitText)
                             .frame(width: 64)
                             .disabled(model.inputLocked)
@@ -252,18 +252,18 @@ struct CT1SharkView: View {
     private var rightColumn: some View {
         GroupBox {
             VStack(spacing: 8) {
-                columnButton("Spielregeln", help: SharkText.ttRules) { model.sheet = .rules }
-                columnButton("Hilfe", help: SharkText.ttHelp) { CT1Games.showSharkHelp() }
+                columnButton("Rules of the game", help: SharkText.ttRules) { model.sheet = .rules }
+                columnButton("Help", help: SharkText.ttHelp) { CT1Games.showSharkHelp() }
                     .keyboardShortcut(KeyEquivalent(Character(UnicodeScalar(UInt16(NSF1FunctionKey))!)), modifiers: [])
-                columnButton("Stil ändern", tall: false, help: SharkText.ttSwitchStyle) { model.toggleStyle() }
+                columnButton("Change style", tall: false, help: SharkText.ttSwitchStyle) { model.toggleStyle() }
                     .keyboardShortcut("c", modifiers: [.shift, .option])
                 Spacer(minLength: 20)
-                Text("Verstrichene Zeit:").font(.callout)
+                Text("Elapsed time:").font(.callout)
                 Text(model.timeText).font(.system(.body, design: .monospaced))
                 Spacer(minLength: 16)
-                columnButton("Haifutter", help: model.restToolTip) { model.feedShark() }
+                columnButton("Shark food", help: model.restToolTip) { model.feedShark() }
                     .disabled(model.restNumbers.isEmpty)
-                columnButton("Spieloptionen", help: SharkText.ttOption) { model.sheet = .options }
+                columnButton("Game options", help: SharkText.ttOption) { model.sheet = .options }
                 HStack(spacing: 14) {
                     Button { model.undo() } label: { Image(systemName: "arrow.uturn.backward") }
                         .disabled(!model.canUndo).help(SharkText.ttUndo)
@@ -271,13 +271,13 @@ struct CT1SharkView: View {
                         .disabled(!model.canRedo).help(SharkText.ttRedo)
                 }
                 .padding(.vertical, 4)
-                columnButton("Laden", tall: false, help: SharkText.ttLoad) { model.loadGame() }
+                columnButton("Load", tall: false, help: SharkText.ttLoad) { model.loadGame() }
                     .keyboardShortcut("l", modifiers: [.shift, .option])
-                columnButton("Speichern", tall: false, help: SharkText.ttSave) { model.saveGame() }
+                columnButton("Save", tall: false, help: SharkText.ttSave) { model.saveGame() }
                     .keyboardShortcut("s", modifiers: [.shift, .option])
                 Spacer(minLength: 16)
-                columnButton("Neues Spiel", help: SharkText.ttStartNew) { model.newGame() }
-                columnButton("Beenden", help: SharkText.ttEnd) { model.endProgram() }
+                columnButton("New game", help: SharkText.ttStartNew) { model.newGame() }
+                columnButton("Exit", help: SharkText.ttEnd) { model.endProgram() }
             }
             .padding(.vertical, 6)
         }
@@ -310,7 +310,7 @@ struct SharkRulesView: View {
     let close: () -> Void
     var body: some View {
         VStack(spacing: 10) {
-            Text("Spielregeln / Spielbeschreibung").font(.headline)
+            Text("Game rules  / game description").font(.headline)
             ScrollView {
                 Text(SharkText.rules + SharkText.rules2)
                     .font(.system(size: 12))
@@ -320,7 +320,7 @@ struct SharkRulesView: View {
             }
             .background(Color(nsColor: .textBackgroundColor))
             .overlay(Rectangle().stroke(Color(nsColor: .separatorColor)))
-            Button("Zum Spiel", action: close).keyboardShortcut(.defaultAction)
+            Button("Back", action: close).keyboardShortcut(.defaultAction)
         }
         .padding(14)
         .frame(width: 820, height: 500)
@@ -342,14 +342,14 @@ struct SharkSummaryView: View {
                 .textSelection(.enabled)
             HStack {
                 Spacer()
-                Button("Zurück zum Spiel") { close(save) }.keyboardShortcut(.defaultAction)
+                Button("Back to the game") { close(save) }.keyboardShortcut(.defaultAction)
                 Spacer()
             }
-            GroupBox(label: Text("Ergebnis als Spielzusammenfassung speichern?")) {
+            GroupBox(label: Text("Save the result as summary?")) {
                 Picker("", selection: $save) {
                     Text(SharkText.radioEdit1(summary.fileName, summary.folder))
                         .fixedSize(horizontal: false, vertical: true).tag(true)
-                    Text("Nein.").tag(false)
+                    Text("No.").tag(false)
                 }
                 .pickerStyle(.radioGroup)
                 .labelsHidden()
@@ -385,13 +385,13 @@ struct SharkOptionsView: View {
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
             TabView(selection: $tab) {
-                welcome.tabItem { Text("Willkommen") }.tag(0)
+                welcome.tabItem { Text("Welcome") }.tag(0)
                 standard.tabItem { Text("Standard") }.tag(1)
-                maxPoints.tabItem { Text("Maximale Punktzahl") }.tag(2)
-                accelerators.tabItem { Text("Tastenkombinationen") }.tag(3)
+                maxPoints.tabItem { Text("Maximum score") }.tag(2)
+                accelerators.tabItem { Text("Shortcuts") }.tag(3)
             }
             .frame(height: 340)
-            Button("Zum Spiel") {
+            Button("To the game") {
                 model.sheet = nil
                 model.updateTitle()
             }
@@ -400,9 +400,9 @@ struct SharkOptionsView: View {
         .padding(14)
         .frame(width: 560)
         .alert(SharkText.numberShark, isPresented: $askAlgorithm) {
-            Button("Ja") { startSearch(backtracking: true) }
-            Button("Nein") { startSearch(backtracking: false) }
-            Button("Abbrechen", role: .cancel) {}
+            Button("Yes") { startSearch(backtracking: true) }
+            Button("No") { startSearch(backtracking: false) }
+            Button("Cancel", role: .cancel) {}
         } message: {
             Text(SharkText.selectSearchAlgorithm)
         }
@@ -440,7 +440,7 @@ struct SharkOptionsView: View {
         VStack(alignment: .leading, spacing: 8) {
             GroupBox {
                 HStack {
-                    Text("Dein Name:")
+                    Text("Your name:")
                     TextField("", text: $model.playerName)
                 }
                 .padding(4)
@@ -509,7 +509,7 @@ struct SharkSearchProgressView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Text("Suchfortschritt").font(.headline)
+            Text("Search Progress").font(.headline)
             Text(SharkText.searchProgress1(search.algorithmName, search.limit))
                 .fixedSize(horizontal: false, vertical: true)
             Text(SharkText.searchProgress2(search.elapsed))
@@ -517,7 +517,7 @@ struct SharkSearchProgressView: View {
             Text(SharkText.searchProgressInfo)
                 .font(.callout)
                 .fixedSize(horizontal: false, vertical: true)
-            Button("Abbrechen") { search.cancel() }.keyboardShortcut(.cancelAction)
+            Button("Cancel") { search.cancel() }.keyboardShortcut(.cancelAction)
         }
         .padding(16)
         .frame(width: 340)
@@ -536,19 +536,19 @@ struct SharkPrecalculatedView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Vorberechnete Punktzahlen anzeigen").font(.headline)
+            Text("Show precalculated scores").font(.headline)
             Text(SharkText.precalculatedIntro(SharkGameData.provedCount, blocks.count))
                 .fixedSize(horizontal: false, vertical: true)
             Table(blocks, selection: $selection) {
-                TableColumn("Zahl") { Text(String($0.limit)) }
-                TableColumn("Ergebnis") { Text($0.score) }
-                TableColumn("Ergebnis optimal?") { Text($0.proved ? "Bewiesen" : "Unbekannt") }
+                TableColumn("Number") { Text(String($0.limit)) }
+                TableColumn("Result") { Text($0.score) }
+                TableColumn("Result optimal?") { Text($0.proved ? "Proven" : "Unknown") }
             }
             .frame(height: 260)
             HStack {
-                Button("Details anzeigen") { showDetails = true }
+                Button("Show details") { showDetails = true }
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(14)
@@ -562,20 +562,20 @@ struct SharkPrecalculatedDetailView: View {
     @CTState private var text: String = {
         var t = ""
         for b in SharkGameData.sorted {
-            t += "Zahl: \(b.limit)\nErgebnis: \(b.score)\nErgebnis optimal? \(b.proved ? "Bewiesen" : "Unbekannt")\n"
-            t += "Sequenzlänge: \(b.sequenceLength)\nSequenz: \(b.sequence)\n\n"
+            t += "Number: \(b.limit)\nResult: \(b.score)\nResult optimal? \(b.proved ? "Proven" : "Unknown")\n"
+            t += "Sequence length: \(b.sequenceLength)\nSequence: \(b.sequence)\n\n"
         }
         return t
     }()
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 10) {
-            Text("Vorberechnete Punktzahlen im Detail anzeigen").font(.headline)
+            Text("Show precalculated scores in detail").font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
             TextEditor(text: .constant(text))
                 .font(.system(.body, design: .monospaced))
                 .frame(minWidth: 520, minHeight: 380)
-            Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+            Button("Close", action: close).keyboardShortcut(.defaultAction)
         }
         .padding(14)
     }

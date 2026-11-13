@@ -43,7 +43,7 @@ if [ "${1:-}" = "--dmg" ]; then
     rm -f "$DMG"
     STAGE="$(mktemp -d)"
     cp -R "$APP" "$STAGE/"
-    ln -s /Applications "$STAGE/Programme"
+    ln -s /Applications "$STAGE/Applications"
     hdiutil create -volname "CrypTool" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
     rm -rf "$STAGE"
     echo "✓ Disk-Image: $DMG"

@@ -18,16 +18,16 @@ public enum AESInspector {
     /// - Returns: the steps, the Nr+1 round keys (16 bytes each, column-major) and the ciphertext.
     public static func trace(key: [UInt8], block: [UInt8]) throws -> (steps: [AESTraceStep], roundKeys: [[UInt8]], ciphertext: [UInt8]) {
         guard [16, 24, 32].contains(key.count) else {
-            throw CTError("AES: Der Schlüssel muss 128, 192 oder 256 Bit lang sein (ist \(key.count * 8) Bit).")
+            throw CTError("AES: The key must be 128, 192 or 256 bits long (is \(key.count * 8) bits).")
         }
         guard block.count == 16 else {
-            throw CTError("AES: Ein Block muss genau 16 Byte lang sein (ist \(block.count) Byte).")
+            throw CTError("AES: A block must be exactly 16 bytes long (is \(block.count) bytes).")
         }
         let roundKeys = expandKey(key)
         let nr = roundKeys.count - 1
         var steps: [AESTraceStep] = []
         var s = block
-        steps.append(AESTraceStep(round: 0, operation: "Eingabe", state: s))
+        steps.append(AESTraceStep(round: 0, operation: "Input", state: s))
         addRoundKey(&s, roundKeys[0])
         steps.append(AESTraceStep(round: 0, operation: "AddRoundKey", state: s))
         for round in 1...nr {
@@ -42,7 +42,7 @@ public enum AESInspector {
             addRoundKey(&s, roundKeys[round])
             steps.append(AESTraceStep(round: round, operation: "AddRoundKey", state: s))
         }
-        steps.append(AESTraceStep(round: nr, operation: "Ausgabe", state: s))
+        steps.append(AESTraceStep(round: nr, operation: "Output", state: s))
         return (steps, roundKeys, s)
     }
 

@@ -18,7 +18,7 @@ final class MontgomeryContext {
     let regCount: Int
 
     init(modulus: BigUInt, registers: Int = 0) {
-        precondition(modulus.isOdd && modulus > 1, "Montgomery: Modul muss ungerade und > 1 sein")
+        precondition(modulus.isOdd && modulus > 1, "Montgomery: modulus must be odd and > 1")
         self.modulus = modulus
         s = modulus.limbs.count
         n = Ptr.allocate(capacity: s)
@@ -249,7 +249,7 @@ extension BigUInt {
     /// Odd moduli use Montgomery multiplication with a sliding-free fixed window, single word
     /// moduli use native 128-bit arithmetic, even moduli fall back to Knuth-D reduction.
     public func power(_ e: BigUInt, modulus m: BigUInt) -> BigUInt {
-        precondition(!m.isZero, "Modul darf nicht null sein")
+        precondition(!m.isZero, "Modulus must not be zero")
         if m.isOne { return BigUInt() }
         if e.isZero { return 1 }
         let base = self < m ? self : self % m

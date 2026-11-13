@@ -146,7 +146,7 @@ public enum AESToolFile {
     /// Decrypts a complete AES-Tool file (any prefix). Returns the original name and the data.
     public static func decrypt(_ file: [UInt8], key: [UInt8]) throws -> (name: String, data: [UInt8]) {
         guard case .encrypted(let info) = probe(bytes: file) else { throw CTError(probeMessage(probe(bytes: file))) }
-        guard let name = originalName(info, key: key) else { throw CTError("Falscher Schlüssel oder Datei beschädigt.") }
+        guard let name = originalName(info, key: key) else { throw CTError("Wrong key or file corrupt.") }
         var out: [UInt8] = []
         try decrypt(info, read: { off, n in Array(file[Int(off)..<(Int(off) + n)]) }, write: { out += $0 }, key: key)
         return (name, out)
@@ -173,7 +173,7 @@ public enum AESToolFile {
             try decrypt(info, read: { off, n in
                 try src.seek(toOffset: off)
                 let d = [UInt8](try src.read(upToCount: n) ?? Data())
-                guard d.count == n else { throw CTError("Diese verschlüsselte Datei ist beschädigt.") }
+                guard d.count == n else { throw CTError("This encrypted file is corrupt.") }
                 return d
             }, write: { try dst.write(contentsOf: $0) }, key: key)
         }
@@ -198,12 +198,12 @@ public enum AESToolFile {
         try FileManager.default.removeItem(at: url)
     }
 
-    /// German CT1 message for a probe result that is not `.encrypted`.
+    /// CT1 message for a probe result that is not `.encrypted`.
     public static func probeMessage(_ p: Probe) -> String {
         switch p {
-        case .oldVersion: return "Diese Datei wurde mit einer älteren Version von AES-Tool verschlüsselt.\nBitte verwenden Sie diese auch zum Entschlüsseln."
-        case .corrupt: return "Diese verschlüsselte Datei ist beschädigt."
-        default: return "Die Datei ist keine AES-Tool-Datei."
+        case .oldVersion: return "This file has been encrypted with an older version of AES-Tool. \nPlease use the same version for decrypting."
+        case .corrupt: return "This encrypted file is corrupt."
+        default: return "The file is not an AES-Tool file."
         }
     }
 
@@ -221,7 +221,7 @@ public enum AESToolFile {
         var done: UInt64 = 0, encLen: UInt64 = 0
         while done < length {
             var block = try read(done, Int(min(UInt64(chunk), length - done)))
-            guard !block.isEmpty else { throw CTError("Die Eingabedatei konnte nicht vollständig gelesen werden.") }
+            guard !block.isEmpty else { throw CTError("The input file could not be read completely.") }
             done += UInt64(block.count)
             if done == length {                  // CT1 padding: 0x01, then 0x00 up to a multiple of 16
                 block.append(1)
@@ -255,7 +255,7 @@ public enum AESToolFile {
                 let lower = plain.count - ct1Last
                 var i = plain.count - 1
                 while i > lower && plain[i] == 0 { i -= 1 }
-                guard plain[i] == 1 else { throw CTError("Falscher Schlüssel oder Datei beschädigt.") }
+                guard plain[i] == 1 else { throw CTError("Wrong key or file corrupt.") }
                 plain.removeSubrange(i...)
             }
             try write(plain)
@@ -265,7 +265,7 @@ public enum AESToolFile {
     static func writing(_ url: URL, _ body: (FileHandle) throws -> Void) throws {
         FileManager.default.createFile(atPath: url.path, contents: nil)
         guard let fh = try? FileHandle(forWritingTo: url) else {
-            throw CTError("Die Datei \(url.path) kann nicht geschrieben werden.")
+            throw CTError("The file \(url.path) cannot be written.")
         }
         do {
             try fh.truncate(atOffset: 0)
@@ -283,7 +283,7 @@ public enum AESToolFile {
         init(decrypt: Bool, key: [UInt8], iv: [UInt8]) throws {
             let st = CCCryptorCreate(CCOperation(decrypt ? kCCDecrypt : kCCEncrypt), CCAlgorithm(kCCAlgorithmAES),
                                      0, key, key.count, iv, &ref)
-            guard st == kCCSuccess else { throw CTError("AES: Initialisierung fehlgeschlagen (\(st)).") }
+            guard st == kCCSuccess else { throw CTError("AES: Initialization failed (\(st)).") }
         }
         deinit { if let ref { CCCryptorRelease(ref) } }
         func update(_ data: [UInt8]) throws -> [UInt8] {
@@ -291,7 +291,7 @@ public enum AESToolFile {
             var out = [UInt8](repeating: 0, count: data.count + 16)
             var moved = 0
             let st = CCCryptorUpdate(ref, data, data.count, &out, out.count, &moved)
-            guard st == kCCSuccess else { throw CTError("AES: Fehler bei der Verarbeitung (\(st)).") }
+            guard st == kCCSuccess else { throw CTError("AES: Processing error (\(st)).") }
             return Array(out[0..<moved])
         }
     }

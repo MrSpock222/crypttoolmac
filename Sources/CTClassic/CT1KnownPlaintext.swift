@@ -95,13 +95,13 @@ public enum CT1HillKnownPlaintext {
     /// CT1 error text of HillAnalysis::analyze for a failed search.
     public static func notFoundMessage(_ failures: [Int: Failure]) -> String {
         let reasons = Set(failures.values)
-        if reasons == [.conflict] { return "Der Schlüssel konnte nicht gefunden werden (Widerspruch) !" }
-        if reasons.count <= 1 { return "Der Schlüssel konnte nicht gefunden werden (Text zu kurz) !" }
+        if reasons == [.conflict] { return "The key could not be found due to a conflict!" }
+        if reasons.count <= 1 { return "The key could not be found as the text was too short!" }
         func list(_ f: Failure) -> String {
             failures.filter { $0.value == f }.keys.sorted().map(String.init).joined(separator: ", ")
         }
-        return "Ein Schlüssel der Dimension \(list(.conflict)) konnte wegen eines Widerspruches nicht gefunden werden.\n"
-             + "Ein Schlüssel der Dimension \(list(.textTooShort)) konnte wegen des zu kurzen Textes nicht gefunden werden."
+        return "A key of dimension \(list(.conflict)) could not be found due to a conflict.\n"
+             + "A key of dimension \(list(.textTooShort)) could not be found because the text was too short."
     }
 
     /// Letter of a Hill number (CKeyHillBase::chr).
@@ -172,7 +172,7 @@ public enum CT1PermutationKnownPlaintext {
         }
 
         /// IDS_IOP_ROW / IDS_IOP_COL.
-        public static func name(_ d: Direction) -> String { d == .columnWise ? "Spaltenweise" : "Zeilenweise" }
+        public static func name(_ d: Direction) -> String { d == .columnWise ? "Column by column" : "Row by row" }
     }
 
     public enum InputError: Error, Equatable, Sendable {
@@ -181,12 +181,12 @@ public enum CT1PermutationKnownPlaintext {
         /// CT1 message texts (IDS_PA_EMPTYFILE, ID_PA_ERROR_DIFFERNT_DOCUMENT_SIZES, …).
         public var message: String {
             switch self {
-            case .empty: return "Beide Dateien (Klartext- und Geheimtextdatei) sind leer. "
-            case .differentSizes: return "Die Dokumentgrößen stimmen nicht überein."
+            case .empty: return "Both files (plaintext and ciphertext) are empty."
+            case .differentSizes: return "The document sizes do not match."
             case .differentHistograms:
-                return "Die Histogramme (Häufigkeitsverteilung der gültigen Alphabetzeichen) der Dokumente stimmen nicht überein.\nDer Geheimtext kann nicht das Ergebnis einer Permutations-Verschlüsselung im ausgewählten Modus (Textmodus bzw. Binärmodus) sein.\nSie können diesen Modus umschalten und es nochmal probieren."
+                return "The histograms of the documents do not match."
             case .range:
-                return "Bitte überprüfen Sie die Eingabe des Suchraums für die Permutationsgröße:\r\nDie untere Grenze (von) muss kleiner oder gleich die der oberen Grenze (bis) sein."
+                return "Please check the input of the permutation key size search space. The lower bound (from) must be less or equal than the upper bound (to)."
             }
         }
     }

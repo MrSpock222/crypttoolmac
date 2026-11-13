@@ -21,14 +21,14 @@ extension CT1Analysis {
             return
         }
         let model = ADFGVXAnalysisModel(document: document, analysis: analysis)
-        let window = WindowPresenter.tool(id: id, title: "Halbautomatische Analyse von ADFGVX",
+        let window = WindowPresenter.tool(id: id, title: "Semiautomatic Analysis of the ADFGVX Cipher",
                                           size: CGSize(width: 620, height: 820)) {
             ADFGVXAnalysisView(model: model)
         }
         window.identifier = NSUserInterfaceItemIdentifier(id)
         model.window = window
         if !UserDefaults.standard.bool(forKey: ADFGVXAnalysisIntroView.defaultsKey) {
-            WindowPresenter.sheet(on: window, title: "Einführung in die Analyse von ADFGVX-Nachrichten") { close in
+            WindowPresenter.sheet(on: window, title: "Introduction to Analyzing ADFGVX Messages") { close in
                 ADFGVXAnalysisIntroView(close: close)
             }
         }
@@ -40,19 +40,19 @@ extension CT1Analysis {
 
 /// German texts of CT1's string table (IDS_STRING_ADFGVX_…).
 enum ADFGVXAnalysisTexts {
-    static let error4 = "Ungültige Zeichen wurden entfernt. Gültige Zeichen sind alle\nBuchstaben des aktuell eingestellten CrypTool-Alphabets.\n"
-    static let error6 = "Die Passwortlänge muss >0 sein!"
-    static let error8 = "Bitte zuerst Transposition analysieren!"
-    static let error9 = "Bei der Analyse des Transpositionsschrittes wurde keine gültige Permutation gefunden.\nDies kann zwei Gründe haben:\n\n1. Die Häufigkeitsverteilung der Buchstaben ist untypisch für deutsche oder englische Texte.\nDies tritt oft bei kurzen Nachrichten auf.\n\n2. Das verwendete Transpositionspasswort liegt nicht im Suchbereich der Analyse.\nSie sollten den Bereich der Passwortlänge verschieben."
-    static let error9B = "Die Analyse hat die obere Grenze des Suchbereichs erreicht.\nEs wurden keine weiteren Passwörter gefunden."
-    static let error11 = "Ungültiges Zeichen! Bitte nur 'A' bis 'Z' und '0' bis '9' eingeben!"
-    static let charExists1A = "Der Buchstabe '"
-    static let charExists1B = "Die Ziffer '"
-    static let charExists2 = "' wurde bereits zugewiesen. \nWollen Sie die neue Zuordnung beibehalten? \n\nJa: Die alte Zuordnung wird gelöscht.\n\nNein: Die Änderung wird rückgängig gemacht."
-    static let matrixReset = "Alle bisherigen Einträge der Substitutionsmatrix werden gelöscht!\nFortfahren?"
-    static let noCharacters = "Sie haben keine Zeichen eingegeben, d.h. die Substitutionsmatrix wurde nicht verändert."
-    static let referenceFileError = "Fehler beim Öffnen der Referenzdatei! Bitte wählen Sie unter dem Menü Optionen / Textoptionen eine geeignete Datei."
-    static let pasteKey = "Schlüssel aus Schlüsselspeicher einfügen"
+    static let error4 = "Invalid characters have been removed. Only characters from the\ncurrent CrypTool alphabet are valid.\n"
+    static let error6 = "The length of the password must be >0!"
+    static let error8 = "Please analyze transposition first!"
+    static let error9 = "No valid permutation was found while analyzing the transposition phase.\nThis may have two reasons:\n\n1. The relative frequency of the letters is atypical for the English or German language.\nThis often occurs when analyzing short messages.\n\n2. The transposition password is not within the selected boundaries of the analysis.\nYou should change the boundaries for the evaluated password length."
+    static let error9B = "The analysis has reached the upper boundary of the search area.\nNo further passwords have been found."
+    static let error11 = "Invalid character! Please enter characters from 'A' to 'Z' and '0' to '9' only!"
+    static let charExists1A = "The character '"
+    static let charExists1B = "The character '"
+    static let charExists2 = "' was already assigned. \nDo you want to retain the new entry? \n\nYes: The old entry will be deleted.\n\nNo: Undo the changes."
+    static let matrixReset = "All current entries in the substitution matrix will be erased!\nContinue?"
+    static let noCharacters = "You did not enter any characters, thus the substitution matrix was not changed."
+    static let referenceFileError = "Error opening the reference file! Please select a valid reference file via the menu Options / Text Options."
+    static let pasteKey = "Paste key from keystore"
 
     /// Yes/No question (CT1 AfxMessageBox MB_YESNO).
     @MainActor
@@ -60,8 +60,8 @@ enum ADFGVXAnalysisTexts {
         let a = NSAlert()
         a.messageText = "CrypTool"
         a.informativeText = message
-        a.addButton(withTitle: "Ja")
-        a.addButton(withTitle: "Nein")
+        a.addButton(withTitle: "Yes")
+        a.addButton(withTitle: "No")
         return a.runModal() == .alertFirstButtonReturn
     }
 }
@@ -119,8 +119,8 @@ final class ADFGVXAnalysisModel: ObservableObject {
         } else {
             ok = false
         }
-        frequencyInfo = "Referenzsprache \(s.referenceLanguage.displayName): Häufigkeitsfolge \(String(analysis.frequencyTable.prefix(10)))…, "
-            + "ein Passwort gilt als möglich, wenn das häufigste Bigramm ≥ \(analysis.highestFrequency) % erreicht."
+        frequencyInfo = "Reference language \(s.referenceLanguage.displayName): frequency order \(String(analysis.frequencyTable.prefix(10)))…, "
+            + "a password is considered possible if the most frequent bigram reaches ≥ \(analysis.highestFrequency) %."
         return ok
     }
 
@@ -216,7 +216,7 @@ final class ADFGVXAnalysisModel: ObservableObject {
         let t = token
         running = true
         progress = 0
-        status = "Suche nach einem Transpositionspasswort …"
+        status = "Searching for a transposition password..."
         let sink = ProgressSink(self)
         Task { @MainActor [weak self] in
             let r = await Task.detached(priority: .userInitiated) {
@@ -236,7 +236,7 @@ final class ADFGVXAnalysisModel: ObservableObject {
         func update(tested: Int, length: Int, fraction: Double) {
             guard let m = model, m.running else { return }
             m.progress = fraction
-            m.status = "Passwortlänge \(length): \(tested.formatted()) Permutationen geprüft …"
+            m.status = "Password length \(length): \(tested.formatted()) permutations checked..."
         }
     }
 
@@ -246,22 +246,22 @@ final class ADFGVXAnalysisModel: ObservableObject {
         running = false
         progress = 0
         if r.cancelled {
-            status = "Suche abgebrochen (\(r.tested.formatted()) Permutationen geprüft)."
+            status = "Search canceled (\(r.tested.formatted()) permutations checked)."
             finishAnalyze()
             return
         }
         lastPasswordFound = r.password
         passwordChanged(r.password)
         if r.password.isEmpty && !iGotOne {
-            status = "Kein Passwort gefunden (\(r.tested.formatted()) Permutationen geprüft)."
+            status = "No password found (\(r.tested.formatted()) permutations checked)."
             Alerts.info(ADFGVXAnalysisTexts.error9)
         }
         if !r.password.isEmpty && (r.password != old || !iGotOne), let m = r.matrix {
             matrix = m
             iGotOne = true
-            status = "Mögliches Passwort gefunden: \(r.password) (\(r.tested.formatted()) Permutationen geprüft)."
+            status = "Possible password found: \(r.password) (\(r.tested.formatted()) permutations checked)."
         } else if iGotOne {
-            status = "Keine weiteren Passwörter gefunden."
+            status = "No further passwords have been found."
             Alerts.info(ADFGVXAnalysisTexts.error9B)
             passwordChanged(old)
         }
@@ -299,7 +299,7 @@ final class ADFGVXAnalysisModel: ObservableObject {
                 return
             }
             matrix = analysis.forcedMatrix(password: password)
-            status = "Passwort \(password) übernommen."
+            status = "Password \(password) applied."
         }
         analysed = true
         resubstitute()
@@ -413,12 +413,12 @@ struct ADFGVXAnalysisView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Geheimtext: \(model.document.displayName ?? "") (\(model.analysis.count) Zeichen)")
+            Text("Ciphertext: \(model.document.displayName ?? "") (\(model.analysis.count) characters)")
                 .font(.callout).foregroundStyle(.secondary)
             transpositionGroup
             substitutionGroup
             VStack(alignment: .leading, spacing: 4) {
-                Text("Aktuelle Lösung")
+                Text("Current solution")
                 ResultBox(text: model.plaintext, minHeight: 130)
             }
             if model.running || !model.status.isEmpty {
@@ -426,7 +426,7 @@ struct ADFGVXAnalysisView: View {
                     if model.running { ProgressView(value: model.progress).frame(width: 140) }
                     Text(model.status).font(.caption).foregroundStyle(.secondary).lineLimit(2)
                     Spacer()
-                    if model.running { Button("Suche abbrechen") { model.cancelSearch() } }
+                    if model.running { Button("Cancel search") { model.cancelSearch() } }
                 }
             }
             Divider()
@@ -434,15 +434,15 @@ struct ADFGVXAnalysisView: View {
                 Button {
                     model.insertKey()
                 } label: {
-                    Label("Schlüssel einfügen", systemImage: "key")
+                    Label("Paste key", systemImage: "key")
                 }
                 .help(ADFGVXAnalysisTexts.pasteKey)
                 .disabled(!model.hasStoredKey || model.running)
                 Spacer()
-                Button("Ausgabe") { model.output() }
+                Button("Output") { model.output() }
                     .keyboardShortcut(.defaultAction)
                     .disabled(!model.outputEnabled)
-                Button("Abbrechen") { model.cancel() }
+                Button("Cancel") { model.cancel() }
                     .keyboardShortcut(.cancelAction)
             }
         }
@@ -461,10 +461,10 @@ struct ADFGVXAnalysisView: View {
     // MARK: Stage 2
 
     private var transpositionGroup: some View {
-        GroupBox("Stufe 2: Transposition") {
+        GroupBox("Step 2: Transposition") {
             HStack(alignment: .top, spacing: 18) {
                 VStack(alignment: .leading, spacing: 8) {
-                    GroupBox("Passwortlänge") {
+                    GroupBox("Password length") {
                         HStack {
                             Picker("minimal", selection: Binding(get: { model.minLength }, set: { model.setMinLength($0) })) {
                                 ForEach(1...26, id: \.self) { Text("\($0)").tag($0) }
@@ -477,14 +477,14 @@ struct ADFGVXAnalysisView: View {
                         }
                         .padding(4)
                     }
-                    Button("Textoptionen …") { OptionsWindows.showTextOptions() }
+                    Button("Text options") { OptionsWindows.showTextOptions() }
                 }
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Aktuelles Passwort")
+                    Text("Current password")
                     TextField("", text: Binding(get: { model.password }, set: { model.userEditedPassword($0) }))
                         .font(.system(.body, design: .monospaced))
                         .textFieldStyle(.roundedBorder)
-                    Text("Reihenfolge der Spalten")
+                    Text("Column sequence")
                     Text(model.numberedPassword.isEmpty ? " " : model.numberedPassword)
                         .font(.system(.body, design: .monospaced))
                         .textSelection(.enabled)
@@ -494,9 +494,9 @@ struct ADFGVXAnalysisView: View {
                         .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color(nsColor: .separatorColor)))
                     HStack {
                         Spacer()
-                        Button("Übernehmen") { model.force() }
+                        Button("Apply") { model.force() }
                             .disabled(!model.forceEnabled || model.running)
-                        Button("Analysieren") { model.analyze() }
+                        Button("Analyze") { model.analyze() }
                             .disabled(model.running)
                     }
                 }
@@ -514,22 +514,22 @@ struct ADFGVXAnalysisView: View {
     // MARK: Stage 1
 
     private var substitutionGroup: some View {
-        GroupBox("Stufe 1: Substitution") {
+        GroupBox("Step 1: Substitution") {
             HStack(alignment: .top, spacing: 18) {
-                GroupBox("Substitutionsmatrix") {
+                GroupBox("Substitution matrix") {
                     matrixGrid.padding(6)
                 }
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Verbleibende Möglichkeiten")
+                    Text("Remaining possible solutions")
                     readOnlyField(model.remainingPossibilities)
-                    Text("Noch nicht zugewiesene Zeichen")
+                    Text("Not yet assigned characters")
                     readOnlyField(model.remainingCharacters.isEmpty ? " " : model.remainingCharacters)
                     HStack {
-                        Button("Matrix leeren") { model.clearMatrix() }
-                        Button("Standardmatrix") { model.standardMatrix() }
+                        Button("Erase matrix entries") { model.clearMatrix() }
+                        Button("Standard matrix") { model.standardMatrix() }
                     }
                     .disabled(!model.analysed)
-                    Button("Zeichenkette eingeben …") {
+                    Button("Enter string") {
                         stringInput = ""
                         showStringBox = true
                     }
@@ -586,7 +586,7 @@ struct ADFGVXAnalysisView: View {
             .focused($focusedCell, equals: idx)
             .onTapGesture { focusedCell = idx }
             .onKeyPress(phases: .down) { press in handleKey(press, row: r, column: c) }
-            .help("Bigramm \(labels[r])\(labels[c]): Zeichen eintippen (Leertaste/Entf = nicht zugewiesen)")
+            .help("Bigram \(labels[r])\(labels[c]): type a character (space/delete = not assigned)")
     }
 
     private func handleKey(_ press: KeyPress, row: Int, column: Int) -> KeyPress.Result {
@@ -621,14 +621,14 @@ struct ADFGVXAnalysisIntroView: View {
     @CTState private var noIntro = UserDefaults.standard.bool(forKey: ADFGVXAnalysisIntroView.defaultsKey)
 
     var body: some View {
-        DialogScaffold(title: "Einführung in die Analyse von ADFGVX-Nachrichten", minWidth: 520) {
+        DialogScaffold(title: "Introduction to Analyzing ADFGVX Messages", minWidth: 520) {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Ein ADFGVX-Chiffrat wird in 2 Stufen erstellt: Stufe 1 führt eine Polybius-Substitution durch, Stufe 2 wendet auf das Ergebnis eine Spalten-Transposition (Permutation) an. Die Ciphertext-only-Analyse eines ADFGVX-Chiffrats geht diese Schritte umgekehrt an.")
-                Text("Wenn Sie in der Gruppierung „Stufe 2: Transposition“ auf „Analysieren“ drücken, wird für die zweite Stufe eine mögliche Passwort-Permutation gesucht (bei jedem Drücken wird versucht, ein weiteres gültiges Passwort zu finden) und die sich daraus schon zwingend ergebenden Zuordnungen werden in der Substitutionsmatrix eingetragen. Der erste Analyseschritt (Transpositionsanalyse) funktioniert also automatisch.")
-                Text("Danach können Sie in der Gruppierung „Stufe 1: Substitution“ weitere Einträge von Hand in die Substitutionsmatrix eintragen. Das entsprechende Zwischenergebnis wird in dem Feld „Aktuelle Lösung“ angezeigt.")
+                Text("The creation of an ADFGVX message is a two-step process: Step 1 performs a Polybius substitution, step 2 transforms the result by a column transposition (permutation). A ciphertext-only analysis of an ADFGVX message reverses those steps.")
+                Text("By clicking the button \"Analyze\" in the grouping \"Step 2: Transposition\", the search for a potential transposition password is started (each click of the button continues the search for the next valid password) and the five most common letters that were used to validate the password are entered into the substitution matrix. Thus, the first step of the analysis runs automatically.")
+                Text("When a transposition password is found, the analysis continues in the grouping \"Step 1: Substitution\". Now you can enter further characters into the substitution matrix manually. The result of the analysis is shown in the field \"Current solution\".")
             }
             .fixedSize(horizontal: false, vertical: true)
-            Toggle("Diesen Dialog in Zukunft nicht mehr anzeigen", isOn: $noIntro)
+            Toggle("Do not show this dialog again", isOn: $noIntro)
                 .onChange(of: noIntro) { _, v in UserDefaults.standard.set(v, forKey: ADFGVXAnalysisIntroView.defaultsKey) }
         } buttons: {
             Button("OK", action: close).keyboardShortcut(.defaultAction)
@@ -644,15 +644,15 @@ struct ADFGVXAnalysisStringBox: View {
     let done: (Bool) -> Void
 
     var body: some View {
-        DialogScaffold(title: "Substitutionspasswort",
-                       subtitle: "Die Zeichen (A–Z, 0–9) werden zeilenweise in die Substitutionsmatrix eingetragen; doppelte Zeichen werden übersprungen, die restlichen Zeichen werden angehängt.",
+        DialogScaffold(title: "Substitution Password",
+                       subtitle: "The characters (A–Z, 0–9) are entered into the substitution matrix row by row; duplicate characters are skipped, the remaining characters are appended.",
                        minWidth: 420) {
             TextField("", text: Binding(get: { input }, set: { input = String($0.uppercased().prefix(36)) }))
                 .font(.system(.body, design: .monospaced))
                 .textFieldStyle(.roundedBorder)
                 .onSubmit { done(true) }
         } buttons: {
-            Button("Abbrechen") { done(false) }.keyboardShortcut(.cancelAction)
+            Button("Cancel") { done(false) }.keyboardShortcut(.cancelAction)
             Button("OK") { done(true) }.keyboardShortcut(.defaultAction)
         }
     }

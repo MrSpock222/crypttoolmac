@@ -13,7 +13,7 @@ public enum PasswordTools {
         public let entropyBits: Double
         /// "sehr schwach", "schwach", "mittel", "stark" or "sehr stark" (CT1 thresholds 25/50/75/90).
         public let level: String
-        /// Remarks (German): policy compliance, found patterns, sequences, keyboard sequences,
+        /// Remarks: policy compliance, found patterns, sequences, keyboard sequences,
         /// dictionary words and the cheapest reconstruction of the password.
         public let remarks: [String]
         /// Quality according to KeePass (character space · length, 128 bit = 100).
@@ -64,19 +64,19 @@ public enum PasswordTools {
     /// Alphabet presets for the password generator. The first four entries are character classes,
     /// followed by combinations and the special alphabets of CT1's "Passwort-Entropie" dialog.
     public static let alphabetPresets: [(name: String, characters: String)] = [
-        ("Kleinbuchstaben", lower),
-        ("Großbuchstaben", upper),
-        ("Ziffern", digits),
-        ("Sonderzeichen", specials),
-        ("Klein- und Großbuchstaben", lower + upper),
-        ("Kleinbuchstaben und Ziffern", lower + digits),
-        ("Buchstaben und Ziffern", upper + lower + digits),
-        ("Buchstaben, Ziffern und Sonderzeichen", upper + lower + digits + specials),
-        ("Hexadezimalziffern", "0123456789ABCDEF"),
-        ("Nicht verwechselbare Zeichen (schriftliche Übermittlung)", "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPRSTUVWXYZ23456789"),
-        ("Nicht verwechselbare Zeichen (telefonische Übermittlung)", "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
-        ("WLAN-Alphabet", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+,-./:=?@[]^_{}~"),
-        ("CrypTool-Standardalphabet", TextOptions.uppercaseLetters),
+        ("Lowercase letters", lower),
+        ("Uppercase letters", upper),
+        ("Numerals", digits),
+        ("Special characters", specials),
+        ("Lowercase and uppercase letters", lower + upper),
+        ("Lowercase letters and numerals", lower + digits),
+        ("Letters and numerals", upper + lower + digits),
+        ("Letters, numerals and special characters", upper + lower + digits + specials),
+        ("Hexadecimal digits", "0123456789ABCDEF"),
+        ("Non-confusable characters (written transmission)", "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPRSTUVWXYZ23456789"),
+        ("Non-confusable characters (telephonic transmission)", "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
+        ("WLAN alphabet", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+,-./:=?@[]^_{}~"),
+        ("CrypTool default alphabet", TextOptions.uppercaseLetters),
     ]
 
     private static let lower = "abcdefghijklmnopqrstuvwxyz"
@@ -140,11 +140,11 @@ public enum PasswordTools {
         let crypTool = min(100, Int(floor(analysis.entropy / 128 * 100)))
         let score = (keePass + mozilla + pgp + crypTool) / 4
 
-        var level = "sehr schwach"
-        if score > 25 { level = "schwach" }
-        if score > 50 { level = "mittel" }
-        if score > 75 { level = "stark" }
-        if score > 90 { level = "sehr stark" }
+        var level = "very weak"
+        if score > 25 { level = "weak" }
+        if score > 50 { level = "medium" }
+        if score > 75 { level = "strong" }
+        if score > 90 { level = "very strong" }
 
         // remarks
         var remarks: [String] = []
@@ -152,30 +152,30 @@ public enum PasswordTools {
         let specialCount = pw.filter { policy.specialCharacters.contains($0) }.count
         var compliant = true
         if pw.isEmpty {
-            remarks.append("Kein Passwort eingegeben.")
+            remarks.append("No password entered.")
         }
         if pw.count < policy.minimumLength {
             compliant = false
-            remarks.append("Passwort-Richtlinie nicht erfüllt: Passwort ist zu kurz (\(pw.count)/\(policy.minimumLength)).")
+            remarks.append("Not compliant with password guidelines: Password is too short (\(pw.count)/\(policy.minimumLength)).")
         }
         if digitsCount < policy.minimumDigits {
             compliant = false
-            remarks.append("Passwort-Richtlinie nicht erfüllt: Passwort enthält zu wenig Ziffern (\(digitsCount)/\(policy.minimumDigits)).")
+            remarks.append("Not compliant with password guidelines: Password contains too few digits (\(digitsCount)/\(policy.minimumDigits)).")
         }
         if specialCount < policy.minimumSpecials {
             compliant = false
-            remarks.append("Passwort-Richtlinie nicht erfüllt: Passwort enthält zu wenig Sonderzeichen (\(specialCount)/\(policy.minimumSpecials)).")
+            remarks.append("Not compliant with password guidelines: Password contains too few special characters (\(specialCount)/\(policy.minimumSpecials)).")
         }
-        if compliant { remarks.append("Passwort-Richtlinie erfüllt.") }
+        if compliant { remarks.append("Compliant with password guidelines.") }
         func list(_ items: [String]) -> String { items.isEmpty ? "-" : items.joined(separator: ", ") }
-        if !analysis.patterns.isEmpty { remarks.append("Muster: " + list(analysis.patterns)) }
-        if !analysis.sequences.isEmpty { remarks.append("Folgen: " + list(analysis.sequences)) }
-        if !analysis.keyboard.isEmpty { remarks.append("Tastatur-Folgen: " + list(analysis.keyboard)) }
-        if !analysis.words.isEmpty { remarks.append("Wörterbuch-Einträge: " + list(analysis.words)) }
-        if !pw.isEmpty { remarks.append("Rekonstruktion aus Wörtern, Folgen und Mustern: " + analysis.components) }
-        if pw.count > 32 { remarks.append("Hinweis: Die CrypTool-Bewertung berücksichtigt nur die ersten 32 Zeichen.") }
+        if !analysis.patterns.isEmpty { remarks.append("Patterns: " + list(analysis.patterns)) }
+        if !analysis.sequences.isEmpty { remarks.append("Sequences: " + list(analysis.sequences)) }
+        if !analysis.keyboard.isEmpty { remarks.append("Keyboard sequences: " + list(analysis.keyboard)) }
+        if !analysis.words.isEmpty { remarks.append("Dictionary words: " + list(analysis.words)) }
+        if !pw.isEmpty { remarks.append("Reconstruction from words, sequences and patterns: " + analysis.components) }
+        if pw.count > 32 { remarks.append("Note: The CrypTool rating only considers the first 32 characters.") }
         let unique = Set(pw).count
-        if pw.count >= 4 && unique * 2 <= pw.count { remarks.append("Viele Zeichenwiederholungen (\(unique) verschiedene Zeichen).") }
+        if pw.count >= 4 && unique * 2 <= pw.count { remarks.append("Many repeated characters (\(unique) different characters).") }
 
         return PasswordQuality(score: score, entropyBits: analysis.entropy, level: level, remarks: remarks,
                                qualityKeePass: keePass, qualityMozilla: mozilla, qualityPGP: pgp, qualityCrypTool: crypTool,

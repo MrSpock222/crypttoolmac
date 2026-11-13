@@ -15,16 +15,16 @@ struct SafePrimeDialog: View {
     @CTState private var busy = false
     @CTState private var token = CancellationToken()
 
-    static let badLength = "Bitte wählen Sie als Bitlänge eine Zahl zwischen 2 und 16384."
+    static let badLength = "Please select a bit length between 2 and 16384."
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Dieser Dialog erzeugt \"sichere Primzahlen\". Dazu werden so lange Primzahlen q gesucht, bis die Zahl p = 2q+1 ebenfalls eine Primzahl ist. Bitte beachten Sie, dass die Bestimmung sicherer Primzahlen in der Regel sehr viel länger dauert als die Bestimmung von Primzahlen ohne diese Eigenschaft.\nSichere Primzahlen spielen eine wichtige Rolle für kryptographische Verfahren (z.B. dem Diffie-Hellman- Verfahren), die auf dem Diskreten-Logarithmus-Problem basieren.")
+            Text("This dialog generates a safe prime number p. Primes q are selected until p = 2q+1 is also a prime. Please note the time to generate a safe prime is in general significantly longer compared to generate a prime without this property.\nSafe primes are important for discrete-log based cryptosystems like the Diffie-Hellman method.")
                 .fixedSize(horizontal: false, vertical: true)
-            GroupBox("Sichere Primzahl") {
+            GroupBox("Generate a prime") {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Bitlänge").frame(width: 70, alignment: .leading)
+                        Text("Bit length").frame(width: 70, alignment: .leading)
                         TextField("", text: $bitText).frame(width: 70)
                             .onChange(of: bitText) { _, v in
                                 let f = v.filter(\.isNumber)
@@ -34,7 +34,7 @@ struct SafePrimeDialog: View {
                         Spacer()
                     }
                     HStack {
-                        Text("Primzahl").frame(width: 70, alignment: .leading)
+                        Text("Prime").frame(width: 70, alignment: .leading)
                         Text(prime.isEmpty ? " " : prime)
                             .font(.system(.body, design: .monospaced))
                             .lineLimit(3).truncationMode(.middle)
@@ -47,12 +47,12 @@ struct SafePrimeDialog: View {
                 }.padding(4)
             }
             HStack {
-                Button("Primzahl erzeugen", action: generate).disabled(busy)
-                Button("Primzahl übernehmen") { close(); onAccept(prime) }
+                Button("Generate prime", action: generate).disabled(busy)
+                Button("Accept prime") { close(); onAccept(prime) }
                     .keyboardShortcut(.defaultAction)
                     .disabled(prime.isEmpty || busy)
                 Spacer()
-                Button("Abbrechen") { token.cancel(); close() }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { token.cancel(); close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)

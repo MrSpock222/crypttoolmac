@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Converts CT1's German HTML-Help sources (CP1252, MS HTML Help Workshop) into a
-UTF-8 help tree that WebKit can display directly.
+"""Converts CT1's HTML-Help sources (CP1252, MS HTML Help Workshop) into a UTF-8 help tree
+that WebKit can display directly. The language (en or de) is taken from the name of the
+destination directory.
 
-usage: python3 -I scripts/import-ct1-help.py <cryptool1 checkout> Resources/Help/de
-       python3 -I scripts/check-help.py Resources/Help/de Sources/CrypTool/Help/HelpTopics.swift
+usage: python3 -I scripts/import-ct1-help.py <cryptool1 checkout> Resources/Help/en
+       python3 -I scripts/check-help.py Resources/Help/en Sources/CrypTool/Help/HelpTopics.swift
 """
 import html
 import os
@@ -12,29 +13,51 @@ import shutil
 import sys
 
 UP = os.path.abspath(sys.argv[1])
-SRC = os.path.join(UP, "CrypTool", "hlp_de")
 DST = os.path.abspath(sys.argv[2])
+LANG = os.path.basename(DST.rstrip("/"))
+if LANG not in ("en", "de"):
+    raise SystemExit("destination directory must be named 'en' or 'de'")
+SRC = os.path.join(UP, "CrypTool", "hlp_" + LANG)
 
 TEXT_EXT = (".html", ".htm")
 
 # Files referenced via the HTML-Help JScript helper parser('...'), which resolved them
 # relative to the CT1 installation directory. Small ones are bundled under files/,
 # the two large PDFs (≈8 MB each) are linked to their online versions.
-FILE_LINKS = {
-    "CT-Book-de.pdf": "https://www.cryptool.org/de/documentation/ctbook/",
-    "CrypTool1-Presentation-de.pdf": "https://www.cryptool.org/de/ct1/",
-    "readme-de.txt": "hid_load_readme.html",
-    "DialogSchwestern.pdf": "files/DialogSchwestern.pdf",
-    "ChinLab-de.pdf": "files/ChinLab-de.pdf",
-    "rijndael-poster-a4.pdf": "files/rijndael-poster-a4.pdf",
-    "tadicnafkeys/t-adicNAF.pdf": "files/tadicnafkeys/t-adicNAF.pdf",
-}
-BUNDLED = {
-    "files/DialogSchwestern.pdf": "dialoguesisters/de/DialogSchwestern.pdf",
-    "files/ChinLab-de.pdf": "setup/template-de/ChinLab-de.pdf",
-    "files/rijndael-poster-a4.pdf": "setup/template/rijndael-poster-a4.pdf",
-    "files/tadicnafkeys/t-adicNAF.pdf": "setup/template/tadicnafkeys/t-adicNAF.pdf",
-}
+if LANG == "de":
+    FILE_LINKS = {
+        "CT-Book-de.pdf": "https://www.cryptool.org/de/documentation/ctbook/",
+        "CrypTool1-Presentation-de.pdf": "https://www.cryptool.org/de/ct1/",
+        "readme-de.txt": "hid_load_readme.html",
+        "DialogSchwestern.pdf": "files/DialogSchwestern.pdf",
+        "ChinLab-de.pdf": "files/ChinLab-de.pdf",
+        "rijndael-poster-a4.pdf": "files/rijndael-poster-a4.pdf",
+        "tadicnafkeys/t-adicNAF.pdf": "files/tadicnafkeys/t-adicNAF.pdf",
+    }
+    BUNDLED = {
+        "files/DialogSchwestern.pdf": "dialoguesisters/de/DialogSchwestern.pdf",
+        "files/ChinLab-de.pdf": "setup/template-de/ChinLab-de.pdf",
+        "files/rijndael-poster-a4.pdf": "setup/template/rijndael-poster-a4.pdf",
+        "files/tadicnafkeys/t-adicNAF.pdf": "setup/template/tadicnafkeys/t-adicNAF.pdf",
+    }
+    README = "setup/template-de/ReadMe-de.txt"
+else:
+    FILE_LINKS = {
+        "CT-Book-en.pdf": "https://www.cryptool.org/en/documentation/ctbook/",
+        "CrypTool1-Presentation-en.pdf": "https://www.cryptool.org/en/ct1/",
+        "readme-en.txt": "hid_load_readme.html",
+        "DialogueSisters.pdf": "files/DialogueSisters.pdf",
+        "ChinLab-en.pdf": "files/ChinLab-en.pdf",
+        "rijndael-poster-a4.pdf": "files/rijndael-poster-a4.pdf",
+        "tadicnafkeys/t-adicNAF.pdf": "files/tadicnafkeys/t-adicNAF.pdf",
+    }
+    BUNDLED = {
+        "files/DialogueSisters.pdf": "dialoguesisters/en/DialogueSisters.pdf",
+        "files/ChinLab-en.pdf": "setup/template-en/ChinLab-en.pdf",
+        "files/rijndael-poster-a4.pdf": "setup/template/rijndael-poster-a4.pdf",
+        "files/tadicnafkeys/t-adicNAF.pdf": "setup/template/tadicnafkeys/t-adicNAF.pdf",
+    }
+    README = "setup/template-en/ReadMe-en.txt"
 CHALLENGES = "setup/template/cryptochallenges"
 
 
@@ -177,6 +200,10 @@ def main():
         low = name.lower()
         if low.endswith(TEXT_EXT):
             text = decode(open(p, "rb").read())
+            if low == "template.html":
+                # authors' template page: its sample link points to a page that never existed
+                # (already commented out in hlp_de)
+                text = re.sub(r'(?<!<!-- )(<A href="menu_index\.html">.*?</A>)', r'<!-- \1 -->', text, flags=re.S)
             write_text(os.path.join(DST, name), convert_html(text))
         elif low.endswith(".css"):
             css = decode(open(p, "rb").read())
@@ -189,7 +216,7 @@ def main():
 
     # Readme page (CT1 generates it at build time from hid_load_readme.html.in).
     tmpl = convert_html(decode(open(os.path.join(SRC, "hid_load_readme.html.in"), "rb").read()))
-    readme = decode(open(os.path.join(UP, "setup/template-de/ReadMe-de.txt"), "rb").read())
+    readme = decode(open(os.path.join(UP, README), "rb").read())
     write_text(os.path.join(DST, "hid_load_readme.html"), build_readme(tmpl, readme))
 
     shutil.copytree(os.path.join(SRC, "images"), os.path.join(DST, "images"))

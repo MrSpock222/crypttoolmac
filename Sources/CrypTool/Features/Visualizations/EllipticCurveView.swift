@@ -9,8 +9,8 @@ struct EllipticCurveView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Picker("", selection: $overReals) {
-                Text("Reelle Zahlen ℝ").tag(true)
-                Text("Endlicher Körper F_p").tag(false)
+                Text("Real numbers ℝ").tag(true)
+                Text("Finite field F_p").tag(false)
             }.pickerStyle(.segmented).labelsHidden().frame(width: 320)
             if overReals { RealCurveView() } else { FiniteCurveView() }
         }
@@ -33,7 +33,7 @@ private struct RealCurveView: View {
     private var discriminantText: String {
         let inner: Double = 4 * a * a * a + 27 * b * b
         let d: Double = -16 * inner
-        return String(format: "Diskriminante: %.1f", d) + (abs(inner) < 1e-9 ? " (singulär!)" : "")
+        return String(format: "Discriminant: %.1f", d) + (abs(inner) < 1e-9 ? " (singular!)" : "")
     }
 
     private func add(_ p: RPoint, _ q: RPoint) -> RPoint? {
@@ -128,14 +128,14 @@ private struct RealCurveView: View {
                 Text(discriminantText)
                     .font(.caption).foregroundStyle(.secondary)
                 Divider()
-                Text("Klicken Sie nacheinander auf die Kurve, um P und Q zu wählen. Klicken Sie zweimal auf denselben Punkt für die Punktverdopplung 2P.")
+                Text("Click on the curve successively to choose P and Q. Click twice on the same point for the point doubling 2P.")
                     .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                Button("Q = P (Verdopplung)") { Q = P }.disabled(P == nil)
+                Button("Q = P (doubling)") { Q = P }.disabled(P == nil)
                 if let P { Text("P = (\(P.x, specifier: "%.3f"), \(P.y, specifier: "%.3f"))") }
                 if let Q { Text("Q = (\(Q.x, specifier: "%.3f"), \(Q.y, specifier: "%.3f"))") }
                 if let P, let Q {
                     if let R = add(P, Q) { Text("P + Q = (\(R.x, specifier: "%.3f"), \(R.y, specifier: "%.3f"))").bold() }
-                    else { Text("P + Q = O (Punkt im Unendlichen)").bold() }
+                    else { Text("P + Q = O (point at infinity)").bold() }
                 }
                 Spacer()
             }
@@ -197,11 +197,11 @@ private struct FiniteCurveView: View {
                 HStack { Text("p"); TextField("", text: $pText) }
                 HStack { Text("a"); TextField("", text: $aText) }
                 HStack { Text("b"); TextField("", text: $bText) }
-                Button("Punkte berechnen", action: compute).keyboardShortcut(.defaultAction)
+                Button("Calculate points", action: compute).keyboardShortcut(.defaultAction)
                 if let error { Text(error).foregroundStyle(.red).font(.caption) }
-                Text("\(points.count + 1) Punkte (einschließlich O)").foregroundStyle(.secondary)
+                Text("\(points.count + 1) points (including O)").foregroundStyle(.secondary)
                 Divider()
-                Text("Klicken Sie auf zwei Punkte P und Q. Die Summe R = P + Q wird violett markiert.")
+                Text("Click on two points P and Q. The sum R = P + Q is marked in purple.")
                     .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                 if let P { Text("P = \(FiniteCurveView.describe(P))").foregroundStyle(.red) }
                 if let Q { Text("Q = \(FiniteCurveView.describe(Q))").foregroundStyle(.green) }
@@ -222,7 +222,7 @@ private struct FiniteCurveView: View {
     }
 
     private func compute() {
-        guard let c = curve else { error = "p muss eine Primzahl zwischen 5 und 2000 sein."; points = []; return }
+        guard let c = curve else { error = "p must be a prime number between 5 and 2000."; points = []; return }
         error = nil
         points = c.allPoints(limit: 10_000).filter { $0 != .infinity }
         P = nil; Q = nil

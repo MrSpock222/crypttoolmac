@@ -48,11 +48,11 @@ final class CTTextView: NSTextView {
         guard r.length > 0, let range = Range(r, in: string) else { return }
         let part = String(string[range])
         let a = NSAlert()
-        a.messageText = "Codiert kopieren"
-        a.informativeText = "Die Auswahl enthält Binärdaten. Wie sollen sie in die Zwischenablage kopiert werden?"
-        a.addButton(withTitle: "Hex-Codierung")
-        a.addButton(withTitle: "Keine Codierung")
-        a.addButton(withTitle: "Abbrechen")
+        a.messageText = "Encoded Copy/Cut"
+        a.informativeText = "The marked data you may transfer encoded or unchanged into the clipboard.\nIf the text is to be transferred to other applications and non printable characters are marked then choose encoding."
+        a.addButton(withTitle: "Hex encoding")
+        a.addButton(withTitle: "No encoding")
+        a.addButton(withTitle: "Cancel")
         switch a.runModal() {
         case .alertFirstButtonReturn:
             NSPasteboard.general.clearContents()
@@ -68,13 +68,13 @@ final class CTTextView: NSTextView {
         let looksHex = compact.count >= 4 && compact.count % 2 == 0 && compact.allSatisfy(\.isHexDigit) && compact.contains(where: \.isNumber)
         guard looksHex, let decoded = Hex.decode(s) else { super.paste(sender); return }
         let a = NSAlert()
-        a.messageText = "Decodiert einfügen"
-        a.informativeText = "Der Inhalt der Zwischenablage besteht nur aus Hexadezimalziffern. Soll er decodiert eingefügt werden?"
-        a.addButton(withTitle: "Keine Decodierung")
-        a.addButton(withTitle: "Hex-Decodierung")
+        a.messageText = "Decoded Paste"
+        a.informativeText = "The clipboard contains hexadecimal characters only.\n\nThey can be inserted decoded (default) or unchanged."
+        a.addButton(withTitle: "No decoding")
+        a.addButton(withTitle: "Hex decoding")
         if a.runModal() == .alertSecondButtonReturn {
             guard let text = String(bytes: decoded, encoding: .utf8) else {
-                Alerts.info("Die decodierten Daten sind kein Text. Bitte in der Hex-Ansicht (Ansicht ▸ Als HexDump anzeigen) einfügen.")
+                Alerts.info("The decoded data is not text. Please paste it in the hex view (View ▸ Show as HexDump).")
                 return
             }
             insertText(text, replacementRange: selectedRange())
@@ -88,7 +88,7 @@ final class CTTextView: NSTextView {
 @MainActor
 enum CT1ContextMenu {
     static func make(hexView: Bool) -> NSMenu {
-        let m = NSMenu(title: "Kontextmenü")
+        let m = NSMenu(title: "Context menu")
         func std(_ t: String, _ s: Selector) {
             m.addItem(FixedTitleMenuItem.isUndoRedo(s) ? FixedTitleMenuItem(title: t, action: s, keyEquivalent: "")
                                                         : NSMenuItem(title: t, action: s, keyEquivalent: ""))
@@ -97,20 +97,20 @@ enum CT1ContextMenu {
             let i = m.addItem(withTitle: t, action: #selector(CTActionHandling.performCTAction(_:)), keyEquivalent: "")
             i.representedObject = ActionBox(a)
         }
-        std("Rückgängig", Selector(("undo:")))
-        std("Wiederherstellen", Selector(("redo:")))
+        std("Undo", Selector(("undo:")))
+        std("Redo", Selector(("redo:")))
         m.addItem(.separator())
-        std("Ausschneiden", #selector(NSText.cut(_:)))
-        std("Kopieren", #selector(NSText.copy(_:)))
-        std("Einfügen", #selector(NSText.paste(_:)))
-        std("Löschen", #selector(NSText.delete(_:)))
+        std("Cut", #selector(NSText.cut(_:)))
+        std("Copy", #selector(NSText.copy(_:)))
+        std("Paste", #selector(NSText.paste(_:)))
+        std("Delete", #selector(NSText.delete(_:)))
         m.addItem(.separator())
-        std("Alles markieren", #selector(NSText.selectAll(_:)))
+        std("Select All", #selector(NSText.selectAll(_:)))
         m.addItem(.separator())
-        ct("Schlüssel anzeigen …", .showKey)
-        ct("Übergeordnetes Fenster", .gotoParent)
+        ct("Show Key...", .showKey)
+        ct("Parent Window", .gotoParent)
         m.addItem(.separator())
-        if hexView { ct("Als Text anzeigen", .viewAsText) } else { ct("Als HexDump anzeigen", .viewAsHex) }
+        if hexView { ct("Show as Text", .viewAsText) } else { ct("Show as HexDump", .viewAsHex) }
         return m
     }
 }
@@ -325,18 +325,18 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate, NSTe
             return i
         }
         switch id {
-        case ToolbarID.new: return item("Neu", "doc.badge.plus", #selector(NSDocumentController.newDocument(_:)))
-        case ToolbarID.open: return item("Öffnen", "folder", #selector(NSDocumentController.openDocument(_:)))
-        case ToolbarID.close: return item("Schließen", "xmark.square", #selector(NSWindow.performClose(_:)))
-        case ToolbarID.save: return item("Speichern", "square.and.arrow.down", #selector(NSDocument.save(_:)))
-        case ToolbarID.print: return item("Drucken", "printer", #selector(NSDocument.printDocument(_:)))
-        case ToolbarID.cut: return item("Ausschneiden", "scissors", #selector(NSText.cut(_:)))
-        case ToolbarID.copy: return item("Kopieren", "doc.on.doc", #selector(NSText.copy(_:)))
-        case ToolbarID.paste: return item("Einfügen", "doc.on.clipboard", #selector(NSText.paste(_:)))
-        case ToolbarID.key: return item("Schlüssel anzeigen", "key", #selector(toolbarShowKey(_:)), target: self)
-        case ToolbarID.parent: return item("Übergeordnetes Fenster", "arrow.up.doc", #selector(toolbarGotoParent(_:)), target: self)
-        case ToolbarID.about: return item("Über CrypTool", "info.circle", #selector(toolbarAbout(_:)), target: self)
-        case ToolbarID.help: return item("Kontexthilfe – danach Menüpunkt wählen", "questionmark.circle", #selector(toolbarContextHelp(_:)), target: self)
+        case ToolbarID.new: return item("New", "doc.badge.plus", #selector(NSDocumentController.newDocument(_:)))
+        case ToolbarID.open: return item("Open", "folder", #selector(NSDocumentController.openDocument(_:)))
+        case ToolbarID.close: return item("Close", "xmark.square", #selector(NSWindow.performClose(_:)))
+        case ToolbarID.save: return item("Save", "square.and.arrow.down", #selector(NSDocument.save(_:)))
+        case ToolbarID.print: return item("Print", "printer", #selector(NSDocument.printDocument(_:)))
+        case ToolbarID.cut: return item("Cut", "scissors", #selector(NSText.cut(_:)))
+        case ToolbarID.copy: return item("Copy", "doc.on.doc", #selector(NSText.copy(_:)))
+        case ToolbarID.paste: return item("Paste", "doc.on.clipboard", #selector(NSText.paste(_:)))
+        case ToolbarID.key: return item("Show key", "key", #selector(toolbarShowKey(_:)), target: self)
+        case ToolbarID.parent: return item("Parent Window", "arrow.up.doc", #selector(toolbarGotoParent(_:)), target: self)
+        case ToolbarID.about: return item("About CrypTool", "info.circle", #selector(toolbarAbout(_:)), target: self)
+        case ToolbarID.help: return item("Context help – then choose a menu item", "questionmark.circle", #selector(toolbarContextHelp(_:)), target: self)
         case ToolbarID.sep1, ToolbarID.sep2, ToolbarID.sep3:
             let i = NSToolbarItem(itemIdentifier: id)
             let line = NSBox(frame: NSRect(x: 0, y: 0, width: 1, height: 18))
@@ -442,10 +442,10 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate, NSTe
         guard let doc = ctDocument else { return }
         if let o = doc.origin {
             var s = o.title
-            if let k = o.key, !o.title.contains(k) { s += " – Schlüssel: \(k)" }
+            if let k = o.key, !o.title.contains(k) { s += " – Key: \(k)" }
             infoLabel.stringValue = s
         } else {
-            infoLabel.stringValue = doc.fileURL?.path ?? "Neues Dokument"
+            infoLabel.stringValue = doc.fileURL?.path ?? "New document"
         }
         window?.title = doc.displayName
     }
@@ -454,10 +454,10 @@ final class DocumentWindowController: NSWindowController, NSWindowDelegate, NSTe
         guard let doc = ctDocument else { return }
         var parts = ["\(doc.bytes.count) Bytes"]
         if viewMode == .text {
-            parts.append("\(textView.string.count) Zeichen")
+            parts.append("\(textView.string.count) characters")
             let sel = textView.selectedRange()
-            if sel.length > 0 { parts.append("Auswahl: \(sel.length)") }
-            if !doc.isText { parts.append("Binärdaten – Textansicht schreibgeschützt (Ansicht ▸ Als HexDump anzeigen)") }
+            if sel.length > 0 { parts.append("Selection: \(sel.length)") }
+            if !doc.isText { parts.append("Binary data – text view is read-only (View ▸ Show as HexDump)") }
         } else {
             parts.append(hexEditor.statusDescription)
         }

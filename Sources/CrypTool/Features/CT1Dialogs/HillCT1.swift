@@ -188,60 +188,60 @@ struct HillDialog: View {
     }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Hill", minWidth: dim > 5 ? 900 : 700) {
-            CT1Group(title: "Beschreibung") {
-                Text("Die Hill-Chiffre ist eine polygraphische Substitutionsverschlüsselung, die auf Linearer Algebra basiert. Dies war die erste polygraphische Substitutionsverschlüsselung, bei der man die Einzeloperationen auch praktikabel auf einer Gruppe von mehr als 3 Klartextbuchstaben (Blöcke) ausführen konnte. Der Schlüssel ist eine quadratische Matrix, deren Dimension dieser Blocklänge entspricht.")
+        DialogScaffold(title: "Key Entry: Hill", minWidth: dim > 5 ? 900 : 700) {
+            CT1Group(title: "Description") {
+                Text("The Hill cipher is a polygraphic substitution cipher based on linear algebra. This was the first polygraphic cipher in which it was practical to operate on groups of more than three letters (blocks) at once. The key is a quadratic matrix. Its dimension is the length of the group of letters.")
                     .font(.callout).fixedSize(horizontal: false, vertical: true)
             }
-            CT1Group(title: "Informationen zur Verschlüsselung") {
+            CT1Group(title: "Information for encryption") {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        Text("Benutztes Alphabet (\(n) Zeichen)")
+                        Text("Selected alphabet (\(n) characters)")
                         CT1ReadOnlyLine(text: String(alphabet))
                     }
                     Spacer()
-                    Text("Wert des ersten Alphabetzeichens").multilineTextAlignment(.trailing).frame(width: 130)
+                    Text("Value of the first alphabet character").multilineTextAlignment(.trailing).frame(width: 130)
                     Text(offsetOne ? "1" : "0").font(.system(.body, design: .monospaced)).padding(.top, 2)
                 }
             }
             HStack(alignment: .top) {
-                CT1Group(title: "Hill-Schlüsselmatrix") {
+                CT1Group(title: "Hill key matrix") {
                     HStack {
                         VStack(alignment: .leading) {
-                            CT1Radio(title: "Alphabetzeichen", selected: editLetters) { editLetters = true }
-                            CT1Radio(title: "Zahlenwerte", selected: !editLetters) { editLetters = false }
+                            CT1Radio(title: "Alphabet characters", selected: editLetters) { editLetters = true }
+                            CT1Radio(title: "Number values", selected: !editLetters) { editLetters = false }
                         }
                         Spacer()
                         CT1PasteKeyButton(method: "hill") { pasteKey($0) }
                     }
                     HStack(alignment: .top, spacing: 12) {
-                        GroupBox("Alphabetzeichen") { grid(letterBinding, editable: editLetters).padding(4) }
-                        GroupBox("Zahlenwerte") { grid(numberBinding, editable: !editLetters).padding(4) }
+                        GroupBox("Alphabet characters") { grid(letterBinding, editable: editLetters).padding(4) }
+                        GroupBox("Number values") { grid(numberBinding, editable: !editLetters).padding(4) }
                     }
-                    Button("Zufälligen Schlüssel erzeugen") { load(numbers: HillCipher.randomKey(size: dim, modulus: n)) }
+                    Button("Generate random key") { load(numbers: HillCipher.randomKey(size: dim, modulus: n)) }
                         .frame(maxWidth: .infinity)
-                    Button("Schlüssel zurücksetzen") { clearKey() }
+                    Button("Reset key") { clearKey() }
                         .frame(maxWidth: .infinity)
                 }
                 VStack(alignment: .leading) {
-                    CT1Group(title: "Multiplikationsart") {
-                        CT1Radio(title: "(Vektorreihe) * (Matrix)", selected: multiplication == .vectorTimesMatrix) { multiplication = .vectorTimesMatrix }
-                        CT1Radio(title: "(Matrix) * (Vektorspalte)", selected: multiplication == .matrixTimesVector) { multiplication = .matrixTimesVector }
+                    CT1Group(title: "Multiplication variant") {
+                        CT1Radio(title: "(row vector) * (matrix)", selected: multiplication == .vectorTimesMatrix) { multiplication = .vectorTimesMatrix }
+                        CT1Radio(title: "(matrix) * (column vector)", selected: multiplication == .matrixTimesVector) { multiplication = .matrixTimesVector }
                     }
-                    CT1Group(title: "Dimension") {
+                    CT1Group(title: "Size of matrix") {
                         ForEach(Array(large ? 1...10 : 1...5), id: \.self) { d in
                             CT1Radio(title: "\(d) x \(d)", selected: dim == d) { dim = d }
                         }
-                        Button(large ? "Kleinere Matrix" : "Größere Matrix") {
+                        Button(large ? "Smaller matrix" : "Larger matrix") {
                             large.toggle()
                             if !large && dim > 5 { dim = 5 }
                         }
                     }
                 }.frame(width: 190)
             }
-            Toggle("Details und Zwischenschritte der Hill-Verschlüsselung ausgeben", isOn: $details)
+            Toggle("Show details and single steps of the Hill cipher", isOn: $details)
         } buttons: {
-            Button("Weitere Hill-Optionen") { showOptions = true }
+            Button("Further Hill options") { showOptions = true }
             CipherButtons(cancel: close, decrypt: { run(false) }, encrypt: { run(true) }, textOptions: true, help: .hill)
         }
         .sheet(isPresented: $showOptions, onDismiss: {
@@ -277,13 +277,13 @@ struct HillDialog: View {
 
     private func run(_ encrypt: Bool) {
         guard let m = matrix else {
-            Alerts.error(String(format: "Alle Felder der Schlüsselmatrix müssen ein erlaubtes Zeichen enthalten. Links sind nur Zeichen des eingestellten Alphabets erlaubt, rechts nur Zahlen zwischen %d und %d (für ein Alphabet von %d Zeichen).",
-                                offsetOne ? 1 : 0, offsetOne ? n : n - 1, n), title: "Schlüssel nicht verwendbar")
+            Alerts.error(String(format: "All fields of the key matrix need to contain a valid character. The left side takes characters of the current alphabet only, the right takes numbers from %d to %d (for an alphabet of %d characters).",
+                                offsetOne ? 1 : 0, offsetOne ? n : n - 1, n), title: "Key cannot be used")
             return
         }
         guard HillCipher.inverse(of: m, modulus: n) != nil else {
-            Alerts.error(String(format: "Die eingegebene %@-Matrix kann modulo %d nicht invertiert werden. Deshalb kann sie für das Hill-Verfahren nicht verwendet werden. \nBitte ändern Sie entweder die Elemente der Matrix, die Dimension der Matrix oder die Anzahl der Elemente des Alphabets.\nAlternativ können Sie in der Hill-Schlüsseleingabe-Maske auch auf \"Zufälligen Schlüssel erzeugen\" klicken: Dann werden die Matrixelemente so gewählt, dass die Schlüsselmatrix für die eingestellte Dimension und die gegebene Alphabetlänge invertierbar ist.",
-                                "\(dim)x\(dim)", n), title: "Schlüssel nicht verwendbar")
+            Alerts.error(String(format: "The entered %@ matrix key cannot be inverted with modulo %d. Therefore the key cannot be used for this Hill cipher.\nPlease either change the matrix elements, the matrix dimension or the number of elements of the alphabet.\nAlternatively in the Hill key entry dialog you can click on the button \"Generate random key\": The key matrix elements then will be chosen so, that the matrix for the chosen dimension and alphabet size is invertible.",
+                                "\(dim)x\(dim)", n), title: "Key cannot be used")
             return
         }
         let o = settings.textOptions
@@ -303,7 +303,7 @@ struct HillDialog: View {
             if details {
                 let plain = encrypt ? input : result
                 let text = HillDetails.text(cipher: h, plaintext: plain)
-                DocumentFactory.openResult(text: text, title: CT1.title("Details zur Hill", encrypt: encrypt, of: document, key: key),
+                DocumentFactory.openResult(text: text, title: CT1.title("Details of Hill", encrypt: encrypt, of: document, key: key),
                                            parent: document)
             }
             close()
@@ -323,19 +323,19 @@ struct HillOptionsSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Hill-Optionen").font(.title3.weight(.semibold))
-            CT1Group(title: "Optionen zur Interpretation des Alphabetzeichens") {
-                CT1Radio(title: "Wert des ersten Alphabetzeichens = 0 (z.B. \"A\"=0)", selected: !offsetOne) { offsetOne = false }
-                CT1Radio(title: "Wert des ersten Alphabetzeichens = 1 (z.B. \"A\"=1)", selected: offsetOne) { offsetOne = true }
+            Text("Hill Options").font(.title3.weight(.semibold))
+            CT1Group(title: "Options to interpret the alphabet characters") {
+                CT1Radio(title: "Value of the first alphabet character = 0 (e.g. \"A\"=0)", selected: !offsetOne) { offsetOne = false }
+                CT1Radio(title: "Value of the first alphabet character = 1 (e.g. \"A\"=1)", selected: offsetOne) { offsetOne = true }
             }
-            CT1Group(title: "Zeichen zum Auffüllen des Klartextes (falls nötig)") {
+            CT1Group(title: "Character used for padding the cleartext (if necessary)") {
                 HStack {
-                    CT1Radio(title: "Erstes Zeichen im Alphabet verwenden (dies ist der Default)", selected: useFirst) { useFirst = true }
+                    CT1Radio(title: "Use first character of the alphabet (default)", selected: useFirst) { useFirst = true }
                     Spacer()
                     Text(alphabet.first.map(String.init) ?? "").font(.system(.body, design: .monospaced)).frame(width: 24)
                 }
                 HStack {
-                    CT1Radio(title: "Zeichen selbst vergeben", selected: !useFirst) { useFirst = false }
+                    CT1Radio(title: "Enter the padding character by yourself", selected: !useFirst) { useFirst = false }
                     Spacer()
                     TextField("", text: $own).frame(width: 30).multilineTextAlignment(.center).disabled(useFirst)
                         .ct1Filter($own) { s in
@@ -348,7 +348,7 @@ struct HillOptionsSheet: View {
             }
             HStack {
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
                 Button("OK") {
                     HillOptionsStore.offsetOne = offsetOne
                     HillOptionsStore.useFirstCharForPadding = useFirst
@@ -365,7 +365,7 @@ struct HillOptionsSheet: View {
 // MARK: - Details window (CHillEncryption::OutputHillmatrix, IDS_HILL_DUMP)
 
 enum HillDetails {
-    static let template = "Hill-Ver-/Entschlüsselung:\n\nDiese Detailbeschreibung der Hill-Verschlüsselung hat folgende Teile: \n 1. Alphabet-Codierung in Zahlen\n 2. Verschlüsselungsparameter und Eigenschaften\n 3. Hill-Verschlüsselung\n 4. Hill-Entschlüsselung\n \nDiese Log-Datei zeigt alle Ver-/Entschlüsselungs-Berechnungen mit der gegenwärtigen Hill Schlüssel-Matrix und den ersten Zeichen der gewählten Nachricht.\n\n\n1. Alphabet-Codierung in Zahlen:\n\nDas aktuell im Menü \"Optionen / Textoptionen\" gewählte Alphabet und dessen Codierung in Zahlen lautet:\n \n%ALPHABET_MAPPING%\n \nDas aktuelle Alphabet besteht aus %ALPHABET_SIZE% Zeichen. Der erste Alphabet-Buchstabe hat den Zahlenwert %ALPHABET_CODING_OFFSET%.\n\n\n2. Verschlüsselungsparameter und Eigenschaften:\n\nDie Ver- und Entschlüsselung ist unten beispielhaft durchgerechnet für die %HILL_DIMENSION% ersten Buchstaben aus dem Klartext, die zum Alphabet gehören.\n\nHier die Parameter der ausgewählten Hill-Verschlüsselung:\n  o Zur Ver- bzw. Entschlüsselung wird die Hill-Matrix mit einem %HILL_MULTIPLICATION_TYPE% multipliziert.\n  o Die gewählte Hill-Matrix hat die Dimension %HILL_DIMENSION%x%HILL_DIMENSION%.\n  o Der Klartext besteht aus %HILL_PLAINTEXT_SIZE% Buchstaben. Davon sind %HILL_NON_ALPHABET_CHARS% Nichtalphabetzeichen (Nichtalphabetzeichen werden ignoriert). Wenn das Alphabet nur Großbuchstaben enthält, werden die entsprechenden Kleinbuchstaben aber ebenfalls verschlüsselt; nicht umgekehrt.  Die Ver- und Entschlüsselung ist unten beispielhaft durchgerechnet für die %HILL_DIMENSION% ersten Buchstaben aus dem Klartext, die zum Alphabet gehören.\n \n\n3. Hill-Verschlüsselung:\n\nDie gewählte Hill-Matrix zum Verschlüsseln ist:\n \n%HILL_ENCRYPTION_TEXTMATRIX%\n \nDiese Matrix codiert in Zahlen:\n \n%HILL_ENCRYPTION_INTMATRIX%\n \nVerschlüsselung des Klartextes: \"%PLAINTEXT%\": \nKlartext(engl. Plaintext)-Vektor P codiert in Zahlen: %HILL_PLAINTEXT_VECTOR%\n \nBerechnung der Hill-Chiffrierung durch das %HILL_VECTOR_MATRIX_MULTTYPE% (der Vektor P[n] ist ein %HILL_VECTORTYPE%): \n%HILL_ENCRYPTION%\n \nDer Hill-Geheimtext lautet: \"%CIPHERTEXT%\". \n\n\n4. Hill-Entschlüsselung:\n\nDie inverse Hill-Matrix zum Entschlüsseln ist: \n%HILL_DECRYPTION_TEXTMATRIX%\n \nDiese Matrix codiert in Zahlen: \n%HILL_DECRYPTION_INTMATRIX%\n \nEntschlüsselung des Geheimtextes: \"%CIPHERTEXT%\": \nGeheimtext-Vektor C codiert in Zahlen: \n%HILL_CIPHERTEXT_VECTOR%\n \nBerechnung der Hill-Dechiffrierung durch das %HILL_VECTOR_MATRIX_MULTTYPE% (der Vektor C[n] ist ein %HILL_VECTORTYPE%): \n%HILL_DECRYPTION%\n \nDer Hill-Klartext lautet: \"%PLAINTEXT%\". \n\n\n"
+    static let template = "Hill En-/Decryption:\n\nThis detailed description of the Hill encryption / decryption consists of the following parts: \n 1. Encoding the alphabet characters to numbers\n 2. Encryption parameters end properties\n 3. Hill encryption\n 4. Hill decryption\n \nThis log file text shows all calculations done with the current Hill key matrix and the beginning characters of the used message.\n\n\n1. Encoding the Alphabet Characters to Numbers\n\nThe actually selected alphabet and it's encoding to numbers as of Menu \"Options / Textoptions\" is:\n \n%ALPHABET_MAPPING%\n \nThe actual alphabet consists of %ALPHABET_SIZE% characters. The first alphabet character is encoded to the number %ALPHABET_CODING_OFFSET%.\n\n\n2. Encryption Parameters and Properties\n\nThis example describes the Hill encryption of the %HILL_DIMENSION% first characters of the input plaintext. Only characters from the current alphabet are encrypted.\n \nHere are the required parameter information for the selected Hill encryption: \n  o For the Hill encryption and decryption the Hill matrix is multiplied by a %HILL_MULTIPLICATION_TYPE%. \n  o The selected Hill matrix is of dimension %HILL_DIMENSION%x%HILL_DIMENSION%. \n  o The plaintext consists of %HILL_PLAINTEXT_SIZE% characters. Thereof are %HILL_NON_ALPHABET_CHARS% non-alphabet characters (non-alphabet characters are ignored.) In case the selected alphabet consists only of capital characters non capital characters are encrypted too but this is not true for the other direction.  Below the Hill encryption and decryption is demonstrated on the example of the %HILL_DIMENSION% first alphabet characters from the given plaintext.\n \n\n3. Hill Encryption\n\nSelected Hill matrix for encryption:\n \n%HILL_ENCRYPTION_TEXTMATRIX%\n \nThis matrix encoded to numbers:\n \n%HILL_ENCRYPTION_INTMATRIX%\n \nEncryption of the plaintext: \"%PLAINTEXT%\": \nThis plaintext vector P is below encoded to numbers: %HILL_PLAINTEXT_VECTOR%\n \nComputation of the Hill encryption by the %HILL_VECTOR_MATRIX_MULTTYPE% (the vector P[n] is a %HILL_VECTORTYPE%): \n%HILL_ENCRYPTION%\n \nThe Hill ciphertext is: \"%CIPHERTEXT%\". \n\n\n4. Hill decryption\n\nThe inverted Hill matrix for decryption: \n%HILL_DECRYPTION_TEXTMATRIX%\n \nThis matrix encoded to numbers: \n%HILL_DECRYPTION_INTMATRIX%\n \nDecryption of the ciphertext: \"%CIPHERTEXT%\": \nCiphertext vector C decoded to numbers: \n%HILL_CIPHERTEXT_VECTOR%\n \nComputation of the Hill decryption by the %HILL_VECTOR_MATRIX_MULTTYPE% (the vector C[n] is a %HILL_VECTORTYPE%): \n%HILL_DECRYPTION%\n \nThe Hill plaintext is: \"%PLAINTEXT%\". \n\n\n"
 
     static func text(cipher h: HillCipher, plaintext: String) -> String {
         let alphabet = h.options.alphabetCharacters
@@ -404,9 +404,9 @@ enum HillDetails {
         t = t.replacingOccurrences(of: "%ALPHABET_MAPPING%", with: map)
         t = t.replacingOccurrences(of: "%ALPHABET_SIZE%", with: String(n))
         t = t.replacingOccurrences(of: "%ALPHABET_CODING_OFFSET%", with: off ? "1" : "0")
-        t = t.replacingOccurrences(of: "%HILL_MULTIPLICATION_TYPE%", with: left ? "Zeilenvektor von links" : "Spaltenvektor von rechts")
-        t = t.replacingOccurrences(of: "%HILL_VECTORTYPE%", with: left ? "Zeilenvektor" : "Spaltenvektor")
-        t = t.replacingOccurrences(of: "%HILL_VECTOR_MATRIX_MULTTYPE%", with: left ? "Zeilen-Spalten Vektor-Matrixprodukt" : "Zeilen-Spalten Matrix-Vektorprodukt")
+        t = t.replacingOccurrences(of: "%HILL_MULTIPLICATION_TYPE%", with: left ? "row vector from left" : "column vector from right")
+        t = t.replacingOccurrences(of: "%HILL_VECTORTYPE%", with: left ? "row vector" : "column vector")
+        t = t.replacingOccurrences(of: "%HILL_VECTOR_MATRIX_MULTTYPE%", with: left ? "row*column vector*matrix product" : "row*column matrix*vector product")
         t = t.replacingOccurrences(of: "%HILL_DIMENSION%", with: String(dim))
         t = t.replacingOccurrences(of: "%HILL_PLAINTEXT_SIZE%", with: String(plaintext.count))
         t = t.replacingOccurrences(of: "%HILL_NON_ALPHABET_CHARS%", with: String(plaintext.count - idx.count))
@@ -474,8 +474,8 @@ struct HillKeyDisplay: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Anzeige Hill-Schlüsselmatrix").font(.title3.weight(.semibold))
-            CT1Group(title: "Hill-Schlüsselmatrix") {
+            Text("Display Hill Key Matrix").font(.title3.weight(.semibold))
+            CT1Group(title: "Hill key matrix") {
                 if let m = shown {
                     let n = parsed.alphabet.count
                     HStack(alignment: .top, spacing: 16) {
@@ -496,15 +496,15 @@ struct HillKeyDisplay: View {
                         }
                     }
                 } else {
-                    Text("Die Matrix ist nicht invertierbar.").foregroundStyle(.red)
+                    Text("The matrix is not invertible.").foregroundStyle(.red)
                 }
-                CT1Radio(title: "Hill-Schlüsselmatrix (Verschlüsseln)", selected: !inverse) { inverse = false }
-                CT1Radio(title: "Inverse Hill-Schlüsselmatrix (Entschlüsseln)", selected: inverse) { inverse = true }
+                CT1Radio(title: "Hill key matrix (encrypt)", selected: !inverse) { inverse = false }
+                CT1Radio(title: "Inverse Hill key matrix (decrypt)", selected: inverse) { inverse = true }
             }
             HStack {
-                Button("Schlüssel kopieren") { CT1KeyStore.shared.copy(key, method: "hill") }
+                Button("Copy key") { CT1KeyStore.shared.copy(key, method: "hill") }
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(18)

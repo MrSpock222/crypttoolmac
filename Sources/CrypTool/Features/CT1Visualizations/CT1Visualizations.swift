@@ -106,29 +106,29 @@ struct StepControls: View {
         HStack(spacing: 10) {
             Group {
                 Button { player.first() } label: { Image(systemName: "backward.end.fill") }
-                    .help("Zum Anfang")
+                    .help("Go to start")
                 Button { player.back() } label: { Image(systemName: "backward.frame.fill") }
-                    .help("Einen Schritt zurück")
+                    .help("One step back")
                     .disabled(!player.canBack)
                 Button { player.toggle() } label: {
                     Image(systemName: player.isPlaying ? "pause.fill" : "play.fill").frame(width: 16)
                 }
-                .help(player.isPlaying ? "Anhalten" : "Automatisch abspielen")
+                .help(player.isPlaying ? "Pause" : "Play automatically")
                 Button { player.pause(); player.next() } label: {
-                    Label("Weiter", systemImage: "forward.frame.fill")
+                    Label("Continue", systemImage: "forward.frame.fill")
                 }
-                .help("Nächster Schritt (Eingabetaste)")
+                .help("Next step (Return key)")
                 .keyboardShortcut(.defaultAction)
                 .disabled(!player.canForward)
                 Button { player.last() } label: { Image(systemName: "forward.end.fill") }
-                    .help("Zum Ende")
+                    .help("Go to end")
             }
-            Text("Schritt \(player.index + 1) von \(player.count)")
+            Text("Step \(player.index + 1) of \(player.count)")
                 .monospacedDigit()
                 .foregroundStyle(.secondary)
                 .frame(minWidth: 120, alignment: .leading)
             if chapters.count > 1 {
-                Picker("Kapitel", selection: Binding(get: { currentChapter }, set: { player.go(to: chapters[$0].step) })) {
+                Picker("Chapter", selection: Binding(get: { currentChapter }, set: { player.go(to: chapters[$0].step) })) {
                     ForEach(chapters.indices, id: \.self) { Text(chapters[$0].title).tag($0) }
                 }
                 .frame(maxWidth: 360)
@@ -137,7 +137,7 @@ struct StepControls: View {
             Image(systemName: "tortoise").foregroundStyle(.secondary)
             Slider(value: Binding(get: { log2(player.speed) }, set: { player.speed = pow(2, $0) }), in: -2...2)
                 .frame(width: 110)
-                .help("Geschwindigkeit")
+                .help("Speed")
             Image(systemName: "hare").foregroundStyle(.secondary)
         }
         .padding(.horizontal, 12)
@@ -427,9 +427,9 @@ struct AnimationInputBar<Fields: View>: View {
             HStack(spacing: 10) {
                 fields
                 Spacer(minLength: 4)
-                Button("Animation erstellen", action: rebuild)
-                Button("CT1-Beispiel", action: resetToExample)
-                    .help("Setzt die Eingaben auf das Beispiel der CT1-Animation zurück")
+                Button("Create animation", action: rebuild)
+                Button("CT1 example", action: resetToExample)
+                    .help("Resets the inputs to the example of the CT1 animation")
             }
             if let note {
                 Text(note).font(.caption).foregroundStyle(.secondary)

@@ -4,7 +4,7 @@ import WebKit
 import CTCommon
 
 /// CT1's stand-alone learning programs, ported natively:
-/// "Der Zahlenhai" (MFC NumberShark), "Punktaddition auf Elliptischen Kurven" (Java eccdemo)
+/// "The Number Shark" (MFC NumberShark), "Point Addition on Elliptic Curves" (Java eccdemo)
 /// and the Enigma visualisation (Flash, Frank Spieß).
 @MainActor
 enum CT1Games {
@@ -13,7 +13,7 @@ enum CT1Games {
     private static weak var enigmaWindow: NSWindow?
     private static weak var enigmaModel: EnigmaVisModel?
 
-    /// Einzelverfahren ▸ Lernspiele ▸ Der Zahlenhai
+    /// Indiv. Procedures ▸ Educational Games ▸ Number Shark
     static func openNumberShark() {
         if let w = sharkWindow, w.isVisible { w.makeKeyAndOrderFront(nil); return }
         let model = SharkGameModel()
@@ -25,7 +25,7 @@ enum CT1Games {
         model.attach(window: w)
     }
 
-    /// Einzelverfahren ▸ Zahlentheorie interaktiv ▸ Punktaddition auf Elliptischen Kurven
+    /// Indiv. Procedures ▸ Number Theory - Interactive ▸ Point Addition on Elliptic Curves
     static func openECCDemo() {
         if let w = eccWindow, w.isVisible { w.makeKeyAndOrderFront(nil); return }
         let model = ECCDemoModel()
@@ -37,7 +37,7 @@ enum CT1Games {
         model.attach(window: w)
     }
 
-    /// Einzelverfahren ▸ Visualisierung von Algorithmen ▸ Enigma
+    /// Indiv. Procedures ▸ Visualization of Algorithms ▸ Enigma
     static func openEnigma(document: CTDocument?) {
         if let w = enigmaWindow, w.isVisible {
             if let document { enigmaModel?.document = document }
@@ -53,19 +53,19 @@ enum CT1Games {
         enigmaWindow = w
     }
 
-    // MARK: - Embedded help (NumberShark-de.chm, Enigma-Help_de.html)
+    // MARK: - Embedded help (NumberShark-en.chm, Enigma-Help_en.html)
 
     static func showSharkHelp(page: String = "NumberShark.html") {
         let toc: [(String, String)] = [
-            ("Bedienung des Spiels", "NumberShark.html"),
-            ("Tutorial zum Spiel", "NumberSharkTutorial.html"),
-            ("Entstehung des Spiels", "NumberSharkDevelopment.html"),
-            ("Echte Teiler", "NumberSharkRealFactors.html"),
-            ("Challenge / Herausforderung", "NumberSharkChallenge.html"),
-            ("Lizenzbestimmung / Haftungsausschluss", "NumberSharkLicense.html"),
+            ("Manual of the game", "NumberShark.html"),
+            ("Tutorial for the game", "NumberSharkTutorial.html"),
+            ("Development of the game", "NumberSharkDevelopment.html"),
+            ("Real factors", "NumberSharkRealFactors.html"),
+            ("Challenge", "NumberSharkChallenge.html"),
+            ("Terms of License", "NumberSharkLicense.html"),
         ]
         let model = CT1HelpModel(start: page)
-        let w = WindowPresenter.tool(id: "ct1games.sharkhelp", title: "Zahlenhai-Hilfe", size: CGSize(width: 900, height: 680)) {
+        let w = WindowPresenter.tool(id: "ct1games.sharkhelp", title: "Number Shark Help", size: CGSize(width: 900, height: 680)) {
             CT1HelpView(model: model, toc: toc)
         }
         // Window reused: navigate the existing web view.
@@ -74,8 +74,8 @@ enum CT1Games {
     }
 
     static func showEnigmaHelp() {
-        let model = CT1HelpModel(start: "Enigma-Help_de.html")
-        WindowPresenter.tool(id: "ct1games.enigmahelp", title: "Hilfe zur Enigma-Simulation", size: CGSize(width: 820, height: 680)) {
+        let model = CT1HelpModel(start: "Enigma-Help_en.html")
+        WindowPresenter.tool(id: "ct1games.enigmahelp", title: "Enigma Simulation Help", size: CGSize(width: 820, height: 680)) {
             CT1HelpView(model: model, toc: [])
         }
     }
@@ -91,13 +91,13 @@ enum CT1Games {
         return i
     }
 
-    /// German number formatting with "." as thousands separator (CT1 `setSeperator`).
+    /// English number formatting with "," as thousands separator (CT1 `setSeperator`, IDS_STRING_PT).
     nonisolated static func sep<T: BinaryInteger>(_ v: T) -> String {
         let s = String(v)
         let neg = s.hasPrefix("-")
         var digits = Array(neg ? s.dropFirst() : Substring(s))
         var i = digits.count - 3
-        while i > 0 { digits.insert(".", at: i); i -= 3 }
+        while i > 0 { digits.insert(",", at: i); i -= 3 }
         return (neg ? "-" : "") + String(digits)
     }
 
@@ -138,14 +138,14 @@ private final class CT1GamesSchemeHandler: NSObject, WKURLSchemeHandler {
         var mime = "text/html"
         if let html = CT1GamesData.sharkHelpPages[name] {
             data = Data(html.utf8)
-        } else if name == "Enigma-Help_de.html" {
+        } else if name == "Enigma-Help_en.html" {
             data = Data(CT1GamesData.enigmaHelp.utf8)
         } else if name.lowercased().hasSuffix(".css") {
             data = Data(CT1GamesData.sharkHelpCSS.utf8); mime = "text/css"
         } else if let b64 = CT1GamesData.images[name] {
             data = Data(base64Encoded: b64)
             mime = name.hasSuffix(".gif") ? "image/gif" : (name.hasSuffix(".png") ? "image/png" : "image/jpeg")
-        } else if let u = Resources.url("Help/de/images/" + name) {
+        } else if let u = Resources.url("Help/en/images/" + name) {
             data = try? Data(contentsOf: u)
             mime = name.lowercased().hasSuffix(".png") ? "image/png" : "image/jpeg"
         }

@@ -18,5 +18,9 @@ Dauerhafte Regeln (je mit Grund). Nur ergänzen, was einen konkreten, wiederholb
 - **Krypto-Verfahren ergebnistreu halten:** Änderungen an `Lattice`/`Coppersmith`/`BloemerMay`/`SideChannel`
   (CTBigNum) nur, wenn Verfahren **und** Ergebnisse gegenüber CT1 unverändert bleiben; danach `CTLatticeTests`
   grün halten. Grund: Gleichheit der Ergebnisse mit der Windows-Version ist Projektziel.
+- **UI-Texte englisch, wörtlich wie im englischen CT1** (`CrypTool/CrypTool.rc`, Abschnitt „English (U.K.)“, gleiche
+  Ressourcen-ID wie der deutsche Text; Hilfe `hlp_en`). Keine deutschen UI-Texte neu einführen; Zahlen „1,234.5“.
+  Bei mehreren englischen Varianten die des nachgebauten Dialogs nehmen, nicht die erstbeste. Grund: die App ist
+  auf die englische Originalfassung umgestellt, Namensgleichheit ist Projektziel.
 - **`NICHT-ENTHALTEN.md` nicht umbenennen** (stabiler Link aus README und GitHub-Releases).
 - **READMEs klein und deutsch** halten (Projektkonvention, nur das Wichtigste).

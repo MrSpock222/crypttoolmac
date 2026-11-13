@@ -163,7 +163,7 @@ extension BigUInt {
 
     /// Jacobi symbol (self / n) for odd n > 0. Returns -1, 0 or 1.
     public func jacobi(_ n: BigUInt) -> Int {
-        precondition(n.isOdd, "Jacobi-Symbol: n muss ungerade sein")
+        precondition(n.isOdd, "Jacobi symbol: n must be odd")
         var a = self % n
         var m = n
         var result = 1
@@ -289,7 +289,7 @@ extension BigUInt {
 
     /// Uniform random number in 0..<upper (precondition: upper > 0).
     public static func random(below upper: BigUInt) -> BigUInt {
-        precondition(!upper.isZero, "Obere Grenze muss > 0 sein")
+        precondition(!upper.isZero, "Upper bound must be > 0")
         if upper.isOne { return BigUInt() }
         let bits = (upper - 1).bitLength
         while true {

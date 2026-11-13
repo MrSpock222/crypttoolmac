@@ -12,14 +12,14 @@ public enum AESToolSelfExtractor {
     static let script = #"""
 #!/bin/sh
 # ---------------------------------------------------------------------------
-#  AES-Tool (CrypTool) - selbstentschlüsselnde Datei für macOS
+#  AES-Tool (CrypTool) - self-decrypting file for macOS
 #
-#  Öffnen: Doppelklick im Finder (startet das Terminal). Verhindert macOS das
-#  Öffnen, im Finder Rechtsklick > Öffnen wählen oder im Terminal eingeben:
-#      sh "/Pfad/zur/Datei.command"
-#  Benötigt nur /usr/bin/perl und /usr/bin/openssl (Bestandteil von macOS).
-#  Die angehängten Daten sind im Format von AES-Tool (CrypTool 1) und können
-#  auch mit CrypTool oder AES-Tool unter Windows entschlüsselt werden.
+#  Open: double-click in the Finder (starts the Terminal). If macOS prevents
+#  opening, choose right-click > Open in the Finder or enter in the Terminal:
+#      sh "/path/to/file.command"
+#  Requires only /usr/bin/perl and /usr/bin/openssl (part of macOS).
+#  The appended data is in the format of AES-Tool (CrypTool 1) and can also
+#  be decrypted with CrypTool or AES-Tool on Windows.
 # ---------------------------------------------------------------------------
 exec /usr/bin/perl -x "$0" "$0"
 exit 1
@@ -38,22 +38,22 @@ my $interactive = -t STDIN;
 
 sub pause_exit {
     my $code = shift;
-    if ($interactive) { print "\nZum Beenden die Eingabetaste drücken ..."; my $x = <STDIN>; }
+    if ($interactive) { print "\nPress Return to quit ..."; my $x = <STDIN>; }
     exit $code;
 }
 sub fail { print "\n$_[0]\n"; pause_exit(1); }
-my $CORRUPT = 'Diese verschlüsselte Datei ist beschädigt.';
+my $CORRUPT = 'This encrypted file is corrupt.';
 
-print "AES-Tool (CrypTool) - selbstentschlüsselnde Datei\n";
-print "Datei: ", basename($self), "\n\n";
+print "AES-Tool (CrypTool) - self-decrypting file\n";
+print "File: ", basename($self), "\n\n";
 
-open(my $fh, '<:raw', $self) or fail("Die Datei $self kann nicht gelesen werden.");
+open(my $fh, '<:raw', $self) or fail("The file $self cannot be read.");
 my $size = -s $fh;
 fail($CORRUPT) if $size < 12;
 seek($fh, $size - 12, 0);
 read($fh, my $tail, 12) == 12 or fail($CORRUPT);
 my ($dlen, $ilen, $magic) = unpack('V3', $tail);
-fail('Die Datei enthält keine AES-Tool-Daten.') if $magic != $MAGIC;
+fail('The file does not contain AES-Tool data.') if $magic != $MAGIC;
 if ($size >= 4294967296) {
     $dlen += $size - ($size % 4294967296);
     $dlen -= 4294967296 if $dlen > $size;
@@ -92,12 +92,12 @@ sub derive {
 
 my ($key, $name);
 for (my $try = 0; $try < 3 && !defined $name; $try++) {
-    print "Schlüssel eingeben (Passwort oder Hex-Schlüssel): ";
+    print "Enter key (password or hex key): ";
     system('stty', '-echo') if $interactive;
     my $in = <STDIN>;
     system('stty', 'echo') if $interactive;
     print "\n";
-    fail('Abgebrochen.') unless defined $in;
+    fail('Canceled.') unless defined $in;
     $in =~ s/[\r\n]+$//;
     redo if $in eq '' && $interactive;
     my @keys;
@@ -119,19 +119,19 @@ for (my $try = 0; $try < 3 && !defined $name; $try++) {
         ($key, $name) = ($kk, substr($p, 8, $nl));
         last;
     }
-    print "Falscher Schlüssel oder Datei beschädigt.\n" unless defined $name;
+    print "Wrong key or file corrupt.\n" unless defined $name;
 }
-fail('Entschlüsselung abgebrochen.') unless defined $name;
+fail('Decryption canceled.') unless defined $name;
 
 $name = encode('UTF-8', decode('cp1252', $name));
 $name =~ s{[/:\x00-\x1f]}{_}g;
-$name = 'entschluesselt' if $name eq '' || $name =~ /^\.+$/;
+$name = 'decrypted' if $name eq '' || $name =~ /^\.+$/;
 my $dir = dirname($self);
 my $out = "$dir/$name";
 if (-e $out) {
     my $ok = 0;
     if ($interactive) {
-        print "Die Datei $out existiert bereits. Überschreiben? (j/n) ";
+        print "The file $out already exists. Overwrite? (y/n) ";
         my $a = <STDIN>;
         $ok = defined $a && $a =~ /^\s*[jJyY]/;
     }
@@ -154,20 +154,20 @@ while ($left > 0) {
     print $o $buf;
     $left -= $n;
 }
-close $o or do { unlink $tmp; fail('Fehler beim Entschlüsseln (openssl).') };
+close $o or do { unlink $tmp; fail('File decryption error (openssl).') };
 if ($dlen > 0) {
-    open(my $r, '+<:raw', $tmp) or fail("Die Datei $tmp kann nicht geöffnet werden.");
+    open(my $r, '+<:raw', $tmp) or fail("The file $tmp cannot be opened.");
     my $last = ($dlen - 1) % 4096 + 1;
     seek($r, $dlen - $last, 0);
     read($r, my $lb, $last);
     my $i = $last - 1;
     $i-- while $i > 0 && substr($lb, $i, 1) eq "\0";
-    if (substr($lb, $i, 1) ne "\x01") { close $r; unlink $tmp; fail('Falscher Schlüssel oder Datei beschädigt.'); }
+    if (substr($lb, $i, 1) ne "\x01") { close $r; unlink $tmp; fail('Wrong key or file corrupt.'); }
     truncate($r, $dlen - $last + $i);
     close $r;
 }
-rename($tmp, $out) or fail("Die Datei $out kann nicht geschrieben werden.");
-print "Die entschlüsselte Datei $out wurde erfolgreich erstellt.\n";
+rename($tmp, $out) or fail("The file $out cannot be written.");
+print "The decrypted file $out has been successfully created.\n";
 pause_exit(0);
 __END__
 

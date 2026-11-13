@@ -14,7 +14,7 @@ extension CT1Analysis {
         let holder = CT1KPWindowHolder()
         let model = CT1KPTextPair(active: document)
         holder.window = WindowPresenter.tool(id: "ct1-kp-perm-\(ObjectIdentifier(document).hashValue)",
-                                             title: "Analyse einer einstufigen Spaltentransposition (Known Plaintext)",
+                                             title: "Analysis of a Simple Column Transposition (Known Plaintext)",
                                              size: CGSize(width: 660, height: 720)) {
             CT1KPTranspositionAnalysisView(model: model, holder: holder)
         }
@@ -46,8 +46,8 @@ struct CT1KPTranspositionAnalysisView: View {
     private func pair(_ title: String, _ row: Binding<Bool>, _ col: Binding<Bool>) -> some View {
         GroupBox(title) {
             VStack(alignment: .leading, spacing: 4) {
-                Toggle("zeilenweise", isOn: row).onChange(of: row.wrappedValue) { _, _ in if !row.wrappedValue && !col.wrappedValue { col.wrappedValue = true } }
-                Toggle("spaltenweise", isOn: col).onChange(of: col.wrappedValue) { _, _ in if !row.wrappedValue && !col.wrappedValue { row.wrappedValue = true } }
+                Toggle("Line by line", isOn: row).onChange(of: row.wrappedValue) { _, _ in if !row.wrappedValue && !col.wrappedValue { col.wrappedValue = true } }
+                Toggle("Col by col", isOn: col).onChange(of: col.wrappedValue) { _, _ in if !row.wrappedValue && !col.wrappedValue { row.wrappedValue = true } }
             }
             .toggleStyle(.checkbox)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -57,29 +57,29 @@ struct CT1KPTranspositionAnalysisView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Dies ist eine Known-Plaintext-Analyse einer Permutations-Chiffre. Mit dieser Analyse können Sie aus dem Klartext und dem Geheimtext den Permutationsschlüssel berechnen.")
+            Text("This is a known-plaintext analysis of a permutation cipher. Given as input a pair of plaintext and ciphertext belonging together, this analysis computes a valid permutation key.")
                 .fixedSize(horizontal: false, vertical: true)
             CT1KPTextInputView(model: model)
-            GroupBox("Welche Varianten des Permutationsverfahrens sollen analysiert werden?") {
+            GroupBox("Which permutation variant should be analyzed? ") {
                 HStack(alignment: .top, spacing: 8) {
-                    pair("Einlesen", $inRow, $inCol)
-                    pair("Permutieren", $permRow, $permCol)
-                    pair("Auslesen", $outRow, $outCol)
-                    GroupBox("Permutationsgröße") {
+                    pair("Input", $inRow, $inCol)
+                    pair("Permute", $permRow, $permCol)
+                    pair("Output", $outRow, $outCol)
+                    GroupBox("Permutation size") {
                         Grid(alignment: .leading, horizontalSpacing: 6, verticalSpacing: 4) {
-                            GridRow { Text("von"); TextField("", text: $rangeFrom).frame(width: 56) }
-                            GridRow { Text("bis"); TextField("", text: $rangeTo).frame(width: 56) }
+                            GridRow { Text("from"); TextField("", text: $rangeFrom).frame(width: 56) }
+                            GridRow { Text("to"); TextField("", text: $rangeTo).frame(width: 56) }
                         }
                         .padding(2)
                     }
                 }
                 .padding(4)
             }
-            GroupBox("Optionen") {
+            GroupBox("Options") {
                 HStack(spacing: 14) {
-                    Text("Betrachte beide Eingabedokumente als:")
-                    CT1Radio(title: "Binäre Daten", selected: !textMode) { textMode = false }
-                    CT1Radio(title: "Text", selected: textMode) { textMode = true }
+                    Text("Consider input document as")
+                    CT1Radio(title: "binary data", selected: !textMode) { textMode = false }
+                    CT1Radio(title: "text", selected: textMode) { textMode = true }
                     Spacer()
                 }
                 .padding(4)
@@ -87,14 +87,14 @@ struct CT1KPTranspositionAnalysisView: View {
             HStack {
                 if let progress {
                     ProgressView(value: progress).frame(width: 120)
-                    Button("Abbrechen") { token?.cancel() }
+                    Button("Cancel") { token?.cancel() }
                 } else {
-                    Button("Schlüssel suchen", action: search).keyboardShortcut(.defaultAction)
+                    Button("Search key", action: search).keyboardShortcut(.defaultAction)
                 }
                 Spacer()
-                Button("Textoptionen...") { OptionsWindows.showTextOptions() }.disabled(!textMode)
+                Button("Text options...") { OptionsWindows.showTextOptions() }.disabled(!textMode)
                 Spacer()
-                Button("Schließen") { token?.cancel(); holder.window?.close() }.keyboardShortcut(.cancelAction)
+                Button("Close") { token?.cancel(); holder.window?.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -136,13 +136,13 @@ struct CT1KPTranspositionAnalysisView: View {
                 token = nil
                 guard let keys else { return }
                 if keys.isEmpty {
-                    Alerts.info("Es wurde kein Permutationsschlüssel gefunden.")
+                    Alerts.info("No single transposition key was found.")
                 } else if keys.count == 1 {
-                    WindowPresenter.sheet(on: holder.window, title: "Schlüsselausgabe: Permutation / Transposition") { close in
+                    WindowPresenter.sheet(on: holder.window, title: "Key Display: Simple Column Transposition") { close in
                         CT1KPPermKeyView(key: keys[0], textMode: text, close: close)
                     }
                 } else {
-                    WindowPresenter.sheet(on: holder.window, title: "Liste der gefundenen Permutationsschlüssel") { close in
+                    WindowPresenter.sheet(on: holder.window, title: "List of recovered permutation keys") { close in
                         CT1KPKeyListView(keys: keys, textMode: text, close: close)
                     }
                 }
@@ -173,12 +173,12 @@ struct CT1KPPermKeyView: View {
 
     private func stage(_ title: String, key: String, _ dirs: [String], enabled: Bool) -> some View {
         CT1Group(title: title) {
-            Text("Schlüssel")
+            Text("Key")
             CT1KPField(text: key)
             Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 4) {
-                GridRow { Text("Einlesen:"); CT1KPField(text: dirs[0]).frame(width: 170) }
-                GridRow { Text("Permutieren:"); CT1KPField(text: dirs[1]).frame(width: 170) }
-                GridRow { Text("Auslesen:"); CT1KPField(text: dirs[2]).frame(width: 170) }
+                GridRow { Text("Input:"); CT1KPField(text: dirs[0]).frame(width: 170) }
+                GridRow { Text("Permute:"); CT1KPField(text: dirs[1]).frame(width: 170) }
+                GridRow { Text("Output:"); CT1KPField(text: dirs[2]).frame(width: 170) }
             }
         }
         .disabled(!enabled)
@@ -186,16 +186,16 @@ struct CT1KPPermKeyView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            stage("1. Permutation (einfache Spaltentransposition)", key: key.display,
+            stage("1st Permutation (simple column transposition)", key: key.display,
                   [K.name(key.readIn), K.name(key.permute), K.name(key.readOut)], enabled: true)
-            stage("2. Permutation (doppelte Spaltentransposition)", key: "", ["", "", ""], enabled: false)
+            stage("2nd Permutation (double column transposition)", key: "", ["", "", ""], enabled: false)
             HStack {
                 // CDlgPermKey::OnBnClickedCopyKey
-                Button("Schlüssel kopieren") {
+                Button("Copy key") {
                     CT1KeyStore.shared.copy(key.keyString(textMode: textMode), method: ct1KPPermutationKeyMethod)
                 }
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(16)
@@ -217,28 +217,28 @@ struct CT1KPKeyListView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Es wurde mindestens ein Permutationsschlüssel gefunden. Die Schlüssel werden in der Liste angezeigt. Sie können eine Zeile auswählen und den damit ausgewählten Schlüssel in den Schlüsselspeicher kopieren.")
+            Text("At least one permutation key was found. These keys are now displayed in the list below.\nYou may copy your actual selection key into the key storage.")
                 .fixedSize(horizontal: false, vertical: true)
             Table(keys.enumerated().map { Row(id: $0.offset, key: $0.element) }, selection: $selection) {
-                TableColumn("Schlüssel") { Text($0.key.display).textSelection(.enabled) }.width(min: 180, ideal: 260)
-                TableColumn("Einlesen") { Text(K.name($0.key.readIn)) }.width(min: 80, ideal: 100)
+                TableColumn("Key") { Text($0.key.display).textSelection(.enabled) }.width(min: 180, ideal: 260)
+                TableColumn("Input") { Text(K.name($0.key.readIn)) }.width(min: 80, ideal: 100)
                 TableColumn("Permutation") { Text(K.name($0.key.permute)) }.width(min: 80, ideal: 100)
-                TableColumn("Auslesen") { Text(K.name($0.key.readOut)) }.width(min: 80, ideal: 100)
+                TableColumn("Output") { Text(K.name($0.key.readOut)) }.width(min: 80, ideal: 100)
             }
             .frame(minHeight: 220)
             HStack {
                 Spacer()
                 // CDlgKeyList::OnBnClickedButtonCopyKey
-                Button("Schlüssel kopieren") {
+                Button("Copy key") {
                     guard let i = selection, keys.indices.contains(i) else {
-                        Alerts.info("Bitte wählen Sie einen Schlüssel aus der Liste.")
+                        Alerts.info("Please select a key from the list")
                         return
                     }
                     CT1KeyStore.shared.copy(keys[i].keyString(textMode: textMode), method: ct1KPPermutationKeyMethod)
-                    Alerts.info("Der von Ihnen gewählte Schlüssel wurde in den Schlüsselspeicher geladen.\nSie können diesen Schlüssel bei der Permutationsverschlüsselung nutzen (siehe Menü: Ver-/Entschlüsseln \\ Symmetrisch (klassisch) \\ Permutation / Transposition).\n\nUm den gespeicherten Schlüssel für die Permutations-Verschlüsselung zu benutzen, klicken Sie dann unten im Schlüsseleingabe-Dialog auf die Ikone zum Schlüsseleinfügen.")
+                    Alerts.info("The selected key has been copied to the key storage. You may use this permutation key for document encryption or ciphertext decryption (See menu: Encrypt/Decrypt \\ Symmetric (classic) \\ Permutation / Transposition).\n\nUsing the Permutation encryption dialog you may click on the key symbol to paste the stored key.")
                     close()
                 }
-                Button("Schließen", action: close).keyboardShortcut(.cancelAction)
+                Button("Close", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)

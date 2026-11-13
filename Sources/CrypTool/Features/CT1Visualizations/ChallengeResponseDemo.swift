@@ -9,7 +9,7 @@ import SwiftUI
 
 extension CT1Visualizations {
     static func openChallengeResponse() {
-        WindowPresenter.tool(id: "ct1-challenge-response", title: "Challenge-Response-Demo", size: CGSize(width: 1040, height: 760)) {
+        WindowPresenter.tool(id: "ct1-challenge-response", title: "Challenge-Response Demonstration", size: CGSize(width: 1040, height: 760)) {
             ChallengeResponseView()
         }
     }
@@ -25,12 +25,12 @@ final class CRScenario: ObservableObject {
         var title: String {
             switch self {
             case .start: return "Start"
-            case .einfuehrung: return "Einführung"
-            case .passwort: return "Passwort"
-            case .einmalpasswoerter: return "Einmalpasswörter"
-            case .crSymmetrisch: return "Challenge-Response (symmetrisch)"
-            case .crAsymmetrisch: return "Challenge-Response (asymmetrisch)"
-            case .wechselseitig: return "Wechselseitige Authentifikation"
+            case .einfuehrung: return "Introduction"
+            case .passwort: return "Password"
+            case .einmalpasswoerter: return "One-time passwords"
+            case .crSymmetrisch: return "Challenge-Response (symmetric)"
+            case .crAsymmetrisch: return "Challenge-Response (asymmetric)"
+            case .wechselseitig: return "Mutual authentication"
             }
         }
     }
@@ -39,7 +39,7 @@ final class CRScenario: ObservableObject {
 
     // computers
     static let client = 0, router1 = 1, router2 = 2, server1 = 3, server2 = 4, attacker = 5
-    static let names = ["Client", "Router 1", "Router 2", "Server 1", "Server 2", "Angreifer"]
+    static let names = ["Client", "Router 1", "Router 2", "Server 1", "Server 2", "Attacker"]
     static let rects: [CGRect] = [CGRect(x: 180, y: 140, width: 40, height: 40), CGRect(x: 300, y: 140, width: 40, height: 40),
                                   CGRect(x: 420, y: 140, width: 40, height: 40), CGRect(x: 540, y: 40, width: 40, height: 40),
                                   CGRect(x: 540, y: 240, width: 40, height: 40), CGRect(x: 300, y: 240, width: 40, height: 40)]
@@ -55,11 +55,11 @@ final class CRScenario: ObservableObject {
     ]
 
     // captions (IDS_dataCaption_*)
-    static let cPasswort = "Passwort: ", cEinmal = "Aktuelles Passwort:  ", cKey = "Key: "
+    static let cPasswort = "Password: ", cEinmal = "Current password: ", cKey = "Key: "
     static let cPrivC = "Private Key (Client): ", cPubC = "Public Key (Client): "
     static let cPrivS = "Private Key (Server): ", cPubS = "Public Key (Server): "
-    static let cChS = "Challenge von Server: ", cRespS = "Response an Server: "
-    static let cChC = "Challenge von Client: ", cRespC = "Response an Client: "
+    static let cChS = "Challenge from server: ", cRespS = "Response to server: "
+    static let cChC = "Challenge from client: ", cRespC = "Response from client: "
 
     struct Line: Equatable { var label: String; var value: String }
 
@@ -95,7 +95,7 @@ final class CRScenario: ObservableObject {
     private var timer: Timer?
 
     // scenario values (Scenario.cpp)
-    private let vPasswort = "geheim", vEinmal = "123456", vKey = "a3c2b1"
+    private let vPasswort = "secret", vEinmal = "123456", vKey = "a3c2b1"
     private let vPrivC = "her7sj", vPubC = "her7sj", vPrivS = "98zwr3", vPubS = "2j658d"
     private var vChS = "a76zup", vChC = "9cxn4f"
 
@@ -104,19 +104,19 @@ final class CRScenario: ObservableObject {
     var modeText: String {
         switch mode {
         case .start:
-            return "Willkommen zur Demonstration des Challenge-Response-Protokolls.\nDas Protokoll wird in mehreren Szenarien eingeführt.\nMit den Knöpfen auf der linken Seite können Sie zwischen den einzelnen Szenarien wählen. Es ist sinnvoll, die Szenarien von oben nach unten durchzuarbeiten.\nWeiterführende Informationen erhalten Sie in jedem Szenario über die Hilfe zum Szenario. Die Hilfe sollten Sie sich vor der ersten Verwendung ansehen.\n\nBitte fahren Sie nun mit 'Einführung' fort."
+            return "Welcome to the demonstration of the Challenge-Response-protocol.\nYou will develop the protocol in several scenarios.\nThe different scenarios can be selected by the buttons on the left side. It makes sense to wade through the scenarios top down.\nYou can get further information by the use of the scenario help. You should take a look at the help before your first usage.\n\nPlease continue with 'Introduction' now."
         case .einfuehrung:
-            return "Einführung: Allen folgenden Szenarien liegt das oben gezeigte Netzwerk mit seinen Elementen zugrunde:\nQuadrate sind Rechner und ihre Benutzer,\nLinien sind die Netzwerkverbindungen dazwischen.\nSie schlüpfen in die Rolle eines Angreifers und versuchen Informationen zu erlangen, mit denen Sie sich bei Server 1 authentifizieren können. Dazu stehen Ihnen die Aktionen Leitungen verbinden und trennen sowie Rechner angreifen und den Angriff auf den Rechner beenden zur Verfügung. Alle Aktionen werden durchgeführt, indem Sie zunächst den entsprechenden Knopf auswählen und dann auf den gewünschten Rechner oder die gewünschte Verbindung klicken. Verbindungen zwischen Angreifer und einem Router werden durch ’Verbinden’ und Anklicken des Routers hergestellt. Wenn einer der beiden Knöpfe zum Authentifizieren gedrückt wird, startet das Protokoll und zwischen den Rechnern werden Datenpakete verschickt. Angegriffene Rechner schicken eine Kopie aller durchgehenden Pakete sowie alle ihre geheimen Daten an den Angreifer. Mit 'Maskieren' können Sie einen Man-in-the-middle-Angriff durchführen.\nDurch ’Szenario zurücksetzen’ können Sie ein Szenario in den ursprünglichen Zustand versetzen.\n\nBevor Sie das erste Szenario auswählen, können Sie hier alle Funktionen ausprobieren. Viel Spaß!"
+            return "Introduction: The above shown network with its elements forms the basis of the following scenarios:\nQuadrates illustrate computers and their users,\nlines show the network connections between these.\nYour cast will be the role of the attacker and your task is to get information to authenticate yourself at Server 1. For that purpose the actions link and unlink as well as attack station and quit attacking station are available. All actions can be performed by choosing the corresponding button and then click on the desired station or conduction. Connections between the attacker and a router can be established by choosing 'Link' and click on the according router. By pushing one of the 'Authenticate...' buttons, the authentication protocol is started and data packets are sent between the computers. Attacked computers send a copy of all packets as well as all their secret data at the attacker. By choosing 'Mask' you can start a man-in-the-middle-attack.\nTo restore the initial state of a scenario press 'Reset scenario'."
         case .passwort:
-            return "Passwort: In diesem Szenario authentifiziert sich der Client durch ein Passwort, das er und Server 1 kennen.\n\nIhre Aufgabe als Angreifer ist es, sich bei Server 1 als Client auszugeben und als solcher auch zu authentifizieren."
+            return "Password: In this scenario the client authenticates himself by means of a password that he and server 1 know.\n\nYour job is to authenticate yourself as attacker at server 1 so that he expects you to be the client."
         case .einmalpasswoerter:
-            return "Einmalpasswörter: Um dem Angriff des Passwort-Szenarios zu entgehen, haben Client und Server 1 vereinbart, nach jeder erfolgten Authentifikation das Passwort zu wechseln. Dafür haben sie eine Liste mit Einmalpasswörtern angelegt und ausgetauscht. Wurde ein Einmalpasswort für die Authentifizierung verwendet, wird es als benutzt gekennzeichnet und kann nicht noch einmal verwendet werden. Für die nächste Authentifizierung muss ein anderes Einmalpasswort der Liste verwendet werden.\n\nIhre Aufgabe ist es wieder, sich als Angreifer so bei Server 1 zu authentifizieren, dass er Sie für den Client hält."
+            return "One-time passwords: To avoid the password scenario attack, the client and server 1 have agreed to change their password after every authentication. They have therefore created a list of one-time passwords that they both know. After using a password, it is marked as used and then never reused.\n\nYour exercise is to play the role of an attacker feigning the legitimate client to become authenticated by server 1."
         case .crSymmetrisch:
-            return "Challenge-Response (mit symmetrischer Verschlüsselung): Nach dem Angriff auf Einmalpasswörter setzen der Client und die Server nun ein Verschlüsselungsverfahren mit einem geheimen Schlüssel ein. Um den organisatorischen Aufwand gering zu halten, wird nicht für jedes Paar aus einem Client und einem Server ein neuer Schlüssel erzeugt und verteilt, sondern alle vertrauenswürdigen Parteien erhalten einen gemeinsamen Schlüssel. Zur Authentifizierung schickt der Server eine Zufallszahl, genannt Challenge (Herausforderung) an den Client. Durch Verschlüsselung mit dem geheimen Schlüssel generiert der Client daraus die Response (Antwort) und schickt diese zurück an den Server. Der Server entschlüsselt die Response und überprüft, ob die entschlüsselte Challenge mit der von ihm geschickten übereinstimmt. Ist dies der Fall, ist die Authentifikation erfolgreich; wenn nicht, wird der Client abgewiesen. Der Server kann dem Client vertrauen, weil kein Außenstehender den geheimen Schlüssel kennt und deshalb die Response nicht korrekt erzeugen kann.\n\nAber vielleicht haben die beiden etwas übersehen...weitere Tipps in der Hilfe."
+            return "Challenge Response (with symmetric encryption): After the attack at the one-time-passwords client and servers use symmetric encryption by means of a secret key now. In order to minimize the organizational effort, not each pair of client and server get an own key, but all confidential parties get a common secret key. For authentication the server sends a random number, called Challenge, to the client. By the use of encryption the client generates the response and sends it back to the server. The server decrypts the response and checks whether the decrypted response conforms with the sent one. If that is the case, authentication is successful; otherwise the client is rejected. The server can trust the client, because no outsider knows the secret key and therefore can not generate the correct Response.\n\nBut maybe something has been overlooked by them...you can find more hints in the online help."
         case .crAsymmetrisch:
-            return "Challenge-Response (mit asymmetrischer Verschlüsselung): Dieses Mal wird das Challenge-Response-Verfahren mit asymmetrischer (public key) Verschlüsselung durchgeführt. Jeder Teilnehmer besitzt ein eigenes Schlüsselpaar: den privaten kennt nur der Teilnehmer, den öffentlichen Schlüssel kennt jeder. Zur Authentifizierung wird wieder eine Challenge vom Server an den Client geschickt, der diese dann mit seinem geheimen Schlüssel signiert und das Ergebnis als Response zurückschickt. Jetzt kann jeder, der im Besitz des öffentlichen Schlüssels des Clients ist, also auch der Server, die Response prüfen: Das bedeutet das die Challenge mit dem privaten Schlüssel des Clients signiert wurde.\n\nTrotzdem, mit einem kleinen Trick kann sich der Angreifer vielleicht doch noch bei Server 1 als Client authentifizieren."
+            return "Challenge Response (with asymmetric encryption): This time the Challenge Response procedure is performed with asymmetric (public key) encryption. Each participant holds his own pair of keys, consisting of a public key that everyone knows and a secret one that only the owner knows. Again, for authentication the server sends a challenge to the client, who signs it with his secret key and then sends the result back to the server. Now everyone, knowing the client´s public key, including the server, can verify the response: this means that the challenge was signed with the client´s private key.\n\nEven so the attacker perhaps can authenticate himself as client at server 1 by a trick."
         case .wechselseitig:
-            return "Wechselseitige Authentifikation: Dieses Szenario basiert auch auf dem Challenge-Response-Verfahren mit asymmetrischer Verschlüsselung. Diesmal wird es allerdings gleichzeitig in beide Richtungen angewendet. D.h. der Server schickt eine Challenge an den Client, die dieser signiert und mitsamt einer eigenen Challenge an den Server zurückschickt. Nun kann der Server durch den öffentlichen Schlüssel des Clients prüfen, dass die Response nur vom Client stammen kann, da nur dieser den zur Signatur nötigen privaten Schlüssel besitzt. Um auch seine eigene Identität zu beweisen, signiert der Server die Challenge des Clients mit seinem eigenen privaten Schlüssel und schickt dies als seine Response zurück. Jetzt kann im Gegenzug auch der Client mit Hilfe des öffentlichen Schlüssels des Servers prüfen, dass diese Response nur vom Server stammen kann. Somit können sich beide sicher sein, mit wem sie kommunizieren und darauf aufbauend z.B. einen sicheren (verschlüsselten) Kanal etablieren, indem sie einen Session-Key asymmetrisch verschlüsselt austauschen. Dadurch wird ein Angriff auf Protokollebene unmöglich. Sie können alle vorangegangenen Lösungen ausprobieren, dieses Protokoll ist damit nicht zu knacken. Beachten Sie aber, dass es andere Angriffe geben kann - gegen die verwendeten kryptografischen Verfahren oder gegen die physikalischen und logischen Verbindungen. Angriffe auf kryptografische Verfahren können mit CrypTool ausprobiert werden, zu Angriffen gegen die physikalischen und logischen Verfahren sei auf die Hilfe verwiesen."
+            return "Mutual Authentication: This scenario is based upon asymmetric encryption, too. But this time it is used synchronous in both directions. Viz the server sends a challenge to the client, which the client signs and returns to the server with his own challenge. Now the server can verify by the use of the client´s public key that the signed challenge (response from the client) can only derive from the client, because he is the only one with the according private key. To prove his own identity, the server signs the client´s challenge by the use of his private key and returns this to the client. Now, the client can verify the origin of the server´s response by means of the server´s public key. Thus both can be sure to know to whom they talk and basing on that establish a secure (encrypted) channel by exchanging an asymmetrical encrypted session key. Thus an attack at the level of protocols gets impossible. You can give all previous solutions a try, but you won´t be able to crack that protocol. But please take attacks to crack the encryption or the physical and logical connections into account. Attacking cryptographic methods can be tried with CrypTool. For more information according attacks to the physical or logical operations please see the online help."
         }
     }
 
@@ -246,17 +246,17 @@ final class CRScenario: ObservableObject {
         case .attack, .removeAttack:
             guard let comp, comp != Self.attacker else { return }
             if comp == Self.client || comp == Self.server1 {
-                if action == .attack { alert = "Dieser Rechner ist zu stark gesichert!" }
+                if action == .attack { alert = "This station is protected too strong!" }
                 return
             }
-            if !reachable(comp) { alert = "Sie haben keine Verbindung zu diesem Rechner!"; return }
+            if !reachable(comp) { alert = "You have no link up to this computer!"; return }
             underAttack[comp] = action == .attack
             if action == .attack && comp == Self.server2 && mode == .crSymmetrisch {
                 change(Self.attacker, Self.cKey, vKey)      // the poorly protected Server 2 reveals the shared key
             }
         }
         if masked && !attackerCanMask {
-            alert = "Maskierung des Angreifers bei dieser Verbindungskonfiguration nicht möglich."
+            alert = "By use of that connection-configuration masking is not possible."
             masked = false
         }
     }
@@ -269,21 +269,21 @@ final class CRScenario: ObservableObject {
 
     func toggleMask() {
         if protocolRunning {
-            if !masked { alert = "Maskierung nur vor Beginn des Protokolls möglich." }
+            if !masked { alert = "Masking only is possible before starting the protocol." }
             masked = false
             return
         }
         if masked { masked = false; return }
         if attackerCanMask { masked = true } else {
-            alert = "Maskierung des Angreifers bei dieser Verbindungskonfiguration nicht möglich."
+            alert = "By use of that connection-configuration masking is not possible."
         }
     }
 
     // MARK: protocol (CScenario::initiateProtocol / protocolStep)
 
     func startProtocol(attacker: Bool) {
-        guard mode != .start else { alert = "Sie haben kein Szenario ausgewählt."; return }
-        guard !protocolRunning else { alert = "Protokoll läuft bereits!"; return }
+        guard mode != .start else { alert = "You have not selected a scenario."; return }
+        guard !protocolRunning else { alert = "Protocol is already running!"; return }
         authenticateAttacker = attacker
         protocolRunning = true
         authenticationFailed = false
@@ -482,15 +482,15 @@ final class CRScenario: ObservableObject {
         stopTimer()
         if protocolRunning {
             protocolRunning = false
-            alert = "Das Protokoll wurde gestört."
+            alert = "The protocol was disturbed."
         } else if authenticationFailed {
-            alert = "Authentifikation fehlgeschlagen."
+            alert = "Authentication failed."
         } else if authenticateAttacker {
-            alert = "Authentifikation des Angreifers erfolgreich."
+            alert = "Authentication of attacker was successful."
         } else if masked && mode != .wechselseitig {
-            alert = "Authentifikation des Angreifers als 'Man In The Middle' durch Maskierung erfolgreich."
+            alert = "Authentication of attacker as 'Man In The Middle' successful by the use of masking."
         } else {
-            alert = "Authentifikation des Clients erfolgreich."
+            alert = "Authentication of client successful."
         }
     }
 
@@ -511,22 +511,22 @@ enum CRHelp {
     static func text(_ m: CRScenario.Mode) -> (scenario: String, solution: String?) {
         switch m {
         case .start, .einfuehrung:
-            return ("Das Modul zeigt in mehreren Szenarien, wie sich ein Client gegenüber einem Server authentifiziert und wie ein Angreifer versucht, sich als Client auszugeben.\n\nBedienung: Wählen Sie rechts eine Aktion (Verbinden, Trennen, Rechner angreifen, Angriff auf Rechner beenden) und klicken Sie dann auf eine Verbindung oder einen Rechner. Verbindungen zwischen Angreifer und Router entstehen durch ‚Verbinden‘ und Anklicken des Routers. Die beiden Knöpfe ‚Authentifizieren des Clients‘ und ‚Authentifizieren des Angreifers‘ starten das jeweilige Protokoll. Angegriffene Rechner (rot) schicken dem Angreifer eine Kopie aller durchgehenden Pakete. ‚Maskieren‘ ermöglicht einen Man-in-the-middle-Angriff.", nil)
+            return ("The module shows in several scenarios how a client authenticates himself to a server and how an attacker tries to pass himself off as the client.\n\nUsage: Choose an action on the right (Link, Unlink, Attack station, Quit attacking station) and then click on a connection or a station. Connections between the attacker and a router are established by choosing 'Link' and clicking on the router. The two buttons 'Authenticate client' and 'Authenticate attacker' start the respective protocol. Attacked stations (red) send the attacker a copy of all packets passing through. 'Mask' enables a man-in-the-middle-attack.", nil)
         case .passwort:
-            return ("Wenn Sie auf ‚Authentifizieren des Clients‘ klicken, wird ein geheimes Passwort vom Client zum Server 1 geschickt. Diesem ist es bereits bekannt und er vergleicht das geschickte Passwort mit seinem eigenen. Stimmen die Passworte überein, akzeptiert er die Identität des Clients.\n\nIhre Aufgabe als Angreifer ist es, das Passwort auszuspähen und es zu verwenden, um ebenfalls von Server 1 als Client anerkannt zu werden.",
-                    "1. Erstellen Sie eine Verbindung zwischen dem Angreifer und Router 1 oder Router 2.\n2. Greifen Sie Router 1 oder Router 2 an (er muss jetzt rot erscheinen).\n3. Starten Sie das Protokoll vom Client aus (‚Authentifizieren des Clients‘). Sobald das Datenpaket beim angegriffenen Router weitergeleitet wird, schickt er Ihnen eine Kopie davon. Dadurch erhalten Sie das Passwort.\n4. Starten Sie das Protokoll vom Angreifer aus (‚Authentifizieren des Angreifers‘) – Sie werden authentifiziert, da Sie das Passwort kennen.")
+            return ("If you click on 'Authenticate client' a secret password will be sent from client to server 1. This is known to the server and it compares the password forwarded with its own. If they match the server accepts the client’s identity.\n\nYour task as attacker is to spy out the password and use it in order to be accepted by the server as a client as well.",
+                    "1. You create a connection between the attacker’s computer and Router 1 or Router 2.\n2. Attack Router 1 or Router 2 (it must appear red now).\n3. You start the protocol from the client via the button 'Authenticate client'. As soon as the data packet is transferred from the attacked router, a copy is forwarded to you so you can obtain the password.\n4. Now you can start the protocol from the attacker’s computer via the button 'Authenticate attacker' and you will be authenticated because you know the password.")
         case .einmalpasswoerter:
-            return ("Client und Server 1 haben eine geheime Liste mit Passwörtern vereinbart, die schrittweise abgearbeitet wird. Nach jeder Authentifikation streichen beide das benutzte Passwort von ihrer Liste. Einfaches Abhören bringt Sie dieses Mal nicht weiter. Hinweis: Sie können auch während des Protokollablaufs noch eingreifen.",
-                    "1. Erstellen Sie eine Verbindung zwischen dem Angreifer und Router 1.\n2. Greifen Sie Router 1 an.\n3. Trennen Sie die Verbindung zwischen Router 1 und Router 2.\n4. Starten Sie das Protokoll vom Client aus. Router 1 schickt Ihnen eine Kopie des Pakets mit dem Passwort; das Protokoll wird durch die Trennung gestört („Das Protokoll wurde gestört.“).\n5. Stellen Sie die Verbindung zwischen Router 1 und Router 2 wieder her und authentifizieren Sie sich als Angreifer mit dem aus Serversicht noch aktuellen Passwort.")
+            return ("Client and Server 1 agree upon a secret list of passwords that are to be dealt with step-by-step. After each authentication both delete the used password from their lists. This time simple tapping will not help you further. Please take note of the hint that you are still in a position to intervene with the protocol procedure.",
+                    "1. You create a connection between the attacker’s computer and router 1.\n2. Attack router 1.\n3. Separate the connection between router 1 and router 2.\n4. You start the protocol from the client. Router 1 forwards a copy of the packet with the password to you; the disconnection disturbs the protocol (\"The protocol was disturbed.\").\n5. Now revoke the separation of router 1 and router 2 and authenticate yourself as attacker with the still current password (from the server's point of view).")
         case .crSymmetrisch:
-            return ("Server 1 schickt eine Zufallszahl (Challenge) an den Client. Der Client verschlüsselt sie mit dem geheimen Schlüssel und schickt das Ergebnis als Response zurück. Server 1 kennt denselben Schlüssel und prüft die Antwort.\n\nDa alle nur symmetrische Verfahren einsetzen, verwenden Server 1, Server 2 und Client aus Effizienzgründen denselben symmetrischen Schlüssel. (Bei n Parteien wären sonst ½·n·(n−1) verschiedene Schlüssel nötig.)",
-                    "Alle Kommunikationspartner verwenden denselben Schlüssel – ist einer von ihnen angreifbar, ist die gesamte Kommunikation kompromittiert.\n1. Verbinden Sie sich mit Router 1 oder Router 2.\n2. Greifen Sie Server 2 an (er steht für einen schlecht geschützten Server). Dadurch erhalten Sie den geheimen Schlüssel.\n3. Starten Sie das Protokoll vom Angreifer aus.")
+            return ("Server 1 sends a random number to the client called challenge. The client encrypts this number with a secret key and returns the result as response to Server 1 who knows the secret key as well and checks the response.\n\nBecause every station uses symmetric cryptography, Server 1, Server 2 and Client share the same symmetric key for reasons of efficiency. (Otherwise, with n parties there would need to be ½·n·(n−1) different keys.)",
+                    "All communication partners use the same key – if only one of these parties is vulnerable the whole system gets compromised.\n1. Connect yourself to Router 1 or Router 2.\n2. Then attack Server 2 (it stands for an insufficiently protected server) so you can obtain the secret key.\n3. Then you can start the protocol from the attacker’s computer.")
         case .crAsymmetrisch:
-            return ("Die Challenge wird vom Server an den Client geschickt, der sie mit seinem geheimen Schlüssel signiert und das Ergebnis als Response zurückschickt. Jeder, der den öffentlichen Schlüssel des Clients besitzt, kann die Response prüfen.",
-                    "Man-in-the-middle-Angriff: Der Angreifer sorgt dafür, dass alle Datenpakete über ihn laufen, und gibt sich gegenüber dem Client als Server 1 und gegenüber Server 1 als Client aus.\n1. Stellen Sie zwei Verbindungen vom Angreifer zu den beiden Routern her.\n2. Trennen Sie die Verbindung zwischen den beiden Routern.\n3. Schalten Sie die Maskierung ein.\n4. Starten Sie das Protokoll vom Client aus. Am Schluss werden Sie (der Angreifer) an Stelle des Clients authentifiziert. Diese Lösung funktioniert übrigens auch für alle bisherigen Szenarien.")
+            return ("The server sends a challenge to the client, who signs it with his secret key and then sends the result back to the server as response. Everyone knowing the client's public key can verify the response.",
+                    "Man-in-the-middle-attack: The attacker makes sure that all data packets are transferred through him and identifies himself to the client as Server 1 and to Server 1 as client.\n1. You create a connection between the attacker and the two routers.\n2. Separate the connection between the two routers.\n3. Put on your masking.\n4. Start the protocol from the client. Finally, you (attacker) will be authenticated instead of the client. This solution works, by the way, for all previous scenarios too.")
         case .wechselseitig:
-            return ("Der Server schickt eine Challenge an den Client, die dieser signiert und mitsamt einer eigenen Challenge zurückschickt. Der Server prüft die Response und signiert seinerseits die Challenge des Clients. So können sich beide sicher sein, mit wem sie kommunizieren, und z. B. einen Session-Key asymmetrisch verschlüsselt austauschen.",
-                    "Dieses Protokoll ist auf Protokollebene nicht zu knacken: Ein Angreifer kann den Ablauf zwar belauschen, kommt aber nicht in den Besitz eines der beiden privaten Schlüssel. Beide Parteien können daher einen sicheren Kanal aufbauen, den der Angreifer nicht belauschen kann.")
+            return ("The server sends a challenge to the client, who signs it and returns it and an additional challenge to the server. The server verifies the response and for his part signs the client's challenge. Thus both can be sure who they communicate with and can, for example, exchange an asymmetrically encrypted session key.",
+                    "It is not possible to attack that protocol on protocol level: An attacker can eavesdrop the communication, but he will not get one of the private keys. Thus the two parties can establish a secure channel which the attacker cannot eavesdrop.")
         }
     }
 }
@@ -548,12 +548,12 @@ struct ChallengeResponseView: View {
                 networkCanvas
                 Divider()
                 HStack(spacing: 10) {
-                    Button("Szenario zurücksetzen") { sc.resetScenario() }.disabled(!sc.networkVisible || sc.protocolRunning)
+                    Button("Reset scenario") { sc.resetScenario() }.disabled(!sc.networkVisible || sc.protocolRunning)
                     Spacer()
                     Image(systemName: "tortoise").foregroundStyle(.secondary)
                     Slider(value: Binding(get: { log2(sc.speed) }, set: { sc.speed = pow(2, $0) }), in: -2...2).frame(width: 90)
                     Image(systemName: "hare").foregroundStyle(.secondary)
-                    Button("Hilfe zum Szenario") { showSolution = false; showHelp = true }
+                    Button("Scenario help") { showSolution = false; showHelp = true }
                 }
                 .padding(.horizontal, 10).padding(.vertical, 6)
                 ScrollView {
@@ -574,7 +574,7 @@ struct ChallengeResponseView: View {
         VStack(alignment: .leading, spacing: 8) {
             modeButton(.start)
             modeButton(.einfuehrung)
-            GroupBox("Szenarienauswahl") {
+            GroupBox("Scenarios") {
                 VStack(spacing: 6) {
                     ForEach([CRScenario.Mode.passwort, .einmalpasswoerter, .crSymmetrisch, .crAsymmetrisch, .wechselseitig]) { modeButton($0) }
                 }
@@ -596,14 +596,14 @@ struct ChallengeResponseView: View {
     }
 
     private var actionButtons: some View {
-        GroupBox("Aktionen") {
+        GroupBox("Actions") {
             VStack(alignment: .leading, spacing: 4) {
                 Picker("", selection: $sc.action) {
-                    Text("Keine").tag(CRScenario.Action.nothing)
-                    Text("Verbinden").tag(CRScenario.Action.connect)
-                    Text("Trennen").tag(CRScenario.Action.disconnect)
-                    Text("Rechner angreifen").tag(CRScenario.Action.attack)
-                    Text("Angriff auf Rechner beenden").tag(CRScenario.Action.removeAttack)
+                    Text("None").tag(CRScenario.Action.nothing)
+                    Text("Link").tag(CRScenario.Action.connect)
+                    Text("Unlink").tag(CRScenario.Action.disconnect)
+                    Text("Attack station").tag(CRScenario.Action.attack)
+                    Text("Quit attacking station").tag(CRScenario.Action.removeAttack)
                 }
                 .pickerStyle(.radioGroup).labelsHidden()
             }
@@ -619,14 +619,14 @@ struct ChallengeResponseView: View {
                 if sc.networkVisible {
                     // protocol buttons (CT1: next to the client and the attacker)
                     Button { sc.startProtocol(attacker: false) } label: {
-                        Text("Authentifizieren\ndes Clients").multilineTextAlignment(.center).font(.caption).fixedSize()
+                        Text("Authenticate client").multilineTextAlignment(.center).font(.caption).fixedSize()
                     }
                     .position(x: ox + 200 * s, y: 96 * s)
                     VStack(spacing: 4) {
                         Button { sc.startProtocol(attacker: true) } label: {
-                            Text("Authentifizieren\ndes Angreifers").multilineTextAlignment(.center).font(.caption).fixedSize()
+                            Text("Authenticate attacker").multilineTextAlignment(.center).font(.caption).fixedSize()
                         }
-                        Toggle("Maskieren", isOn: Binding(get: { sc.masked }, set: { _ in sc.toggleMask() }))
+                        Toggle("Mask", isOn: Binding(get: { sc.masked }, set: { _ in sc.toggleMask() }))
                             .toggleStyle(.button).font(.caption)
                     }
                     .position(x: ox + 225 * s, y: 330 * s)
@@ -696,22 +696,22 @@ struct ChallengeResponseView: View {
     private var helpSheet: some View {
         let h = CRHelp.text(sc.mode)
         return VStack(alignment: .leading, spacing: 12) {
-            Text("Hilfe zum Szenario: \(sc.mode.title)").font(.title3.bold())
+            Text("Scenario help: \(sc.mode.title)").font(.title3.bold())
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
                     Text(h.scenario).fixedSize(horizontal: false, vertical: true)
                     if let sol = h.solution {
                         if showSolution {
-                            Text("Lösung").font(.headline)
+                            Text("Solution").font(.headline)
                             Text(sol).fixedSize(horizontal: false, vertical: true)
                         } else {
-                            Button("Lösung anzeigen") { showSolution = true }
+                            Button("Show solution") { showSolution = true }
                         }
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            HStack { Spacer(); Button("Schließen") { showHelp = false }.keyboardShortcut(.defaultAction) }
+            HStack { Spacer(); Button("Close") { showHelp = false }.keyboardShortcut(.defaultAction) }
         }
         .padding(18)
         .frame(width: 560, height: 420)

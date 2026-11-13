@@ -26,23 +26,23 @@ struct CaesarAnalysisSheet: View {
 
     var body: some View {
         let chars = settings.textOptions.alphabetCharacters
-        DialogScaffold(title: "Caesar-Analyse (Ciphertext-Only)",
-                       subtitle: "Für jede mögliche Verschiebung wird die Buchstabenverteilung des entschlüsselten Textes mit der Referenzsprache (\(settings.referenceLanguage.displayName)) verglichen (χ²-Abstand, kleiner = besser).",
+        DialogScaffold(title: "Caesar Analysis (Ciphertext-Only)",
+                       subtitle: "For each possible shift the letter distribution of the decrypted text is compared with the reference language (\(settings.referenceLanguage.displayName)) (χ² distance, smaller = better).",
                        minWidth: 600) {
             if !scores.isEmpty {
                 Chart {
                     ForEach(scores.indices, id: \.self) { i in
-                        BarMark(x: .value("Schlüssel", String(chars[i % max(chars.count, 1)])), y: .value("Abstand", scores[i]))
+                        BarMark(x: .value("Key", String(chars[i % max(chars.count, 1)])), y: .value("Distance", scores[i]))
                             .foregroundStyle(i == shift ? Color.green : Color.blue.opacity(0.6))
                     }
                 }.frame(height: 180)
             }
-            Stepper("Schlüssel: \(chars.isEmpty ? "?" : String(chars[shift % chars.count])) (Verschiebung \(shift))", value: $shift, in: 0...max(0, chars.count - 1))
-            Text("Vorschau: " + String(Caesar.decrypt(String(document.text.prefix(300)), shift: shift, options: settings.textOptions).prefix(200)))
+            Stepper("Key: \(chars.isEmpty ? "?" : String(chars[shift % chars.count])) (shift \(shift))", value: $shift, in: 0...max(0, chars.count - 1))
+            Text("Preview: " + String(Caesar.decrypt(String(document.text.prefix(300)), shift: shift, options: settings.textOptions).prefix(200)))
                 .font(.system(.callout, design: .monospaced)).lineLimit(3)
         } buttons: {
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Entschlüsseln") {
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Decrypt") {
                 let key = chars.isEmpty ? "\(shift)" : String(chars[shift])
                 if CipherRun.text(document, method: "caesar", name: "Caesar", encrypt: false, key: key, {
                     Caesar.decrypt(document.text, shift: shift, options: settings.textOptions)
@@ -68,25 +68,25 @@ struct VigenereAnalysisSheet: View {
     @CTState private var key = ""
 
     var body: some View {
-        DialogScaffold(title: "Vigenère-Analyse (Ciphertext-Only)",
-                       subtitle: "1. Bestimmung der Schlüssellänge (Friedman-Test, Koinzidenzindex der Spalten). 2. Für jede Spalte Caesar-Analyse gegen die Referenzsprache.",
+        DialogScaffold(title: "Vigenère Analysis (Ciphertext-Only)",
+                       subtitle: "1. Determination of the key length (Friedman test, index of coincidence of the columns). 2. Caesar analysis of each column against the reference language.",
                        minWidth: 620) {
             if !lengthScores.isEmpty {
                 Chart {
                     ForEach(lengthScores, id: \.length) { s in
-                        BarMark(x: .value("Länge", s.length), y: .value("Koinzidenzindex", s.score))
+                        BarMark(x: .value("Length", s.length), y: .value("Index of coincidence", s.score))
                             .foregroundStyle(s.length == keyLength ? Color.green : Color.blue.opacity(0.6))
                     }
                 }.frame(height: 170)
-                Text(String(format: "Friedman-Schätzung der Schlüssellänge: %.2f", friedman)).font(.caption).foregroundStyle(.secondary)
+                Text(String(format: "Friedman estimate of the key length: %.2f", friedman)).font(.caption).foregroundStyle(.secondary)
             }
-            Stepper("Schlüssellänge: \(keyLength)", value: $keyLength, in: 1...max(1, settings.vigenereMaxKeyLength))
+            Stepper("Key length: \(keyLength)", value: $keyLength, in: 1...max(1, settings.vigenereMaxKeyLength))
                 .onChange(of: keyLength) { _, l in deriveKey(length: l) }
-            TextField("Ermittelter Schlüssel (editierbar)", text: $key).font(.system(.body, design: .monospaced))
-            Text("Vorschau: " + preview).font(.system(.callout, design: .monospaced)).lineLimit(3)
+            TextField("Derived key (editable)", text: $key).font(.system(.body, design: .monospaced))
+            Text("Preview: " + preview).font(.system(.callout, design: .monospaced)).lineLimit(3)
         } buttons: {
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Entschlüsseln") {
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Decrypt") {
                 if CipherRun.text(document, method: "vigenere", name: "Vigenère", encrypt: false, key: key, {
                     try Vigenere.decrypt(document.text, key: key, options: settings.textOptions)
                 }) { close() }
@@ -128,33 +128,33 @@ struct ByteKeyAnalysisSheet: View {
     @CTState private var useReference = true
 
     var body: some View {
-        DialogScaffold(title: xor ? "Analyse XOR / Vernam" : "Analyse Byteweise Addition",
-                       subtitle: "Die Schlüssellänge wird über die Autokorrelation bestimmt. Je Spalte wird angenommen, dass das häufigste Byte dem häufigsten Klartextzeichen (\(String(format: "%02X", settings.expectedMostFrequentByte)), einstellbar unter Analyseoptionen) entspricht.",
+        DialogScaffold(title: xor ? "XOR / Vernam Analysis" : "Byte Addition Analysis",
+                       subtitle: "The key length is determined by autocorrelation. For each column it is assumed that the most frequent byte corresponds to the most frequent plaintext character (\(String(format: "%02X", settings.expectedMostFrequentByte)), can be set in the analysis options).",
                        minWidth: 620) {
             if !autocorr.isEmpty {
                 Chart {
                     ForEach(autocorr.indices, id: \.self) { i in
-                        BarMark(x: .value("Verschiebung", i + 1), y: .value("Übereinstimmungen", autocorr[i]))
+                        BarMark(x: .value("Offset", i + 1), y: .value("Number of characters that match", autocorr[i]))
                             .foregroundStyle(keyLength > 0 && (i + 1) % keyLength == 0 ? Color.green : Color.blue.opacity(0.6))
                     }
                 }.frame(height: 160)
             }
-            Picker("Bestimmung der Schlüsselbytes", selection: $useReference) {
-                Text("Maximum-Likelihood mit Referenztext").tag(true)
-                Text("CT1: häufigstes Byte ↦ häufigstes Klartextzeichen").tag(false)
+            Picker("Determination of the key bytes", selection: $useReference) {
+                Text("Maximum likelihood with reference text").tag(true)
+                Text("CT1: most frequent byte ↦ most frequent plaintext character").tag(false)
             }
             .onChange(of: useReference) { _, _ in analyze() }
-            Text("Ermittelte Schlüssellänge: \(keyLength)")
-            TextField("Schlüssel (hex, editierbar)", text: $keyHex).font(.system(.body, design: .monospaced))
+            Text("Derived key length: \(keyLength)")
+            TextField("Key (hex, editable)", text: $keyHex).font(.system(.body, design: .monospaced))
             if let k = Hex.decode(keyHex), !k.isEmpty {
                 let p = xor ? ByteCiphers.xor(Array(document.bytes.prefix(200)), key: k) : ByteCiphers.subtract(Array(document.bytes.prefix(200)), key: k)
-                Text("Vorschau: " + BruteForceDialog.preview(p)).font(.system(.callout, design: .monospaced)).lineLimit(2)
+                Text("Preview: " + BruteForceDialog.preview(p)).font(.system(.callout, design: .monospaced)).lineLimit(2)
             }
         } buttons: {
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Entschlüsseln") {
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Decrypt") {
                 guard let k = Hex.decode(keyHex), !k.isEmpty else { return }
-                if CipherRun.bytes(document, method: xor ? "xor" : "add", name: xor ? "XOR" : "Byteweise Addition", encrypt: false, key: Hex.encode(k), {
+                if CipherRun.bytes(document, method: xor ? "xor" : "add", name: xor ? "XOR" : "Byte Addition", encrypt: false, key: Hex.encode(k), {
                     xor ? ByteCiphers.xor(document.bytes, key: k) : ByteCiphers.subtract(document.bytes, key: k)
                 }) { close() }
             }.keyboardShortcut(.defaultAction)
@@ -218,29 +218,29 @@ struct SubstitutionAnalysisSheet: View {
 
     var body: some View {
         let chars = settings.textOptions.alphabetCharacters
-        DialogScaffold(title: "Substitutions-Analyse (Ciphertext-Only)",
-                       subtitle: "Automatische Analyse per Hill-Climbing: Der Schlüssel wird so lange variiert, bis der entschlüsselte Text bezüglich der N-Gramm-Statistik der Referenzsprache (\(settings.referenceLanguage.displayName)) möglichst typisch ist.",
+        DialogScaffold(title: "Substitution Analysis (Ciphertext-Only)",
+                       subtitle: "Automatic analysis by hill climbing: the key is varied until the decrypted text is as typical as possible with respect to the N-gram statistics of the reference language (\(settings.referenceLanguage.displayName)).",
                        minWidth: 640) {
-            if model.running { ProgressView(value: model.progress) { Text("Analyse läuft …") } }
+            if model.running { ProgressView(value: model.progress) { Text("Analysis in progress...") } }
             if !model.key.isEmpty {
-                Text("Geheimtextalphabet → Klartextalphabet").font(.caption).foregroundStyle(.secondary)
+                Text("Ciphertext alphabet → plaintext alphabet").font(.caption).foregroundStyle(.secondary)
                 Text(String(chars)).font(.system(.body, design: .monospaced))
                 Text(String(model.key.map { $0 >= 0 && $0 < chars.count ? chars[$0] : "?" })).font(.system(.body, design: .monospaced)).foregroundStyle(.blue)
                 ResultBox(text: String(model.plaintext.prefix(1500)), minHeight: 160)
             }
         } buttons: {
-            Button("Schließen", action: { model.cancel(); close() }).keyboardShortcut(.cancelAction)
+            Button("Close", action: { model.cancel(); close() }).keyboardShortcut(.cancelAction)
             if model.running {
-                Button("Abbrechen") { model.cancel() }
+                Button("Abort") { model.cancel() }
             } else {
-                Button("Manuell nachbearbeiten …") {
+                Button("Manual post-processing...") {
                     let key = model.key
                     close()
                     FeatureRouter.openManualSubstitution(document, initialKey: key)
                 }.disabled(model.key.isEmpty)
-                Button("Als Dokument öffnen") {
+                Button("Open as document") {
                     let keyDesc = String(model.key.map { $0 >= 0 && $0 < chars.count ? chars[$0] : "?" })
-                    DocumentFactory.openResult(text: model.plaintext, title: DocumentFactory.title("Automatische Substitutions-Analyse", of: document, key: keyDesc),
+                    DocumentFactory.openResult(text: model.plaintext, title: DocumentFactory.title("Automatic substitution analysis", of: document, key: keyDesc),
                                                parent: document, method: "substitution-analysis", key: keyDesc)
                     close()
                 }.keyboardShortcut(.defaultAction).disabled(model.key.isEmpty)
@@ -267,7 +267,7 @@ struct ManualSubstitutionView: View {
         HSplitView {
             ScrollView {
                 Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 4) {
-                    GridRow { Text("Geheim").bold(); Text("Anteil").bold(); Text("→ Klar").bold() }
+                    GridRow { Text("Cipher").bold(); Text("Frequency").bold(); Text("→ Plain").bold() }
                     ForEach(counts.indices.sorted { counts[$0].count > counts[$1].count }, id: \.self) { i in
                         GridRow {
                             Text(String(counts[i].symbol)).font(.system(.body, design: .monospaced).bold())
@@ -282,15 +282,15 @@ struct ManualSubstitutionView: View {
             .frame(minWidth: 220, maxWidth: 260)
             VStack(alignment: .leading) {
                 HStack {
-                    Button("Häufigkeitsvorschlag") { frequencyGuess() }
-                    Button("Zurücksetzen") { mapping = Array(repeating: "", count: chars.count) }
+                    Button("Frequency suggestion") { frequencyGuess() }
+                    Button("Reset") { mapping = Array(repeating: "", count: chars.count) }
                     Spacer()
-                    Button("Als Dokument öffnen") {
+                    Button("Open as document") {
                         DocumentFactory.openResult(text: decrypted(document.text, chars: chars),
-                                                   title: DocumentFactory.title("Manuelle Substitutions-Analyse", of: document, key: keyString(chars)), parent: document)
+                                                   title: DocumentFactory.title("Manual substitution analysis", of: document, key: keyString(chars)), parent: document)
                     }
                 }
-                Text("Nicht zugeordnete Geheimtextzeichen werden als · angezeigt. Großbuchstaben = Geheimtext, Kleinbuchstaben = zugeordneter Klartext.")
+                Text("Unassigned ciphertext characters are shown as ·. Uppercase letters = ciphertext, lowercase letters = assigned plaintext.")
                     .font(.caption).foregroundStyle(.secondary)
                 ResultBox(text: decrypted(String(document.text.prefix(4000)), chars: chars), minHeight: 300)
             }
@@ -346,27 +346,27 @@ struct HillAnalysisSheet: View {
     @CTState private var message: String?
 
     var body: some View {
-        DialogScaffold(title: "Hill-Analyse (Known Plaintext)",
-                       subtitle: "Aus zusammengehörigem Klartext und Geheimtext wird die Schlüsselmatrix durch Lösen eines linearen Gleichungssystems modulo \(settings.textOptions.alphabetSize) bestimmt.",
+        DialogScaffold(title: "Hill Analysis (Known Plaintext)",
+                       subtitle: "The key matrix is determined from a matching pair of plaintext and ciphertext by solving a system of linear equations modulo \(settings.textOptions.alphabetSize).",
                        minWidth: 560) {
-            DocumentPicker(title: "Klartext", selection: $plainID)
-            DocumentPicker(title: "Geheimtext", selection: $cipherID)
-            Toggle("Matrixgröße automatisch bestimmen (1…10)", isOn: $automatic)
-            if !automatic { Stepper("Matrixgröße: \(size)", value: $size, in: 1...10) }
-            Picker("Multiplikation", selection: $multiplication) {
-                Text("Matrix × Spaltenvektor").tag(HillMultiplication.matrixTimesVector)
-                Text("Zeilenvektor × Matrix").tag(HillMultiplication.vectorTimesMatrix)
+            DocumentPicker(title: "Plaintext", selection: $plainID)
+            DocumentPicker(title: "Ciphertext", selection: $cipherID)
+            Toggle("Determine matrix size automatically (1…10)", isOn: $automatic)
+            if !automatic { Stepper("Matrix size: \(size)", value: $size, in: 1...10) }
+            Picker("Multiplication", selection: $multiplication) {
+                Text("Matrix × column vector").tag(HillMultiplication.matrixTimesVector)
+                Text("Row vector × matrix").tag(HillMultiplication.vectorTimesMatrix)
             }
             if let message { Text(message).foregroundStyle(.secondary) }
             if let m = result {
-                Text("Gefundene Schlüsselmatrix:").font(.headline)
+                Text("Key matrix found:").font(.headline)
                 Text(m.map { $0.map { String(format: "%3d", $0) }.joined(separator: " ") }.joined(separator: "\n"))
                     .font(.system(.body, design: .monospaced)).textSelection(.enabled)
             }
         } buttons: {
-            Button("Schließen", action: close).keyboardShortcut(.cancelAction)
-            Button("Analysieren", action: analyze)
-            Button("Geheimtext entschlüsseln") {
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Analyze", action: analyze)
+            Button("Decrypt ciphertext") {
                 guard let m = result, let c = DocumentPicker.document(for: cipherID) else { return }
                 if CipherRun.text(c, method: "hill", name: "Hill", encrypt: false, key: HillDialog.format(m), {
                     try HillCipher(matrix: m, options: settings.textOptions, multiplication: multiplication).decrypt(c.text)
@@ -380,7 +380,7 @@ struct HillAnalysisSheet: View {
     }
 
     private func analyze() {
-        guard let p = DocumentPicker.document(for: plainID), let c = DocumentPicker.document(for: cipherID) else { message = "Bitte Klartext und Geheimtext wählen."; return }
+        guard let p = DocumentPicker.document(for: plainID), let c = DocumentPicker.document(for: cipherID) else { message = "Please select plaintext and ciphertext."; return }
         let sizes = automatic ? Array(1...10) : [size]
         for s in sizes {
             if let m = HillAnalysis.knownPlaintext(plaintext: p.text, ciphertext: c.text, size: s, options: settings.textOptions, multiplication: multiplication),
@@ -389,12 +389,12 @@ struct HillAnalysisSheet: View {
                 let cc = settings.textOptions.filtered(String(c.text.prefix(400)))
                 if automatic && !cc.hasPrefix(String(check.prefix(min(40, check.count - s)))) { continue }
                 result = m
-                message = "Schlüssel der Größe \(s)×\(s) gefunden."
+                message = "Key of size \(s)×\(s) found."
                 return
             }
         }
         result = nil
-        message = "Es konnte keine passende Schlüsselmatrix bestimmt werden (zu wenig Text oder Texte gehören nicht zusammen)."
+        message = "No matching key matrix could be determined (not enough text, or the texts do not belong together)."
     }
 }
 
@@ -411,21 +411,21 @@ struct TranspositionAnalysisSheet: View {
     @CTState private var searched = false
 
     var body: some View {
-        DialogScaffold(title: "Einstufige Spaltentransposition (Known Plaintext)",
-                       subtitle: "Es werden alle Permutationen bis zur angegebenen Länge gesucht, die den Klartext in den Geheimtext überführen.",
+        DialogScaffold(title: "Simple Column Transposition (Known Plaintext)",
+                       subtitle: "All permutations up to the given length that transform the plaintext into the ciphertext are searched.",
                        minWidth: 520) {
-            DocumentPicker(title: "Klartext", selection: $plainID)
-            DocumentPicker(title: "Geheimtext", selection: $cipherID)
-            Stepper("Maximale Schlüssellänge: \(maxLength)", value: $maxLength, in: 2...10)
+            DocumentPicker(title: "Plaintext", selection: $plainID)
+            DocumentPicker(title: "Ciphertext", selection: $cipherID)
+            Stepper("Maximum key length: \(maxLength)", value: $maxLength, in: 2...10)
             if searched {
-                if results.isEmpty { Text("Keine passende Permutation gefunden.").foregroundStyle(.secondary) }
+                if results.isEmpty { Text("No matching permutation found.").foregroundStyle(.secondary) }
                 ForEach(results.indices, id: \.self) { i in
                     Text("Permutation: " + results[i].map(String.init).joined(separator: ",")).font(.system(.body, design: .monospaced)).textSelection(.enabled)
                 }
             }
         } buttons: {
-            Button("Schließen", action: close).keyboardShortcut(.cancelAction)
-            Button("Suchen") {
+            Button("Close", action: close).keyboardShortcut(.cancelAction)
+            Button("Find") {
                 guard let p = DocumentPicker.document(for: plainID), let c = DocumentPicker.document(for: cipherID) else { return }
                 results = TranspositionAnalysis.knownPlaintextSingleColumn(plaintext: p.text, ciphertext: c.text, options: settings.textOptions, maxKeyLength: maxLength)
                 searched = true

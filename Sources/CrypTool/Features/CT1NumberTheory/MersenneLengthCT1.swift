@@ -3,11 +3,11 @@ import SwiftUI
 import CTCommon
 import CTBigNum
 
-/// CT1 number fields with digit grouping ("1.234.567", IDS_INTEGRAL_NUMBER_SEPARATOR ".").
+/// CT1 number fields with digit grouping ("1,234,567", English IDS_INTEGRAL_NUMBER_SEPARATOR ",").
 func ntGrouped(_ digits: String) -> String {
     var out: [Character] = []
     for (i, c) in digits.reversed().enumerated() {
-        if i > 0 && i % 3 == 0 { out.append(".") }
+        if i > 0 && i % 3 == 0 { out.append(",") }
         out.append(c)
     }
     return String(out.reversed())
@@ -30,14 +30,14 @@ struct MersenneView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Beschreibung") {
-                Text("Dieser Dialog berechnet Mersenne-artige Zahlen b^e-1 auch dann sehr schnell, wenn sie sehr groß sind. Sowohl die Basis b als auch der Exponent e bestehen aus natürlichen Zahlen.")
+            GroupBox("Description") {
+                Text("This dialog computes Mersenne-like numbers b^e-1 very fast even if they are very big. The base b as well as the exponent e consist of natural numbers.")
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 8) {
                 GridRow {
-                    Text("Basis b:").gridColumnAlignment(.trailing)
+                    Text("Base b:").gridColumnAlignment(.trailing)
                     TextField("", text: $baseText).frame(width: 120).disabled(running)
                 }
                 GridRow {
@@ -45,36 +45,36 @@ struct MersenneView: View {
                     TextField("", text: $exponentText).disabled(running)
                 }
                 GridRow {
-                    Text("Ergebnis b^e - 1:")
+                    Text("Result b^e - 1:")
                     NTReadOnlyText(text: resultText)
                 }
                 GridRow {
-                    Text("Ergebnislänge:")
+                    Text("Result length:")
                     HStack {
                         NTReadOnlyText(text: lengthText).frame(width: 120)
-                        Text("(Anzahl der Dezimalstellen)")
+                        Text("(number of decimals)")
                     }
                 }
             }
             HStack(alignment: .bottom) {
                 VStack(alignment: .leading) {
-                    Button("Berechnung starten", action: start).keyboardShortcut(.defaultAction).disabled(running)
-                    Button("Berechnung abbrechen", action: cancel).disabled(!running)
+                    Button("Start computation", action: start).keyboardShortcut(.defaultAction).disabled(running)
+                    Button("Cancel computation", action: cancel).disabled(!running)
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Button("Primzahltest", action: primeTest).disabled(result == nil || running)
-                    Button("Ergebnis in Datei schreiben", action: writeToFile).disabled(result == nil || running)
+                    Button("Prime number test", action: primeTest).disabled(result == nil || running)
+                    Button("Write result to file", action: writeToFile).disabled(result == nil || running)
                     HStack {
                         CT1HelpButton(action: .mersenne)
-                        Button("Schließen") { ref.window?.close() }.disabled(running)
+                        Button("Close") { ref.window?.close() }.disabled(running)
                     }
                 }
             }
         }
         .padding(14)
         .frame(width: 520)
-        .ct1Window(title: "Mersenne-Zahlen berechnen", ref: ref)
+        .ct1Window(title: "Compute Mersenne Numbers", ref: ref)
         .onChange(of: baseText) { _, v in fieldChanged($baseText, v) }
         .onChange(of: exponentText) { _, v in fieldChanged($exponentText, v) }
     }
@@ -93,13 +93,13 @@ struct MersenneView: View {
         lastBase = b.description; lastExponent = "\(e)"
         if b > 1 && Double(e) * ntLog2(b) > 4_294_967_296 {
             // guard against results of more than 512 MB (CT1 would run out of memory)
-            Alerts.error("Das Ergebnis ist zu groß (mehr als 2^32 Bit). Bitte wählen Sie eine kleinere Basis oder einen kleineren Exponenten.")
+            Alerts.error("The result is too large (more than 2^32 bits). Please choose a smaller base or a smaller exponent.")
             return
         }
         let t = CancellationToken(); token = t
         running = true
         result = nil
-        resultText = "Die Berechnung läuft..."; lengthText = ""
+        resultText = "The computation is running..."; lengthText = ""
         Task.detached(priority: .userInitiated) {
             let startTime = Date()
             var r: BigUInt? = nil
@@ -129,7 +129,7 @@ struct MersenneView: View {
                     result = decimal
                 }
                 if seconds > 1 {
-                    Alerts.info(String(format: "Benötigte Zeit für die Berechnung der Mersenne-Zahl: %.0f Sekunden", seconds))
+                    Alerts.info(String(format: "Elapsed time for the computation of the Mersenne number: %.0f seconds", seconds))
                 }
                 show(result!)
             }
@@ -138,7 +138,7 @@ struct MersenneView: View {
 
     private func show(_ r: String) {
         if r.count > 100_000 {
-            Alerts.info("Das Ergebnis ist sehr groß. Deshalb wird es nur in Teilen im Dialog angezeigt.\r\nBitte schreiben Sie das Ergebnis in eine Datei, um es vollständig zu betrachten.")
+            Alerts.info("The result is very large. So only parts of it will be displayed in the dialog.\r\nPlease write the result to a file to view it completely.")
             resultText = String(r.prefix(10)) + "..." + String(r.suffix(10))
         } else {
             resultText = r.hasPrefix("-") ? r : ntGrouped(r)
@@ -150,13 +150,13 @@ struct MersenneView: View {
         token.cancel()
         running = false
         result = nil
-        resultText = "Die Berechnung wurde abgebrochen."; lengthText = ""
+        resultText = "The computation was canceled."; lengthText = ""
     }
 
     private func primeTest() {
         guard let r = result else { return }
         if r.count > CT1BigNumber.maxDigits { Alerts.info(NTMessages.bigNumber); return }
-        WindowPresenter.tool(title: "Primzahltest", size: CGSize(width: 600, height: 520)) {
+        WindowPresenter.tool(title: "Prime number test", size: CGSize(width: 600, height: 520)) {
             PrimeTestView(initialNumber: r)
         }
     }
@@ -164,10 +164,10 @@ struct MersenneView: View {
     private func writeToFile() {
         guard let r = result else { return }
         if r.count > 100_000 {
-            Alerts.info("Das Ergebnis ist sehr groß. Es in eine Datei zu schreiben und anzuzeigen, wird eine gewisse Zeit dauern.")
+            Alerts.info("The result is very large. Writing it to a file and displaying it will take some time.")
         }
         let text = "b: \(lastBase)\r\ne: \(lastExponent)\r\nr: \(r)\r\n"
-        DocumentFactory.openResult(text: text, title: "Mersenne-Zahl \(lastBase)^\(lastExponent) - 1")
+        DocumentFactory.openResult(text: text, title: "Mersenne number \(lastBase)^\(lastExponent) - 1")
     }
 }
 
@@ -185,40 +185,40 @@ struct NumberLengthView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Beschreibung") {
+            GroupBox("Description") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Dieser Dialog berechnet die Länge einer Zahl (in Zeichen).")
-                    Text("Sie können die Zahl in vier verschiedenen Darstellungsformen eingeben (binär, oktal, dezimal, hexadezimal). Sobald die Zahl verändert wird, wird die Länge für jede Darstellungsform sofort aktualisiert.")
-                    Text("Falls die dezimale Darstellung ausgewählt ist, können Sie auch Formeln eingeben (das Ändern der Darstellung zeigt den jeweiligen Zahlenwert an).")
+                    Text("This dialog calculates the length of a number (in characters).")
+                    Text("You can input the number in four different representations (binary, octal, decimal, hexadecimal). Whenever the number is changed, the resulting length of each representation is recalculated at once.")
+                    Text("If decimal representation is selected, you can also enter formulas (changing the representation shows the according number values).")
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Eingabe-Darstellung") {
+            GroupBox("Input representation") {
                 Picker("", selection: Binding(get: { representation }, set: { switchRepresentation($0) })) {
-                    Text("Binär").tag(0); Text("Oktal").tag(1); Text("Dezimal").tag(2); Text("Hexadezimal").tag(3)
+                    Text("Binary").tag(0); Text("Octal").tag(1); Text("Decimal").tag(2); Text("Hexadecimal").tag(3)
                 }
                 .pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                 .disabled(value == nil)
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Zahl") {
+            GroupBox("Number") {
                 TextField("", text: $number).font(.system(.body, design: .monospaced)).padding(4)
             }
-            GroupBox("Ergebnis (Länge der Zahl in Zeichen)") {
+            GroupBox("Result (length of the number in characters)") {
                 Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 4) {
-                    row("Binär:", 2); row("Oktal:", 8); row("Dezimal:", 10); row("Hexadezimal:", 16)
+                    row("Binary:", 2); row("Octal:", 8); row("Decimal:", 10); row("Hexadecimal:", 16)
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack {
                 Spacer()
                 CT1HelpButton(action: .numberLength)
-                Button("Schließen") { ref.window?.close() }.keyboardShortcut(.cancelAction)
+                Button("Close") { ref.window?.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
         .frame(width: 520)
-        .ct1Window(title: "Länge einer Zahl", ref: ref)
+        .ct1Window(title: "Length of a Number", ref: ref)
         .onChange(of: number) { _, _ in updateNumber() }
     }
 

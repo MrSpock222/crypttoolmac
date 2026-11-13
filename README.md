@@ -1,7 +1,8 @@
 # CrypTool für macOS
 
 Native Version von [CrypTool 1](https://github.com/cryptool-org/cryptool1) für Macs mit Apple Silicon – ohne Emulation.
-Menüs, Dialoge und Online-Hilfe entsprechen der Windows-Version, damit beide im Unterricht nebeneinander genutzt werden können.
+Menüs, Dialoge und Online-Hilfe entsprechen der englischen Windows-Version, damit beide im Unterricht nebeneinander genutzt werden können
+(bis Version 1.4.0 deutsch).
 
 ## Installation
 

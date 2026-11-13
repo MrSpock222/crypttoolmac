@@ -10,12 +10,12 @@ extension CT1Analysis {
     static func openSolitaireAnalysis(document: CTDocument) {
         guard !SolitaireAnalysis.letters(document.text).isEmpty else {
             // IDS_SOLITAIRE_MESSAGE_1
-            Alerts.error("Die Eingabe muss mindestens ein Zeichen und höchstens 15.000 Zeichen enthalten.")
+            Alerts.error("Please enter between 1 and 15,000 characters.")
             return
         }
         let holder = SolitaireAnalysisCT1WindowHolder()
         let w = WindowPresenter.tool(id: "ct1-solitaire-analysis-\(ObjectIdentifier(document).hashValue)",
-                                     title: "Solitaire-Analyse: Manuelle Bearbeitung",
+                                     title: "Solitaire Analysis: Manual Post-Processing",
                                      size: CGSize(width: 860, height: 820)) {
             SolitaireAnalysisCT1View(document: document, close: { holder.window?.close() })
         }
@@ -86,12 +86,12 @@ final class SolitaireAnalysisCT1Model: ObservableObject {
 
     /// Card button k pressed (`DoCard`).
     func pick(_ k: Int) {
-        guard k <= cardCount else { Alerts.error("Kartenanzahl beachten."); return }   // IDS_SOLITAIRE_MESSAGE_5
+        guard k <= cardCount else { Alerts.error("Please note the number of cards."); return }   // IDS_SOLITAIRE_MESSAGE_5
         guard !entered.contains(k), endDeck == nil else { return }
         entered.append(k)
         if entered.count >= cardCount {
             endDeck = entered
-            Alerts.info("Gefundenes Deck eingegeben.")                                    // IDS_SOLITAIRE_MESSAGE_6
+            Alerts.info("Found Deck entered.")                                    // IDS_SOLITAIRE_MESSAGE_6
         }
     }
 
@@ -109,13 +109,13 @@ final class SolitaireAnalysisCT1Model: ObservableObject {
     /// CT1 "End-Deck laden" (IDC_BUTTON5): file in CT1 notation ("1,2,…,A,B") or numeric.
     func loadEndDeck() {
         let panel = NSOpenPanel()
-        panel.title = "End-Deck laden"
+        panel.title = "Load final deck"
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.nameFieldStringValue = "end-deck.txt"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         guard let data = try? Data(contentsOf: url) else {
-            Alerts.error("Das Solitaire-Deck konnte nicht geladen werden.")
+            Alerts.error("Could not load the Solitaire deck.")
             return
         }
         do {
@@ -133,7 +133,7 @@ final class SolitaireAnalysisCT1Model: ObservableObject {
     /// Mac addition: end deck the sender gets with a passphrase (scenario preparation).
     func computeEndDeckFromPassphrase() {
         guard passphrase.contains(where: { $0.isLetter }) else {
-            Alerts.error("Bitte ein Passwort (Buchstaben A–Z) eingeben.")
+            Alerts.error("Please enter a password (letters A–Z).")
             return
         }
         useLoadedDeck(SolitaireAnalysis.endDeck(passphrase: passphrase, cards: 54, letterCount: letterCount))
@@ -175,7 +175,7 @@ final class SolitaireAnalysisCT1Model: ObservableObject {
         }
         r.decide(front: front)
         // IDS_SOLITAIRE_MESSAGE_7 / _8 (CT1 shows them as message boxes)
-        lastNote = front ? "Joker \(joker.name) vorne einsortiert." : "Joker \(joker.name) hinten einsortiert."
+        lastNote = front ? "Joker \(joker.name) put in front." : "Joker \(joker.name) put in back."
         r.run()
         if r.isFinished { finish(r) } else { reverser = r }
     }
@@ -183,8 +183,8 @@ final class SolitaireAnalysisCT1Model: ObservableObject {
     private func finish(_ r: SolitaireAnalysis.Reverser) {
         reverser = nil
         initialDeck = r.deck
-        summary = "\(r.roundsReversed) Runden zurückgerechnet (davon \(r.nullRounds) Nullrunden), \(r.decisions.count) Joker-Entscheidungen"
-            + (r.decisions.isEmpty ? "." : ": " + r.decisions.map { "\($0.joker.name) \($0.front ? "vorne" : "hinten")" }.joined(separator: ", ") + ".")
+        summary = "\(r.roundsReversed) rounds calculated backwards (\(r.nullRounds) of them null rounds), \(r.decisions.count) joker decisions"
+            + (r.decisions.isEmpty ? "." : ": " + r.decisions.map { "\($0.joker.name) \($0.front ? "front" : "back")" }.joined(separator: ", ") + ".")
     }
 
     @Published var summary: String?
@@ -203,7 +203,7 @@ final class SolitaireAnalysisCT1Model: ObservableObject {
         guard let raw = rawKeystream else { return false }
         let plain = SolitaireAnalysis.decrypt(document.text, keystream: raw)
         let key = SolitaireAnalysis.keyString(SolitaireAnalysis.reduced(raw))
-        DocumentFactory.openResult(text: plain, title: DocumentFactory.title("Solitaire-Entschlüsselung", of: document, key: key),
+        DocumentFactory.openResult(text: plain, title: DocumentFactory.title("Solitaire decryption", of: document, key: key),
                                    parent: document, method: "solitaire", key: key)
         return true
     }
@@ -225,7 +225,7 @@ struct SolitaireAnalysisCT1View: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
                     description
-                    GroupBox("Initial-Deck bestimmen und Schlüsselstrom erzeugen") {
+                    GroupBox("Determining the initial deck and generating the keystream") {
                         VStack(alignment: .leading, spacing: 10) {
                             step1
                             step2
@@ -239,13 +239,13 @@ struct SolitaireAnalysisCT1View: View {
             }
             Divider()
             HStack {
-                Button("Entschlüsseln") { if model.decrypt() { close() } }
+                Button("Decrypt") { if model.decrypt() { close() } }
                     .keyboardShortcut(.defaultAction)
                     .disabled(model.rawKeystream == nil)
-                Text("Geheimtext: \(document.shortName), \(model.letterCount) Buchstaben")
+                Text("Ciphertext: \(document.shortName), \(model.letterCount) letters")
                     .font(.caption).foregroundStyle(.secondary)
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
@@ -255,8 +255,8 @@ struct SolitaireAnalysisCT1View: View {
     // MARK: Sections
 
     private var description: some View {
-        GroupBox("Beschreibung") {
-            Text("Der legitime Empfänger braucht zur Entschlüsselung den Geheimtext und das „Initial-Deck“. Wir nehmen an, der Angreifer hat neben dem Geheimtext aber nur das (vom Sender bei der Verschlüsselung, oder vom Empfänger bei der Entschlüsselung erzeugte) End-Deck.\nBei dieser Kryptoanalyse wird versucht, aus dem End-Deck das Initial-Deck zu reproduzieren. Dies gelingt aufgrund der unvollständigen Reversibilität der Schlüsselstrom-Erzeugung nicht immer eindeutig. Deshalb müssen Sie entscheiden, wo der Joker einzusortieren ist.\nAus dem berechneten Initial-Deck kann dann wieder der nötige Schlüsselstrom berechnet werden.")
+        GroupBox("Description") {
+            Text("The legitimate receiver needs for encryption the ciphertext and the initial deck. We suppose, the attacker got beside the ciphertext only the final deck generated by the sender (through encryption) or by the receiver (through decryption).\nThis cryptanalysis tries to reproduce the initial deck from the final deck. Because of the irreversibility of the keystream generation this reverse production succeeds not always in a unique manner. Then you will be asked for the decision, where to place the joker.\nThen the original keystream can be generated from the calculated initial deck.")
                 .font(.callout)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -265,20 +265,20 @@ struct SolitaireAnalysisCT1View: View {
     }
 
     private var step1: some View {
-        GroupBox("1. Parameter des gefundenen Decks") {
+        GroupBox("1. Parameters of the found deck") {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .top, spacing: 14) {
                     VStack(alignment: .leading, spacing: 10) {
-                        Button("End-Deck laden") { model.loadEndDeck() }
+                        Button("Load final deck") { model.loadEndDeck() }
                             .disabled(model.manualRunning)
-                        Button("Nach Vorgabe") { model.resetForManualEntry() }
+                        Button("Own choice") { model.resetForManualEntry() }
                             .disabled(model.manualRunning)
                     }
                     .frame(width: 120, alignment: .leading)
-                    GroupBox("Nach Vorgabe") {
+                    GroupBox("Own choice") {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack {
-                                Text("Kartenanzahl:")
+                                Text("Number of cards:")
                                 Picker("", selection: $model.cardCount) {
                                     ForEach(3...54, id: \.self) { Text("\($0)").tag($0) }
                                 }
@@ -297,19 +297,19 @@ struct SolitaireAnalysisCT1View: View {
                         .opacity(model.entryEnabled ? 1 : 0.55)
                     }
                 }
-                DisclosureGroup("End-Deck als Text eingeben oder für ein Beispiel berechnen (Ergänzung der Mac-Version)") {
+                DisclosureGroup("Enter the final deck as text or compute it for an example (addition of the Mac version)") {
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
-                            TextField("z. B. 1,2,3,…,52,A,B (CT1-Datei „end-deck.txt“) oder 1,…,53,54", text: $model.pastedDeck)
+                            TextField("e.g. 1,2,3,…,52,A,B (CT1 file \"end-deck.txt\") or 1,…,53,54", text: $model.pastedDeck)
                                 .font(.system(.body, design: .monospaced))
-                            Button("Übernehmen") { model.usePastedDeck() }
+                            Button("Apply") { model.usePastedDeck() }
                                 .disabled(model.pastedDeck.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         }
                         HStack {
-                            TextField("Passwort, mit dem der Sender verschlüsselt hat (54 Karten)", text: $model.passphrase)
-                            Button("End-Deck des Senders berechnen") { model.computeEndDeckFromPassphrase() }
+                            TextField("Password the sender used for encryption (54 cards)", text: $model.passphrase)
+                            Button("Compute the final deck of the sender") { model.computeEndDeckFromPassphrase() }
                         }
-                        Text("Simuliert das Kartenspiel des Senders nach der Verschlüsselung dieses Geheimtextes (\(model.letterCount) Buchstaben).")
+                        Text("Simulates the deck of the sender after the encryption of this ciphertext (\(model.letterCount) letters).")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                     .padding(.top, 4)
@@ -339,35 +339,35 @@ struct SolitaireAnalysisCT1View: View {
     }
 
     private var step2: some View {
-        GroupBox("2. Joker positionieren") {
+        GroupBox("2. Positioning of the joker ") {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .top, spacing: 14) {
-                    GroupBox("Einheitliche Entscheidung") {
+                    GroupBox("Always the same decision") {
                         HStack {
-                            Button("Immer vorne") { model.runUniform(.alwaysFront) }
-                            Button("Immer hinten") { model.runUniform(.alwaysBack) }
+                            Button("Always to front") { model.runUniform(.alwaysFront) }
+                            Button("Always to back") { model.runUniform(.alwaysBack) }
                         }
                         .disabled(!model.jokerButtonsEnabled)
                     }
-                    GroupBox("Manuell") {
-                        Button("Starten") { model.startManual() }
+                    GroupBox("Manual") {
+                        Button("Start manual") { model.startManual() }
                             .disabled(!model.jokerButtonsEnabled)
                     }
-                    Text("Aufgrund der Irreversibilität von Solitaire müssen an bestimmten Stellen der Rückwärtsrechnung Entscheidungen getroffen werden, wo der entsprechende Joker einzuordnen ist.")
+                    Text("Because of the irreversibility of the Solitaire algorithm the user has to decide in special cases of the reverse calculation, where to position the joker.")
                         .font(.callout)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 if let r = model.reverser, let joker = r.pending {
                     // CT1: message box "Joker einsortieren" with Ja / Nein / Abbrechen
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Joker einsortieren").font(.headline)
-                        Text("Möchten Sie Joker \(joker.name) vorne einsortieren?")
-                        Text("Runde \(r.roundsReversed + 1) der Rückwärtsrechnung, noch \(r.remaining) Geheimtextzeichen. „Nein“ sortiert den Joker hinten ein.")
+                        Text("Putting Jokers").font(.headline)
+                        Text("Do you want to put Joker \(joker.name) to the front?")
+                        Text("Round \(r.roundsReversed + 1) of the reverse calculation, \(r.remaining) ciphertext characters left. \"No\" puts the joker in back.")
                             .font(.caption).foregroundStyle(.secondary)
                         HStack {
-                            Button("Ja") { model.answer(front: true) }.keyboardShortcut("j", modifiers: [])
-                            Button("Nein") { model.answer(front: false) }.keyboardShortcut("n", modifiers: [])
-                            Button("Abbrechen") { model.answer(front: nil) }
+                            Button("Yes") { model.answer(front: true) }.keyboardShortcut("y", modifiers: [])
+                            Button("No") { model.answer(front: false) }.keyboardShortcut("n", modifiers: [])
+                            Button("Cancel") { model.answer(front: nil) }
                         }
                     }
                     .padding(8)
@@ -383,13 +383,13 @@ struct SolitaireAnalysisCT1View: View {
     }
 
     private var step3: some View {
-        GroupBox("3. Initial-Deck erzeugen") {
+        GroupBox("3. Generating the initial deck") {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Gefundenes Deck (= End-Deck)").font(.caption)
+                Text("Found deck").font(.caption)
                 SolitaireAnalysisCT1DeckField(text: SolitaireAnalysis.deckString(model.endDeck ?? model.entered))
-                Text("Zwischendeck").font(.caption)
+                Text("Temporary deck").font(.caption)
                 SolitaireAnalysisCT1DeckField(text: model.intermediateDeck.map(SolitaireAnalysis.deckString) ?? "")
-                Text("Initial-Deck").font(.caption)
+                Text("Initial deck").font(.caption)
                 SolitaireAnalysisCT1DeckField(text: model.initialDeck.map(SolitaireAnalysis.deckString) ?? "")
                 if let s = model.summary, model.initialDeck != nil {
                     Text(s).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
@@ -400,9 +400,9 @@ struct SolitaireAnalysisCT1View: View {
     }
 
     private var step4: some View {
-        GroupBox("4. Schlüsselstrom erzeugen") {
+        GroupBox("4. Generating the keystream") {
             VStack(alignment: .leading, spacing: 6) {
-                Button("Schlüsselstrom automatisch erzeugen") { model.generateKeystream() }
+                Button("Automatically generate the keystream") { model.generateKeystream() }
                     .disabled(model.initialDeck == nil || model.rawKeystream != nil)
                 ResultBox(text: model.rawKeystream.map(SolitaireAnalysis.keyString) ?? "", minHeight: 50)
                     .frame(maxHeight: 90)

@@ -31,7 +31,7 @@ enum CipherRun {
         do {
             let result = try transform()
             KeyMemory.remember(key, for: method)
-            let op = "\(name)-\(encrypt ? "Verschlüsselung" : "Entschlüsselung")"
+            let op = "\(name) \(encrypt ? "encryption" : "decryption")"
             DocumentFactory.openResult(text: result, title: DocumentFactory.title(op, of: doc, key: key),
                                        parent: doc, method: method, key: key)
             return true
@@ -76,7 +76,7 @@ enum CipherRun {
         do {
             let result = try transform()
             KeyMemory.remember(key, for: method)
-            let op = "\(name)-\(encrypt ? "Verschlüsselung" : "Entschlüsselung")"
+            let op = "\(name) \(encrypt ? "encryption" : "decryption")"
             DocumentFactory.openResult(result, title: DocumentFactory.title(op, of: doc, key: key),
                                        parent: doc, method: method, key: key,
                                        viewMode: viewMode ?? (TextCoding.looksLikeText(result) ? .text : .hex))
@@ -94,8 +94,8 @@ struct CipherButtons: View {
     var cancel: () -> Void
     var decrypt: (() -> Void)?
     var encrypt: (() -> Void)?
-    var encryptTitle = "Verschlüsseln"
-    var decryptTitle = "Entschlüsseln"
+    var encryptTitle = "Encrypt"
+    var decryptTitle = "Decrypt"
     var disabled = false
     /// CT1 "Textoptionen" button (opens Optionen ▸ Textoptionen).
     var textOptions = false
@@ -104,12 +104,12 @@ struct CipherButtons: View {
 
     var body: some View {
         if let help {
-            Button("Hilfe") { HelpCenter.show(action: help) }
+            Button("Help") { HelpCenter.show(action: help) }
         }
         if textOptions {
-            Button("Textoptionen …") { OptionsWindows.showTextOptions() }
+            Button("Text Options...") { OptionsWindows.showTextOptions() }
         }
-        Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction)
+        Button("Cancel", action: cancel).keyboardShortcut(.cancelAction)
         if let decrypt {
             Button(decryptTitle, action: decrypt).disabled(disabled)
         }
@@ -124,7 +124,7 @@ struct AlphabetNote: View {
     @EnvironmentObject var settings: AppSettings
     var body: some View {
         let o = settings.textOptions
-        Text("Alphabet (\(o.alphabetSize) Zeichen): \(o.alphabet)" + (o.keepNonAlphabet ? "" : " – andere Zeichen werden entfernt"))
+        Text("Alphabet (\(o.alphabetSize) characters): \(o.alphabet)" + (o.keepNonAlphabet ? "" : " – other characters are removed"))
             .font(.caption)
             .foregroundStyle(.secondary)
             .lineLimit(2)
@@ -145,18 +145,18 @@ struct ByteKeyField: View {
             .pickerStyle(.segmented)
             .frame(width: 120)
             .labelsHidden()
-            TextField(isHex ? "z. B. 4B 45 59" : "Schlüssel", text: $key)
+            TextField(isHex ? "e.g. 4B 45 59" : "Key", text: $key)
                 .font(.system(.body, design: .monospaced))
         }
     }
 
     static func bytes(key: String, isHex: Bool) throws -> [UInt8] {
         if isHex {
-            guard let b = Hex.decode(key), !b.isEmpty else { throw CTError("Ungültiger Hex-Schlüssel.") }
+            guard let b = Hex.decode(key), !b.isEmpty else { throw CTError("Invalid hex key.") }
             return b
         }
         let b = TextCoding.bytes(from: key)
-        if b.isEmpty { throw CTError("Bitte einen Schlüssel eingeben.") }
+        if b.isEmpty { throw CTError("Please enter a key.") }
         return b
     }
 }
@@ -205,7 +205,7 @@ struct DocumentPicker: View {
 
     var body: some View {
         Picker(title, selection: $selection) {
-            Text("– bitte wählen –").tag(ObjectIdentifier?.none)
+            Text("– please select –").tag(ObjectIdentifier?.none)
             ForEach(documents, id: \.self) { d in
                 Text(d.displayName ?? "?").tag(Optional(ObjectIdentifier(d)))
             }

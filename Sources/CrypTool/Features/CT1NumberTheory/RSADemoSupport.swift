@@ -137,62 +137,62 @@ struct RSADemoOptionsView: View {
     var body: some View {
         let maxBL = options.maxBlockLength(modulus: modulus)
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Alphabetoptionen") {
+            GroupBox("Alphabet options") {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        NTRadio(title: "Alle 256 Zeichen", selected: options.textOptions == 0) { options.textOptions = 0; options.coding = 0 }
+                        NTRadio(title: "All 256 ASCII characters", selected: options.textOptions == 0) { options.textOptions = 0; options.coding = 0 }
                             .disabled(options.variant == 1)
                         Spacer()
-                        Text("Anzahl Zeichen: \(options.alphabetSize)")
+                        Text("Number of characters: \(options.alphabetSize)")
                     }
-                    NTRadio(title: "Alphabet vorgeben:", selected: options.textOptions == 1) { options.textOptions = 1 }
+                    NTRadio(title: "Specify alphabet:", selected: options.textOptions == 1) { options.textOptions = 1 }
                     TextField("", text: $options.alphabet).font(.system(.body, design: .monospaced))
                         .disabled(options.textOptions == 0).padding(.leading, 18)
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("RSA-Variante ") {
+            GroupBox("RSA variant") {
                 HStack(spacing: 20) {
                     NTRadio(title: "Normal", selected: options.variant == 0) { options.variant = 0 }
-                    NTRadio(title: "Dialog der Schwestern", selected: options.variant == 1) {
+                    NTRadio(title: "Dialogue of the Sisters", selected: options.variant == 1) {
                         options.variant = 1; options.textOptions = 1; options.coding = 0
                     }
                     Spacer()
                 }.padding(4)
             }
-            GroupBox("Methode, wie ein Block als Zahl codiert wird") {
+            GroupBox("Method for coding a block into numbers") {
                 HStack(spacing: 20) {
-                    NTRadio(title: "b-adisch", selected: options.coding == 0) { options.coding = 0 }
-                    NTRadio(title: "Basissystem", selected: options.coding == 1) { options.coding = 1 }.disabled(options.variant == 1)
+                    NTRadio(title: "b-adic", selected: options.coding == 0) { options.coding = 0 }
+                    NTRadio(title: "Number system", selected: options.coding == 1) { options.coding = 1 }.disabled(options.variant == 1)
                     Spacer()
                 }.padding(4)
             }
-            GroupBox("Blocklänge") {
+            GroupBox("Block length") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Die Anzahl der Zeichen, die pro RSA-Operation verschlüsselt werden.\nDie maximale Anzahl ist abhängig von der Bitlänge des RSA-Moduls N, der Anzahl der Zeichen im Alphabet und der Codierungsmethode der Nachricht.")
+                    Text("The number of characters that are encrypted with each RSA operation.\nThe maximum size of a block is limited by the bit length of the modulus N, the number of characters in the alphabet, and the encoding method.")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
-                        Text("Blocklänge in Zeichen:")
+                        Text("Block length in characters:")
                         TextField("", text: $blockText).frame(width: 50).disabled(options.variant == 1)
-                        Text("(Maximale Blocklänge \(maxBL) Zeichen)")
+                        Text("(Maximum block length \(maxBL) characters)")
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Zahlensystem ") {
+            GroupBox("Number system") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Die Zahlen der RSA-Ver-/Entschlüsselung werden in dem folgenden Zahlensystem dargestellt.")
+                    Text("The numbers for encryption and decryption will be represented in the following radix:")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack(spacing: 20) {
-                        NTRadio(title: "Dezimal", selected: options.numberBasis == 0) { options.numberBasis = 0 }
-                        NTRadio(title: "Binär", selected: options.numberBasis == 1) { options.numberBasis = 1 }
-                        NTRadio(title: "Oktal", selected: options.numberBasis == 2) { options.numberBasis = 2 }
-                        NTRadio(title: "Hexadezimal", selected: options.numberBasis == 3) { options.numberBasis = 3 }
+                        NTRadio(title: "Decimal", selected: options.numberBasis == 0) { options.numberBasis = 0 }
+                        NTRadio(title: "Binary", selected: options.numberBasis == 1) { options.numberBasis = 1 }
+                        NTRadio(title: "Octal", selected: options.numberBasis == 2) { options.numberBasis = 2 }
+                        NTRadio(title: "Hexadecimal", selected: options.numberBasis == 3) { options.numberBasis = 3 }
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack {
                 Button("OK", action: ok).keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
@@ -224,18 +224,18 @@ struct RSADemoOptionsView: View {
         if o.variant == 1 {
             let m = nText.count > 3 ? 1000 : Int(nText) ?? 0
             if o.alphabetSize > m {
-                Alerts.error("Bitte ändern Sie das Alphabet, so dass die Anzahl der Zeichen im Alphabet (hier \(o.alphabetSize)) kleiner oder gleich der Größe des RSA-Moduls (hier N = \(nText)) ist.")
+                Alerts.error("Please modify the alphabet in a way that the number of characters in the alphabet (here \(o.alphabetSize)) is less or equal to the size of the RSA modul (here N = \(nText)).")
                 return
             }
             o.blockLength = 1
         } else if maxBL == 0 {
-            Alerts.error("Bitte ändern Sie das Alphabet, so dass die Anzahl der Zeichen im Alphabet (hier \(o.alphabetSize)) kleiner oder gleich der Größe des RSA-Moduls (hier N = \(nText)) ist.")
+            Alerts.error("Please modify the alphabet in a way that the number of characters in the alphabet (here \(o.alphabetSize)) is less or equal to the size of the RSA modul (here N = \(nText)).")
             return
         } else if maxBL == 1 && o.blockLength != 1 {
-            Alerts.error("Bitte setzen Sie die Blocklänge auf 1.")
+            Alerts.error("Please change the block length to 1.")
             return
         } else if o.blockLength < 1 || o.blockLength > maxBL {
-            Alerts.error("Die Blocklänge muss aus dem Zahlenbereich 1, ..., \(maxBL) sein!")
+            Alerts.error("The block length must be a value out of  1, ..., \(maxBL) !")
             return
         }
         onOK(o)

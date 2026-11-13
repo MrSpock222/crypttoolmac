@@ -43,7 +43,7 @@ struct DESTrace {
          [7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8], [2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]],
     ]
 
-    /// Example of CT1's DES animation (bit matrices of des_de.aml).
+    /// Example of CT1's DES animation (bit matrices of des_en.aml).
     static let ct1Plaintext: [UInt8] = [0x16, 0xBD, 0x40, 0x94, 0xB4, 0x53, 0x8A, 0x7B]
     static let ct1Key: [UInt8] = [0xE1, 0xA4, 0xBB, 0x9B, 0xC2, 0xE3, 0x24, 0xBB]
 

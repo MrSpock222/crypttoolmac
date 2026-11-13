@@ -499,23 +499,23 @@ check(pwd.count == 32 && pwd.allSatisfy { "0123456789ABCDEF".contains($0) }, "ge
 let pwd2 = PasswordTools.generate(entropyBits: 80, alphabet: "aab")
 check(pwd2.count == 80 && Set(pwd2).isSubset(of: ["a", "b"]), "generate dedups alphabet")
 check(PasswordTools.generate(entropyBits: 80, alphabet: "aaa").isEmpty, "generate needs ≥ 2 chars")
-check(PasswordTools.alphabetPresets.count >= 8 && PasswordTools.alphabetPresets[0].name == "Kleinbuchstaben", "presets")
+check(PasswordTools.alphabetPresets.count >= 8 && PasswordTools.alphabetPresets[0].name == "Lowercase letters", "presets")
 check(PasswordTools.qualityKeePass("abcdefgh") == 29, "KeePass quality")
 check(PasswordTools.qualityMozilla("abcdefgh") == 30, "Mozilla quality")
 check(PasswordTools.qualityPGP("abcdefgh") == 31, "PGP quality")
-for (pw, levels) in [("123456", ["sehr schwach"]), ("password", ["sehr schwach"]), ("qwertz", ["sehr schwach"]),
-                     ("Sommer2024", ["sehr schwach", "schwach"]),
-                     ("x7#Kp!2vQz", ["mittel", "stark"]),
-                     ("G7$kq!Zp2#vW9@rT4&mY", ["stark", "sehr stark"])] {
+for (pw, levels) in [("123456", ["very weak"]), ("password", ["very weak"]), ("qwertz", ["very weak"]),
+                     ("Sommer2024", ["very weak", "weak"]),
+                     ("x7#Kp!2vQz", ["medium", "strong"]),
+                     ("G7$kq!Zp2#vW9@rT4&mY", ["strong", "very strong"])] {
     let q = PasswordTools.quality(of: pw)
     check(levels.contains(q.level), "quality of \(pw): \(q.level) (score \(q.score), \(String(format: "%.1f", q.entropyBits)) bit) \(q.remarks)")
 }
 let qp = PasswordTools.quality(of: "passwort12.03.1990")
-check(qp.remarks.contains { $0.hasPrefix("Wörterbuch") } && qp.remarks.contains { $0.hasPrefix("Muster") }, "remarks found word and date: \(qp.remarks)")
+check(qp.remarks.contains { $0.hasPrefix("Dictionary") } && qp.remarks.contains { $0.hasPrefix("Patterns") }, "remarks found word and date: \(qp.remarks)")
 let qk = PasswordTools.quality(of: "asdfgh")
-check(qk.remarks.contains { $0.hasPrefix("Tastatur") } && qk.entropyBits < 20, "keyboard sequence \(qk.entropyBits)")
+check(qk.remarks.contains { $0.hasPrefix("Keyboard") } && qk.entropyBits < 20, "keyboard sequence \(qk.entropyBits)")
 let qs = PasswordTools.quality(of: "abcdefg")
-check(qs.remarks.contains { $0.hasPrefix("Folgen") } && qs.components == "abcdefg", "sequence components '\(qs.components)'")
+check(qs.remarks.contains { $0.hasPrefix("Sequences") } && qs.components == "abcdefg", "sequence components '\(qs.components)'")
 check(PasswordTools.quality(of: "").score == 0, "empty password")
 
 // MARK: - CT1 analyses (separate files)

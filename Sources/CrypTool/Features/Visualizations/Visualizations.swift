@@ -35,10 +35,10 @@ struct EnigmaView: View {
 
     var body: some View {
         Form {
-            Section("Walzenlage (links → rechts)") {
+            Section("Rotor order (left → right)") {
                 HStack {
-                    Picker("Umkehrwalze", selection: $reflector) {
-                        ForEach(EnigmaReflector.allCases, id: \.self) { Text("UKW \($0.rawValue)").tag($0) }
+                    Picker("Reflector", selection: $reflector) {
+                        ForEach(EnigmaReflector.allCases, id: \.self) { Text("Reflector \($0.rawValue)").tag($0) }
                     }.frame(width: 160)
                     ForEach(0..<3, id: \.self) { i in
                         VStack {
@@ -55,25 +55,25 @@ struct EnigmaView: View {
                     }
                 }
             }
-            Section("Steckerbrett") {
-                TextField("Steckerpaare", text: $plugboard, prompt: Text("z. B. AB CD EF")).font(.system(.body, design: .monospaced))
+            Section("Plugboard") {
+                TextField("Plug pairs", text: $plugboard, prompt: Text("e.g. AB CD EF")).font(.system(.body, design: .monospaced))
             }
-            Section("Eingabe") {
+            Section("Input") {
                 CodeEditor(text: $input, minHeight: 80)
             }
-            Section("Ausgabe") {
-                if let e = (try? machine()) == nil ? "Ungültige Einstellung (Steckerpaare doppelt? Walzen doppelt?)" : nil {
+            Section("Output") {
+                if let e = (try? machine()) == nil ? "Invalid setting (duplicate plug pairs? duplicate rotors?)" : nil {
                     Text(e).foregroundStyle(.red)
                 }
                 ResultBox(text: EnigmaView.group(output), minHeight: 60)
                 HStack {
-                    Text("Die Enigma ist involutorisch: Mit gleicher Einstellung verschlüsselt sie den Geheimtext wieder zum Klartext.")
+                    Text("The Enigma is involutory: With the same setting it encrypts the ciphertext back into the plaintext.")
                         .font(.caption).foregroundStyle(.secondary)
                     Spacer()
                     if let d = sourceDocument {
-                        Button("Dokument <\(d.shortName)> verschlüsseln") { encryptDocument(d) }
+                        Button("Encrypt document <\(d.shortName)>") { encryptDocument(d) }
                     }
-                    Button("Ausgabe als Dokument") { DocumentFactory.openResult(text: output, title: "Enigma-Ausgabe", key: settingsDescription) }
+                    Button("Output as document") { DocumentFactory.openResult(text: output, title: "Enigma output", key: settingsDescription) }
                 }
             }
         }
@@ -82,8 +82,8 @@ struct EnigmaView: View {
     }
 
     private var settingsDescription: String {
-        "UKW \(reflector.rawValue), Walzen \(rotors.map(\.rawValue).joined(separator: "-")), Ringe \(String(rings.map { EnigmaView.letters[$0] })), Start \(String(positions.map { EnigmaView.letters[$0] }))"
-            + (plugboard.isEmpty ? "" : ", Stecker \(plugboard.uppercased())")
+        "Reflector \(reflector.rawValue), rotors \(rotors.map(\.rawValue).joined(separator: "-")), rings \(String(rings.map { EnigmaView.letters[$0] })), start \(String(positions.map { EnigmaView.letters[$0] }))"
+            + (plugboard.isEmpty ? "" : ", plugs \(plugboard.uppercased())")
     }
 
     static func group(_ s: String) -> String {
@@ -99,7 +99,7 @@ struct EnigmaView: View {
         do {
             var m = try machine()
             let r = m.encrypt(d.text)
-            DocumentFactory.openResult(text: r, title: DocumentFactory.title("Enigma-Verschlüsselung", of: d, key: settingsDescription), parent: d, method: "enigma", key: settingsDescription)
+            DocumentFactory.openResult(text: r, title: DocumentFactory.title("Enigma encryption", of: d, key: settingsDescription), parent: d, method: "enigma", key: settingsDescription)
         } catch { Alerts.error(error.localizedDescription) }
     }
 }
@@ -117,34 +117,34 @@ struct AESInspectorView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Verfolgen Sie die Zustandsmatrix (spaltenweise, FIPS-197) durch alle Runden von AES. Vorbelegt ist das Beispiel aus FIPS-197, Anhang B.")
+            Text("Follow the state matrix (column by column, FIPS-197) through all rounds of AES. The example from FIPS-197, Appendix B is preset.")
                 .font(.callout).foregroundStyle(.secondary)
             HStack {
-                Text("Schlüssel").frame(width: 80, alignment: .leading)
-                TextField("16/24/32 Bytes hex", text: $keyHex).font(.system(.body, design: .monospaced))
+                Text("Key").frame(width: 80, alignment: .leading)
+                TextField("16/24/32 bytes hex", text: $keyHex).font(.system(.body, design: .monospaced))
             }
             HStack {
-                Text("Klartext").frame(width: 80, alignment: .leading)
-                TextField("16 Bytes hex", text: $blockHex).font(.system(.body, design: .monospaced))
-                Button("Berechnen", action: compute).keyboardShortcut(.defaultAction)
+                Text("Plaintext").frame(width: 80, alignment: .leading)
+                TextField("16 bytes hex", text: $blockHex).font(.system(.body, design: .monospaced))
+                Button("Calculate", action: compute).keyboardShortcut(.defaultAction)
             }
             if let error { Text(error).foregroundStyle(.red) }
             if !steps.isEmpty {
                 HStack(alignment: .top, spacing: 16) {
                     List(selection: $selectedStep) {
                         ForEach(steps.indices, id: \.self) { i in
-                            Text("Runde \(steps[i].round): \(steps[i].operation)").tag(i)
+                            Text("Round \(steps[i].round): \(steps[i].operation)").tag(i)
                         }
                     }.frame(width: 240)
                     VStack(alignment: .leading, spacing: 12) {
                         let s = steps[min(selectedStep, steps.count - 1)]
-                        Text("Runde \(s.round) – \(s.operation)").font(.headline)
+                        Text("Round \(s.round) – \(s.operation)").font(.headline)
                         StateMatrixView(state: s.state, previous: selectedStep > 0 ? steps[selectedStep - 1].state : nil)
                         if s.round < roundKeys.count {
-                            Text("Rundenschlüssel \(s.round)").font(.headline)
+                            Text("Round key \(s.round)").font(.headline)
                             StateMatrixView(state: roundKeys[s.round], previous: nil)
                         }
-                        Text("Chiffrat: " + Hex.encode(cipher)).font(.system(.body, design: .monospaced)).textSelection(.enabled)
+                        Text("Ciphertext: " + Hex.encode(cipher)).font(.system(.body, design: .monospaced)).textSelection(.enabled)
                         Spacer()
                     }
                 }
@@ -155,7 +155,7 @@ struct AESInspectorView: View {
     }
 
     private func compute() {
-        guard let k = Hex.decode(keyHex), let b = Hex.decode(blockHex) else { error = "Ungültige Hex-Eingabe."; return }
+        guard let k = Hex.decode(keyHex), let b = Hex.decode(blockHex) else { error = "Invalid hex input."; return }
         do {
             let r = try AESInspector.trace(key: k, block: b)
             steps = r.steps; roundKeys = r.roundKeys; cipher = r.ciphertext; error = nil
@@ -213,12 +213,12 @@ struct CaesarDiskView: View {
             }
             .frame(width: 360, height: 360)
             VStack(alignment: .leading, spacing: 10) {
-                Text("Caesar-Scheibe").font(.title2.bold())
-                Text("Außen: Klartextalphabet, innen (blau): Geheimtextalphabet. Drehen Sie die innere Scheibe, um die Verschiebung zu ändern.")
+                Text("Caesar Disk").font(.title2.bold())
+                Text("Outside: plaintext alphabet, inside (blue): ciphertext alphabet. Turn the inner disk to change the shift.")
                     .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                Stepper("Verschiebung: \(shift) (Schlüssel \(String(letters[shift])))", value: $shift, in: 0...25)
+                Stepper("Shift: \(shift) (key \(String(letters[shift])))", value: $shift, in: 0...25)
                 Slider(value: Binding(get: { Double(shift) }, set: { shift = Int($0.rounded()) }), in: 0...25, step: 1)
-                TextField("Klartext", text: $text).font(.system(.body, design: .monospaced))
+                TextField("Plaintext", text: $text).font(.system(.body, design: .monospaced))
                 Text(Caesar.encrypt(text, shift: shift, options: .default)).font(.system(.title3, design: .monospaced)).foregroundStyle(.blue).textSelection(.enabled)
                 Spacer()
             }

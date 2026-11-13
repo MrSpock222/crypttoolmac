@@ -1,6 +1,6 @@
 import Foundation
 
-/// Maps menu commands to the page of CT1's original online help (Resources/Help/de).
+/// Maps menu commands to the page of CT1's original online help (Resources/Help/en).
 ///
 /// CT1 names the page of a menu command after its lower-case command ID without "ID_"
 /// (ID_ROT13CAESAR_ASC → hid_rot13caesar_asc.html, see CrypTool.rc, menu IDR_TEXTTYPE).

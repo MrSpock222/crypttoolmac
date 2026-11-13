@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta charset="utf-8">
+<meta name="keywords" content="Card game, Solitaire encryption algorithm">
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Solitaire joker output (zero round)</Title>
+<link rel="stylesheet" type="text/css" href="CrypTool_Help.css">
+</HEAD>
+
+<BODY>
+
+<H3>Zero round (joker output)</H3>
+
+<p>A zero round appears at the <a href="hid_symclassic_solitaire.html">Solitaire algorithm</a> always, if in 
+step 5 of the keystream generation a joker is found.</P>
+
+<P>In this case the card value 53 (at a <a href="kartendeck.html">card deck</a> consisting of 54 cards) is 
+not taken as the keystream letter, but the algorithm is started again, until a valid 
+<a href="kartendeck.html">card value</a> (1-52) is found in step 5.</P>
+
+<P>This is implicitly done by the application.</p>
+
+</BODY>
+</HTML>
+

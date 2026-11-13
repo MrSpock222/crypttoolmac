@@ -94,21 +94,21 @@ public struct Enigma: Sendable {
     public init(rotors: [EnigmaRotor], reflector: EnigmaReflector, ringSettings: [Int], positions: [Int],
                 plugboard: [(Character, Character)], greekRotor: EnigmaGreekRotor? = nil,
                 greekRing: Int = 0, greekPosition: Int = 0) throws {
-        guard rotors.count == 3 else { throw CTError("Die Enigma benötigt genau drei Walzen.") }
-        guard Set(rotors).count == 3 else { throw CTError("Jede Walze darf nur einmal eingesetzt werden.") }
+        guard rotors.count == 3 else { throw CTError("The Enigma requires exactly three rotors.") }
+        guard Set(rotors).count == 3 else { throw CTError("Each rotor may only be used once.") }
         guard ringSettings.count == 3, positions.count == 3 else {
-            throw CTError("Für jede der drei Walzen werden Ringstellung und Grundstellung benötigt.")
+            throw CTError("A ring setting and an initial position are required for each of the three rotors.")
         }
         var plug = Array(0..<26)
         var used = Set<Int>()
-        guard plugboard.count <= 13 else { throw CTError("Das Steckerbrett erlaubt höchstens 13 Steckverbindungen.") }
+        guard plugboard.count <= 13 else { throw CTError("The plugboard allows at most 13 plug connections.") }
         for (a, b) in plugboard {
             guard let x = latinLetterValue(a), let y = latinLetterValue(b) else {
-                throw CTError("Steckverbindungen dürfen nur die Buchstaben A–Z verbinden („\(a)\(b)“).")
+                throw CTError("Plug connections may only connect the letters A-Z (\"\(a)\(b)\").")
             }
-            guard x != y else { throw CTError("Ein Buchstabe kann nicht mit sich selbst gesteckt werden („\(a)\(b)“).") }
+            guard x != y else { throw CTError("A letter cannot be plugged to itself (\"\(a)\(b)\").") }
             guard !used.contains(x), !used.contains(y) else {
-                throw CTError("Jeder Buchstabe darf auf dem Steckerbrett nur einmal verwendet werden („\(a)\(b)“).")
+                throw CTError("Each letter may only be used once on the plugboard (\"\(a)\(b)\").")
             }
             used.insert(x); used.insert(y)
             plug[x] = y; plug[y] = x
@@ -145,7 +145,7 @@ public struct Enigma: Sendable {
     public init(rotors: [EnigmaRotor], reflector: EnigmaReflector, rings: String, start: String, plugboard: String = "") throws {
         let r = rings.compactMap(latinLetterValue), s = start.compactMap(latinLetterValue)
         guard r.count == 3, s.count == 3 else {
-            throw CTError("Ringstellung und Grundstellung müssen je drei Buchstaben enthalten.")
+            throw CTError("Ring setting and initial position must each contain three letters.")
         }
         try self.init(rotors: rotors, reflector: reflector, ringSettings: r, positions: s,
                       plugboard: try Enigma.parsePlugboard(plugboard))
@@ -154,7 +154,7 @@ public struct Enigma: Sendable {
     /// Parses plugboard pairs such as "AB CD EF" (letters are paired in order, other characters ignored).
     public static func parsePlugboard(_ s: String) throws -> [(Character, Character)] {
         let letters = s.filter { latinLetterValue($0) != nil }.map(asciiUppercased)
-        guard letters.count % 2 == 0 else { throw CTError("Das Steckerbrett muss aus Buchstabenpaaren bestehen.") }
+        guard letters.count % 2 == 0 else { throw CTError("The plugboard must consist of pairs of letters.") }
         return stride(from: 0, to: letters.count, by: 2).map { (letters[$0], letters[$0 + 1]) }
     }
 

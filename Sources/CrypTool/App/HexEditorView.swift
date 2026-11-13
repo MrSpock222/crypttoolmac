@@ -227,14 +227,14 @@ final class HexEditorView: NSView, NSMenuItemValidation {
         let old = bytes
         um.registerUndo(withTarget: self) { view in
             view.apply(newer, cursor: view.cursor)
-            view.registerUndo(old: old, actionName: "Bearbeiten")
+            view.registerUndo(old: old, actionName: "Edit")
         }
     }
 
     private func typeHexDigit(_ v: UInt8) {
         let sel = selection
         if !sel.isEmpty {
-            replace(sel, with: [v << 4], cursorAfter: sel.lowerBound, actionName: "Eingabe")
+            replace(sel, with: [v << 4], cursorAfter: sel.lowerBound, actionName: "Typing")
             lowNibble = true
             return
         }
@@ -253,20 +253,20 @@ final class HexEditorView: NSView, NSMenuItemValidation {
             apply(b, cursor: cursor + 1)
             lowNibble = false
         }
-        registerUndo(old: old, actionName: "Eingabe")
+        registerUndo(old: old, actionName: "Typing")
         needsDisplay = true
     }
 
     private func typeASCII(_ ch: UInt8) {
         let sel = selection
         if !sel.isEmpty {
-            replace(sel, with: [ch], cursorAfter: sel.lowerBound + 1, actionName: "Eingabe")
+            replace(sel, with: [ch], cursorAfter: sel.lowerBound + 1, actionName: "Typing")
             return
         }
         if cursor >= bytes.count {
-            replace(bytes.count..<bytes.count, with: [ch], cursorAfter: bytes.count + 1, actionName: "Eingabe")
+            replace(bytes.count..<bytes.count, with: [ch], cursorAfter: bytes.count + 1, actionName: "Typing")
         } else {
-            replace(cursor..<cursor + 1, with: [ch], cursorAfter: cursor + 1, actionName: "Eingabe")
+            replace(cursor..<cursor + 1, with: [ch], cursorAfter: cursor + 1, actionName: "Typing")
         }
     }
 
@@ -293,12 +293,12 @@ final class HexEditorView: NSView, NSMenuItemValidation {
             asciiFocus.toggle(); lowNibble = false; needsDisplay = true
         case 0x7F: // backspace
             let sel = selection
-            if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Löschen") }
-            else if cursor > 0 { replace(cursor - 1..<cursor, with: [], cursorAfter: cursor - 1, actionName: "Löschen") }
+            if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Delete") }
+            else if cursor > 0 { replace(cursor - 1..<cursor, with: [], cursorAfter: cursor - 1, actionName: "Delete") }
         case NSDeleteFunctionKey:
             let sel = selection
-            if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Löschen") }
-            else if cursor < bytes.count { replace(cursor..<cursor + 1, with: [], cursorAfter: cursor, actionName: "Löschen") }
+            if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Delete") }
+            else if cursor < bytes.count { replace(cursor..<cursor + 1, with: [], cursorAfter: cursor, actionName: "Delete") }
         default:
             guard !cmd, let typed = event.characters?.unicodeScalars.first else { super.keyDown(with: event); return }
             if asciiFocus {
@@ -330,19 +330,19 @@ final class HexEditorView: NSView, NSMenuItemValidation {
     @objc func cut(_ sender: Any?) {
         copy(sender)
         let sel = selection
-        if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Ausschneiden") }
+        if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Cut") }
     }
 
     @objc func paste(_ sender: Any?) {
         guard let s = NSPasteboard.general.string(forType: .string) else { return }
         let new = (!asciiFocus ? Hex.decode(s) : nil) ?? TextCoding.bytes(from: s)
         let sel = selection
-        replace(sel, with: new, cursorAfter: sel.lowerBound + new.count, actionName: "Einfügen")
+        replace(sel, with: new, cursorAfter: sel.lowerBound + new.count, actionName: "Paste")
     }
 
     @objc func delete(_ sender: Any?) {
         let sel = selection
-        if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Löschen") }
+        if !sel.isEmpty { replace(sel, with: [], cursorAfter: sel.lowerBound, actionName: "Delete") }
     }
 
     /// CT1 context menu (IDR_CONTEXT_MENU).
@@ -389,14 +389,14 @@ final class HexEditorView: NSView, NSMenuItemValidation {
 
     func replaceSelection(with new: [UInt8]) {
         let sel = selection
-        replace(sel, with: new, cursorAfter: sel.lowerBound + new.count, actionName: "Ersetzen")
+        replace(sel, with: new, cursorAfter: sel.lowerBound + new.count, actionName: "Replace")
     }
 
     var statusDescription: String {
         let sel = selection
         var s = String(format: "Offset %08X (%d)", cursor, cursor)
-        if !sel.isEmpty { s += "  ·  Auswahl: \(sel.count) Bytes" }
-        s += asciiFocus ? "  ·  ASCII-Spalte" : "  ·  Hex-Spalte (Tab wechselt)"
+        if !sel.isEmpty { s += "  ·  Selection: \(sel.count) bytes" }
+        s += asciiFocus ? "  ·  ASCII column" : "  ·  Hex column (Tab switches)"
         return s
     }
 }

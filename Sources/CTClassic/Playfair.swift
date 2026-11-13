@@ -52,11 +52,11 @@ public struct PlayfairCipher: Sendable {
                 separator2: Character = "Y", separateOnlyWithinPairs: Bool = true) throws {
         let d = size.dimension
         guard matrix.count == d, matrix.allSatisfy({ $0.count == d }) else {
-            throw CTError("Die Playfair-Matrix muss \(d)×\(d) Zeichen enthalten.")
+            throw CTError("The Playfair matrix must contain \(d)×\(d) characters.")
         }
         let flat = matrix.flatMap { $0 }.map { PlayfairCipher.normalize($0, size: size) }
         guard flat.allSatisfy({ $0 != nil }), Set(flat.map { $0! }).count == d * d else {
-            throw CTError("Die Playfair-Matrix muss jedes Zeichen des Alphabets (\(String(size.alphabet))) genau einmal enthalten.")
+            throw CTError("The Playfair matrix must contain each character of the alphabet (\(String(size.alphabet))) exactly once.")
         }
         let m = (0..<d).map { r in (0..<d).map { c in flat[r * d + c]! } }
         self.init(uncheckedMatrix: m, size: size, separator: separator, separator2: separator2,

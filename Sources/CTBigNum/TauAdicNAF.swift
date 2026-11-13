@@ -39,13 +39,13 @@ public enum TauAdicNAF {
 
         public var errorDescription: String? {
             switch self {
-            case .empty: return "Der binäre Schlüssel ist leer."
-            case .notADigit(let n): return "Das Zeichen nach \(n) Ziffern im binären Schlüssel ist keine Ziffer.\nDer binäre Schlüssel darf nur die Ziffern 0 und 1 enthalten!"
-            case .notBinary(let n): return "Die Ziffer nach \(n) Ziffern im binären Schlüssel ist nicht 0 oder 1.\nDer binäre Schlüssel darf nur die Ziffern 0 und 1 enthalten!"
-            case .generatedWrongly: return "Der t-adic-NAF-Schlüssel wurde falsch erzeugt!\nBitte prüfen Sie, ob das MSB 0 ist oder der Betrag zweier benachbarter Stellen größer als 1 ist."
-            case .outOfRegion: return "Die Länge des t-adic-NAF-Schlüssels liegt außerhalb des zulässigen Bereichs!\nSie ist größer als das Dreifache der Länge des binären Schlüssels.\nBitte ändern Sie den Parameter „a“."
-            case .temporaryBuffer: return "Der temporäre TNAF-Puffer benötigt mehr als 10 Stellen."
-            case .regeneratedWrongly: return "Der regenerierte t-adic-NAF-Schlüssel ist nicht korrekt."
+            case .empty: return "The binary key is empty."
+            case .notADigit(let n): return "ERROR! The character after \(n) digits in binary key is not a digit.\nThe binary key in the input file should contain only the digits 0 and 1!"
+            case .notBinary(let n): return "ERROR! The digit after \(n) digits in binary key is not 0 or 1.\nThe binary key in the input file should contain only the digits 0 and 1!"
+            case .generatedWrongly: return "The 't-adic NAF' key generated wrongly!\nPlease check if MSB bit is 0 or the absolute value of two near bits in key are > 1."
+            case .outOfRegion: return "The size of the length of 't-adic NAF' key is out of region!\nThe size is > 3 times of the binary key length.\nPlease try to change 'a' parameter."
+            case .temporaryBuffer: return "ERROR! The size of TNAF temporary buffer require more than 10 bit."
+            case .regeneratedWrongly: return "ERROR! The regenerated 't-adic NAF' key is not correct."
             }
         }
     }

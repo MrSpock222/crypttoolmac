@@ -1,876 +1,876 @@
-// Generated from the content recovered out of ZT.exe (Martin Ramberger, Authorware 4).
+// Generated from the content recovered out of NT.exe (Martin Ramberger, Authorware 4).
 // Page texts are verbatim; \u{E000}…\u{E001} = superscript, \u{E002}…\u{E003} = subscript.
 
 extension ZTContent {
     static func lesson1() -> ZTLesson {
         var chapters: [ZTChapter] = []
-        chapters.append(ZTChapter(number: "1.1", title: "Teilbarkeit", pages: [
-            ZTPage(id: "1.1 - 01", title: "Teiler und Komplementärteiler", tool: .divisorPairs, blocks: [
-                "    ·  d ist ein Teiler von n, wenn eine Zahl z ∈ ℕ existiert mit d·z = n.\n    ·  Ist d ein Teiler von n, dann heißt      Komplementärteiler zu d.\nAuf der Suche nach Teilern von n muss man nur die Teiler ≤ √n bestimmen,\ndie übrigen Teiler sind deren Komplementärteiler.",
-                "Die Anzahl der Teiler ist bei Quadratzahlen ungerade, weil ein Teiler \"doppelt auftritt\",\nbei allen anderen Zahlen gerade.",
+        chapters.append(ZTChapter(number: "1.1", title: "Divisibility", pages: [
+            ZTPage(id: "1.1 - 01", title: "Divisors and complementary divisors", tool: .divisorPairs, blocks: [
+                "Definition: Let d, n ∈ ℕ.\n    ·  d is a divisor of n, if there is a number z ∈ ℕ with d·z = n.\n    ·  If d is a divisor of n, then     is d's complementary divisor.\nWhen searching for divisors of n, only look for the divisors ≤ √n,\ntheir complementary divisors make up the rest.",
+                "If n is a square number, n's number of divisors is odd, since one divisor \"appears twice\",\notherwise n's number of divisors is even.",
             ]),
-            ZTPage(id: "1.1 - Teiler in Z", title: "Teiler in ℤ", tool: .divides, blocks: [
-                "Man kann den Begriff des Teilers auf ganze Zahlen ausdehnen:\nDefinition: Seien a, b ∈ ℤ.\n    a ist ein Teiler von b, wenn z ∈ ℤ existiert mit a·z = b.\n    Schreibweise: a | b. Man sagt auch: a teilt b, b ist durch a teilbar, b ist ein Vielfaches von a.\n\nBeispiel:      5 | –15,  denn es existiert –3 ∈ ℤ mit 5·(–3) = –15",
-                "Satz: Für alle a, b, c ∈ ℤ gelten die folgenden Regeln der Teilbarkeit:\n    1.  ±1 | a  und  ±a | a,    denn    1·a = a = (–1)·(–a)  und  a·1 = a = (–a)·(–1).\n    2.  a | 1  ⇒  a = ±1,    \"    für a ≠ ±1 existiert kein z ∈ ℤ mit a·z = ±1.\n    6.  a | b  ⇒  a·c | b·c,    \"    a·z = b  ⇒  b·c = (a·z)·c = (a·c)·z.\n    7.  a | b  ∧  b ≠ 0  ⇒  |a| ≤ |b|,    \"    a·z = b  ∧  z ≠ 0  ⇒  |a·z| ≥ |a|.\n    8.  a | b  ∧  b | a  ⇒  |a| = |b|,    \"    falls a = 0, dann ist b = 0 und umgekehrt,\n            sonst ist |a| ≤ |b| und |b| ≤ |a|, also |a| = |b|.\n    3.  a | 0,    \"    a·0 = 0.\n    4.  0 | b  ⇒  b = 0,    \"    0·z = b  ⇒  b = 0.\n    5.  a | b  ∧  b | c  ⇒  a | c,    \"    a·z\u{E002}1\u{E003} = b  ∧  b·z\u{E002}2\u{E003} = c  ⇒  c = (a·z\u{E002}1\u{E003})·z\u{E002}2\u{E003} = a·(z\u{E002}1\u{E003}·z\u{E002}2\u{E003}).",
-                " 1 teilt a,      a teilt a,\n–1 teilt a,    –a teilt a.",
-                "Wenn a Teiler von 1 ist, dann ist a gleich 1 oder –1.\nDas heißt: Die einzigen Teiler von 1 sind 1 und –1.",
-                "Jede Zahl teilt 0. Auch 0 teilt 0, denn 0·z = 0 gilt sogar mit beliebigem z ∈ ℤ.\nTrotzdem ist die Division 0 durch 0 verboten, denn kein z ist als Ergebnis definiert.",
-                "Wenn 0 eine Zahl teilt, dann ist diese Zahl gleich 0.\nDas heißt: Nur 0 wird von 0 geteilt.\nOder: Das einzige Vielfache von 0 ist 0 selbst.",
-                "Ist a Teiler von b, und ist b Teiler von c, dann ist a Teiler von c.\nMan sagt deshalb auch: Teilbarkeit ist transitiv.\n\"Transitiv\" könnte man hier mit \"überbrückend\" übersetzen.",
-                "Ist a Teiler von b, dann ist a·c Teiler von b·c.",
-                "Wenn a Teiler von b ist und b ungleich 0, dann ist a dem Betrage nach kleiner als b.",
-                "Ist a Teiler von b, und ist b Teiler von a, dann sind a und b dem Betrage nach gleich.",
+            ZTPage(id: "1.1 - Teiler in Z", title: "Divisors in ℤ", tool: .divides, blocks: [
+                "One can extend the concept of divisors on integers:\nDefinition: Let a, b ∈ ℤ.\n    a is a divisor of b, if z ∈ ℤ exists with a·z = b.\n    Notation: a | b. One says: a divides b, b is divisible by a,  b is a multiple of a.\n\nExample:      5 | –15,  since there exists –3 ∈ ℤ with 5·(–3) = –15",
+                "Theorem: For all a, b, c ∈ ℤ the following divisibility rules hold:\n    1.  ±1 | a  and  ±a | a,    since    1·a = a = (–1)·(–a)  and  a·1 = a = (–a)·(–1).\n    2.  a | 1  ⇒  a = ±1,    \"    for a ≠ ±1 exists no z ∈ ℤ with a·z = ±1.\n    6.  a | b  ⇒  a·c | b·c,    \"    a·z = b  ⇒  b·c = (a·z)·c = (a·c)·z.\n    7.  a | b  ∧  b ≠ 0  ⇒  |a| ≤ |b|,    \"    a·z = b  ∧  z ≠ 0  ⇒  |a·z| ≥ |a|.\n    8.  a | b  ∧  b | a  ⇒  |a| = |b|,    \"    if a = 0, then b = 0 and vice versa,\n            otherwise is |a| ≤ |b| and |b| ≤ |a|, thus |a| = |b|.\n    3.  a | 0,    \"    a·0 = 0.\n    4.  0 | b  ⇒  b = 0,    \"    0·z = b  ⇒  b = 0.\n    5.  a | b  ∧  b | c  ⇒  a | c,    \"    a·z\u{E002}1\u{E003} = b  ∧  b·z\u{E002}2\u{E003} = c  ⇒  c = (a·z\u{E002}1\u{E003})·z\u{E002}2\u{E003} = a·(z\u{E002}1\u{E003}·z\u{E002}2\u{E003}).",
+                "  1 divides a,      a divides a,\n–1 divides a,    –a divides a.",
+                "If a divides 1, then a equals 1 or –1.\nIn other words: The only divisors of 1 are 1 and –1.",
+                "Each number divides 0. Even 0 divides 0, since 0·z = 0 with any z ∈ ℤ.\nBut the division 0 by 0 is forbidden, because no z is defined as this division's result.",
+                "Whenever 0 divides a number, this number is 0.\nThis means: Only 0 is divided by 0.\nOr: The only multiple of 0 is 0 itself.",
+                "If a divides b and b divides c, then a divides c.\nThis means: divisibility is transitive.",
+                "If a divides b, then a·c divides b·c.",
+                "If a divides b and b is not 0, then a's absolute value is not greater than b's absolute value.",
+                "If a divides b and b divides a, then a and b have equal absolute values.",
             ]),
-            ZTPage(id: "1.1 - Teilermenge", title: "Die Teilermenge", tool: .divisorSet, blocks: [
-                "Mit jeder Zahl a ist auch –a ein Teiler von b:   a | b  ⇔  –a | b.\nDeshalb reicht es, wenn man die positiven Teiler sammelt:\n\nDefinition:     Für a ∈ ℤ heißt \u{E002}T\u{E003}a = { x ∈ ℕ  |  x | a } Teilermenge von a.",
-                "Dieser Strich bedeutet:\n\"mit folgender Eigenschaft\"",
-                "d | a  ⇔  d | –a,    denn   a = d·z  ⇔  –a = d·(–z)",
-                "Teibarkeitsregel 3",
-                "Teibarkeitsregel 7",
-                "Teibarkeitsregel 1",
-                "Keine Teilermenge ist leer:  T\u{E002}a\u{E003} ≠ ∅  für alle a.\nDie Teilermenge von 0 enthält alle natürlichen Zahlen:  T\u{E002}0\u{E003} = ℕ.\nDie Teilermengen für a ≠ 0 sind endlich.\n\nWegen T\u{E002}a\u{E003} = T\u{E002}–a\u{E003} kann man die Untersuchung von Teilermengen auf a ∈ ℕ beschränken.",
+            ZTPage(id: "1.1 - Teilermenge", title: "The divisor set", tool: .divisorSet, blocks: [
+                "With each number a also –a is a divisor of b:   a | b  ⇔  –a | b.\nHence one simply looks for the positive divisors:\n\nDefinition:     For a ∈ ℤ the set T\u{E002}a\u{E003} = { x ∈ ℕ  |  x | a } is called divisor set of a.",
+                "This line means:\n\"with the following property\"",
+                "d | a  ⇔  d | –a,    since   a = d·z  ⇔  –a = d·(–z)",
+                "3rd divisibility rule",
+                "7th divisibility rule",
+                "1st divisibility rule",
+                "No divisor set is empty:  T\u{E002}a\u{E003} ≠ ∅  for all a.\nThe divisor set of 0 contains all natural numbers:  T\u{E002}0\u{E003} = ℕ.\nThe divisor sets for a ≠ 0 are finite.\n\nBecause of T\u{E002}a\u{E003} = T\u{E002}–a\u{E003} one can restrict the examination of divisor sets to a ∈ ℕ.",
             ]),
-            ZTPage(id: "1.1 - Def ggT", title: "Der größte gemeinsame Teiler", tool: .gcdSets, blocks: [
-                "Definition: Sind die Zahlen a, b ∈ ℤ nicht beide gleich 0, dann heißt\n    die größte Zahl aus T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003}  größter gemeinsamer Teiler von a und b, kurz ggT(a, b).\nDer ggT existiert, denn jede Teilermenge enthält die Zahl 1, \nund mindestens eine Teilermenge ist endlich, also auch der Schnitt der Teilermengen;\nweil man alle natürlichen Zahlen bezüglich Größe miteinander vergleichen kann,\nenthält jede endliche nicht-leere Menge natürlicher Zahlen ein größtes Element.",
-                "HSatz: Folgende Regeln gelten für den ggT:\n    1. ggT(a, b) = ggT(±a, ±b),     denn  \u{E002}T\u{E003}a = \u{E002}T–\u{E003}a  und  \u{E002}T\u{E003}b = \u{E002}T–\u{E003}b\n    2. ggT(a, 0) = |a|  für a ≠ 0,    denn  \u{E002}T\u{E003}0 = ℕ    und  \u{E002}T\u{E003}a ∩ ℕ = \u{E002}T\u{E003}a = \u{E002}T|a\u{E003}|\n    3. ggT(a, 1) = 1,    denn  \u{E002}T\u{E003}1 = {1}  und  Ta ∩ {1} = {1}\nWegen Regel 1 kann man sich bei der Bestimmung von ggT(a, b) auf a, b ∈ ℕ beschränken.\nDefinition: Zwei Zahlen a, b ∈ ℤ heißen teilerfremd oder prim zueinander, wenn ggT(a, b) = 1.\nmehr Beispiele\nBeispiel:     T–6 = {1, 2, 3, 6},  T15 = {1, 3, 5, 15},\n    T\u{E002}–6\u{E003} ∩ T\u{E002}15\u{E003} = {1, 3}  ⇒  ggT(–6, 15) = 3",
-            ]),
-        ]))
-        chapters.append(ZTChapter(number: "1.2", title: "Primzahlen", pages: [
-            ZTPage(id: "1.2 - 01", title: "Primzahlen", tool: .trialDivision, blocks: [
-                "Definition:    Eine Primzahl p ist eine natürliche Zahl mit genau zwei positiven Teilern,\n    nämlich 1 und p selbst. Die Menge aller Primzahlen heißt ℙ.\n\nBeachten Sie, dass 1 keine Primzahl ist. Die Primzahlen < 100 sind:\n2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97.",
-                "Definition:    Teilt eine Primzahl p eine ganze Zahl a, dann heißt p Primteiler von a.\nSatz:     Jede natürliche Zahl n > 1 hat mindestens einen Primteiler.    Beweis",
-                "Daraus gewann schon Euklid Einsicht in die Anzahl der Primzahlen:\nSatz:     Es gibt unendlich viele Primzahlen.    Beweis",
-                "Definition:     Die natürlichen Zahlen zwischen den Primzahlen heißen zusammengesetzte Zahlen.\nSatz:     Jede zusammengesetzte Zahl n hat einen Primteiler p ≤ \u{E002}Ö\u{E003} n.    Beweis",
-                "Ist also eine natürliche Zahl n > 1 durch keine Primzahl p ≤ √n teilbar, dann ist n eine Primzahl.\nBeispiel:     89 ist Primzahl, denn 2, 3, 5, 7 teilen 89 nicht,  und 11 > √89.",
-            ]),
-            ZTPage(id: "1.2 - Eratosthenes", title: "Das Sieb des Eratosthenes", tool: .sieve, blocks: [
-                "Jede zusammengesetzte Zahl n hat einen Primteiler ≤ √n. Das macht man sich zunutze beim\nSieb des Eratosthenes. Es findet alle Primzahlen bis zu einer Grenze g",
-            ]),
-            ZTPage(id: "1.2 - Erat mit Einsen", title: "Probedivision", tool: .trialDivision, blocks: [
-                "Jede p-te Zahl ist ein Vielfaches von p: Man kann sie unbesehen streichen. Daher reicht es,\nwenn man das Sieb am Anfang mit Einsen füllt, um Platz zu sparen.\nAußerdem lässt man die geraden Zahlen gleich weg. Dann vertritt das i-te Feld die Zahl 2·i – 1.\nAm Ende markieren die Einsen die Primzahlen > 2.\nISiebgröße =    {{, .., {} enthält { Primzahlen.",
-            ]),
-            ZTPage(id: "1.2 - Fundamentalsatz", title: "Der Fundamentalsatz", tool: .factorize, blocks: [
-                "Die zusammengesetzten Zahlen kann man als Produkte natürlicher Zahlen > 1 darstellen.\n\nBeispiele:    ·  4 = 2·2\n    ·  60 = 6·10 = 2·3·2·5  oder  60 = 4·15 = 2·2·3·5\n\nEine solche Darstellung heißt Faktorzerlegung. Ein Faktor ∈ ℙ heißt Primfaktor.\nEine Primfaktorzerlegung enthält nur Primfaktoren.\nDie Primfaktorzerlegung einer Primzahl p besteht aus einem einzigen Faktor: p selbst.",
-                "Satz:     Teilt p ∈ ℙ ein Produkt ganzer Zahlen, dann teilt p mindestens einen Faktor.\nBewiesen wird der Satz gegen Ende von Abschnitt 1.3.\nAnmerkung: Für p ∉ ℙ gibt es Gegenbeispiele, etwa: p = 4 teilt 2·10, aber weder 2 noch 10.",
-                "Damit gilt der Fundamentalsatz der Zahlentheorie:\n\nSatz:     Jede natürliche Zahl n > 1 hat eine eindeutige Primfaktorzerlegung,\n    wenn man die Reihenfolge der Primfaktoren außer Acht lässt.\nBeweis",
-            ]),
-            ZTPage(id: "1.2 - Zahlenmenge 4n+1", title: "Die Zahlenmenge 4n+1", tool: .hilbert, blocks: [
-                "∅Der Satz, dass jede natürliche Zahl > 1 eine eindeutige Primfaktorzerlegung hat, scheint trivial. Aber er gilt nicht in jeder Zahlenmenge.\nBeispiel:     Betrachten Sie H = {4·n + 1 | n ∈ I\u{E002}N\u{E003}0} = {1, 5, 9, 13, 17, 21, 25, 29, 33, ...}.",
-                "    H ist multiplikativ abgeschlossen, das heißt:  a, b ∈ H  ⇒  a·b ∈ H.\n    Denn:  (4·a+1)·(4·b+1)  =  16·a·b + 4·a + 4·b + 1  =  4·(4·a·b+a+b) + 1",
-                "Primzahlen sind in H definiert als Zahlen mit genau zwei Teilern ∈ H.\nIst a ∈ H Primzahl in ℕ, dann ist a auch Primzahl in H.",
-                "    Zusätzlich gibt es in H Primzahlen, die in ℕ keine Primzahlen sind,\n    zum Beispiel:\n    ·  9    ist Primzahl in H. Die Zerlegung 9 = 3·3 existiert in H nicht, denn 3 ∉ H.\n    ·  77    ist Primzahl in H. Die Zerlegung 7 = 7·11 existiert in H nicht, denn 7 ∉ H.",
-                "    Und in H gibt es Zahlen mit mehr als einer Primfaktorzerlegung,\n    zum Beispiel:\n    ·  441 = 21·21 = 9·49    ·  1089 = 33·33 = 9·121\n    ·  3249 = 57·57 = 9·361    ·  5929 = 77·77 = 49·121",
-            ]),
-            ZTPage(id: "1.2 - kanonische PFZ", title: "Kanonische Primfaktorzerlegung", tool: .factorize, blocks: [
-                "Gewöhnlich ordnet man die Faktoren einer Primfaktorzerlegung nach ihrer Größe\nund fasst gleiche Faktoren zu Potenzen zusammen, zum Beispiel:  200 = 2\u{E000}3\u{E001}·5\u{E000}2\u{E001}",
-                "Nummeriert man die Primzahlen nach ihrer Größe,\n    p\u{E002}1\u{E003} = 2,   p\u{E002}2\u{E003} = 3,   p\u{E002}3\u{E003} = 5,   p\u{E002}4\u{E003} = 7,   p\u{E002}5\u{E003} = 11,  ...",
-                "und kommt in der Primfaktorzerlegung einer Zahl a die i-te Primzahl a\u{E002}i\u{E003} mal vor,",
-                "        a = ∏ p\u{E002}i\u{E003}\u{E000}a\u{E001}i   =  p\u{E002}1\u{E003}\u{E000}a\u{E001}1 · p\u{E002}2\u{E003}\u{E000}a\u{E001}2 · p\u{E002}3\u{E003}\u{E000}a\u{E001}3 · ....\n\nBeispiel:       200 = 2\u{E000}3\u{E001}·3\u{E000}0\u{E001}·5\u{E000}2\u{E001}·7\u{E000}0\u{E001}·11\u{E000}0\u{E001}·13\u{E000}0\u{E001}·...\ndann ist",
-                "Dieses Produkt hat nur endlich viele Faktoren,\ndenn alle Primzahlen, die a nicht teilen, werden durch den Exponenten a\u{E002}i\u{E003} = 0 neutralisiert.\n =  2\u{E000}3\u{E001}·1·5\u{E000}2\u{E001}·1·1·1·...  =  2\u{E000}3\u{E001}·5\u{E000}2\u{E001}",
-                "p\u{E000}0\u{E001} = 1, und der Faktor 1 ändert nichts am Produkt.",
-                "Definition:       a = ∏ p\u{E002}i\u{E003}\u{E000}a\u{E001}i   heißt kanonische Primfaktorzerlegung von a.\n\nIn der kanonischen Primfaktorzerlegung von 1 sind alle Exponenten a\u{E002}i\u{E003} = 0.",
-            ]),
-            ZTPage(id: "1.2 - Anzahl Teiler", title: "Anzahl der Teiler", tool: .divisorCount, blocks: [
-                "Mit der kanonischen Primfaktorzerlegung kann man die Teiler einer Zahl a ∈ ℕ bestimmen.\nDie Zahl  d = ∏ p\u{E002}i\u{E003}\u{E000}d\u{E001}i   ist genau dann ein Teiler von  a = ∏ p\u{E002}i\u{E003}\u{E000}a\u{E001}i  , wenn d\u{E002}i\u{E003} ≤ a\u{E002}i\u{E003} für alle i ∈ ℕ.",
-                "Beispiel:     Die positiven Teiler d von a = 200 = 2\u{E000}3\u{E001}·5\u{E000}2\u{E001} sind:\n    2\u{E000}0\u{E001}·5\u{E000}0\u{E001} = 1    2\u{E000}0\u{E001}·5\u{E000}1\u{E001} = 5    2\u{E000}0\u{E001}·5\u{E000}2\u{E001} = 25\n    2\u{E000}1\u{E001}·5\u{E000}0\u{E001} = 2    2\u{E000}1\u{E001}·5\u{E000}1\u{E001} = 10    2\u{E000}1\u{E001}·5\u{E000}2\u{E001} = 50\n    2\u{E000}2\u{E001}·5\u{E000}0\u{E001} = 4    2\u{E000}2\u{E001}·5\u{E000}1\u{E001} = 20    2\u{E000}2\u{E001}·5\u{E000}2\u{E001} = 100\n    2\u{E000}3\u{E001}·5\u{E000}0\u{E001} = 8     2\u{E000}3\u{E001}·5\u{E000}1\u{E001} = 40    2\u{E000}3\u{E001}·5\u{E000}2\u{E001} = 200",
-                "Die negativen Teiler unterscheiden sich nur durch ihr Vorzeichen von den positiven.",
-                "Die positiven Teiler entstehen durch Kombination der Primfaktoren. Dabei darf\nin jeder Kombination der Primfaktor p\u{E002}i\u{E003} maximal a\u{E002}i\u{E003} mal vorkommen oder auch fehlen.\nDas ergibt insgesamt (a\u{E002}1\u{E003}+1)·(a\u{E002}2\u{E003}+1)·(a\u{E002}3\u{E003}+1)·.... mögliche Kombinationen.\nWegen der Eindeutigkeit der Primfaktorzerlegung in ℕ ist jede Kombination ein neuer Teiler.\n(3+1) Möglichkeiten für Primfaktor 2\n(2+1) Möglichkeiten für Primfaktor 5",
-                "Die Anzahl der positiven Teiler von a ∈ ℕ ist also P (a\u{E002}i\u{E003}+1).\nBeispiel:     200 = 2\u{E000}3\u{E001}·5\u{E000}2\u{E001}  hat  (3+1)·(2+1) = 12  positive Teiler.",
-            ]),
-            ZTPage(id: "1.2 - ggT mit Hilfe PFZ", title: "ggT mit Hilfe der PFZ", tool: .gcdFactor, blocks: [
-                "Kennt man die Primfaktorzerlegungen zweier Zahlen a, b ∈ ℕ,\nso kann man den ggT(a, b) auch ohne T\u{E002}a\u{E003} und T\u{E002}b\u{E003} bestimmen.",
-                "⇒min(x, y) ist das Minimum von x und y,\nalso x, falls x ≤ y; andernfalls y.",
-                "Taucht der Primteiler p\u{E002}i\u{E003} in a a\u{E002}i\u{E003} mal und in b b\u{E002}i\u{E003} mal auf, so im ggT(a, b) min(a\u{E002}i \u{E003}, b\u{E002}i\u{E003}) mal:\n∩a = P \u{E002}p\u{E003}\u{E000}i\u{E001}ai   ∧  b = P \u{E002}p\u{E003}\u{E000}i\u{E001}bi    ⇒    ggT(a, b) = P \u{E002}p\u{E003}imin(ai\u{E000} ,\u{E001} b\u{E000}i\u{E001}) ",
+            ZTPage(id: "1.1 - Def ggT", title: "The greatest common divisor", tool: .gcdSets, blocks: [
+                "Definition: If numbers a, b ∈ ℤ not both are 0, then the greatest number from T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003}\n    is called the greatest common divisor of a and b, shortly GCD(a, b).\nThe GCD exists, since each divisor set contains the number 1, \nand at least one divisor set is finite, thus the intersection of the divisor sets is finite;\nbecause all natural numbers are comparable in respect of size,\neach finite non-empty set of natural numbers has a biggest element.",
+                "Theorem: The following rules hold for the GCD:\n    1. GCD(a, b) = GCD(±a, ±b),     since  T\u{E002}a\u{E003} = T\u{E002}–a\u{E003}  and  T\u{E002}b\u{E003} = T\u{E002}–b\u{E003}\n    2. GCD(a, 0) = |a|  for a ≠ 0,    since  T\u{E002}0\u{E003} = ℕ    and  T\u{E002}a\u{E003} ∩ ℕ = T\u{E002}a\u{E003} = T\u{E002}|a|\u{E003}\n    3. GCD(a, 1) = 1,    since  T\u{E002}1\u{E003} = {1}  and  T\u{E002}a\u{E003} ∩ {1} = {1}\nBecause of rule 1 one can restrict the identification of GCD(a, b) on a, b ∈ ℕ.\nDefinition: Two numbers a, b ∈ ℤ are coprime or relatively prime, if GCD(a, b) = 1.\nmore Examples\nExample:     T\u{E002}–6\u{E003} = {1, 2, 3, 6},  T\u{E002}15\u{E003} = {1, 3, 5, 15},\n    T\u{E002}–6\u{E003} ∩ T\u{E002}15\u{E003} = {1, 3}  ⇒  GCD(–6, 15) = 3",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "1.3", title: "Euklids Algorithmus", pages: [
-            ZTPage(id: "1.3 - 01", title: "Vielfachsummen", tool: .linearCombination, blocks: [
-                "Definition:    Seien a, b ∈ ℤ.\n    Dann heißt  a·x + b·y mit x, y ∈ ℤ Vielfachsumme von a und b.\n    Die Zahlen x und y heißen Koeffizienten der Vielfachsumme.",
-                "Beispiel:    a und b sind anklickbar.",
-                "Satz:    Seien a, b \u{E002}∈\u{E003} Z. Dann gilt für alle x, y \u{E002}∈\u{E003} Z:\n    d | a  ∧  d | b    ⇒    d | a·x + b·y\n    Jeder gemeinsame Teiler der Zahlen a, b teilt jede Vielfachsumme von a, b.   Beweis\nAlso nur Vielfache der gemeinsamen Teiler von a, b können Vielfachsumme von a, b sein.",
-                "Satz:    Jede Vielfachsumme hat unendlich viele Darstellungen.     Beweis",
+        chapters.append(ZTChapter(number: "1.2", title: "Primes", pages: [
+            ZTPage(id: "1.2 - 01", title: "Primes", tool: .trialDivision, blocks: [
+                "Definition:    A prime or prime number p is a natural number with exactly two positive divisors,\n    namely 1 and p itself. The set of all primes is called ℙ.\n\nNotice that 1 is no prime. The primes < 100 are:\n2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97.",
+                "Definition:    If a prime p divides an integer a, then p is called prime divisor of a.\nTheorem:     Each natural number n > 1 has at least one prime divisor.    Proof",
+                "From this Euclid got insight in the number of primes:\nTheorem:     There are infinitely many primes.    Proof",
+                "Definition:     The natural numbers between the primes are called composite numbers.\nTheorem:     Each composite number n has a prime divisor p ≤ √ n.    Proof",
+                "Thus, if an integer n > 1 is not divisible by any prime p ≤ √ n, then n is prime.\nExample:     89 is prime, since 2, 3, 5, 7 do not divide 89,  and 11 > √ 89.",
             ]),
-            ZTPage(id: "1.3 - ggT(a,b)=ggT(b,a-b)", title: "ggT(a, b) = ggT(b, a – b)", tool: .subtractiveGcd, blocks: [
-                "Seien a, b ∈ ℤ.\nSubtrahiert man von a ein Vielfaches von b, so erhält man als Vielfachsumme von a und b:\na – x·b = c\nEs gilt also:     d | a  ∧  d | b  ⇒  d | c",
-                "Formt man die Gleichung um, so erhält man a als Vielfachsumme von b und c:\na = x·b + c\nEs gilt also auch:     d | b  ∧  d | c  ⇒  d | a",
-                "Insgesamt gilt also:    d | a  ∧  d | b  ⇔  d | b  ∧  d | c\nDas heißt für die Teilermengen:    T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003}     =     T\u{E002}b\u{E003} ∩ T\u{E002}c\u{E003}\nUnd damit gilt:    ggT(a, b)     =     ggT(b, c)\nBeispiele:      ·  1024    – 10·100    = 24,     also ist  ggT(1024, 100)  =  ggT(100, 24)\n    ·  100    – 4·24    = 4,      also ist  ggT(100, 24)  =  ggT(24, 4)\n    ·  24    – 6·4    = 0,      also ist  ggT(24, 4)  =  ggT(4, 0)  =  4",
+            ZTPage(id: "1.2 - Eratosthenes", title: "The Sieve of Eratosthenes", tool: .sieve, blocks: [
+                "Each composite number n has a prime divisor ≤ √ n. This is taken advantage of by the\nSieve of Eratosthenes. It finds all primes up to a limit g",
             ]),
-            ZTPage(id: "1.3 - Euklid Ablauf", title: "Ablauf des Euklidischen Algorithmus", tool: .euclid, blocks: [
-                "a – z·b = r   ⇔   a = z·b + r\nWeil r Vielfachsumme von a und b ist, gilt:     d | a  ∧  d | b     ⇒     d | b  ∧  d | r\nWeil a Vielfachsumme von b und r ist, gilt:    d | b  ∧  d | r     ⇒     d | a  ∧  d | b\nAlso gilt:    d | a  ∧  d | b     ⇔     d | b  ∧  d | r\nalso:    T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003}     =     T\u{E002}b\u{E003} ∩ T\u{E002}r\u{E003}\nund damit:    ggT(a, b)     =     ggT(b, r)",
-                "ggT(a, b) = ggT(±a, ±b)",
-                "Euklid: \"Subtrahiere von der ersten Zahl a ein solches Vielfaches der zweiten Zahl b,",
-                "Beim Rest = 0 hört man auf. Der letzte Rest > 0 ist der gesuchte ggT.",
+            ZTPage(id: "1.2 - Erat mit Einsen", title: "Trial division", tool: .trialDivision, blocks: [
+                "Each p-th number is a multiple of p: You can strike it out regardlessly.\nHence you can simply fill the sieve initially with 1s in order to save space.\nMoreover you can omit the even numbers. Then the i-th field represents the number 2·i – 1.\nIn the end the remaining 1s mark the primes > 2.",
             ]),
-            ZTPage(id: "1.3 - die Teiler des ggT", title: "Die Teiler des ggT", tool: .gcdSets, blocks: [
-                "a–x·b ist Vielfachsumme von a und b.",
-                "Man subtrahiert von der ersten Zahl immer ein solches Vielfaches der zweiten,\ndass ein möglichst kleiner Rest ≥ 0 bleibt.",
-                "Irgendwann tritt der Rest 0 auf.",
-                "⇔r ist die größte Zahl ∈ \u{E002}T\u{E003}r = \u{E002}Ta\u{E003} ∩ \u{E002}Tb\u{E003}",
-                "Dem euklidischen Algorithmus entsprechen folgende Gleichungen mit r als letztem Rest > 0:\nT\u{E002}a \u{E003}∩ T\u{E002}b\u{E003}  =  T\u{E002}b \u{E003}∩ T\u{E002}a–x·b\u{E003}  =  ...  =  T\u{E002}r \u{E003}∩ T\u{E002}0\u{E003}  =  T\u{E002}r\u{E003}  =  TggT(a,b)\nDie gemeinsamen Teiler von a und b sind also genau die Teiler des ggT(a, b).",
-                "Deshalb kann man ggT(a, b) auch so definieren:\nDefinition:     Die Zahl d ∈ ℕ\u{E002}0\u{E003} heißt größter gemeinsamer Teiler von a und b, wenn gilt:\n    1. d | a  und  d | b    d ist gemeinsamer Teiler.\n    2. t | a und t | b  ⇒  t | d    Jeder gemeinsame Teiler teilt d.\n\nNach dieser Definition ist ggT(0, 0) = 0 sinnvoll, denn:\n    1. 0 ist gemeinsamer Teiler.\n    2. Jeder gemeinsame Teiler – also jede ganze Zahl – teilt 0.",
-                "Noch einmal zur Frage, welche Zahlen können Vielfachsumme von a und b sein?\nBisher galt:     nur Vielfache aller gemeinsamen Teiler von a und b\nDas heißt jetzt kurz:     nur Vielfache des ggT(a, b)\n\nEs bleibt die Frage: Ist ggT(a, b) immer als Vielfachsumme von a und b darstellbar?",
+            ZTPage(id: "1.2 - Fundamentalsatz", title: "The fundamental theorem of arithmetic", tool: .factorize, blocks: [
+                "The composite numbers can be represented as products of natural numbers > 1.\n\nExamples:    ·  4 = 2·2\n    ·  60 = 6·10 = 2·3·2·5  or  60 = 4·15 = 2·2·3·5\n\nA representation like this is called factor decomposition. A factor ∈ ℙ is called prime factor.\nA prime decomposition contains only prime factors.\nThe prime decomposition of a prime p consists of only one factor: p itself.",
+                "Theorem:     If p ∈ ℙ divides a product of integers, then p divides at least one factor.\nProof:    The proof of this theorem is located about the end of chapter 1.3.\nAnnotation: For p ∉ ℙ there are counter-examples, e.g. p = 4 divides 2·10, but neither 2 nor 10.",
+                "Thus holds the Fundamental Theorem of Arithmetic:\n\nTheorem:     Each natural number n > 1 has a unique prime decomposition\n    apart from rearrangement of the prime factors.\nProof",
             ]),
-            ZTPage(id: "1.3 - ggT als Vielfachsumme", title: "Der ggT als Vielfachsumme", tool: .extEuclid, blocks: [
-                "Der euklidische Algorithmus berechnet ggT(a, b). Dabei kann man alle auftretenden Reste als Vielfachsummen von a und b schreiben und ihre Koeffizienten berechnen:",
-                "ggT(a, b) = ggT(±a, ±b)\nDie Koeffizienten reagieren mit ihren Vorzeichen.",
-                "Man erhält ggT(a, b) als Vielfachsumme von |a| und |b|.\nFalls a < 0 oder b < 0, so multipliziert man den entsprechenden Koeffizienten mit –1\nund erhält ggT(a, b) als Vielfachsumme von a und b:",
+            ZTPage(id: "1.2 - Zahlenmenge 4n+1", title: "The number set 4n+1", tool: .hilbert, blocks: [
+                "The theorem that each natural number > 1 has a unique prime decomposition seems trivial.\nBut it does not hold in each set of numbers.\nExample:     Consider H = {4·n + 1 | n ∈ ℕ\u{E002}0\u{E003}} = {1, 5, 9, 13, 17, 21, 25, 29, 33, ...}.",
+                "    H is multiplicatively closed, this means:  a, b ∈ H  ⇒  a·b ∈ H.\n    Because:  (4·a+1)·(4·b+1)  =  16·a·b + 4·a + 4·b + 1  =  4·(4·a·b+a+b) + 1",
+                "Primes are defined in H as numbers with exactly two divisors ∈ H.\nIf a ∈ H is prime in ℕ, then a is prime in H too.",
+                "    Additionally there are primes in H which are no primes in ℕ,\n    for example:\n    ·  9    is prime in H. The decomposition 9 = 3·3 does not exist in H, since 3 ∉ H.\n    ·  77    is prime in H. The decomposition 7 = 7·11 does not exist in H, since 7 ∉ H.",
+                "    And in H there are numbers with more than one prime decomposition,\n    for example:\n    ·  441 = 21·21 = 9·49    ·  1089 = 33·33 = 9·121\n    ·  3249 = 57·57 = 9·361    ·  5929 = 77·77 = 49·121",
             ]),
-            ZTPage(id: "1.3 - Eigenschaften ggT", title: "Eigenschaften des ggT", tool: .extEuclid, blocks: [
-                "Aus dem euklidischen Algorithmus folgt also:\nSatz:   Die Teiler des ggT(a, b) sind die gemeinsamen Teiler von a und b.    Demonstration\nSatz:   ggT(a, b) lässt sich als Vielfachsumme von a und b darstellen.    Demonstration",
-                "Auch jedes Vielfache des ggT(a, b) lässt sich als Vielfachsumme von a und b darstellen:\n    ggT(a, b)  =  a·x + b·y    ⇒    ggT(a, b)·z  =  a·x·z + b·y·z\nWeil nur Vielfache des ggT(a, b) Vielfachsumme von a und b sein können, erhält man als\nFolgerung:    ggT(a, b) | d     ⇔    Es gibt x, y \u{E002}∈\u{E003} Z, so dass  d = a·x + b·y.",
-                "Satz:   ggT(a, b) = d   ⇔   ggT(   ,   ) = 1    Beweis\nMit Vielfachsummen lassen sich bequem weitere Eigenschaften beweisen:\nSatz:   ggT(a, c) = 1  ∧  ggT(b, c) = 1   ⇒   ggT(a·b, c) = 1    Beweis\nSatz:   ggT(a, b) = 1  ∧  a | b·c   ⇒   a | c    Beweis",
-                "In Abschnitt 1.2 wurde der Fundamentalsatz der Zahlentheorie bewiesen mit dem Satz:\n    Teilt eine Primzahl ein Produkt ganzer Zahlen, so teilt sie mindestens einen Faktor.\nHier ist der Beweis dieses Satzes.",
+            ZTPage(id: "1.2 - kanonische PFZ", title: "Canonical prime decomposition", tool: .factorize, blocks: [
+                "Usually one orders the factors of a prime decomposition by their size\nand combines equal factors in powers, for example:  200 = 2\u{E000}3\u{E001}·5\u{E000}2\u{E001}",
+                "Having numbered the primes consecutively,\n    p\u{E002}1\u{E003} = 2,   p\u{E002}2\u{E003} = 3,   p\u{E002}3\u{E003} = 5,   p\u{E002}4\u{E003} = 7,   p\u{E002}5\u{E003} = 11,  ...",
+                "if the i-th prime occurs α\u{E002}i\u{E003} times in the prime decomposition of number a,",
+                "        a = ∏ p\u{E002}i\u{E003}\u{E000}α\u{E001}i   =  p\u{E002}1\u{E003}\u{E000}α\u{E001}1 · p\u{E002}2\u{E003}\u{E000}α\u{E001}2 · p\u{E002}3\u{E003}\u{E000}α\u{E001}3 · ....\n\nExample:       200 = 2\u{E000}3\u{E001}·3\u{E000}0\u{E001}·5\u{E000}2\u{E001}·7\u{E000}0\u{E001}·11\u{E000}0\u{E001}·13\u{E000}0\u{E001}·...\nthen is",
+                "This product has only finitely many factors,\nsince all primes which do not divide a, are neutralized by the exponent α\u{E002}i\u{E003} = 0.\n =  2\u{E000}3\u{E001}·1·5\u{E000}2\u{E001}·1·1·1·...  =  2\u{E000}3\u{E001}·5\u{E000}2\u{E001}",
+                "p\u{E000}0\u{E001} = 1, and the factor 1 doesn't change the product.",
+                "Definition:       a = ∏ p\u{E002}i\u{E003}\u{E000}α\u{E001}i   is called the canonical prime decomposition of a.\n\nIn the canonical prime decomposition of 1 are all exponents α\u{E002}i\u{E003} = 0.",
             ]),
-            ZTPage(id: "1.3 - ggT von mehr als 2 Zahlen", title: "ggT von mehr als 2 Zahlen", tool: .gcdMany, blocks: [
-                "Man kann den ggT von mehr als 2 Zahlen definieren:\nDefinition:     Seien k, a\u{E002}1 \u{E003}, a\u{E002}2 \u{E003}, ..., a\u{E002}k\u{E003} ∈ ℤ und k > 2. Dann ist      \u{E000}ggT( a\u{E001}1\u{E000},\u{E001} \u{E000}a\u{E001}2\u{E000},\u{E001} ..., ak ) = größte Zahl ∈ Ta\u{E002}1\u{E003} \u{E000}∩ T\u{E001}a\u{E002}2\u{E003} ∩ ... ∩ Ta\u{E002}k\u{E003}\u{E000} ,\u{E001} falls nicht alle a = 0,\n    ggT( 0, 0, ..., 0 ) = 0.",
-                "Teilerfremde Zahlen sind nicht unbedingt paarweise teilerfremd.   Beispiel\n    Ist ggT(a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003}) = 1, dann heißen a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003} teilerfremd.",
-                "Satz:      ggT( a, ggT(b, c) )  =  ggT( ggT(a, b), c )    Beweis\n    ggT( a\u{E002}1\u{E003}, ..., a\u{E002}k+1\u{E003} )  =  ggT( ggT( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} ), a\u{E002}k+1\u{E003} )  für k ≥ 2    Beweis\nMit der Eigenschaft T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003} = T\u{E002}ggT(a, b)\u{E003} kann man zeigen:",
-                "Man kann auch Vielfachsummen von mehr als zwei Zahlen \u{E002}a\u{E003}1, \u{E002}a\u{E003}2, ..., \u{E002}a\u{E003}k definieren und\nmit vollständiger Induktion zeigen, dass sich mit ihnen ggT( \u{E002}a\u{E003}1, \u{E002}a\u{E003}2, ..., \u{E002}a\u{E003}k ) darstellen lässt.\nDer Kürze halber gibt es hier nur den Beweis für k = 3.",
+            ZTPage(id: "1.2 - Anzahl Teiler", title: "Number of divisors", tool: .divisorCount, blocks: [
+                "With the canonical prime decomposition you can find the divisors of a number a ∈ ℕ.\nNumber  d = ∏ p\u{E002}i\u{E003}\u{E000}δ\u{E001}i   is a divisor of  a = ∏ p\u{E002}i\u{E003}\u{E000}α\u{E001}i  ,  exactly if δ\u{E002}i\u{E003} ≤ α\u{E002}i\u{E003} for all i ∈ ℕ.",
+                "Example:     The positive divisors d of a = 200 = 2\u{E000}3\u{E001}·5\u{E000}2\u{E001} are:\n    2\u{E000}0\u{E001}·5\u{E000}0\u{E001} = 1    2\u{E000}0\u{E001}·5\u{E000}1\u{E001} = 5    2\u{E000}0\u{E001}·5\u{E000}2\u{E001} = 25\n    2\u{E000}1\u{E001}·5\u{E000}0\u{E001} = 2    2\u{E000}1\u{E001}·5\u{E000}1\u{E001} = 10    2\u{E000}1\u{E001}·5\u{E000}2\u{E001} = 50\n    2\u{E000}2\u{E001}·5\u{E000}0\u{E001} = 4    2\u{E000}2\u{E001}·5\u{E000}1\u{E001} = 20    2\u{E000}2\u{E001}·5\u{E000}2\u{E001} = 100\n    2\u{E000}3\u{E001}·5\u{E000}0\u{E001} = 8     2\u{E000}3\u{E001}·5\u{E000}1\u{E001} = 40    2\u{E000}3\u{E001}·5\u{E000}2\u{E001} = 200",
+                "The negative divisors differ from the positive ones only by their signs.",
+                "The positive divisors are formed by combinations of prime factors;\nin each combination the prime factor p\u{E002}i\u{E003} can occur at most α\u{E002}i\u{E003} times or miss completely.\nThis yields (α\u{E002}1\u{E003}+1)·(α\u{E002}2\u{E003}+1)·(α\u{E002}3\u{E003}+1)·.... possible combinations altogether.\nBecause of the uniqueness of the prime decomposition in ℕ each combination is a new divisor.\n(3+1) possibilities for prime factor 2\n(2+1) possibilities for prime factor 5",
+                "Thus the number of positive divisors of a ∈ ℕ is ∏ (α\u{E002}i\u{E003}+1).\nExample:     200 = 2\u{E000}3\u{E001}·5\u{E000}2\u{E001}  has  (3+1)·(2+1) = 12  positive divisors.",
             ]),
-        ]))
-        chapters.append(ZTChapter(number: "1.4", title: "Das kgV", pages: [
-            ZTPage(id: "1.4 - 01", title: "Das kleinste gemeinsame Vielfache", tool: .lcm, blocks: [
-                "Definition:  Seien a, b ∈ ℤ.\n    Die Zahl v ∈ ℕ\u{E002}0\u{E003} heißt kleinstes gemeinsames Vielfaches von a und b, kurz kgV(a, b),\n    wenn gilt:    1. a | v  und  b | v    v ist gemeinsames Vielfaches,\n        2. a | w und b | w  ⇒  v | w    v teilt jedes gemeinsame Vielfache.",
-                "Das Produkt a·b ist ein gemeinsames Vielfaches von a und b, aber nicht immer das kleinste.\n\nSatz:   kgV(a, b) =    für a, b ≠ 0      Beweis    Beispiel\nggT(a, b)\nkgV(a, 0) = 0,  denn 0 hat nur sich selbst als Vielfaches.",
-                "Definition:  Man bezeichnet die Menge aller positiven Vielfachen von a ∈ ℤ mit V\u{E002}a\u{E003} .\nAlso ist V\u{E002}0\u{E003} = ∅.",
-                "Für a, b ≠ 0 gilt:    kgV(a, b) ist die kleinste Zahl ∈ V\u{E002}a\u{E003} ∩ V\u{E002}b\u{E003} , und\n    V\u{E002}a\u{E003} ∩ V\u{E002}b\u{E003} = V\u{E002}kgV(a, b)\u{E003} .",
-                "Damit kann man zeigen:\nSatz:     kgV(  a, kgV(b, c)  )  =  kgV(  kgV(a, b), c  )    Beweis",
-            ]),
-            ZTPage(id: "1.4 - kgV von mehr als 2 Zahlen", title: "kgV von mehr als 2 Zahlen", tool: .lcm, blocks: [
-                "Man kann auch das kgV von mehr als 2 Zahlen definieren:\n\nDefinition:    Für k, a\u{E002}1 \u{E003}, a\u{E002}2 \u{E003}, ..., a\u{E002}k\u{E003} ∈ ℤ und k > 2 ist\ndie kleinste Zahl ∈ V\u{E002}1\u{E003} ∩ V\u{E002}2\u{E003} ∩ ... ∩ V\u{E002}k \u{E003},  falls alle a ≠ 0,\n0,  falls mindestens ein a = 0.\nkgV( a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003} )",
-                "Satz:    Für k, a\u{E002}1 \u{E003}, a\u{E002}2 \u{E003}, ..., a\u{E002}k \u{E003}, a\u{E002}k+1\u{E003} ∈ ℤ und k > 2 gilt:\n\n    1.  Va\u{E002}1\u{E003} ∩ ... ∩ Va\u{E002}k\u{E003}  =  VkgV( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} )    Beweis\n         Die gemeinsamen Vielfachen sind die Vielfachen des kgV.\n         Der Beweis zeigt auch:\n         kgV( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} )  =  kgV(  kgV( a\u{E002}1\u{E003}, ..., a\u{E002}k–1\u{E003} ), a\u{E002}k\u{E003}  )\n         Man kann also das kgV von mehr als 2 Zahlen rekursiv berechnen.\n\n    2.  a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} paarweise teilerfremd  ⇒  kgV( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} ) = |a\u{E002}1\u{E003}·...· a\u{E002}k \u{E003}|    Beweis",
-                "Ende des Kapitels",
+            ZTPage(id: "1.2 - ggT mit Hilfe PFZ", title: "GCD by means of the prime decomposition", tool: .gcdFactor, blocks: [
+                "Knowing the prime decompositions of two numbers a, b ∈ ℕ,\none can find GCD(a, b) without T\u{E002}a\u{E003} and T\u{E002}b\u{E003}.",
+                "min(x, y) is the minimal element of x and y,\nthus x, if x ≤ y; otherwise y.",
+                "If prime divisor p\u{E002}i\u{E003} occurs α\u{E002}i\u{E003} times in a and β\u{E002}i\u{E003} times in b, then min(α\u{E002}i \u{E003}, β\u{E002}i\u{E003}) times in GCD(a, b):\na = ∏ p\u{E002}i\u{E003}\u{E000}α\u{E001}i   ∧  b = ∏ p\u{E002}i\u{E003}\u{E000}β\u{E001}i    ⇒    GCD(a, b) = ∏ p\u{E002}i\u{E003}\u{E000}min(α\u{E001}i \u{E000}, β\u{E001}i\u{E000})\u{E001}",
             ]),
         ]))
-        return ZTLesson(number: 1, title: "Ganze Zahlen", chapters: chapters)
+        chapters.append(ZTChapter(number: "1.3", title: "Euclid's Algorithm", pages: [
+            ZTPage(id: "1.3 - 01", title: "Linear combinations", tool: .linearCombination, blocks: [
+                "Definition:    Let a, b ∈ ℤ.\n    Then a·x + b·y with x, y ∈ ℤ is called a linear combination of a and b.\n    The numbers x and y are called coefficients of the linear combination.",
+                "Example:    a and b are clickable.",
+                "Theorem:  Let a, b ∈ ℤ. Then for all x, y ∈ ℤ holds:\n    d | a  ∧  d | b    ⇒    d | a·x + b·y\n    Each common divisor of a, b divides each linear combination of a, b.   Proof\nThus only multiples of all common divisors of a, b can be linear combinations of a, b.",
+                "Theorem:  Each linear combination has infinitely many representations.     Proof",
+            ]),
+            ZTPage(id: "1.3 - ggT(a,b)=ggT(b,a-b)", title: "GCD(a, b) = GCD(b, a – b)", tool: .subtractiveGcd, blocks: [
+                "Let a, b ∈ ℤ.\nBy subtracting a multiple of b from a, one gets the following linear combination of a and b:\na – x·b = c\nHence holds:     d | a  ∧  d | b  ⇒  d | c",
+                "By transforming the equation, one gets a as linear combination of b and c:\na = x·b + c\nHence holds too:     d | b  ∧  d | c  ⇒  d | a",
+                "Hence in conjunction holds:    d | a  ∧  d | b  ⇔  d | b  ∧  d | c\nThis means for the divisor sets:    T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003}     =     T\u{E002}b\u{E003} ∩ T\u{E002}c\u{E003}\nAnd so holds:    GCD(a, b)     =     GCD(b, c)\nExamples:     ·  1024    – 10·100    = 24,     thus is  GCD(1024, 100)  =  GCD(100, 24)\n    ·  100    – 4·24    = 4,      thus is  GCD(100, 24)  =  GCD(24, 4)\n    ·  24    – 6·4    = 0,      thus is  GCD(24, 4)  =  GCD(4, 0)  =  4",
+            ]),
+            ZTPage(id: "1.3 - Euklid Ablauf", title: "The steps of the Euclidian algorithm", tool: .euclid, blocks: [
+                "a – z·b = r   ⇔   a = z·b + r\nSince r is linear combination of a and b holds:    d | a  ∧  d | b     ⇒     d | b  ∧  d | r\nSince a is linear combination of b and r holds:    d | b  ∧  d | r     ⇒     d | a  ∧  d | b\nHence holds:    d | a  ∧  d | b     ⇔     d | b  ∧  d | r\nhence:    T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003}     =     T\u{E002}b\u{E003} ∩ T\u{E002}r\u{E003}\nand hence:    GCD(a, b)     =     GCD(b, r)",
+                "GCD(a, b) = GCD(±a, ±b)",
+                "Euclid: \"Subtract from the first number a such multiple of the second number b that the",
+                "When remainder = 0 stop. The last remainder > 0 is the GCD.",
+            ]),
+            ZTPage(id: "1.3 - die Teiler des ggT", title: "The divisors of the GCD", tool: .gcdSets, blocks: [
+                "a–x·b is linear combination of a and b.",
+                "Repeatedly one subtracts from the first number a multiple of the second number,\nso that the remainder ≥ 0 is as small as possible.",
+                "Finally the remainder 0 is hit.",
+                "r is the greatest number ∈ T\u{E002}r\u{E003} = T\u{E002}a \u{E003}∩ T\u{E002}b\u{E003}",
+                "Euclid's algorithm accords with the following equations with r as last remainder > 0:\nT\u{E002}a \u{E003}∩ T\u{E002}b\u{E003}  =  T\u{E002}b \u{E003}∩ T\u{E002}a–x·b\u{E003}  =  ...  =  T\u{E002}r \u{E003}∩ T\u{E002}0\u{E003}  =  T\u{E002}r\u{E003}  =  T\u{E002}GCD(a,b)\u{E003}\nThus the common divisors of a and b are exactly the divisors of the GCD(a, b).",
+                "Hence GCD(a, b) alternatively can be defined as follows:\nDefinition:     The number d ∈ ℕ\u{E002}0\u{E003} is called greatest common divisor of a and b, if holds:\n    1. d | a  and  d | b    d is common divisor.\n    2. t | a and t | b  ⇒  t | d    Each common divisor divides d.\n\nAfter this definition GCD(0, 0) = 0 is sensible, since:\n    1. 0 is common divisor.\n    2. Each common divisor – thus each integer – divides 0.",
+                "Let's get back to the question:    Which numbers can be linear combinations of a and b?\nUntil now we knew:     Only multiples of all common divisors of a and b.\nThis means now:     Only multiples of the GCD(a, b).\n\nThe question remains: Can GCD(a, b) always be represented as linear combination of a and b?",
+            ]),
+            ZTPage(id: "1.3 - ggT als Vielfachsumme", title: "The GCD as linear combination", tool: .extEuclid, blocks: [
+                "Euclid's algorithm calculates GCD(a, b). In this calculation one can represent all remainders\nas linear combinations of a and b and calculate their coefficients:",
+                "GCD(a, b) = GCD(±a, ±b)\nThe coefficients react in their signs.",
+                "One gets GCD(a, b) as linear combination of |a| and |b|.\nIf a < 0 or b < 0, one multiplies the corresponding coefficient by –1\nand gets GCD(a, b) as linear combination of a and b:",
+            ]),
+            ZTPage(id: "1.3 - Eigenschaften ggT", title: "Properties of the GCD", tool: .extEuclid, blocks: [
+                "From the Euclidian algorithm follows thus:\nTheorem:   The divisors of GCD(a, b) are the common divisors of a and b.    Demonstration\nTheorem:   GCD(a, b) can be represented as linear combination of a and b.    Demonstration",
+                "Also each multiple of GCD(a, b) can be as represented as linear combination of a and b:\n    GCD(a, b)  =  a·x + b·y    ⇒    GCD(a, b)·z  =  a·x·z + b·y·z\nSince only multiples of GCD(a, b) can be linear combinations of a and b, one gets as\nConsequence:    GCD(a, b) | d     ⇔    There are x, y ∈ ℤ, so that  d = a·x + b·y.",
+                "Theorem:   GCD(a, b) = d   ⇔   GCD(   ,   ) = 1    Proof\nUsing linear combinations, it is easy to prove further properties:\nTheorem:   GCD(a, c) = 1  ∧  GCD(b, c) = 1   ⇒   GCD(a·b, c) = 1    Proof\nTheorem:   GCD(a, b) = 1  ∧  a | b·c   ⇒   a | c    Proof",
+                "In chapter 1.2 the fundamental theorem of arithmetic was proved with the aid of the theorem:\n    If a prime divides a product of integers, then it divides at least one factor.\nHere is the proof of this theorem.",
+            ]),
+            ZTPage(id: "1.3 - ggT von mehr als 2 Zahlen", title: "GCD of more than 2 numbers", tool: .gcdMany, blocks: [
+                "One can define the GCD of more than 2 numbers:\nDefinition:     Let k, a\u{E002}1 \u{E003}, a\u{E002}2 \u{E003}, ..., a\u{E002}k\u{E003} ∈ ℤ and k > 2. Then is      \u{E000}GCD( a\u{E001}1, \u{E000}a\u{E001}2, ..., ak ) = biggest number ∈ Ta\u{E002}1\u{E003} \u{E000}∩ T\u{E001}a\u{E002}2\u{E003} ∩ ... ∩ Ta\u{E002}k\u{E003} , if not all a = 0,\n    GCD( 0, 0, ..., 0 ) = 0.",
+                "Coprime numbers are not necessarily pairwise coprime.   Example\n    If GCD(a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003}) = 1, then a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003} are called coprime.",
+                "Theorem:      GCD( a, GCD(b, c) )  =  GCD( GCD(a, b), c )    Proof\n    GCD( a\u{E002}1\u{E003}, ..., a\u{E002}k+1\u{E003} )  =  GCD( GCD( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} ), a\u{E002}k+1\u{E003} )  for k ≥ 2    Proof\nWith the property T\u{E002}a\u{E003} ∩ T\u{E002}b\u{E003} = T\u{E002}GCD(a, b)\u{E003} can be shown:",
+                "One can also define linear combinations of more than two numbers a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003}  and\nshow by induction that these linear combinations can represent GCD( a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003} ).\nTo make it short, here is only the proof for k = 3.",
+            ]),
+        ]))
+        chapters.append(ZTChapter(number: "1.4", title: "The LCM", pages: [
+            ZTPage(id: "1.4 - 01", title: "The least common multiple", tool: .lcm, blocks: [
+                "Definition:  Let a, b ∈ ℤ.\n    The number v ∈ ℕ\u{E002}0\u{E003} is called least common multiple of a and b, shortly LCM(a, b),\n    if holds:    1. a | v  and  b | v    v is common multiple,        2. a | w and b | w  ⇒  v | w    v divides each common multiple.",
+                "The product a·b is a common multiple of a and b, but not always the smallest one.\n\nTheorem:   LCM(a, b) =    for a, b ≠ 0      Proof    Examples\nGCD(a, b)\nLCM(a, 0) = 0,  since the only multiple of 0 is 0 itself.",
+                "Definition:  One denotes the set of all positive multiples of a ∈ ℤ by V\u{E002}a\u{E003} .\nThus is V\u{E002}0\u{E003} = ∅.",
+                "For a, b ≠ 0 holds:    LCM(a, b) is the smallest number ∈ V\u{E002}a\u{E003} ∩ V\u{E002}b\u{E003} , and\n    V\u{E002}a\u{E003} ∩ V\u{E002}b\u{E003} = V\u{E002}LCM(a, b)\u{E003} .",
+                "Hereby can be shown:\nTheorem:     LCM(  a, LCM(b, c)  )  =  LCM(  LCM(a, b), c  )    Proof",
+            ]),
+            ZTPage(id: "1.4 - kgV von mehr als 2 Zahlen", title: "LCM of more than 2 numbers", tool: .lcm, blocks: [
+                "One also can define the LCM of more than 2 numbers:\n\nDefinition:    For k, a\u{E002}1 \u{E003}, a\u{E002}2 \u{E003}, ..., a\u{E002}k\u{E003} ∈ ℤ and k > 2 is\nthe smallest number ∈ V\u{E002}1\u{E003} ∩ V\u{E002}2\u{E003} ∩ ... ∩ V\u{E002}k \u{E003},  if all a ≠ 0,\n0,  if at least one a = 0.\nLCM( a\u{E002}1\u{E003}, a\u{E002}2\u{E003}, ..., a\u{E002}k\u{E003} )",
+                "Theorem:    For k, a\u{E002}1 \u{E003}, a\u{E002}2 \u{E003}, ..., a\u{E002}k \u{E003}, a\u{E002}k+1\u{E003} ∈ ℤ and k > 2 holds:\n\n    1.  Va\u{E002}1\u{E003} ∩ ... ∩ Va\u{E002}k\u{E003}  =  VLCM( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} )    Proof\n         The common multiples are the multiples of the LCM.\n         The proof also shows:\n         LCM( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} )  =  LCM(  LCM( a\u{E002}1\u{E003}, ..., a\u{E002}k–1\u{E003} ), a\u{E002}k\u{E003}  )\n         Thus the LCM of more than 2 numbers can be calculated recursively.\n\n    2.  a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} pairwise coprime  ⇒  LCM( a\u{E002}1\u{E003}, ..., a\u{E002}k\u{E003} ) = |a\u{E002}1\u{E003}·...· a\u{E002}k \u{E003}|    Proof",
+                "end of this lesson",
+            ]),
+        ]))
+        return ZTLesson(number: 1, title: "Integers", chapters: chapters)
     }
     static func lesson2() -> ZTLesson {
         var chapters: [ZTChapter] = []
-        chapters.append(ZTChapter(number: "2.1", title: "Rechnen mit Kongruenzen", pages: [
-            ZTPage(id: "2.1 - 01", title: "Algebraische Begriffe", tool: nil, blocks: [
-                "algebraische Sruktur\n\n\nHalbgruppe\nMonoid    neutrales Element\nGruppe     inverses Element\n\nRing    Nullelement    Einselement\n    Nullteiler    Einheit\nKörper\nIn dieser Lektion werden einige Begriffe aus der Algebra gebraucht,\ndie Sie jeweils vor Ort oder hier gesammelt studieren können:\nIsomorphismus\ninjektiv  surjektiv  bijektiv",
+        chapters.append(ZTChapter(number: "2.1", title: "Congruences", pages: [
+            ZTPage(id: "2.1 - 01", title: "Algebraic terms", tool: nil, blocks: [
+                "distributive\nAlgebraic Structure\n\n\nSemigroup\nMonoid    Neutral Element\nGroup     Inverse Element\n\nRing    Zero-Element    One-Element\n    Zero Divisor    Unit\nField\nIn this lesson some concepts from algebra are required,\nwhich can be studied later when coming across or now collectively:\nIsomorphism\ninjective      surjective      bijective",
             ]),
-            ZTPage(id: "2.1 - Division mit Rest", title: "Division mit Rest", tool: .divRest, blocks: [
-                "Dividiert man zwei ganze Zahlen, so erhält man nicht immer eine ganze Zahl,\nzum Beispiel:     \u{E002}∉\u{E003} Z.\nGanzzahlige Ergebnisse erhält man bei der Division mit Rest:",
-                "Definition: Seien a, b ∈ ℤ, b > 0.\n    Als Division von a durch b mit Rest bezeichnet man die Darstellung:\n    a = q·b + r    mit q, r \u{E002}∈\u{E003} Z   und   0 ≤ r < b.\n    Dabei heißt  q  ganzzahliger Quotient und  r  Rest der Division.",
-                "keine Einschränkung, denn",
-                "Satz:  Ganzzahliger Quotient und Rest sind eindeutig bestimmt:  q = ⌊   ⌋  und  r = a – q·b.\nBeweis        Anmerkung",
+            ZTPage(id: "2.1 - Division mit Rest", title: "Division with remainder", tool: .divRest, blocks: [
+                "Dividing an integer by another integer not always yields an integer,\nfor instance:     ∉ ℤ.\nFor obtaining integer results one applies division with remainder:",
+                "Definition: Let a, b ∈ ℤ, b > 0.\n    Division of a by b with remainder is called the following representation:\n    a = q·b + r    with q, r ∈ ℤ   and   0 ≤ r < b.\n    Here  q  is called the integer quotient and  r  the remainder of the division.",
+                "no constraint, since",
+                "Theorem:  Integer quotient and remainder are unique:  q = ⌊   ⌋  and  r = a – q·b.\nProof        Annotation",
             ]),
-            ZTPage(id: "2.1 - Kongruenz", title: "Kongruenz", tool: .congruence, blocks: [
-                "Definition: Sei m ∈ ℕ.\n    Zwei ganze Zahlen a und b heißen kongruent modulo m, wenn m die Differenz a – b teilt.\n    Man schreibt dann a ≡ b mod m. Die Zahl m nennt man den Modul.\n\nBegriff und Schreibweise der Kongruenz wurden von Gauß eingeführt.\n\nBeispiele:\n    · Uhrzeiten:  13 ≡ 1 mod 12,  24 ≡ 0 mod 12\n    · ungerade Zahlen:  –25 ≡ 3 mod 2",
-                "Satz:   a ≡ b mod m  ⇔  a und b lassen bei Division durch m den gleichen Rest.\nBeweis",
-                "    Die Kongruenz modulo m ist eine Äquivalenzrelation in ℤ, es gilt:\n    1. Reflexivität:     a ≡ a mod m  für alle a ∈ ℤ\n    2. Symmetrie:     a ≡ b mod m  ⇒  b ≡ a mod m\n    3. Transitivität:     a ≡ b mod m  ∧  b ≡ c mod m  ⇒  a ≡ c mod m",
+            ZTPage(id: "2.1 - Kongruenz", title: "Congruence", tool: .congruence, blocks: [
+                "Definition: Let m ∈ ℕ.\n    Two integers a and b are called congruent modulo m, if m divides the difference a – b.\n    One writes a ≡ b mod m. The number m is called the modulus.\n\nThe concept and notation of congruence were introduced by Gauss.\n\nExamples:\n    · clock times:  13 ≡ 1 mod 12,  24 ≡ 0 mod 12\n    · odd numbers:  –25 ≡ 3 mod 2",
+                "Theorem:   a ≡ b mod m  ⇔  a and b give the same remainder after division by m.\nProof",
+                "    Congruence modulo m is an equivalence relation in ℤ, it holds:\n    1. Reflexivity:     a ≡ a mod m  for all a ∈ ℤ\n    2. Symmetry:     a ≡ b mod m  ⇒  b ≡ a mod m\n    3. Transitivity:     a ≡ b mod m  ∧  b ≡ c mod m  ⇒  a ≡ c mod m",
             ]),
-            ZTPage(id: "2.1 - Restklassen", title: "Restklassen", tool: .residueClass, blocks: [
-                "Die Kongruenz modulo m teilt ℤ in Äquivalenzklassen ein, die man Restklassen nennt.\nDefinition:\n    Die Menge [a]m = { x ∈ ℤ | x ≡ a mod m } heißt Restklasse a modulo m, kurz: a mod m.\n    Die Zahl a bezeichnet man als Vertreter der Restklasse.",
-                "ÁAlle Elemente von [a]m lassen bei Division durch m den gleichen Rest wie der Vertreter a.\nWeil sie sich von a und untereinander durch ganzzahlige Vielfache des Moduls m unterscheiden, findet man auch die Bezeichnung a+mZ =    [a]m = { x ∈ ℤ | x = a + z·m, z ∈ ℤ }.\n    ·  [1]10 = {1, 1±10, 1±2·10, 1±3·10, ...} = {1, –9, 11, –19, 21, –29, 31, ...}\n    ·  [1\u{E002}]\u{E003}2 ist die Menge aller ungeraden Zahlen.\n    ·  [0\u{E002}]\u{E003}2 ist die Menge aller geraden Zahlen.",
-                "Jede Zahl kann ihre Restklasse vertreten:  a ≡ b mod m  ⇔  [a]\u{E002}m\u{E003} = [b]\u{E002}m\u{E003}\nBeispiele:  ·  [1]\u{E002}10\u{E003} = [11]\u{E002}10\u{E003}                ·  [1]\u{E002}2\u{E003} = [–1]\u{E002}2\u{E003}                ·  [0]\u{E002}12\u{E003} = [24]\u{E002}12\u{E003}",
+            ZTPage(id: "2.1 - Restklassen", title: "Residue classes", tool: .residueClass, blocks: [
+                "Congruence modulo m divides ℤ into equivalence classes, called residue classes.\nDefinition:\n    The set [a]\u{E002}m\u{E003} = { x ∈ ℤ | x ≡ a mod m } is called Residue Class a modulo m, shortly: a mod m.\n    The number a is called a Representative of the residue class.",
+                "All elements of [a]\u{E002}m\u{E003} give the same remainder as the representative a after division by m.\nSince they differ from a and from each other by integer multiples of the modulus m, there is the alternative denotation a+mℤ =    [a]\u{E002}m\u{E003} = { x ∈ ℤ | x = a + z·m, z ∈ ℤ }.\nExamples:\n    ·  [1]\u{E002}10\u{E003} = {1, 1±10, 1±2·10, 1±3·10, ...} = {1, –9, 11, –19, 21, –29, 31, ...}\n    ·  [1]\u{E002}2\u{E003} is the set of all odd numbers.\n    ·  [0]\u{E002}2\u{E003} is the set of all even numbers.",
+                "Each number can represent its residue class:  a ≡ b mod m  ⇔  [a]\u{E002}m\u{E003} = [b]\u{E002}m\u{E003}\nExamples:  ·  [1]\u{E002}10\u{E003} = [11]\u{E002}10\u{E003}                ·  [1]\u{E002}2\u{E003} = [–1]\u{E002}2\u{E003}                ·  [0]\u{E002}12\u{E003} = [24]\u{E002}12\u{E003}",
             ]),
-            ZTPage(id: "2.1 - Standardvertreter", title: "Standardvertreter", tool: .residueClass, blocks: [
-                "kleinste nicht-negative,    kleinste positive,    größte negative,    absolut kleinste Vertreter\n    [0]\u{E002}4\u{E003}     =     [4]\u{E002}4\u{E003}     =     [–4]\u{E002}4\u{E003}     =     [0]\u{E002}4\u{E003}\n    [1]\u{E002}4\u{E003}     =     [1]\u{E002}4\u{E003}     =     [–3]\u{E002}4\u{E003}     =     [1]\u{E002}4\u{E003}\n    [2]\u{E002}4\u{E003}     =     [2]\u{E002}4\u{E003}     =     [–2]\u{E002}4\u{E003}     =     [2]\u{E002}4\u{E003}\n    [3]\u{E002}4\u{E003}     =     [3]\u{E002}4\u{E003}     =     [–1]\u{E002}4\u{E003}     =     [–1]\u{E002}4\u{E003}\nAm Beispiel der Restklassen modulo 4 seien einige besondere Vertreter vorgestellt:",
-                "Die kleinsten nicht-negativen Vertreter heißen Standardvertreter.\nSie sind die möglichen Reste bei Division durch den Modul.\nIst x der Standardvertreter von [a]\u{E002}m\u{E003}, dann schreibt man  x = a (mod m).\nDas Ersetzen einer Zahl a durch a (mod m) heißt Reduktion mod m.",
-                "Es gilt:       x = a (mod m)   ⇒   x ≡ a mod m\nDie Umkehrung ist falsch, zum Beispiel:      3 ≡ 5 mod 2,  aber  3 ≠ 5 (mod 2) = 1",
-                "In vielen Programmiersprachen berechnet die Funktion mod(a, b) einen Vertreter von a mod b,\ngewöhnlich den Standard-, in manchen Sprachen den größten negativen Vertreter, falls a < 0.",
+            ZTPage(id: "2.1 - Standardvertreter", title: "Standard representative", tool: .residueClass, blocks: [
+                "least non-negative,    least positive,    greatest negative,    absolute least representatives\n    [0]\u{E002}4\u{E003}     =     [4]\u{E002}4\u{E003}     =     [–4]\u{E002}4\u{E003}     =     [0]\u{E002}4\u{E003}\n    [1]\u{E002}4\u{E003}     =     [1]\u{E002}4\u{E003}     =     [–3]\u{E002}4\u{E003}     =     [1]\u{E002}4\u{E003}\n    [2]\u{E002}4\u{E003}     =     [2]\u{E002}4\u{E003}     =     [–2]\u{E002}4\u{E003}     =     [2]\u{E002}4\u{E003}\n    [3]\u{E002}4\u{E003}     =     [3]\u{E002}4\u{E003}     =     [–1]\u{E002}4\u{E003}     =     [–1]\u{E002}4\u{E003}\nThere are some special representatives, for example with the residue classes modulo 4:",
+                "The least non-negative representatives are called standard representatives.\nThey are the possible remainders after division by the modulus.\nIf x is the standard representative of [a]\u{E002}m\u{E003} one writes  x = a (mod m).\nReplacing an integer a with a (mod m) is called reduction mod m.",
+                "It holds:       x = a (mod m)   ⇒   x ≡ a mod m\nThe converse is wrong, for instance:      3 ≡ 5 mod 2,  but  3 ≠ 5 (mod 2) = 1",
+                "In many programming languages the function mod(a, b) computes a representative of a mod b,\nusually the standard-, in some languages the greatest negative representative in case a < 0.",
             ]),
-            ZTPage(id: "2.1 - Summe, Produkt", title: "Summe und Produkt", tool: .modTables, blocks: [
-                "Definition:     Die Menge aller Restklassen mod m bezeichnet man mit ℤm oder Z/m.\nℤm enthält m Restklassen, weil bei der Division durch m die Reste 0, 1, 2, ..., m – 1 auftreten.\nBeispiel:    ℤ3 = { [0], [1], [2] }\nErgibt sich der Modul aus dem Kontext, so kann man die Indizes der Restklassen weg lassen.\nIst klar, dass Restklassen gemeint sind, so kann man auch die eckigen Klammern weg lassen.",
-                "  1. Die Summe zweier Restklassen ist [a] + [b] = [a+b].\n  2. Das Produkt zweier Restklassen ist [a] · [b] = [a·b].\nIn der endlichen Menge Z\u{E002}m\u{E003} kann man eine Addition + und eine Multiplikation · definieren,\nso dass (Z\u{E002}m\u{E003}, +, ·) eine algebraische Struktur ist.",
-                "Satz: Diese Verknüpfungen sind wohldefiniert, das heißt:\n        Sie führen unabhängig von der Wahl der Vertreter a und b immer zum gleichen Ergebnis.\n        Aus  [a] = [a']  und  [b] = [b']  folgt  [a+b] = [a'+b']  und  [a·b] = [a'·b'].\nBeweis\nDass Wohldefiniertheit nicht selbstverständlich ist, zeigt ein Gegenbeispiel.",
+            ZTPage(id: "2.1 - Summe, Produkt", title: "Sum and product", tool: .modTables, blocks: [
+                "Definition:     The set of all residue classes mod m is denoted by ℤ\u{E002}m\u{E003} or ℤ/m.\nℤ\u{E002}m\u{E003} has m elements, since the possible remainders after division by m are 0, 1, 2, ..., m – 1.\nExample:    ℤ\u{E002}3\u{E003} = { [0], [1], [2] }\nIf the modulus is known from the context, one can omit the indices of the residue classes.\nIf it's clear that residue classes are meant, one can omit the brackets too.",
+                "  1. The sum of two residue classes is [a] + [b] = [a+b].\n  2. The product of two residue classes is [a] · [b] = [a·b].\nIn the finite set ℤ\u{E002}m\u{E003} an addition + and a multiplication · can be defined,\nsuch that (ℤ\u{E002}m\u{E003}, +, ·) is an algebraic structure.",
+                "Theorem: These connections are well-defined, this means:\n        They give the same results no matter which representatives a and b are chosen.\n        From  [a] = [a']  and  [b] = [b']  follows  [a+b] = [a'+b']  and  [a·b] = [a'·b'].\nProof\nA counter-example shows that well-definedness cannot be taken for granted.",
             ]),
-            ZTPage(id: "2.1 - Restklassenring", title: "Der Restklassenring", tool: .modTables, blocks: [
-                "Satz:    Assoziativität, Kommutativität, Existenz des neutralen Elements, Invertierbarkeit und     Distributivität übertragen sich von (ℤ, +, ·) auf (Z\u{E002}m \u{E003}, +, ·).\nBeweis",
-                "Satz:    Assoziativität, Kommutativität, Existenz des neutralen Elements, Invertierbarkeit und     Distributivität übertragen sich von (ℤ, +, ·) auf (Z\u{E002}m \u{E003}, +, ·).\nBeweis\nFolgerung:\n    (\u{E002}ℤm\u{E003} , +) ist eine kommutative Gruppe. Neutrales Element ist [0], invers zu [a] ist [m–a].\n    (\u{E002}ℤm\u{E003} , ·) ist eine kommutative Halbgruppe. Neutrales Element ist [1].",
-                "Folgerung und Definition:    (Z\u{E002}m \u{E003}, +, ·) ist ein kommutativer Ring mit Einselement: der Restklassenring modulo m.",
+            ZTPage(id: "2.1 - Restklassenring", title: "The residue class ring", tool: .modTables, blocks: [
+                "Theorem:    Associativity, commutativity, existence of a neutral element, invertibility and     distributivity are transported from (ℤ, +, ·) to (ℤ\u{E002}m \u{E003}, +, ·).\nProof",
+                "Consequence:\n    (ℤ\u{E002}m \u{E003}, +) is a commutative group. Neutral element is [0], inverse to [a] is [m–a].\n    (ℤ\u{E002}m \u{E003}, ·) is a commutative semigroup. Neutral element is [1].",
+                "Corollary and Definition:    (ℤ\u{E002}m \u{E003}, +, ·) is a commutative ring with one-element: the residue class ring modulo m.",
             ]),
-            ZTPage(id: "2.1 - Wozu mod", title: "Wozu modulo rechnen?", tool: .checkNine, blocks: [
-                "prominentes Beispiel\nDem Rechnen im Restklassenring entspricht das Rechnen mit Kongruenzen.\nDa es dabei nur auf die Klassen ankommt, kann man immer die \"handlichsten\" Vertreter wählen.\n\nBeispiel:  Welchen Rest hat 13·14 bei Division durch 16?\n    Im Restklassenring modulo 16 ist [13·14] = [13]·[14] = [–3]·[–2] = [(–3)·(–2)] = [6].\n    Dem entsprechen die Kongruenzen                    13·14 ≡ (–3)·(–2) ≡ 6 mod 16.\n    Statt 13·14 dividiert man (–3)·(–2) durch 16 und erhält sofort den Rest 6.\n    Machen Sie die Probe.",
-                "Das nutzt man bei der Rechenkontrolle über die Endziffern. Man rechnet modulo 10.\nBeispiel:      5461958 · 987459187 ≠ 434756195619242, denn [8]·[7] = [6].\nDas Ergebnis kann falsch sein, auch wenn die Endziffern überein stimmen.\nDie Differenz zum richtigen Ergebnis ist dann ein Vielfaches von 10.\nDie Rechenkontrolle geht auch mit anderen Moduln. Wenn die Restklassen überein stimmen, ist\ndie Differenz zum richtigen Ergebnis ein Vielfaches des Moduls.",
+            ZTPage(id: "2.1 - Wozu mod", title: "Why calculate modulo?", tool: .checkNine, blocks: [
+                "prominent Example\nCalculating in the residue class ring corresponds to calculating with congruences.\nSince only classes matter, one can always choose the \"handiest\" representatives.\n\nExample:  Which remainder gives 13·14 after division by 16?\n    In the residue class ring mod 16 holds [13·14] = [13]·[14] = [–3]·[–2] = [(–3)·(–2)] = [6].\n    This correspond to the congruences                    13·14  ≡  (–3)·(–2) ≡ 6 mod 16.\n    Instead of 13·14 one divides (–3)·(–2) by 16 and obtains the remainder 6 at once.\n    Test it yourself.",
+                "This is utilized in calcution checks with final digits. One calculates modulo 10.\nExample:      5461958 · 987459187 ≠ 434756195619242, since [8]·[7] = [6].\nThe result can be wrong, even if the final digits accord. \nThen the difference from the correct result is a multiple of 10.\nThis calcution check also works with different moduli. If the residue classes accord,\nthe difference from the correct result is a multiple of the modulus.",
             ]),
-            ZTPage(id: "2.1 - Quersummen", title: "Quersummen", tool: .crossSums, blocks: [
-                "Für alle Exponenten z ist 10\u{E000}z\u{E001}  ≡  1 mod 3.\n10 ≡ 1 mod 3",
-                "Von rechts nach links fasst man Päckchen von jeweils k Ziffern zu neuen Zahlen zusammen.\nDas Päckchen ganz links darf auch weniger als k Ziffern haben.",
-                "Man gibt den Päckchen wechselnde Vorzeichen.\nDabei fängt man rechts mit + an.",
-                "mit x = 5214\nJedes andere x täte es auch.",
-                "Für gerade Exponenten z ist 10\u{E000}z\u{E001}  ≡  1 mod 11,\nfür ungerade z ist 10\u{E000}z\u{E001}  ≡  –1 mod 11.\n10 ≡ –1 mod 11",
-                "Für alle Exponenten z ist (10\u{E000}2\u{E001})\u{E000}z\u{E001}  ≡  1 mod 11.\n10\u{E000}2\u{E001} ≡ 1 mod 11",
-                "Vielleicht kennen Sie die Regel:    3 | x    ⇔     3 | Q(x) = Quersumme von x\nBeispiel:      3 | 5214, denn    3 | 5+2+1+4 = 12",
-                "Im 10er-System ist  5214 =    5·10\u{E000}3\u{E001} + 2·10\u{E000}2\u{E001} + 1·10\u{E000}1\u{E001} + 4·10\u{E000}0\u{E001}.\n10 ≡ 1 mod 3    ⇒    5·10\u{E000}3\u{E001} + 2·10\u{E000}2\u{E001} + 1·10\u{E000}1\u{E001} + 4·10\u{E000}0\u{E001}  ≡  5+2+1+4 mod 3\n        Bei Division durch 3 lässt x den selben Rest wie Q(x).",
-                "Betrachten Sie k-stufige Quersummen Q\u{E002}k\u{E003} und alternierende Quersummen Q'\u{E002}k\u{E003}:",
-                "Für Teilbarkeit durch 11 gilt:    11 | x      ⇔      11 | Q'\u{E002}1\u{E003}(x)    und    11 | x      ⇔      11 | Q\u{E002}2\u{E003}(x),    denn\n10 ≡ –1 mod 11    ⇒     5·10\u{E000}3\u{E001} + 2·10\u{E000}2\u{E001} + 1·10\u{E000}1\u{E001} + 4·10\u{E000}0\u{E001}  ≡  –5+2–1+4 mod 11\n10\u{E000}2\u{E001} ≡ 1 mod 11    ⇒     52·10\u{E000}2\u{E001} + 14·10\u{E000}0\u{E001}  ≡  52+14 mod 11\n        Bei Division durch 11 lässt x den selben Rest wie Q'\u{E002}1\u{E003}(x) und Q\u{E002}2\u{E003}(x).\nmehr Beispiele      Verallgemeinerung",
+            ZTPage(id: "2.1 - Quersummen", title: "Transversal sums", tool: .crossSums, blocks: [
+                "For all exponents z holds 10\u{E000}z\u{E001}  ≡  1 mod 3.\n10 ≡ 1 mod 3",
+                "From right to left one merges packs of k digits into new numbers.\nThe leftmost pack can have less than k digits.",
+                "The packs get alternating signs,\nstarting from the right end with a + .",
+                "with x = 5214\nAny other x would do as well.",
+                "For even exponents z holds 10\u{E000}z\u{E001}  ≡  1 mod 11,\nfor odd z holds 10\u{E000}z\u{E001}  ≡  –1 mod 11.\n10 ≡ –1 mod 11",
+                "For all exponents z holds (10\u{E000}2\u{E001})\u{E000}z\u{E001}  ≡  1 mod 11.\n10\u{E000}2\u{E001} ≡ 1 mod 11",
+                "Perhaps you know the rule:    3 | x    ⇔     3 | Q(x) = transversal sum of x\nExample:      3 | 5214, since    3 | 5+2+1+4 = 12",
+                "Base-10 system:    5214  =    5·10\u{E000}3\u{E001} + 2·10\u{E000}2\u{E001} + 1·10\u{E000}1\u{E001} + 4·10\u{E000}0\u{E001}.\n10 ≡ 1 mod 3    ⇒    5·10\u{E000}3\u{E001} + 2·10\u{E000}2\u{E001} + 1·10\u{E000}1\u{E001} + 4·10\u{E000}0\u{E001}  ≡  5+2+1+4 mod 3\n        After division by 3, x gives the same remainder as Q(x).",
+                "Consider k-stage transversal sums Q\u{E002}k\u{E003} and alternating transversal sums Q'\u{E002}k\u{E003}:",
+                "For divisibility by 11 holds:    11 | x      ⇔      11 | Q'\u{E002}1\u{E003}(x)    and    11 | x      ⇔      11 | Q\u{E002}2\u{E003}(x),    since\n10 ≡ –1 mod 11    ⇒     5·10\u{E000}3\u{E001} + 2·10\u{E000}2\u{E001} + 1·10\u{E000}1\u{E001} + 4·10\u{E000}0\u{E001}  ≡  –5+2–1+4 mod 11\n10\u{E000}2\u{E001} ≡ 1 mod 11    ⇒     52·10\u{E000}2\u{E001} + 14·10\u{E000}0\u{E001}  ≡  52+14 mod 11\n        After division by 11, x gives the same remainder as Q'\u{E002}1\u{E003}(x) and Q\u{E002}2\u{E003}(x).\nmore Examples      Generalization",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "2.2", title: "prime Restklassen", pages: [
-            ZTPage(id: "2.2 - 01", title: "Einheiten und Nullteiler", tool: .modTables, blocks: [
-                "Betrachten Sie die Gleichung      3 + x = 5.\nMan kann sie lösen, indem man 3 subtrahiert, also das Inverse von 3 addiert.\n    3 + x = 5   |  + (– 3)\n          x = 2",
-                "hier bezüglich ·",
-                "Betrachten Sie nun die Gleichung    3 · x = 5.\nMan kann sie lösen, indem man durch 3 dividiert, also mit dem Inversen von 3 multipliziert.\n    3 · x = 5   |  ·",
-                "Man rechnet hier im Ring (Q, +, ·), denn    ∉ ℤ.\nIm Ring der ganzen Zahlen (Z, +, ·) ist 3 nicht multiplikativ invertierbar.",
-                "Bezüglich Addition ist jedes Element eines Ringes invertierbar,\nbezüglich Multiplikation sind nur einige invertierbar, sie heißen Einheiten.\nIst 0 eine Einheit, so hat der Ring nur ein Element. Beweis",
-                "Manche Ringe enthalten Elemente a, b ≠ 0, aber a·b = 0. Sie heißen Nullteiler und sind niemals Einheiten.",
+        chapters.append(ZTChapter(number: "2.2", title: "Prime Residue Classes", pages: [
+            ZTPage(id: "2.2 - 01", title: "Units and zero divisors", tool: .modTables, blocks: [
+                "Consider the equation      3 + x = 5.\nIt can be solved by subtracting 3, thus by adding the inverse of 3.\n    3 + x = 5   |  + (– 3)\n          x = 2",
+                "with respect to · here",
+                "Consider now the equation    3 · x = 5.\nIt can be solved by dividing by 3, thus by multiplying by the inverse of 3.\n    3 · x = 5   |  ·\n         \u{E002}x = \u{E003}",
+                "Here one calculates in the ring (ℚ, +, ·), since    ∉ ℤ.\nIn the ring of integers (ℤ, +, ·) 3 is not multiplicatively invertible.",
+                "With respect to addition each element of a ring is invertible,\nwith respect to multiplication only some are invertible, they are called units.\nIf 0 is a unit, the ring has only one element. Proof",
+                "Some rings contain elements a, b ≠ 0, but a·b = 0. Such elements are called zero divisors, they are never units.",
             ]),
-            ZTPage(id: "2.2 - Zm*", title: "Prime Restklassen ℤm*", tool: .units, blocks: [
-                "die nicht invertierbar sind:\n(Dargestellt sind die Standardvertreter.)\nDie Elemente eines Ringes, die bezüglich Multiplikation invertierbar sind, heißen Einheiten.",
-                "Beobachtung: Genau die Vertreter der Einheiten sind prim zum Modul.\nDefinition:    Die Einheiten im Restklassenring heißen prime Restklassen.\n    Sie bilden die prime Restklassengruppe modulo m, kurz Z\u{E002}m\u{E003}* oder (Z/m)*.",
-                "Beobachtung: Die anderen Restklassen außer [0] sind Nullteiler.",
-                "Die Einheiten haben eine\n1 in Zeile und Spalte.",
-                "≠ 0, haben mehr als eine 0 in Zeile und Spalte",
+            ZTPage(id: "2.2 - Zm*", title: "Prime residue classes ℤm*", tool: .units, blocks: [
+                "that are not invertible:\n(standard representatives)\nThe elements of a ring that are invertible with respect to multiplication are called units.",
+                "Observation: Exactly the representatives of the units are coprime to the modulus.\nDefinition:    The units in the residue class ring are called prime residue classes.\n    They form the group of prime residue classes modulo m, shortly ℤ\u{E002}m\u{E003}* or (ℤ/m)*.",
+                "Observation: The other residue classes except [0] are zero divisors.",
+                "The units have a 1\nin row and column.",
+                "≠ 0, have more than a 0 in row and column",
             ]),
-            ZTPage(id: "2.2 - prim zum Modul", title: "Prim zum Modul", tool: .units, blocks: [
-                "Satz:     [a]\u{E002}m\u{E003} ist prime Restklasse  ⇔  ggT(a, m) = 1.\nBeweis\n\"⇒\"    [a]\u{E002}m\u{E003}·[b]\u{E002}m\u{E003} = [1]\u{E002}m\u{E003}   ⇒   a·b ≡ 1 mod m  ⇒  m | a·b – 1\n    ⇒     ggT(a, m) | a·b – 1\n    Außerdem:    ggT(a, m) | a\n ⇒  ggT(a, m) | 1  ⇒  ggT(a, m) = 1",
-                "invertierbar bezüglich Multiplikation",
-                "\"Ü\"    Sei ggT(a, m) = 1.    ⇒    Es gibt Koeffizienten x, y ∈ ℤ mit a·x + m·y = 1.\n    ⇒  a·x – 1 = –m·y    ⇒    m | a·x – 1\n    ⇒  a·x ≡ 1 mod m    ⇒    [a]\u{E002}m\u{E003}·[x]\u{E002}m\u{E003} = [1]\u{E002}m\u{E003}\n    Die Koeffizienten x und y – und damit [x\u{E002}]\u{E003}m – findet man mit dem euklidischen Algorithmus.\nDer Beweis der Gegenrichtung stützt sich auf Vielfachsummen:",
-                "Auch die zweite Beobachtung lässt sich beweisen:\nSatz:     [a]\u{E002}m\u{E003} ist ein Nullteiler   ⇔   1 < ggT(a, m) < m.      Beweis",
-                "Ist der Modul m eine Primzahl, so sind alle Restklassen außer [0] prime Restklassen.\nDer Restklassenring modulo einer Primzahl ist also ein Körper.",
+            ZTPage(id: "2.2 - prim zum Modul", title: "Coprime to the modulus", tool: .units, blocks: [
+                "Theorem:    [a]\u{E002}m\u{E003} is a prime residue class  ⇔  GCD(a, m) = 1.\nProof\n\"⇒\"    [a]\u{E002}m\u{E003}·[b]\u{E002}m\u{E003} = [1]\u{E002}m\u{E003}   ⇒   a·b ≡ 1 mod m  ⇒  m | a·b – 1\n    ⇒     GCD(a, m) | a·b – 1\n    Moreover:    GCD(a, m) | a\n ⇒  GCD(a, m) | 1  ⇒  GCD(a, m) = 1",
+                "invertible with respect to multiplication",
+                "\"⇐\"    Let GCD(a, m) = 1.    ⇒    There are coefficients x, y ∈ ℤ with a·x + m·y = 1.\n    ⇒  a·x – 1 = –m·y    ⇒    m | a·x – 1\n    ⇒  a·x ≡ 1 mod m    ⇒    [a]\u{E002}m\u{E003}·[x]\u{E002}m\u{E003} = [1]\u{E002}m\u{E003}\nThe coefficients x and y – and thus [x]\u{E002}m\u{E003} – can be found by the Euclidian algorithm.\nThe proof of the converse is based on linear combinations:",
+                "The second observation can be proved too:\nTheorem:     [a]\u{E002}m\u{E003} is a zero divisor   ⇔   1 < GCD(a, m) < m.      Proof",
+                "In case the modulus m is a prime, all residue classes except [0] are prime residue classes.\nThus the residue class ring modulo a prime is a field.",
             ]),
-            ZTPage(id: "2.2 - invertieren mit Euklid", title: "Invertieren mit Euklid", tool: .inverse, blocks: [
-                "Die multiplikativ Inverse [x]\u{E002}m\u{E003} zu einer Restklasse [a]\u{E002}m\u{E003}\nkann man durch Ausprobieren finden ...",
-                "... oder mit Hilfe des euklidischen Algorithmus,\nindem man ggT(a, m) als Vielfachsumme darstellt:",
+            ZTPage(id: "2.2 - invertieren mit Euklid", title: "Inverting with Euclid", tool: .inverse, blocks: [
+                "The multiplicative inverse [x]\u{E002}m\u{E003} to a residue class [a]\u{E002}m\u{E003}\ncan be found by trial and error ...",
+                "... or by the Euclidian algorithm,\nwhich can represent GCD(a, m) as a linear combination:",
                 "a·x ≡ 1 mod m  ⇔  a·x + m·y = 1",
             ]),
-            ZTPage(id: "2.2 - Kongruenzen lösen", title: "Kongruenzen lösen", tool: .linearCongruence, blocks: [
-                "Definition:     Gilt a·x ≡ b mod m für ein x\u{E002}0\u{E003} ∈ ℤ, so sagt man: x\u{E002}0\u{E003} erfüllt die Kongruenz,\n    und die Restklasse [x\u{E002}0\u{E003}]\u{E002}m\u{E003} heißt dann Lösung der Kongruenz.\nIst [a]\u{E002}m\u{E003} prime Restklasse mit [a']\u{E002}m\u{E003}·[a]\u{E002}m\u{E003} = [1]\u{E002}m \u{E003}, dann ist [a']\u{E002}m\u{E003}·[b]\u{E002}m\u{E003} die eindeutige Lösung.\nAuch sonst kann es Lösungen geben:",
-                "Satz:      1. Die Kongruenz  a·x ≡ b mod m  ist lösbar  ⇔  ggT(a, m) | b.\n    2. Gibt es Lösungen zu  a·x ≡ b mod m,  dann ist ihre Anzahl = ggT(a, m).\nBeweis",
-                "¡Beispiel:    4·x ≡ 6 mod 10  ist lösbar, denn ggT(4, 10) = 2 | 6.\n    Es gibt 2 Lösungen. Also kürzt man durch 2 und löst die neue Kongruenz\n    2·x ≡ 3 mod 5.\n    Deren Lösung ist [4\u{E002}]\u{E003}5 = {4 + 5·z | z ∈ Z} = {..., –6, –1, 4, 9, 14, 19, ...}.\n    Modulo 10 zerfällt diese Klasse in die beiden Klassen\n        [4]10 = {4 + 10·z | z ∈ Z} = {..., –6, 4, 14, ...}  und\n        [9]10 = {9 + 10·z | z ∈ Z} = {..., –1, 9, 19, ...}.\n    Das sind die beiden Lösungen der ursprünglichen Kongruenz 4·x ≡ 6 mod 10.",
+            ZTPage(id: "2.2 - Kongruenzen lösen", title: "Solving congruences", tool: .linearCongruence, blocks: [
+                "Definition:     If a·x ≡ b mod m for an x\u{E002}0\u{E003} ∈ ℤ, one says: x\u{E002}0\u{E003} satisfies the congruence,\n    and the residue class [x\u{E002}0\u{E003}]\u{E002}m\u{E003} is called then a solution of the congruence.\nIf [a]\u{E002}m\u{E003} is prime residue class with [a']\u{E002}m\u{E003}·[a]\u{E002}m\u{E003} = [1]\u{E002}m \u{E003}, then [a']\u{E002}m\u{E003}·[b]\u{E002}m\u{E003} is the unique solution.\nAlso otherwise there can be solutions:",
+                "Theorem:      1. The congruence  a·x ≡ b mod m  is solvable  ⇔  GCD(a, m) | b.\n    2. If there are solutions of  a·x ≡ b mod m, their number is GCD(a, m).\nProof",
+                "Example:    4·x ≡ 6 mod 10  is solvable, since GCD(4, 10) = 2 | 6.\n    There are 2 solutions. Thus one cancels by 2 and solves the new congruence\n    2·x ≡ 3 mod 5.\n    Its solution is [4]\u{E002}5\u{E003} = {4 + 5·z | z ∈ ℤ} = {..., –6, –1, 4, 9, 14, 19, ...}.\n    Modulo 10 this class falls into the two classes\n        [4]\u{E002}10\u{E003} = {4 + 10·z | z ∈ ℤ} = {..., –6, 4, 14, ...}  and\n        [9]\u{E002}10\u{E003} = {9 + 10·z | z ∈ ℤ} = {..., –1, 9, 19, ...}.\n    They are the two solutions of the original congruence 4·x ≡ 6 mod 10.",
             ]),
-            ZTPage(id: "2.2 - Euler-Funktion", title: "Die Euler-Funktion", tool: .phiTable, blocks: [
-                "der griechische Buchstabe Phi",
-                "Die Anzahl der primen Restklassen modulo n bezeichnet man mit φ(n).\nDefinition: Euler-Funktion φ\n    Sei n ∈ ℕ. Dann ist φ(n) die Anzahl der zu n teilerfremden natürlichen Zahlen ≤ n.",
-                "einige Werte der Euler-Funktion:\n  n    1    2    3    4    5    6    7    8    9    10    11    12    13    14    15    16    17    18    19    20    ...    n\n φ(n)    1    1    2    2    4    2    6    4    6     4    10     4    12     6     8     8    16     6    18     8    ...    ?",
-                "Satz:  Für alle n ∈ ℕ ist n = Σ φ(d).",
-                "d =     t    \u{E002}A\u{E003}t     x ∈ {1, ..., n} mit ggT(x, n) = t             ∈ {1, ...,   } mit ggT(  ,   ) = 1    φ(d)",
-                "Für jedes x gibt es eine Menge A\u{E002}t\u{E003}.\nKein x ist in mehr als einer Menge A\u{E002}t\u{E003}.\nEs gibt n verschiedene x.",
-                "^At enthält alle x ∈ {1, 2, ..., n} mit ggT(x, n) = t.\nDas sind genau die x ∈ {1, 2, ..., n}, für die     teilerfremd zu     ist,\ndabei ist     ∈ {1, 2, ...,   }.\nGenau φ(   ) Zahlen ∈ {1, 2, ...,   } sind teilerfremd zu    .",
-                "Beweis:  Σ φ(d) = n       mit φ(n) = Anzahl der zu n teilerfremden natürlichen Zahlen ≤ n.\n^Für jeden Teiler t von n sei At die Menge aller x ∈ {1, 2, ..., n} mit ggT(x, n) = t.\n⇒    Σ |\u{E002}A\u{E003}t|  =  n.     Denn zu jedem x gibt es genau ein t = ggT(x, n).",
-                "Außerdem gilt:   ggT(x, n) = t  ⇔  ggT(   ,   ) = 1",
+            ZTPage(id: "2.2 - Euler-Funktion", title: "The Euler function", tool: .phiTable, blocks: [
+                "the greek letter Phi",
+                "The number of prime residue classes modulo n is denoted by φ(n).\nDefinition: Euler function φ\n    Let n ∈ ℕ. Then φ(n) counts the natural numbers ≤ n that are coprime to n.",
+                "some values of the Euler function:\n  n    1    2    3    4    5    6    7    8    9    10    11    12    13    14    15    16    17    18    19    20    ...    n\n φ(n)    1    1    2    2    4    2    6    4    6     4    10     4    12     6     8     8    16     6    18     8    ...    ?",
+                "Theorem:  For all n ∈ ℕ is n = Σ φ(d).",
+                "d =     t    A\u{E002}t\u{E003}     x ∈ {1, .., n} with GCD(x, n) = t            ∈ {1, ..,   } with GCD(  ,   ) = 1    φ(d)",
+                "For each x there is a set A\u{E002}t\u{E003}.\nNo x is in more than one set A\u{E002}t\u{E003}.\nThere are n different x.",
+                "A\u{E002}t\u{E003} contains all x ∈ {1, 2, ..., n} with GCD(x, n) = t.\nThese are exactly the x ∈ {1, 2, ..., n}, for which     is coprime to    ,\nand it holds        ∈ {1, 2, ...,   }.\nExactly φ(   ) numbers    ∈ {1, 2, ...,   } are coprime to    .",
+                "Proof:  Σ φ(d) = n       where φ(n) counts the natural numbers ≤ n that are coprime to n.\nFor each divisor t of n let A\u{E002}t\u{E003} be the set of all x ∈ {1, 2, ..., n} with GCD(x, n) = t.\n⇒    Σ |A\u{E002}t\u{E003}|  =  n.     Because for each x there is exactly one t = GCD(x, n).",
+                "Moreover:     GCD(x, n) = t  ⇔  GCD(   ,   ) = 1",
                 "⇒      |A\u{E002}t\u{E003}|  =  φ(   )\n⇒      n = Σ    |A\u{E002}t\u{E003}|  =  Σ φ(   )",
-                "Setze d =    = Komplementärteiler zu t, dann folgt die Behauptung.",
+                "Set d =    = complementary divisor of t, then the proposition follows.",
             ]),
-            ZTPage(id: "2.2 - Berechnung Euler 1", title: "Berechnung der Euler-Funktion (1)", tool: .phi, blocks: [
-                "Folgende Werte der Euler-Funktion kann man sofort angeben:\n\nSatz:      Für Primzahlen p ist  φ(p) = p – 1.\nBeweis:     Alle natürlichen Zahlen < p sind teilerfremd zu p.\nBeispiele:      φ(2) = 1,    φ(5) = 4,    φ(11) = 10,    φ(97) = 96",
-                "Beispiele:       φ(8) = φ(2\u{E000}3\u{E001}) = 1·2\u{E000}2\u{E001} = 4\n    φ(81) = φ(3\u{E000}4\u{E001}) = 2·3\u{E000}3\u{E001} = 54\n    φ(121) = φ(11\u{E000}2\u{E001}) = 10·11\u{E000}1\u{E001} = 110\nSatz:    Für Primzahlpotenzen p\u{E000}a\u{E001} ist  φ(p\u{E000}a\u{E001}) = p\u{E000}a\u{E001} – p\u{E000}a–1\u{E001} = (p – 1)·p\u{E000}a–1\u{E001}.\nBeweis:    Jede p-te Zahl ∈ {1, 2, ..., \u{E000}p\u{E001}a} ist durch p teilbar, das sind       = \u{E000}pa–\u{E001}1  Zahlen.\n⇔pa\nanderer Beweis\n    Die Anzahl der zu  p\u{E000}a\u{E001}  teilerfremden Zahlen ist also  p\u{E000}a\u{E001} – p\u{E000}a–1\u{E001}.",
-                "Und wenn eine Zahl keine Primzahlpotenz ist?\nFür diesen Fall muss man ein bisschen weiter ausholen.",
+            ZTPage(id: "2.2 - Berechnung Euler 1", title: "Computing the Euler function (1)", tool: .phi, blocks: [
+                "Some values of the Euler function can be given at once:\n\nTheorem:      For each prime p is  φ(p) = p – 1.\nProof:     All natural numbers < p are coprime to p.\nExamples:      φ(2) = 1,    φ(5) = 4,    φ(11) = 10,    φ(97) = 96",
+                "Examples:      φ(8) = φ(2\u{E000}3\u{E001}) = 1·2\u{E000}2\u{E001} = 4\n    φ(81) = φ(3\u{E000}4\u{E001}) = 2·3\u{E000}3\u{E001} = 54\n    φ(121) = φ(11\u{E000}2\u{E001}) = 10·11\u{E000}1\u{E001} = 110\nTheorem:    For prime powers p\u{E000}a\u{E001} is  φ(p\u{E000}a\u{E001}) = p\u{E000}a\u{E001} – p\u{E000}a–1\u{E001} = (p – 1)·p\u{E000}a–1\u{E001}.\nProof:    Each p-th number ∈ {1, 2, ..., p\u{E000}a\u{E001}} is divisible by p, that are       = p\u{E000}a–1\u{E001}  numbers.\nalternative Proof\n    Thus there are p\u{E000}a\u{E001} – p\u{E000}a–1\u{E001} numbers coprime to p\u{E000}a\u{E001}.",
+                "And if a number is no prime power?\nThis case needs some deeper examination ...",
             ]),
-            ZTPage(id: "2.2 - Uhren verstellen", title: "Uhren verstellen", tool: .crt, blocks: [
-                "Unter jeder Uhr steht ein Bruch:\nDer Zähler zeigt die aktuelle Stunde,\nder Nenner zeigt die Größe des Zifferblattes.\n\nDie Uhren lassen sich nur gemeinsam verstellen,\nund zwar alle um die gleiche Stundenzahl.",
-                "Verstellen Sie diese Uhren:",
-                "Uhren in Schritten verstellen:",
+            ZTPage(id: "2.2 - Uhren verstellen", title: "Clock setting", tool: .crt, blocks: [
+                "Below each clock is a quotient:\nThe enumerator tells the hour,\nthe denominator tells the size of the clock face.\n\nThe clocks can only be adjusted simultaneously,\neach by the same number of hours.",
+                "Set these clocks:",
+                "adjusting the clocks stepwise:",
             ]),
-            ZTPage(id: "2.2 - Chinesischer Restsatz", title: "Der Chinesische Restsatz", tool: .crt, blocks: [
-                "Kongruenzen, für die man gemeinsame Lösungen sucht",
-                "Das simultane Uhrenverstellen demonstriert den Chinesischen Restsatz:\n\nSatz:    Seien     m\u{E002}1\u{E003} , m\u{E002}2\u{E003} , ... , m\u{E002}k\u{E003} ∈ ℕ  paarweise teilerfremd,\n         a\u{E002}1\u{E003} ,  a\u{E002}2\u{E003} , ... ,  a\u{E002}k\u{E003} ∈ ℤ,     n = m\u{E002}1\u{E003} · m\u{E002}2\u{E003} · ... · m\u{E002}k\u{E003} ,\n    dann löst genau eine Restklasse x\u{E002}0\u{E003} mod n die simultane Kongruenz\n        x ≡ a\u{E002}1\u{E003} mod m\u{E002}1\u{E003} ,   x ≡ a\u{E002}2\u{E003} mod m\u{E002}2\u{E003} ,  ... ,   x ≡ a\u{E002}k\u{E003} mod m\u{E002}k\u{E003} .\nBeweis",
-                "Die Zahlen  m\u{E002}1\u{E003}, ..., m\u{E002}k\u{E003}  entsprechen den Uhren.\nDie Restklassen  a\u{E002}1\u{E003} mod m\u{E002}1\u{E003}, ...,  a\u{E002}k\u{E003} mod m\u{E002}k\u{E003}  entsprechen den Vorgabezeiten.\nZu jedem x mod n gibt es eine Kombination ( x mod m\u{E002}1 \u{E003}, ... ,  x mod m\u{E002}k\u{E003} ) von Uhrzeiten.",
-                "Jede dieser Kombinationen ist ein Element von    ℤm\u{E002}1\u{E003} ×   ...   ×  ℤm\u{E002}k\u{E003} .\nDer Chinesische Restsatz besagt nun, dass es auch umgekehrt\nzu jeder solchen Kombination genau eine Restklasse x mod n gibt.\nEs gibt also eine bijektive Abbildung f von Zn nach  ℤm\u{E002}1\u{E003}× ... ×  ℤm\u{E002}k\u{E003}\u{E000} .\u{E001}\nBeispiel",
-                "die Menge aller Restklassen mod n",
+            ZTPage(id: "2.2 - Chinesischer Restsatz", title: "The Chinese remainder theorem", tool: .crt, blocks: [
+                "congruences for which\na common solution is wanted",
+                "The simultaneous clock adjustment demonstrates the Chinese Remainder Theorem:\n\nTheorem:    Let     m\u{E002}1\u{E003} , m\u{E002}2\u{E003} , ... , m\u{E002}k\u{E003} ∈ ℕ  be pairwise coprime,\n         a\u{E002}1\u{E003} ,  a\u{E002}2\u{E003} , ... ,  a\u{E002}k\u{E003} ∈ ℤ,     n = m\u{E002}1\u{E003} · m\u{E002}2\u{E003} · ... · m\u{E002}k\u{E003} ,\n    then exactly one residue class x\u{E002}0\u{E003} mod n solves the simultaneous congruence\n        x ≡ a\u{E002}1\u{E003} mod m\u{E002}1\u{E003} ,   x ≡ a\u{E002}2\u{E003} mod m\u{E002}2\u{E003} ,  ... ,   x ≡ a\u{E002}k\u{E003} mod m\u{E002}k\u{E003} .\nProof",
+                "The numbers  m\u{E002}1\u{E003}, ..., m\u{E002}k\u{E003}  correspond the clocks.\nThe residue classes  a\u{E002}1\u{E003} mod m\u{E002}1\u{E003}, ...,  a\u{E002}k\u{E003} mod m\u{E002}k\u{E003}  correspond the target times.\nFor each x mod n there is a combination ( x mod m\u{E002}1 \u{E003}, ... ,  x mod m\u{E002}k\u{E003} ) of clock times.",
+                "Each of these combinations is an element of    ℤm\u{E002}1\u{E003} ×   ...   ×  ℤm\u{E002}k\u{E003} .\nNow the Chinese Remainder Theorem says that also vice versa\nfor each such combination there is exactly one residue class x mod n.\nThus there is a bijective mapping f from ℤn  \u{E000}to\u{E001}  ℤm\u{E002}1\u{E003}× ... ×  ℤm\u{E002}k\u{E003} .\nExample",
+                "the set of all residue classes mod n",
             ]),
-            ZTPage(id: "2.2 - Zerlegung Ring", title: "Zerlegung des Restklassenrings", tool: .crtMap, blocks: [
-                "Sind R\u{E002}1\u{E003}, R\u{E002}2\u{E003}, ... , R\u{E002}k\u{E003} Ringe, dann bezeichnet man als ihr direktes Produkt die Menge aller Tupel\n(r\u{E002}1\u{E003}, r\u{E002}2\u{E003}, ... , r\u{E002}k\u{E003}) ∈ R\u{E002}1\u{E003}× R\u{E002}2\u{E003}× ... × R\u{E002}k\u{E003} mit komponentenweiser Addition und Multiplikation.\nBeispiel",
-                "Das direkte Produkt ist wieder ein Ring. Sind die R\u{E002}i\u{E003} kommutative Ringe mit Einselementen e\u{E002}i\u{E003} , 1≤ i ≤ k, so ist das direkte Produkt ein kommutativer Ring mit Einselement (e\u{E002}1\u{E003}, ... , e\u{E002}k\u{E003}).",
-                "Satz:    Seien  m1 , m2 , ... , mk ∈ ℕ paarweise teilerfremd,  n = m1 · m2 · ... · mk .  Dann ist\n    die Abbildung       f:  Zn   →   ℤm1×  ℤm2× ... ×  ℤmk     mit\n    ein Isomorphismus von Ringen.\nBeweis        Beispiel\nf( [x]n ) = ( [x]m1 ,  [x]m2 , ... ,  [x]mk )",
-                "Ist R @ R\u{E002}1\u{E003}× R\u{E002}2\u{E003}× ... × R\u{E002}k\u{E003} , so nennt man R\u{E002}1\u{E003}× R\u{E002}2\u{E003}× ... × R\u{E002}k\u{E003} eine Zerlegung von R.\nMan kann also Z\u{E002}n\u{E003} zerlegen und statt in einem großen in vielen kleinen Ringen rechnen;\ndas Ergebnis-Tupel übersetzt man mit dem Chinesischen Restsatz zurück nach Z\u{E002}n\u{E003} .",
+            ZTPage(id: "2.2 - Zerlegung Ring", title: "Decomposition of the residue class ring", tool: .crtMap, blocks: [
+                "Let R\u{E002}1\u{E003}, R\u{E002}2\u{E003}, ... , R\u{E002}k\u{E003} be rings, then one denotes as their direct product the set of all tuples\n(r\u{E002}1\u{E003}, r\u{E002}2\u{E003}, ... , r\u{E002}k\u{E003}) ∈ R\u{E002}1\u{E003}× R\u{E002}2\u{E003}× ... × R\u{E002}k\u{E003} with componentwise addition and multiplication.\nExample",
+                "The direct product is a ring too. If the R\u{E002}i\u{E003} are commutative rings with one-elements e\u{E002}i\u{E003} , 1≤ i ≤ k, then the direct product is a commutative ring with one-element (e\u{E002}1\u{E003}, ... , e\u{E002}k\u{E003}).",
+                "Theorem:    Let  m\u{E002}1 \u{E003}, m\u{E002}2 \u{E003}, ... , m\u{E002}k\u{E003} ∈ ℕ be pairwise coprime,  n = m\u{E002}1 \u{E003}· m\u{E002}2 \u{E003}· ... · m\u{E002}k \u{E003}.  Then\n    the mapping        f:  ℤn   →   ℤm\u{E002}1\u{E003}\u{E000}×\u{E001}  ℤm\u{E002}2\u{E003}× ... ×  ℤm\u{E002}k\u{E003}     with\n\n    is an isomorphism of rings.\nProof        Example\n\u{E000}f( [x]\u{E001}n \u{E000}) = ( [x]\u{E001}m\u{E002}1 \u{E003},  \u{E000}[x]\u{E001}m\u{E002}2 \u{E003}, ... ,  \u{E000}[x]\u{E001}m\u{E002}k\u{E003} \u{E000})\u{E001}",
+                "If R ≅ R\u{E002}1\u{E003}× R\u{E002}2\u{E003}× ... × R\u{E002}k\u{E003} , then R\u{E002}1\u{E003}× R\u{E002}2\u{E003}× ... × R\u{E002}k\u{E003} is called a decomposition of R.\nSo one can decompose ℤ\u{E002}n\u{E003} and calculate in many little rings instead in a big one;\nthe resulting tuple can be transformed back to ℤ\u{E002}n\u{E003} with the Chinese Remainder Theorem.",
             ]),
-            ZTPage(id: "2.2 - Berechnung Euler 2", title: "Berechnung der Euler-Funktion (2)", tool: .phi, blocks: [
-                "Dank der Zerlegung des Restklassenringes kann man die Euler-Funktion auch\nfür Produkte teilerfremder Zahlen berechnen – sofern man ihre Primfaktoren kennt:\nWiederholung:  Für Primzahlpotenzen  p\u{E000}a\u{E001}  ist  φ(p\u{E000}a\u{E001}) = (p – 1)·p\u{E000}a–1\u{E001}.",
-                "Satz:     Sei  n = m\u{E002}1 \u{E003}· m\u{E002}2 \u{E003}· ... · m\u{E002}k \u{E003} mit paarweise teilerfremden Zahlen  m\u{E002}1 \u{E003}, m\u{E002}2 \u{E003}, ... , m\u{E002}k\u{E003} ∈ ℕ.\n    Dann ist      φ(n) = φ(m\u{E002}1\u{E003}) · φ(m\u{E002}2\u{E003}) · ... · φ(m\u{E002}k\u{E003}).\nBeweis",
-                "Ist n = ∏ p\u{E000}e(p)\u{E001}    die Primfaktorzerlegung von n, wobei p je e(p) mal in n vorkommt, dann ist\n\nφ(n) = P φ(p\u{E000}e(p)\u{E001} ).   Setzt man hier die Formel für Primzahlpotenzen ein, so ergibt sich die\nFormel zur Euler-Funktion:\nφ(n) = P (p – 1)·p\u{E000}e(p)–1A\u{E001}\nandere Darstellungen",
+            ZTPage(id: "2.2 - Berechnung Euler 2", title: "Computing the Euler function (2)", tool: .phi, blocks: [
+                "Due to the decomposition of residue class rings the Euler function can be calculated\nfor any product of coprime numbers too – provided that its prime factors are known:\nRecollection:  For prime powers  p\u{E000}a\u{E001}  is  φ(p\u{E000}a\u{E001}) = (p – 1)·p\u{E000}a–1\u{E001}.",
+                "Theorem:     Let  n = m\u{E002}1 \u{E003}· m\u{E002}2 \u{E003}· ... · m\u{E002}k \u{E003} with pairwise coprime numbers  m\u{E002}1 \u{E003}, m\u{E002}2 \u{E003}, ... , m\u{E002}k\u{E003} ∈ ℕ.\n    Then is      φ(n) = φ(m\u{E002}1\u{E003}) · φ(m\u{E002}2\u{E003}) · ... · φ(m\u{E002}k\u{E003}).\nProof",
+                "If  n = ∏ p\u{E000}e(p)\u{E001}   is the prime decomposition of n, where p occurs e(p) times, then is\n\nφ(n) = ∏ φ(p\u{E000}e(p)\u{E001} ).   After replacing p\u{E000}e(p)\u{E001} with the formula for prime powers one obtains the\nFormula for the Euler function:\nφ(n) = ∏ (p – 1)·p\u{E000}e(p)–1\u{E001}\nother Representations",
             ]),
-            ZTPage(id: "2.2 - Fermat, Euler", title: "Die Sätze von Fermat und Euler", tool: .eulerFermat, blocks: [
-                "Euler verallgemeinerte einen Satz von Fermat zu einem der wichtigsten Sätze der Zahlentheorie:\n\nSatz:    \"Euler-Fermat\"\n    Sei n ∈ ℕ, a teilerfremd zu n. Dann ist  a\u{E000}φ(n)\u{E001} ≡ 1 mod n.\nIllustration    Beweis",
-                "Den Spezialfall mit φ(p) = p – 1 für Primzahlen p kannte schon Fermat:\nSatz:    \"kleiner Fermat\"\n    Sei p eine Primzahl, a teilerfremd zu p. Dann ist  a\u{E000}p–1\u{E001} ≡ 1 mod p.",
-                "Folgerung:  Sei n ∈ ℕ, a teilerfremd zu n. Dann gilt:\n    b ≡ c mod φ(n)  ⇒  a\u{E000}b\u{E001} ≡ a\u{E000}c\u{E001} mod n    Beweis\nDie Umkehrung gilt nicht, z.B.  3\u{E000}2\u{E001} ≡ 3\u{E000}4\u{E001} mod 8,\naber 2 ≡ 4 mod 4.",
-                "Beim Rechnen mit primen Restklassen modulo n\nkann man also ihre     ·  Vertreter     modulo n,\n    ·  Exponenten     modulo φ(n)    beliebig ersetzen.     Beispiel 1\n            Beispiel 2",
+            ZTPage(id: "2.2 - Fermat, Euler", title: "The theorems of Fermat and Euler", tool: .eulerFermat, blocks: [
+                "Euler, by generalizing a theorem of Fermat, got a most important theorem in number theory:\n\nTheorem:    \"Euler-Fermat\"\n    Let n ∈ ℕ, a be coprime to n. Then is  a\u{E000}φ(n)\u{E001} ≡ 1 mod n.\nIllustration        Proof",
+                "The special case φ(p) = p – 1 for primes p was known to Fermat:\nTheorem:    \"Little Fermat\"\n    Let p be prime, a be coprime to p. Then is  a\u{E000}p–1\u{E001} ≡ 1 mod p.",
+                "but 2 ≡ 4 mod 4.\nCorollary:  Let n ∈ ℕ, a be coprime to n. Then holds:\n    b ≡ c mod φ(n)  ⇒  a\u{E000}b\u{E001} ≡ a\u{E000}c\u{E001} mod n    Proof\nThe converse is wrong,  e.g.  3\u{E000}2\u{E001} ≡ 3\u{E000}4\u{E001} mod 8,",
+                "Thus in calcutions with prime residue classes modulo n\none can replace their     ·  representatives     modulo n,\n    ·  exponents     modulo φ(n).     Example 1\n            Example 2",
             ]),
-            ZTPage(id: "2.2 - schnelle Potenz", title: "Schnelles Potenzieren", tool: .squareMultiply, blocks: [
-                "    ⌊Hälfte⌋     (97)    48    24    12    6     3     1    0 \n    Rest      1    0    0    0     0     1    1",
-                "Vergleichen Sie die Anzahl der Multiplikationen (einschließlich Quadraturen) mit dem Exponenten.",
-                "Manchmal helfen keine Tricks, man muss eine Potenz ausrechnen. Dann aber geschickt:\n    Quadriere die Basis \"mehrmals\", dadurch entsteht \"Baumaterial\". \n    Wähle das richtige Baumaterial aus und setze es zur Potenz zusammen.\nDas wird am Beispiel  3\u{E000}97\u{E001} erklärt:",
-                "Quadriere 3 mehrmals:    3,    9,    81,    81\u{E000}2\u{E001},    (81\u{E000}2\u{E001})\u{E000}2\u{E001},    ((81\u{E000}2\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001},    (((81\u{E000}2\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001} ...\nNun gilt:  (a\u{E000}k\u{E001})\u{E000}2\u{E001} = a\u{E000}2·k\u{E001}\nDas Baumaterial ist also:    3\u{E000}1\u{E001},    3\u{E000}2\u{E001},    3\u{E000}4\u{E001},    3\u{E000}8\u{E001},    3\u{E000}16\u{E001},    3\u{E000}32\u{E001},    3\u{E000}64\u{E001} ...",
-                "Was man davon braucht, zeigt die Zerlegung des Exponenten in verschiedene Zweierpotenzen:\n    97  =      1 +    0 +    0  +    0   +     0    +     32     +    64\nAlso ist      3\u{E000}97\u{E001} =     3\u{E000}1\u{E001} ·    1  ·    1   ·    1   ·    1     ·    3\u{E000}32\u{E001}    ·     3\u{E000}64\u{E001}.\ngeschickt",
-                "Die Zerlegung des Exponenten entspricht seiner Binärdarstellung 1100001 rückwärts,\nman findet sie durch fortgesetztes Halbieren mit Rest. Damit ergibt sich folgender\nAlgorithmus:      Potenz := 1\n    Solange Exponent > 0:    Exponent := ⌊Exponent / 2⌋\n                    Wenn Rest = 1, dann  Potenz := Potenz · Basis\n                     Basis := Basis\u{E000}2\u{E001}",
+            ZTPage(id: "2.2 - schnelle Potenz", title: "Fast exponentiation", tool: .squareMultiply, blocks: [
+                "    ⌊half⌋     (97)    48    24    12    6     3     1    0 \n    remainder      1    0    0    0     0     1    1",
+                "Compare the number of multiplications\n(including squaring) with the exponent.",
+                "Sometimes there are no tricks, one must compute a power. But cleverly.\n    Quadrify the base \"several times\", this yields \"building material\". \n    Choose the proper building material and compose the power of it.\nThis is being explained in the case of  3\u{E000}97\u{E001}:",
+                "Quadrify 3 several times:    3,    9,    81,    81\u{E000}2\u{E001},    (81\u{E000}2\u{E001})\u{E000}2\u{E001},    ((81\u{E000}2\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001},    (((81\u{E000}2\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001} ...\nNow holds:  (a\u{E000}k\u{E001})\u{E000}2\u{E001} = a\u{E000}2·k\u{E001}\nThus the material is:    3\u{E000}1\u{E001},    3\u{E000}2\u{E001},    3\u{E000}4\u{E001},    3\u{E000}8\u{E001},    3\u{E000}16\u{E001},    3\u{E000}32\u{E001},    3\u{E000}64\u{E001} ...",
+                "The proper material is shown by the decomposition of the exponent in different powers of 2: \n    97  =      1 +    0 +    0  +    0   +     0    +     32     +    64\nThus is      3\u{E000}97\u{E001} =     3\u{E000}1\u{E001} ·    1  ·    1   ·    1   ·    1     ·    3\u{E000}32\u{E001}    ·     3\u{E000}64\u{E001}.\ncleverly",
+                "The decomposition of the exponent corresponds its binary representation 1100001 backwards,\nit can be found by repeatedly halving with remainder. This yields the following\nAlgorithm:      power := 1\n    While exponent > 0:    exponent := ⌊exponent / 2⌋\n                    If remainder = 1, then  power := power · base\n                     base := base\u{E000}2\u{E001}",
             ]),
-            ZTPage(id: "2.2 - modulare Potenz", title: "Modulares Potenzieren", tool: .squareMultiply, blocks: [
-                "durch den Standardvertreter ersetzt",
-                "Basis, Quadrate und (in Klammern) Zwischenergebnisse werden sofort reduziert.",
-                "Die Basis ist nicht invertierbar.",
-            ]),
-        ]))
-        chapters.append(ZTChapter(number: "2.3", title: "Untergruppen", pages: [
-            ZTPage(id: "2.3 - 01", title: "Gruppen", tool: nil, blocks: [
-                "€Der Kürze halber werden ab hier\n\n·  bekannte Gruppen ohne Verknüpfung angegeben,\n    zum Beispiel  ℤ statt (ℤ, +),\n\n·  Restklassen bei bekanntem Modul durch Vertreter dargestellt,\n    zum Beispiel  \u{E002}Z1\u{E003}0* = {1, 3, 7, 9},\n\nwenn der Sinn aus dem Zusammenhang klar wird.\nDie ausführliche Schreibweise kann noch hier und da der Verdeutlichung dienen.",
-            ]),
-            ZTPage(id: "2.3 - |G|", title: "Ordnung einer Gruppe, Untergruppen", tool: .order, blocks: [
-                "Definition:  Die Anzahl der Elemente einer Gruppe G heißt Ordnung der Gruppe, kurz |G|.\nBeispiele:    ·  ℤ    hat unendliche Ordnung.\n    ·  Z\u{E002}10\u{E003}    hat die Ordnung 10.    ·  Z\u{E002}10\u{E003}*   hat die Ordnung φ(10) = 4.",
-                "¼Definition:    Sei (G, *) eine Gruppe, U ⊆ G.\n    Ist (U, *) eine Gruppe, dann bezeichnet man sie als Untergruppe von (G, *).\nBeispiele:    ·  In Z bilden die geraden Zahlen eine Untergruppe.\n    ·  Das neutrale Element und G selbst sind die so genannten trivialen Untergruppen.\n    ·  Die Untergruppen in ℤ8* sind: {1}, {1, 3}, {1, 5}, {1, 7}, Z8* selbst.",
-                "Satz:    Sei (G, *) eine Gruppe, U ⊆ G, U ≠ ∅.\n    Ist U endlich und abgeschlossen bezüglich *,\n    dann ist (U, *) eine Untergruppe von (G, *).    Beweis\n\nBeachte:    Abgeschlossenheit allein reicht nicht, so ist (ℕ\u{E002}0\u{E003}, +) keine Untergruppe von (ℤ, +).",
-            ]),
-            ZTPage(id: "2.3 - ord(a)", title: "Ordnung eines Elements", tool: .order, blocks: [
-                "Nach dem Satz von Euler-Fermat gilt für alle a ∈ Z\u{E002}m\u{E003}*:  a\u{E000}φ(m)\u{E001} = 1.\nDas kann man erweitern:",
-                "Satz:      Sei G eine endliche Gruppe mit neutralem Element e.\n        Dann gilt für alle a ∈ G:      a\u{E000}|G|\u{E001} = e.\nBeispiel:    In Z\u{E002}10\u{E003} gilt:  [2]\u{E000}10\u{E001} = [2]+[2]+[2]+[2]+[2]+[2]+[2]+[2]+[2]+[2] = [20] = [0] = e.\nBeweis:      Ersetze im Beweis zu Euler-Fermat Z\u{E002}m\u{E003}* durch G,  φ(m) durch |G| usw.",
-                "Es geht hier auch mit kleinerem Exponenten:\n[2]\u{E000}5\u{E001} = [2]+[2]+[2]+[2]+[2] = [10] = [0] = e.",
-                "Definition:    Sei G eine Gruppe mit neutralem Element e, a ∈ G.\n    Die kleinste Zahl n ∈ ℕ mit a\u{E000}n\u{E001} = e heißt Ordnung von a in G, kurz ord(a).\n    Existiert keine solche Zahl, so heißt die Ordnung von a in G unendlich.\nBeispiele:    ·  In ℤ ist ord(2) = ∞.\n    ·  In Z\u{E002}10\u{E003} ist ord(2) = 5.    ·  In Z\u{E002}10\u{E003}* ist ord(9) = 2.",
-                "wenn G bekannt ist",
-            ]),
-            ZTPage(id: "2.3 - ord( Potenz )", title: "Ordnung einer Potenz", tool: .order, blocks: [
-                "Sei G eine Gruppe mit neutralem Element e, a \u{E000}∈\u{E001} \u{E000}G, z\u{E001} \u{E000}∈\u{E001} \u{E000}Z und ord(a)\u{E001} \u{E000}∈\u{E001} ℕ. Dann gilt:\nSatz:    a\u{E000}z\u{E001} = e  ⇔  ord(a) | z\n    \"Potenz neutral  ⇔  Ordnung der Basis teilt Exponent\"    Beweis\nBeispiel",
-                "Folgerungen:\n    1. Wegen    a\u{E000}|G|\u{E001} = e   gilt:   ord(a) teilt |G|.\n\"Element-Ordnung teilt Gruppen-Ordnung.\"\n\n    2. Wegen    a\u{E000}x–y\u{E001} = e  ⇔  ord(a) | (x–y)     gilt:\n        a\u{E000}x\u{E001} = a\u{E000}y\u{E001}  ⇔  x ≡ y mod ord(a)    Beispiel\nin endlichen Gruppen",
-                "ggT(a, z)\nord(a\u{E000}z\u{E001})\nSatz:\nBeispiel\nKennt man die Ordnung von a, so erhält man leicht die Ordnung jeder Potenz von a:\nUmit a = ord(a)",
-            ]),
-            ZTPage(id: "2.3 - Erzeugnis", title: "Erzeugnis, zyklische Gruppen", tool: .order, blocks: [
-                "/Definition:    Sei G eine Gruppe.\n    ·  Für jedes a ∈ G heißt <a> = {\u{E000}a\u{E001}z | z ∈ Z} das Erzeugnis von a.\n        Man sagt: a erzeugt <a>, a ist Erzeuger oder erzeugendes Element von <a>.\n    ·  Gibt es ein a ∈ G mit <a> = G, dann heißt G zyklisch.\nManche Gruppen kann man durch Potenzieren aus einem ihrer Elemente erzeugen:",
-                "…Beispiele:    ·  ℤ ist zyklisch mit den Erzeugern 1 und –1.\n        Die geraden Zahlen sind <2> = <–2> = {2·z | z ∈ Z}\u{E002}.\u{E003}\n    ·  Die Erzeugnisse in ℤ8* sind:     <1> = {1},",
-                "·Satz:    Jedes Erzeugnis ist eine Untergruppe.     Beweis\nDie Umkehrung des Satzes ist falsch, denn zum Beispiel\n    ℤ8* ist nicht zyklisch, aber Untergruppe von sich selbst,\n    Z20* hat die nicht-zyklische Untergruppe {1, 9, 11, 19}.",
-            ]),
-            ZTPage(id: "2.3 - Lagrange", title: "Der Satz von Lagrange", tool: .order, blocks: [
-                "Satz:     Sei G eine Gruppe, a ∈ G, dann gilt:\n        |<a>| = ord(a)    Beweis\nJedes Element einer Gruppe erzeugt eine Untergruppe.\nDie Ordnung dieser Untergruppe ist nun gerade die Ordnung des erzeugenden Elements.",
-                "In endlichen Gruppen gilt:    ord(a)  teilt  |G|.\nFolgerung für endliche Gruppen:     |<a>|  teilt  |G|.\n\"Erzeugnis-Ordnung teilt Gruppen-Ordnung.\"",
-                "Lagrange gelang folgende Verallgemeinerung:\nSatz von Lagrange:      Ist U ist Untergruppe einer endlichen Gruppe G, dann gilt:              |U| teilt |G|.    Beweis\n\"Untergruppen-Ordnung teilt Gruppen-Ordnung.\"\nBeachte:     Lagrange sagt nicht, es müsse zu jedem Teiler von |G| eine Untergruppe geben.",
-            ]),
-            ZTPage(id: "2.3 - ord(a) berechnen", title: "ord(a) berechnen", tool: .order, blocks: [
-                "Sei G eine endliche Gruppe mit neutralem Element e, a ∈ G.\nBei der Bestimmung von ord(a) kommen nur die Teiler von |G| in Betracht.\nGesucht ist der kleinste Teiler d von |G|, so dass a\u{E000}d\u{E001} = e.",
-                "Weil die Teiler aus den Primteilern von |G| bestehen,\nhilft die Kenntnis der Primfaktorzerlegung von |G|.\nMan fängt an mit d = |G| und verkleinert d so lange wie möglich:",
-                "Algorithmus:     1. d := |G|\n    2. Nimm einen Primteiler p von |G|, der noch nicht dran war.    3. Wenn a\u{E000}d/p\u{E001} = e, dann        d := d / p         Wenn p öfter in |G| vorkommt, als er dran war, dann gehe zu 3.    4. Wenn noch nicht alle Primteiler dran waren, dann gehe zu 2.    5. Ausgabe: ord(a) = d.",
-                "Die Frage, ob a ein Erzeuger ist, kann der Algorithmus schneller beantworten, denn\na erzeugt die Gruppe  ⇔  ord(a) = |G|.\nSobald also der Algorithmus d verkleinern kann, kann a kein Erzeuger mehr sein.\n a ist kein Erzeuger von G.",
-            ]),
-            ZTPage(id: "2.3 - zyklisch iso", title: "Zyklische Gruppen sind isomorph", tool: .order, blocks: [
-                "·Beispiele:    ·  (ℤ, +) @ (<2>, +)  mit f(x) = 2·x\n    ·  (\u{E002}Z4\u{E003} , +) @ (ℤ5*, ·)  mit f( [x] ) = [2\u{E000}]\u{E001}x , denn ℤ5* = <[2]> = {[2], [4], [3], [1]}\nJedes Erzeugnis ist eine zyklische Gruppe und umgekehrt, und es gilt:\nSatz:    Jede zyklische Gruppe ist isomorph zu einer Restklassengruppe Z\u{E002}n\u{E003} oder zu ℤ.\nBeweis",
-                "Tabellen zyklischer Gruppen\nkann man so anordnen, dass\nin allen steigenden Diagonalen\njeweils gleiche Elemente stehen.",
-                "Das nächste Elemente der Kopfzeile soll immer das Element links darunter sein.\nWenn das nicht geht, fangen Sie die Kopfzeile mit einem anderen Element an.",
-                "kann man gar nicht anders als verlangt anordnen.",
-            ]),
-            ZTPage(id: "2.3 - zyklisch Sätze", title: "Sätze über zyklische Gruppen", tool: nil, blocks: [
-                "¯Dank Isomorphie lernt man aus ℤ und ℤn alles über zyklische Gruppen.\n\nDie Untergruppen von ℤ sind <a> = <–a> = {0, ±a, ±2·a, ±3·a, ...} mit a ∈ ℤ.\nFür a ≠ 0 ist <a> unendlich und isomorph zu ℤ mit f(x) = a·x.\nDagegen ist <0> = {0} endlich und isomorph zu Z1.",
-                "In Z\u{E002}n\u{E003} gelten folgende Sätze:\nSatz:  <a> = <ggT(a, n)>      Beweis\nSatz:  Zu jedem Teiler d von n gibt es genau eine zyklische Untergruppe: <d>    Beweis\nSatz:  Zu jedem Teiler d von n gibt es genau φ(d) Elemente der Ordnung d.    Beweis\nSatz:  Alle Untergruppen sind zyklisch.    Beweis\nUm die Sätze zu übertragen auf zyklische Gruppen G mit Erzeuger g, ersetzt man n durch |G|\nund die Erzeugnisse < x > durch < g\u{E000}x \u{E001}>.",
-            ]),
-            ZTPage(id: "2.3 - pos Erz", title: "Positives Erzeugnis", tool: .order, blocks: [
-                "In einer Halbgruppe muss es weder ein neutrales, noch invertierbare Elemente geben.\nAber Potenzen mit positiven Exponenten sind immer möglich.\n\nDefinition:  Sei H eine Halbgruppe, h ∈ H.\n    Als positives Erzeugnis von g bezeichnet man <h\u{E000}>\u{E001}+ = {hn | n ∈ ℕ}.",
-                "Satz:      Sei H eine Halbgruppe, h ∈ H, n ∈ ℕ.\n    h\u{E000}n\u{E001} = h für n > 1  ⇔  <h>\u{E000}+\u{E001} ist eine Gruppe.    Beweis\nDas positive Erzeugnis kann eine Gruppe sein.",
-                "Beispiele:    ·  In H = (ℤn , ·) bildet <0>+ = {0} eine Gruppe mit neutralem Element 0.\n    ·  In H = (Z\u{E002}6\u{E003} , ·) bildet <2>\u{E000}+\u{E001} = {2, 4} eine Gruppe mit neutralem Element 4.\n    Beide Male ist <h>+ keine Untergruppe von H, denn H ist keine Gruppe.\nJede Gruppe <h>\u{E000}+\u{E001} der Ordnung n ist zyklisch und damit isomorph zu Z\u{E002}n\u{E003}.\nIn <h>\u{E000}+\u{E001} kann es ein neutrales Element geben, das in H nicht neutral ist,\nund eben solche invertierbaren Elemente.",
-            ]),
-            ZTPage(id: "2.3 - sterne", title: "Erzeugnisse als Sterne", tool: .order, blocks: [
-                "Betrachten Sie positive Erzeugnisse <a>\u{E000}+\u{E001} von Restklassen modulo\n\nVerknüpfung:",
+            ZTPage(id: "2.2 - modulare Potenz", title: "Modular exponentiation", tool: .squareMultiply, blocks: [
+                "durch the Standardvertreter ersetzt",
+                "base, squares and (in brackets) intermediate results are being reduced at once.",
+                "The base is not invertible.",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "2.4", title: "primitive Restklassen", pages: [
-            ZTPage(id: "2.4 - 01", title: "Primitive Restklassen", tool: .primitiveRoots, blocks: [
-                "Nun wird untersucht, welche primen Restklassengruppen zyklisch sind.\n\nBeispiele:    ·  Z\u{E002}8\u{E003}* = {1, 3, 5, 7} ist nicht zyklisch.\n    ·  Z10* = {1, 3, 7, 9} ist zyklisch mit den Erzeugern 3 und 7.",
-                "Definition:    ·  Eine prime Restklasse, die Z\u{E002}m\u{E003}* erzeugt, heißt primitive Restklasse mod m.\n    ·  Ein Vertreter einer primitiven Restklasse mod m heißt Primitivwurzel mod m.",
-                "Beachte:    Es gibt prime Restklassen, die nicht primitiv sind.\n\nWeil die Ordnung eines Elements die Ordnung seines Erzeugnisses ist,\ngilt:  Die Ordnung einer primitiven Restklasse mod m ist φ(m).",
+        chapters.append(ZTChapter(number: "2.3", title: "Subgroups", pages: [
+            ZTPage(id: "2.3 - 01", title: "Groups", tool: nil, blocks: [
+                "In order to make it short from now on\n\n·  well-known groups are given without connection,\n    for example  ℤ instead (ℤ, +),\n\n·  residue classes with known modulus are given by representatives,\n    for example  ℤ\u{E002}10\u{E003}* = {1, 3, 7, 9},\n\nif the meaning is clear from the context.\nThe circumstantial notation can be used for clarification here and there.",
             ]),
-            ZTPage(id: "2.4 - Polynome", title: "Polynome", tool: nil, blocks: [
-                "Für den ersten Schritt auf der Suche nach primitiven Restklassen braucht man Polynome:\n\nDefinition:     Sei R ein kommutativer Ring mit Einselement 1 ≠ 0.\n    Ein Polynom vom Grad n ist eine Funktion f: R→R der Form\nf(x) = a\u{E002}0\u{E003} + a\u{E002}1\u{E003}·x +...+ a\u{E002}n\u{E003}·x\u{E000}n\u{E001}      mit      a\u{E002}0 \u{E003},..., a\u{E002}n\u{E003} ∈ R   und   a\u{E002}n \u{E003}≠ 0.\n    \u{E002}Ein b\u{E003} \u{E002}∈\u{E003} R heißt Nullstelle des Polynoms f, wenn f(b) = 0 ist.",
-                "Mit Hilfe einer Nullstelle kann man ein Polynom als Produkt darstellen:\nSatz:     \"Ausklammern von Nullstellen\"\n    Sei f ein Polynom vom Grad n und b eine Nullstelle von f.\n    Dann gibt es ein Polynom g vom Grad n–1, so dass f(x) = (x–b)·g(x) für alle x ∈ R.\n\nBeispiel    Beweis",
+            ZTPage(id: "2.3 - |G|", title: "Order of a group, subgroups", tool: .order, blocks: [
+                "Definition:  The number of elements of a group G is called order of the group, shortly |G|.\nExamples:    ·  ℤ    has infinite order.\n    ·  ℤ\u{E002}10\u{E003}    has the order 10.    ·  ℤ\u{E002}10\u{E003}*   has the order φ(10) = 4.",
+                "Definition:    Let (G, *) be a group, U ⊆ G.\n    If (U, *) is a group, then it is called a subgroup of (G, *).\n\nExamples:    ·  In ℤ the even numbers form a subgroup.\n    ·  The neutral element and G itself are the so called trivial subgroups.\n    ·  The subgroups in ℤ\u{E002}8\u{E003}* are: {1}, {1, 3}, {1, 5}, {1, 7}, ℤ\u{E002}8\u{E003}* itself.",
+                "Theorem:    Let (G, *) be a group, U ⊆ G, U ≠ ∅.\n    If U is finite and closed with respect to *,\n    then (U, *) is a subgroup of (G, *).    Proof\n\nNotice:    Closedness alone is not enough, for instance (ℕ\u{E002}0\u{E003}, +) is no subgroup of (ℤ, +).",
             ]),
-            ZTPage(id: "2.4 - eindeut Fakt", title: "Eindeutige Faktorisierung", tool: nil, blocks: [
-                "Die prime Restklassengruppe ℤ8* enthält vier Elemente: {1, 3, 5, 7}.\nDie Ordnung jedes Elementes ist ≤ 2, denn:\n1\u{E000}2\u{E001} ≡ 1 mod 8,   3\u{E000}2\u{E001} ≡ 1 mod 8,   5\u{E000}2\u{E001} ≡ 1 mod 8,   7\u{E000}2\u{E001} ≡ 1 mod 8.\nDeshalb sind alle vier Elemente Nullstellen des Polynoms x\u{E000}2\u{E001} – 1.",
-                "Je nachdem, welche Nullstelle man ausklammert, erhält man:\n    ·  (x – 1)·(x – 7)  =  x\u{E000}2\u{E001} –8x + 7   ≡   x\u{E000}2\u{E001} – 1 mod 8, oder\n    ·  (x – 3)·(x – 5)  =  x\u{E000}2\u{E001} –8x + 15  ≡  x\u{E000}2\u{E001} – 1 mod 8.",
-                "Man kann das Polynom also nicht auf eindeutige, sondern auf zweierlei Art in Faktoren zerlegen: Die Faktoren der einen Zerlegung haben Nullstellen, die die Faktoren der anderen nicht haben.\nDas ist nur möglich, weil Z\u{E002}8\u{E003} kein Körper ist. Denn es gilt:",
-                "Satz:  In einem Körper hat jedes Polynom eine eindeutige Faktorzerlegung.    Beweis",
-                "Satz:  In einem Körper hat jedes Polynom n-ten Grades höchstens n Nullstellen.    Beweis\nFür die Anzahl der Nullstellen gilt damit:",
+            ZTPage(id: "2.3 - ord(a)", title: "Order of an element", tool: .order, blocks: [
+                "After the theorem of Euler-Fermat holds for all a ∈ ℤ\u{E002}m\u{E003}*:  a\u{E000}φ(m)\u{E001} = 1.\nThis can be extended:",
+                "Theorem:      Let G be a finite group with neutral element e.\n        Then holds for all a ∈ G:      a\u{E000}|G|\u{E001} = e.\nExample:    In ℤ\u{E002}10\u{E003} holds:  [2]\u{E000}10\u{E001} = [2]+[2]+[2]+[2]+[2]+[2]+[2]+[2]+[2]+[2] = [20] = [0] = e.\nProof:      In the proof of Euler-Fermat replace ℤ\u{E002}m\u{E003}* with G,  φ(m) with |G| etc.",
+                "Here this works also with a smaller exponent:\n[2]\u{E000}5\u{E001} = [2]+[2]+[2]+[2]+[2] = [10] = [0] = e.",
+                "Definition:    Let G be a group with neutral element e, a ∈ G.\n    The smallest number n ∈ ℕ with a\u{E000}n\u{E001} = e is called the order of a in G, shortly ord(a).\n    If no such number exists, the order of a in G is called infinite.\nExamples:    ·  In ℤ is ord(2) = ∞.\n    ·  In ℤ\u{E002}10\u{E003} is ord(2) = 5.    ·  In ℤ\u{E002}10\u{E003}* is ord(9) = 2.",
+                "if G is well-known",
             ]),
-            ZTPage(id: "2.4 - mod p zyklisch", title: "ℤp* ist zyklisch", tool: .primitiveRoots, blocks: [
-                "Die Gruppe der Einheiten eines Ringes R nennt man Einheitengruppe R*.\nSo ist Z\u{E002}n\u{E003}* die Einheitengruppe des Restklassenringes Z\u{E002}n\u{E003}.\nDie Einheitengruppe K* eines Körpers K mit n Elementen hat immer die Ordnung n – 1,\nweil alle Elemente außer der Null Einheiten sind.",
-                "Satz:    Sei K ein endlicher Körper mit n Elementen, sei d ∈ ℕ mit d | n – 1.\n    Dann haben in der Einheitengruppe K* genau φ(d) Elemente die Ordnung d.\nBeispiel    Beweis",
-                "    Da n – 1 ein Teiler von sich selbst ist, haben φ(n–1) Elemente in K* die Ordnung n – 1.\n    Diese Elemente erzeugen K*. Also ist K* zyklisch.",
-                "    Ist p eine Primzahl, so ist Z\u{E002}p\u{E003}* zyklisch, weil dann Z\u{E002}p\u{E003} ein Körper ist.",
-                "Anmerkung:  Der obige Satz gilt für jede endliche zyklische Gruppe.",
+            ZTPage(id: "2.3 - ord( Potenz )", title: "Order of a power", tool: .order, blocks: [
+                "Let G be a group with neutral element e, a ∈ \u{E000}G, z\u{E001} ∈ ℤ and ord(a) ∈ ℕ. Then holds:\nTheorem:    a\u{E000}z\u{E001} = e  ⇔  ord(a) | z\n    \"power neutral  ⇔  order of the base divides exponent\"    Proof\nExample",
+                "Consequences:\n    1. Due to    a\u{E000}|G|\u{E001} = e   holds:   ord(a) divides |G|.\n\"element-order divides group-order.\"\n\n    2. Due to    a\u{E000}x–y\u{E001} = e  ⇔  ord(a) | (x–y)     holds:\n        a\u{E000}x\u{E001} = a\u{E000}y\u{E001}  ⇔  x ≡ y mod ord(a)    Example\nin finite groups",
+                "GCD(α, z)\nord(a\u{E000}z\u{E001})\nTheorem:\nExample\nIf the order of a is known, one easily gets the order of each power of a:\nwith α = ord(a)",
             ]),
-            ZTPage(id: "2.4 - zyklisch komplett", title: "Wann ist ℤm* zyklisch?", tool: .primitiveRoots, blocks: [
-                "    1. (Z/2\u{E000}n\u{E001})* ist genau dann zyklisch, wenn n < 3.    Beweis\n    2. Für teilerfremde Zahlen u, v > 2 ist (Z/u·v)* nicht zyklisch.    Beweis\n    3. Sei p eine Primzahl.\n        ·  Es gibt eine primitive Restklasse g mod p mit g\u{E000}p–1\u{E001} ≠ 1 mod p\u{E000}2\u{E001}.\n        ·  Ist p > 2, dann erzeugt eine Primitivwurzel von (Z/p)* auch (Z/p\u{E000}2\u{E001})*.    Beweis\n    Für Primzahlen p > 2 gilt:\n    4. Es gibt eine primitive Restklasse g mod p mit gp\u{E000}n–2\u{E001}·(p–1)  \u{E002}≠\u{E003}  \u{E002}1 mod p\u{E003}n .    Beweis\n    5. Eine Primitivwurzel von (Z/p)* erzeugt auch (Z/p\u{E000}n\u{E001})*.    Beweis\n    6. (Z/2·p\u{E000}n\u{E001})* ist zyklisch.      Beweis\nFazit:  (Z/m)* ist genau dann zyklisch, wenn m eine der folgenden Zahlen ist:\n1, 2, 4, p\u{E000}n\u{E001}, 2·p\u{E000}n\u{E001}  mit einer ungeraden Primzahl p\nHier wird die Schreibweise Z/m statt Z\u{E002}m\u{E003} verwendet.\nAbkürzung:  Ist a eine Primitivwurzel mod m, dann sagt man: a erzeugt (Z/m)*.",
+            ZTPage(id: "2.3 - Erzeugnis", title: "Generation, cyclic groups", tool: .order, blocks: [
+                "Definition:    Let G be a group.\n    ·  For each a ∈ G the set <a> = {a\u{E000}z\u{E001} | z ∈ ℤ} is called the generation of a.\n        One says: a generates <a>, a is called generator or generator element of <a>.\n    ·  If there is an a ∈ G with <a> = G, then G is called cyclic.\nSome groups can be generated from one of their elements by exponentiation:",
+                "Examples:    ·  ℤ is cyclic with the generators 1 and –1. \n        The even numbers are <2> = <–2> = {2·z | z ∈ ℤ}.\n    ·  The generations in ℤ\u{E002}8\u{E003}* are:     <1> = {1},",
+                "Theorem:    Each generation is a subgroup.     Proof\n\nThe converse of the theorem is wrong, since for example\n    ℤ\u{E002}8\u{E003}* is not cyclic, but is a subgroup of itself,\n    ℤ\u{E002}20\u{E003}* has the non-cyclic subgroup {1, 9, 11, 19}.",
             ]),
-            ZTPage(id: "2.4 - finden", title: "Primitive Restklassen finden", tool: .primitiveRoots, blocks: [
-                "Ende des Kapitels",
-                "Primitive Restklassen mod m findet man durch Ausprobieren:\nMan wählt eine prime Restklasse x und prüft, ob ord(x) = φ(m).\nDabei hilft der Algorithmus zur Berechnung der Element-Ordnung, den man immer stoppt,\nBeispiel:\n⊂sobald klar ist, dass ord(x) < φ(m); dann prüft man sofort die nächste prime Restklasse.",
-                "    Primteiler von φ(m):  {{}\nMan potenziert die Restklassen mit den Komplementärteilern der Primteiler von φ(m):",
+            ZTPage(id: "2.3 - Lagrange", title: "Lagrange's theorem", tool: .order, blocks: [
+                "Theorem:     Let G be a group, a ∈ G, then holds:\n        |<a>| = ord(a)    Proof\nEach element of a group generates a subgroup.\nThe order of this subgroup is exactly the order of the generating element.",
+                "In finite groups holds:    ord(a)  divides  |G|.\nConsequence for finite groups:     |<a>|  divides  |G|. \n\"generation-order divides group-order.\"",
+                "Lagrange found the following generalization:\nLagrange's Theorem:      If U is a subgroup of a finite group G, then holds:                  |U| divides |G|.    Proof\n\"subgroup-order divides group-order.\"\nNotice:     Lagrange does not say, there were a subgroup for each divisor of |G|.",
+            ]),
+            ZTPage(id: "2.3 - ord(a) berechnen", title: "Computing ord(a)", tool: .order, blocks: [
+                "Let G be a finite group with neutral element e, a ∈ G.\nWhen computing ord(a), one only has to take the divisors of |G| into account.\nOne looks for the smallest divisor d of |G| for that a\u{E000}d\u{E001} = e.",
+                "Since the divisors consist of the prime divisors of |G|,\nknowing the prime decomposition of |G| is helpful.\nStart with d = |G| and decrease d as long as possible:",
+                "Algorithm:     1. d := |G|\n    2. Take a prime divisor p of |G| that has not yet been handled.    3. If a\u{E000}d/p\u{E001} = e, then        d := d / p         If p occurs more often in |G| than it has been handled, then go to 3.    4. If not yet all prime divisors have been handled, then go to 2.    5. Output: ord(a) = d.",
+                "The question whether a is a generator can be decided faster by the algorithm, since\na generates the group  ⇔  ord(a) = |G|.\nAs soon as the algorithm can decrease d, a cannot be a generator any more.\n a is no generator of G.",
+            ]),
+            ZTPage(id: "2.3 - zyklisch iso", title: "Cyclic groups are isomorphic", tool: .order, blocks: [
+                "Examples:    ·  (ℤ, +) ≅ (<2>, +)      with f(x) = 2·x\n    ·  (ℤ\u{E002}4 \u{E003}, +) ≅ (ℤ\u{E002}5\u{E003}*, ·)    with f( [x] ) = [2]\u{E000}x\u{E001} , as ℤ\u{E002}5\u{E003}* = <[2]> = {[2], [4], [3], [1]}\nEach generation is a cyclic group and vice versa, and it holds:\nTheorem:    Each cyclic group is isomorphic to a residue class group ℤ\u{E002}n\u{E003} or to ℤ.\nProof",
+                "Tables of cyclic groups\ncan be rearranged such that\nall rising diagonals      contain\nequal elements respectively.",
+                "Start on the left.\nThe next element of the headline always\nhas to be the element left below.\nIf this is impossible, start the headline with a new element.",
+                "So few elements\ncannot be arranged otherwise than required.",
+            ]),
+            ZTPage(id: "2.3 - zyklisch Sätze", title: "Theorems on cyclic groups", tool: nil, blocks: [
+                "Thanks to isomorphism one can learn from ℤ and ℤ\u{E002}n\u{E003} everything about cyclic groups.\n\nThe subgroups of ℤ are <a> = <–a> = {0, ±a, ±2·a, ±3·a, ...} with a ∈ ℤ.\nFor a ≠ 0, <a> is infinite and isomorphic to ℤ with f(x) = a·x.\nHowever <0> = {0} is finite and isomorphic to ℤ\u{E002}1\u{E003}.",
+                "In ℤ\u{E002}n\u{E003} the following theorems hold:\nTheorem:  <a> = <GCD(a, n)>      Proof\nTheorem:  For each divisor d of n there is exactly one cyclic subgroup: <d>    Proof\nTheorem:  For each divisor d of n there are exactly φ(d) elements of order d.    Proof\nTheorem:  All subgroups are cyclic.    Proof\nIn order to translate these theorems for cyclic groups G with generator g, replace n with |G|\nand the generations < x > with < g\u{E000}x \u{E001}>.",
+            ]),
+            ZTPage(id: "2.3 - pos Erz", title: "Positive generation", tool: .order, blocks: [
+                "In a semigroup there needn't be any neutral element, nor invertible elements.\nBut powers with positive exponents are always possible.\n\nDefinition:  Let H be a semigroup, h ∈ H.\n    As positive generation of g we denote <h>\u{E000}+\u{E001} = {h\u{E000}n\u{E001} | n ∈ ℕ}.",
+                "Theorem:     Let H be a semigroup, h ∈ H, n ∈ ℕ.\n    h\u{E000}n\u{E001} = h for n > 1  ⇔  <h>\u{E000}+\u{E001} is a group.    Proof\nThe positive generation can be a group.",
+                "Examples:    ·  In H = (ℤ\u{E002}n \u{E003}, ·) the set <0>\u{E000}+\u{E001} = {0} forms a group with neutral element 0.\n    ·  In H = (ℤ\u{E002}6\u{E003} , ·) the set <2>\u{E000}+\u{E001} = {2, 4} forms a group with neutral element 4.\n    In both cases <h>\u{E000}+\u{E001} is no subgroup of H, since H is no group.\nEach group <h>\u{E000}+\u{E001} of order n is cyclic and thus isomorphic to ℤ\u{E002}n\u{E003}.\nIn <h>\u{E000}+\u{E001} there can be a neutral element that is not neutral in H,\nand such like invertible elements.",
+            ]),
+            ZTPage(id: "2.3 - sterne", title: "Generations as stars", tool: .order, blocks: [
+                "Consider positive generations <a>\u{E000}+\u{E001} of residue classes modulo\n\nconnection:",
             ]),
         ]))
-        return ZTLesson(number: 2, title: "Restklassen", chapters: chapters)
+        chapters.append(ZTChapter(number: "2.4", title: "Primitive Residue Classes", pages: [
+            ZTPage(id: "2.4 - 01", title: "Primitive residue classes", tool: .primitiveRoots, blocks: [
+                "Now will be inquired which groups of prime residue classes are cyclic.\n\nExamples:    ·  ℤ\u{E002}8\u{E003}* = {1, 3, 5, 7} is not cyclic.\n    ·  ℤ\u{E002}10\u{E003}* = {1, 3, 7, 9} is cyclic with the generators 3 and 7.",
+                "Definition:    ·  A prime residue class that generates ℤ\u{E002}m\u{E003}*, is called primitive residue class mod m.\n    ·  A representative of a primitive residue class mod m is called primitive root mod m.",
+                "Notice:    There are prime residue classes which are not primitive.\n\nSince the order of an element is the order of its generation,\nholds:  The order of a primitive residue class mod m is φ(m).",
+            ]),
+            ZTPage(id: "2.4 - Polynome", title: "Polynomials", tool: nil, blocks: [
+                "For the first step in the search for primitive residue classes one needs polynomials:\n\nDefinition:     Let R be a commutative ring with one-element 1 ≠ 0.\n    A polynomial of degree n is a function f: R→R of the form\nf(x) = a\u{E002}0\u{E003} + a\u{E002}1\u{E003}·x +...+ a\u{E002}n\u{E003}·x\u{E000}n\u{E001}      with      a\u{E002}0 \u{E003},..., a\u{E002}n\u{E003} ∈ R   and   a\u{E002}n \u{E003}≠ 0.\n    \u{E002}r\u{E003} ∈ R is called root of the polynomial f, if f(r) = 0.",
+                "If a root is given, a polynomial can be written as a product:\nTheorem:     \"Factoring out Roots\"\n    Let f be a polynomial of degree n and r a root of f.\n    Then there is a polynomial g of degree n–1, so that f(x) = (x–r)·g(x) for all x ∈ R.\n\nExample    Proof",
+            ]),
+            ZTPage(id: "2.4 - eindeut Fakt", title: "Unique factorization", tool: nil, blocks: [
+                "The group of prime residue classes ℤ\u{E002}8\u{E003}* contains four elements: {1, 3, 5, 7}.\nThe order of each element is ≤ 2, since:\n1\u{E000}2\u{E001} ≡ 1 mod 8,   3\u{E000}2\u{E001} ≡ 1 mod 8,   5\u{E000}2\u{E001} ≡ 1 mod 8,   7\u{E000}2\u{E001} ≡ 1 mod 8.\nHence all four elements are roots of the polynomial x\u{E000}2\u{E001} – 1.",
+                "Depending on which root is being factored out, one obtains:\n    ·  (x – 1)·(x – 7)  =  x\u{E000}2\u{E001} –8x + 7   ≡   x\u{E000}2\u{E001} – 1 mod 8, or\n    ·  (x – 3)·(x – 5)  =  x\u{E000}2\u{E001} –8x + 15  ≡  x\u{E000}2\u{E001} – 1 mod 8.",
+                "Thus one can not uniquely decompose the polynomial into factors, but in two ways:\nThe factors of the first decomposition have roots that the factors of the second have not.\nThis is only possible, because ℤ\u{E002}8\u{E003} is not a field. Because it holds:",
+                "Theorem:  In a field each polynomial has a unique factor decomposition.    Proof",
+                "Theorem:  In a field each polynomial of degree n has at most n roots.    Proof\nThus for the number of roots holds:",
+            ]),
+            ZTPage(id: "2.4 - mod p zyklisch", title: "ℤp* is cyclic", tool: .primitiveRoots, blocks: [
+                "The group of the units of a ring R is called group of units R*.\nFor instance, the residue class ring ℤ\u{E002}n\u{E003} has the group of units ℤ\u{E002}n\u{E003}*.\nThe group of units K* of a field K with n elements always has the order n – 1,\nsince all elements except the zero-element are units.",
+                "Theorem:    Let K be a finite field with n elements, d ∈ ℕ with d | n – 1.\n    Then in the group of units K* exactly φ(d) elements have the order d.\nExample    Proof",
+                "Corollary:    Since n – 1 is a divisor of itself, φ(n–1) elements in K* have the order n – 1.\n    These elements generate K*. Thus K* is cyclic.",
+                "Corollary:    If p is prime, ℤ\u{E002}p\u{E003}* is cyclic, because then ℤ\u{E002}p\u{E003} is a field.",
+                "Annotation:  The above theorem holds for each finite cyclic group.",
+            ]),
+            ZTPage(id: "2.4 - zyklisch komplett", title: "When is ℤm* cyclic?", tool: .primitiveRoots, blocks: [
+                "    1. (ℤ/2\u{E000}n\u{E001})* is exactly then cyclic, if n < 3.    Proof\n    2. For coprime numbers u, v > 2 (ℤ/u·v)* is not cyclic.    Proof\n    3. Let p be a prime.\n        ·  There is a primitive residue class g mod p so that g\u{E000}p–1\u{E001} ≠ 1 mod p\u{E000}2\u{E001}.\n        ·  If p > 2, then a primitive root of (ℤ/p)* also generates (ℤ/p\u{E000}2\u{E001})*.    Proof\n    For primes p > 2 holds:\n    4. There is a primitive residue class g mod p so that gp\u{E000}n–2\u{E001}·(p–1)  ≠  \u{E002}1 mod p\u{E003}n .    Proof\n    5. A primitive root of (ℤ/p)* also generates (ℤ/p\u{E000}n\u{E001})*.    Proof\n    6. (ℤ/2·p\u{E000}n\u{E001})* is cyclic.      Proof\nResult:  (ℤ/m)* is exactly then cyclic, if m is one of the following numbers:\n1, 2, 4, p\u{E000}n\u{E001}, 2·p\u{E000}n\u{E001}  with an odd prime p\nHere the notation ℤ/m instead of ℤ\u{E002}m\u{E003} is used.\nAbbreviation:  If a is a primitive root mod m, one says: a generates (ℤ/m)*.",
+            ]),
+            ZTPage(id: "2.4 - finden", title: "Finding primitive residue classes", tool: .primitiveRoots, blocks: [
+                "end of this lesson",
+                "Primitive residue classes mod m are found by trial and error:\nChoose a prime residue class x and test whether ord(x) = φ(m).\nFor this one can apply the algorithm for calculating an element's order, which can be stopped,\nExample:\nwhen it's clear that ord(x) < φ(m); in this case test the next prime residue class at once.",
+                "One exponentiates the classes by the complementary divisors of the prime divisors of φ(m):",
+            ]),
+        ]))
+        return ZTLesson(number: 2, title: "Residue Classes", chapters: chapters)
     }
     static func lesson3() -> ZTLesson {
         var chapters: [ZTChapter] = []
-        chapters.append(ZTChapter(number: "3.1", title: "Primzahlen finden", pages: [
-            ZTPage(id: "3.1 - 01", title: "Primzahlen finden", tool: .sieve, blocks: [
-                "Es gibt zwar unendlich viele Primzahlen, aber sie sind umso dünner gesät, je höher man steigt.\nLassen Sie ein Intervall von 20000 Zahlen durchsieben, dessen Obergrenze Sie eingeben:",
-                "¬{{, .., {} enthält { Primzahlen.",
-                "Primzahlsatz: Unterhalb der Schranke x liegen etwa          Primzahlen, wenn x sehr groß ist. \nln xA",
+        chapters.append(ZTChapter(number: "3.1", title: "Finding Primes", pages: [
+            ZTPage(id: "3.1 - 01", title: "Finding primes", tool: .sieve, blocks: [
+                "There are infinitely many primes, but they are the rarer, the higher you get.\nSieve an interval of up to 20000 numbers whose upper bound you enter here:",
+                "Prime Number Theorem: Below the limit x there are about          primes, if x is very big.\nln x",
             ]),
-            ZTPage(id: "3.1 - Mersenne, Fermat", title: "Mersenne- und Fermatzahlen", tool: .mersenneFermat, blocks: [
-                "Ein alter Alchimistentraum der Mathematiker ist der, Primzahlen herzustellen mit einer Formel, die beliebig viele Primzahlen \"ausspuckt\".\n\nBeispiele ähnlicher Formeln:\n ·    Euler:  x\u{E000}2\u{E001} – x + 41  ergibt Primzahlen für x = 0, 1, 2, ..., 40.",
-                " ·      Mersenne (1588-1648):  M\u{E002}n\u{E003} = 2\u{E000}n\u{E001} – 1\n    Diese so genannten Mersenne-Zahlen bestehen im Zweiersystem nur aus Einsen:  111...111\n    Ist 2\u{E000}n\u{E001} – 1 Primzahl, dann ist auch n Primzahl. Beweis\n    Die Umkehrung gilt nicht, zum Beispiel:  2\u{E000}11\u{E001} – 1 = 2047 = 23·89\n    In den letzten Jahren wurden etliche Mersenne-Primzahlen entdeckt.",
-                " ·      Fermat:  F\u{E002}n\u{E003} = 2\u{E000}2\u{E001}  + 1\n    Diese so genannten Fermat-Zahlen sehen im Zweiersystem so aus:  100...001\n    Ist 2\u{E000}k\u{E001} + 1 Primzahl, dann ist k eine Zweierpotenz. Beweis\n    Fermat-Primzahlen gibt es wahrscheinlich nur für n = 0, 1, 2, 3 und 4.\n    Dass F\u{E002}5\u{E003} zusammengesetzt ist, hat Euler bewiesen.",
+            ZTPage(id: "3.1 - Mersenne, Fermat", title: "Mersenne and Fermat numbers", tool: .mersenneFermat, blocks: [
+                "An old alchemist-dream of mathematicians is obtaining primes by a formula, which outputs arbitrary many primes.\n\nExamples of similar formulas:\n ·    Euler:  x\u{E000}2\u{E001} – x + 41  yields primes for x = 0, 1, 2, ..., 40.",
+                " ·      Mersenne (1588-1648):  M\u{E002}n\u{E003} = 2\u{E000}n\u{E001} – 1\n    These so called Mersenne numbers consist in the binary system only of ones:  111...111\n    If 2\u{E000}n\u{E001} – 1 is prime, then also n is prime. Proof\n    The converse is false, for example:  2\u{E000}11\u{E001} – 1 = 2047 = 23·89\n    In recent years several Mersenne primes were discovered.",
+                " ·      Fermat:  F\u{E002}n\u{E003} = 2\u{E000}2\u{E001}  + 1\n    These so called Fermat numbers look in the binary system like this:  100...001\n    If 2\u{E000}k\u{E001} + 1 is prime, then k is a power of two. Proof\n    Fermat primes probably only exist for n = 0, 1, 2, 3 and 4.\n    That F\u{E002}5\u{E003} is composite was proved by Euler.",
             ]),
-            ZTPage(id: "3.1 - Tests", title: "Primzahltests", tool: .trialDivision, blocks: [
-                "Kann man Primzahlen schon nicht beliebig per Formel konstruieren, so will man wenigstens entscheiden können, ob eine vorgelegte Zahl n eine Primzahl ist.",
-                "Das einfachste Verfahren ist die Probedivision:\nMan dividiert n durch alle Primzahlen 2, 3, 5, 7, 11, ..., um zu sehen, ob ein Rest bleibt.\nHat man bis zur Wurzel von n keinen Teiler gefunden, so ist n eine Primzahl.",
-                "Die Primzahlen, durch die man dividiert, liefert zum Beispiel das Sieb des Eratosthenes.\nAllerdings stößt die Probedivision mit wachsendem n schnell an Grenzen:\n  1. Das Sieb verlangt zu viel Speicherplatz.\n  2. Die Divisionen verschlingen zu viel Rechenzeit.",
-                "Man hat deshalb andere, effizientere Tests ersonnen.\nEinige davon sind so genannte probabilistische Tests, das bedeutet praktisch:\n  Wo sie eine Zahl als zusammengesetzt erkennen, haben sie recht, aber\n  wo sie eine Zahl als Primzahl erkennen, irren sie mit einer gewissen Wahrscheinlichkeit.",
-                "Tests mit sicherem Ergebnis sind komplexer und in der Praxis nicht unbedingt erforderlich. Sie werden hier nicht behandelt. Namentlich erwähnt sei der Test von Agrawal aus dem Jahre 2002. Zu Primzahltests siehe auch: [Agrawal-Primzahltest], [Spalka], [Winterhof]",
-            ]),
-        ]))
-        chapters.append(ZTChapter(number: "3.2", title: "Der Fermat-Test", pages: [
-            ZTPage(id: "3.2 - 01", title: "Der Fermat-Test", tool: .fermatTest, blocks: [
-                "‰Jede Primzahl p besteht einen Test, der sich aus dem kleinen Satz von Fermat ergibt:\n    Prüfe für ein a ∈ {2, ..., p–1}, ob  \u{E000}ap–\u{E001}1 ≡ 1 mod p.\nDieser Test heißt Fermat-Test. Leider bestehen ihn auch einige zusammengesetzte Zahlen.\nBeispiel:     341 = 11 · 31,  trotzdem ist  2\u{E000}340\u{E001} ≡ 1 mod 341.",
-                "Bei Bestehen sagt der Test nichts aus, man wiederholt ihn mit einer anderen Basis a:",
-                "Definition:     Sei n eine zusammengesetzte Zahl, a teilerfremd zu n.\n    Wenn  a\u{E000}n–1\u{E001} ≡ 1 mod n,  dann heißt     ·  n Pseudoprimzahl zur Basis a,        ·  a Lügner für (die Primalität von) n,    andernfalls heißt a Zeuge gegen (die Primalität von) n.",
-                "\\Satz:    Wenn es überhaupt Zeugen gegen n gibt,\n    dann sind es mindestens 50% aller zu n teilerfremden a ∈ {1, ..., n}.     Beweis",
-            ]),
-            ZTPage(id: "3.2 - Zeugen Staffel", title: "Fermat-Zeugen", tool: .fermatTest, blocks: [
-                "Die Ordnung einer Lügnerklasse teilt außer φ(n) auch n–1.\nSatz:    a ist Zeuge gegen n  ⇔  ord( [a]\u{E002}n\u{E003} ) teilt nicht n–1.    Beweis\nBeispiel:",
-                "Ordnungen der Restklassen:\nMöglich sind Teiler von φ(n).",
-                "a\u{E000}n–1\u{E001} ≡ 1 mod n  ⇔  ord([a]\u{E002}n\u{E003}) | n–1",
-            ]),
-            ZTPage(id: "3.2 - Carmichael", title: "Carmichael-Zahlen", tool: .carmichael, blocks: [
-                "Der Fermat-Test mit der Basis a\nentlarvt keine Pseudoprimzahl zur Basis a.\nMan wiederholt ihn mit anderen Basen. Nun hat das größte anzunehmende Unglück einen Namen:\nDefinition:\nIst n eine Pseudoprimzahl zur Basis a\nfür alle ganzen Zahlen a mit ggT(a, n) = 1,\ndann heißt n Carmichael-Zahl.\nGibt es solche Zahlen überhaupt?",
-                "Carmichael-Zahlen < 109\nR.D.Carmichael entdeckte sie 1910.\nund wählen Sie a",
-                "Der Fermat-Test entlarvt eine Carmichael-Zahl\ngenau dann, wenn ggT(a, n) > 1.\nDie Wahrscheinlichkeit dafür ist 1 –          .",
-            ]),
-            ZTPage(id: "3.2 - Carm. Eigenschaften", title: "Eigenschaften der Carmichael-Zahlen", tool: .carmichael, blocks: [
-                "Satz:  Jede Carmichael-Zahl ist ungerade.      Beweis\nSatz:  Für jeden Primteiler p einer Carmichael-Zahl n gilt:  p–1 | n–1.     Beweis\nSatz:  Jede Carmichael-Zahl n ist quadratfrei.      Beweis",
-                "Satz:     Ist n eine ungerade, zusammengesetzte, quadratfreie Zahl,\n    und gilt für jeden Primteiler p von n:  p–1 | n–1,\n    dann ist n eine Carmichael-Zahl.    Beweis\nSatz: Carmichael-Zahlen haben mindestens drei Primteiler.      Beweis",
-                "Alford, Granville, Pomerance bewiesen 1994, dass es unendlich viele Carmichael-Zahlen gibt.\nSatz:  Konstruktion von Carmichael-Zahlen\n    Sind für u ∈ ℕ die drei Zahlen  p\u{E002}1\u{E003}=6·u+1,   p\u{E002}2\u{E003}=12·u+1,   p\u{E002}3\u{E003}=18·u+1  Primzahlen,\n    dann ist n = p\u{E002}1\u{E003}·p\u{E002}2\u{E003}·p\u{E002}3\u{E003} = (6·u+1)·(12·u+1)·(18·u+1) eine Carmichael-Zahl.\nBeweis\nDieser Satz allein beweist nicht, dass es unendlich viele Carmichael-Zahlen gibt, da erst gezeigt werden muss, dass es unendlich viele Primzahl-Tripel der angegebenen Form gibt. Darauf wird hier verzichtet.",
+            ZTPage(id: "3.1 - Tests", title: "Prime number tests", tool: .trialDivision, blocks: [
+                "Even if primes can not be constructed at will per formula, one at least wants to be able to decide whether a given number n is prime.",
+                "The simplest method is the trial division:\nDivide n by all primes 2, 3, 5, 7, 11, ... to see whether a remainder is left.\nIf up to the root of n no divisor has been found, n is a prime.",
+                "The primes that serve as trial divisors can be given by the sieve of Eratosthenes, for example.\nBut for greater n the trial division soon reaches its limits:\n  1. The sieve needs too much memory space.\n  2. The divisions take too much calculation time.",
+                "Therefore one has devised different, more efficient tests.\nSome are so called probabilistic tests, that means practically:\n  Where they recognize a number as composite they are right, but\n  where they recognize a number as prime they are mistaken with some probability.",
+                "Tests with safe results are more complex and not necessarily needed for practical matters.\nThey are not treated here. We only mention Agrawal's test from 2002.\nAbout prime tests see also: [Agrawal prime test], [Spalka], [Winterhof]",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "3.3", title: "Der Miller-Rabin-Test", pages: [
-            ZTPage(id: "3.3 - 01", title: "Die Idee des Miller-Rabin-Tests", tool: .millerRabin, blocks: [
-                "Einige Pseudoprimzahlen lassen sich entlarven, wenn man Folgendes beachtet:\nSatz:    Sei n eine Primzahl, a teilerfremd zu n, b gerade.\n    Dann gilt:    a\u{E000}b\u{E001} ≡ 1 mod n   ⇒   a\u{E000}b/2\u{E001} ≡ ±1 mod n    Beweis",
-                "(a\u{E000}d\u{E001})\u{E000}2\u{E001} = a\u{E000}2·d\u{E001}. Nach s Quadrierungen hat man den Exponenten s mal verdoppelt und erhält a\u{E000}n–1\u{E001}.",
-                "\"1 entsteht durch Quadrieren\nnur aus 1 oder –1.\"P",
-                "Beispiel:  8\u{E000}560\u{E001} ≡ 1 mod 561,  8\u{E000}280\u{E001} ≡ 1 mod 561,  8\u{E000}140\u{E001} ≡ 67 mod 561  ⇒  561 keine Primzahl.",
-                "Man hätte den Exponenten noch zwei mal halbieren können, denn 560 = 2\u{E000}4\u{E001}·35.\nAllgemein:    n–1 = 2\u{E000}s\u{E001}·d  mit s ∈ ℕ und ungeradem d.\n    n–1 lässt sich s mal halbieren, a\u{E000}d\u{E001} ist die letzte mögliche Potenz.",
-                "Beim Miller-Rabin-Test fängt man mit a\u{E000}d\u{E001} an und quadriert mehrmals:\nBeispiel: (mod 561)  8\u{E000}35\u{E001} ≡ 461,  8\u{E000}70\u{E001} ≡ 463,  8\u{E000}140\u{E001} ≡ 67  ,  8\u{E000}280\u{E001} ≡ 1  ⇒  561 keine Primzahl.",
-                "Man quadriert a\u{E000}d\u{E001} höchstens s–1 mal; ist nämlich n Primzahl, dann gilt wegen a\u{E000}n–1\u{E001} ≡ 1 mod n:\nEntweder schon    1) a\u{E000}d\u{E001} ≡ 1 mod n,\noder     2) vor a\u{E000}n–1\u{E001} tritt eine Potenz ≡ –1 mod n auf.\nGilt weder 1) noch 2), dann ist n keine Primzahl.",
+        chapters.append(ZTChapter(number: "3.2", title: "Fermat Test", pages: [
+            ZTPage(id: "3.2 - 01", title: "The Fermat test", tool: .fermatTest, blocks: [
+                "Each prime p passes a test that results from Fermat's Little Theorem:\n    For b ∈ {2, ..., p–1}, test if  b\u{E000}p–1\u{E001} ≡ 1 mod p.\nThis test is called Fermat Test. Unfortunately some composite numbers pass it as well.\nExample:     341 = 11 · 31, and yet  2\u{E000}340\u{E001} ≡ 1 mod 341.",
+                "Passing the test provides no information. It must be repeated with a different base b:",
+                "Definition:     Let n be a composite number coprime to b.\n    If  b\u{E000}n–1\u{E001} ≡ 1 mod n,  then it is said that     ·  n is pseudoprime to b,                                                       and    ·  b is a liar for (the primality of) n,    otherwise it is said that       ·  b is a witness against (the primality of) n.",
+                "Theorem:    If there are any witnesses against n,\n    then they make up at least 50% of all b ∈ {1, ..., n} coprime to n.     Proof",
             ]),
-            ZTPage(id: "3.3 - stark pseudo", title: "Starke Pseudoprimzahlen", tool: .millerRabin, blocks: [
-                "Wie beim Fermat-Test hängt das Ergebnis des Miller-Rabin-Tests von der Testbasis a ab.\nDie Begriffe Zeuge, Lügner, Pseudoprimzahl tauchen wieder auf:",
-                "a\u{E000}d\u{E001}, (a\u{E000}d\u{E001})\u{E000}2\u{E001}, ((a\u{E000}d\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001}, ...... < a\u{E000}n–1\u{E001}",
-                "Definition:    Sei n eine zusammengesetzte Zahl, a teilerfremd zu n.\n    Seien s, d ∈ ℕ so bestimmt, dass  n–1 = d·2\u{E000}s\u{E001}  mit ungeradem d.\nWenn     1) ad ≡ 1 mod n\noder     2) (ad)2  ≡ –1 mod n  für ein r ∈ {0, ..., s–1},\n\ndann heißt     ·  n starke Pseudoprimzahl zur Basis a,\n    ·  a starker Lügner für (die Primalität von) n.\n\nAndernfalls, wenn also weder 1) noch 2) gilt, heißt\n    ·  a starker Zeuge gegen (die Primalität von) n.",
-                "Wie beim Fermat-Test muss man unter Umständen mehrere Basen probieren. Der Unterschied:\nGegen jede zusammengesetzte Zahl gibt es genug starke Zeugen.\nBewiesen wird das auf der übernächsten Seite. Betrachten Sie vorher ein paar Beispiele.",
+            ZTPage(id: "3.2 - Zeugen Staffel", title: "Fermat witnesses", tool: .fermatTest, blocks: [
+                "The order of a liar class divides φ(n) and n–1.\nTheorem:    b is witness against n  ⇔  ord( [b]\u{E002}n\u{E003} ) does not divide n–1.    Proof\nExample:",
+                "orders of the residue classes:\nPossible are divisors of φ(n).",
+                "b\u{E000}n–1\u{E001} ≡ 1 mod n  ⇔  ord([b]\u{E002}n\u{E003}) | n–1",
             ]),
-            ZTPage(id: "3.3 - MR action", title: "Der Miller-Rabin-Test in Aktion", tool: .millerRabin, blocks: [
-                "s = {    ⇒    n–1 = d·\u{E000}2\u{E001}s        Es wird eine Zufallsbasis a ∈ {2, ..., n–1} gewählt:",
-                "Damit ist sofort klar, dass n keine Primzahl ist.",
-                "r      (a\u{E000}d\u{E001})2   mod n  ( ≡ –1 für ein r < s, wenn n Primzahl ist)\nuadrieren:",
+            ZTPage(id: "3.2 - Carmichael", title: "Carmichael numbers", tool: .carmichael, blocks: [
+                "The Fermat test with base b\ndetects no pseudo prime to base b.\nOne repeats it with other bases. Now the\nmaximum credible accident has a name:\nDefinition:\nIf n is a pseudo prime to base b\nfor all integers b where GCD(b, n) = 1,\nthen n is called Carmichael number.\nAre there such numbers at all?",
+                "Carmichael numbers < 10\u{E000}9\u{E001}\nR.D.Carmichael discovered them in 1910.\nand choose b",
+                "The Fermat test detects a Carmichael number,\nexactly if GCD(b, n) > 1.\nThe probability for this is 1 –          .",
             ]),
-            ZTPage(id: "3.3 - max 1/4 Lügner", title: "Höchstens 1/4 Lügner", tool: .millerRabin, blocks: [
-                "Hilfs-Satz:    Sei Z\u{E002}n\u{E003}* zyklisch, m ∈ ℕ. Dann gilt:\n    In  Z\u{E002}n\u{E003}* hat x\u{E000}m\u{E001} = –1 so viele Lösungen wie x\u{E000}m\u{E001} = 1 oder keine.    Beispiel\nBeweis",
-                "Satz:    Sei n ≠ 9 ungerade und zusammengesetzt. Dann sind \n    höchstens 25% aller a ∈ {1, ..., n} mit ggT(a, n) = 1 starke Lügner für n.",
-                "Anmerkungen:\n·  Nach x Durchläufen des Miller-Rabin-Tests mit x verschiedenen Testbasen ist die\n    Wahrscheinlichkeit, dass n nicht prim ist, kleiner als 4\u{E000}–x\u{E001}.\n·  Wegen der geringen Dichte der Primzahlen im Vergleich zu nicht primen Zahlen kann die\n    Wahrscheinlichkeit, dass n nicht prim ist, für große n deutlich besser abgeschätzt werden.\n    Für eine 500 Bit lange Zahl zum Beispiel ist sie schon nach einem Durchlauf kleiner als 4\u{E000}–28\u{E001}.\n·  Für die meisten nicht primen großen n ist bereits a = 2 ein starker Zeuge.\n·  Es gibt unendlich viele nicht prime große n, deren kleinster starker Zeuge beliebig groß ist.\n·  Im Bereich ≤ n gibt es n1/(35·ln ln ln n) nicht prime Zahlen mit großen kleinsten starken Zeugen.",
-                "Ende des Kapitels",
+            ZTPage(id: "3.2 - Carm. Eigenschaften", title: "Properties of the Carmichael numbers", tool: .carmichael, blocks: [
+                "Theorem:  Each Carmichael number is odd.      Proof\nTheorem:  For each prime divisor p of a Carmichael number n holds:  p–1 | n–1.     Proof\nTheorem:  Each Carmichael number n is squarefree.      Proof",
+                "Theorem:     If n is an odd, composite, squarefree number,\n    and if for each prime divisor p of n holds:  p–1 | n–1,\n    then n is a Carmichael number.    ProofTheorem:    Carmichael numbers have at least three prime divisors.      Proof",
+                "Alford, Granville, Pomerance proved in 1994 that there are infinitely many Carmichael numbers.\nTheorem:  construction of Carmichael numbers\n    If for u ∈ ℕ the three numbers  p\u{E002}1\u{E003}=6·u+1,   p\u{E002}2\u{E003}=12·u+1,   p\u{E002}3\u{E003}=18·u+1  are primes,\n    then  n = p\u{E002}1\u{E003}·p\u{E002}2\u{E003}·p\u{E002}3\u{E003} = (6·u+1)·(12·u+1)·(18·u+1)  is a Carmichael number.\nProof\nThis theorem alone does not prove that there are infinitely many Carmichael numbers,\nsince first must be shown that there are infinitely many prime triples of the given form.\nThis won't be done here.",
             ]),
         ]))
-        return ZTLesson(number: 3, title: "Primzahlerzeugung", chapters: chapters)
+        chapters.append(ZTChapter(number: "3.3", title: "Miller-Rabin Test", pages: [
+            ZTPage(id: "3.3 - 01", title: "The idea of the Miller-Rabin test", tool: .millerRabin, blocks: [
+                "Some pseudo primes can be detected by taking into account the following:\nTheorem:    Let n be a prime, b coprime to n, k even.\n    Then holds:    b\u{E000}k\u{E001} ≡ 1 mod n   ⇒   b\u{E000}k/2\u{E001} ≡ ±1 mod n    Proof",
+                "(b\u{E000}d\u{E001})\u{E000}2\u{E001} = b\u{E000}2·d\u{E001}. After s squarings the exponent has been doubled s times and one gets b\u{E000}n–1\u{E001}.",
+                "\"1 is generated by squaring\nonly from 1 or –1.\"",
+                "Example:  8\u{E000}560\u{E001} ≡ 1 mod 561,  8\u{E000}280\u{E001} ≡ 1 mod 561,  8\u{E000}140\u{E001} ≡ 67 mod 561  ⇒  561 no prime.",
+                "One could have halved the exponent two more times, since 560 = 2\u{E000}4\u{E001}·35.\nGenerally:    n–1 = 2\u{E000}s\u{E001}·d  with s ∈ ℕ and odd d.\n    n–1 can be halved s times, b\u{E000}d\u{E001} is the last possible power.",
+                "The Miller-Rabin Test starts from below at b\u{E000}d\u{E001} and squares several times:\nExample: (mod 561)  8\u{E000}35\u{E001} ≡ 461,  8\u{E000}70\u{E001} ≡ 463,  8\u{E000}140\u{E001} ≡ 67  ,  8\u{E000}280\u{E001} ≡ 1  ⇒  561 no prime.",
+                "One squares b\u{E000}d\u{E001} at most s–1 times:  If n is prime, then due to b\u{E000}n–1\u{E001} ≡ 1 mod n holds:\nEither already    1) b\u{E000}d\u{E001} ≡ 1 mod n,\nor     2) before b\u{E000}n–1\u{E001} there occurs a power ≡ –1 mod n.\nIf neither 1) nor 2), then n is no prime.",
+            ]),
+            ZTPage(id: "3.3 - stark pseudo", title: "Strong pseudo primes", tool: .millerRabin, blocks: [
+                "Like in Fermat's test the result of Miller-Rabin's test depends on the test base b.\nThe concepts witness, liar, pseudo prime occur once more:",
+                "b\u{E000}d\u{E001}, (b\u{E000}d\u{E001})\u{E000}2\u{E001}, ((b\u{E000}d\u{E001})\u{E000}2\u{E001})\u{E000}2\u{E001}, ...... < b\u{E000}n–1\u{E001}",
+                "Definition:    Let n be a composite number coprime to b.\n    Let s, d ∈ ℕ such that  n–1 = d·2\u{E000}s\u{E001}  with odd d.\nIf     1) b\u{E000}d\u{E001} ≡ 1 mod n\nor     2) (b\u{E000}d\u{E001})\u{E000}2\u{E001}  ≡ –1 mod n  for an r ∈ {0, ..., s–1},\n\nthen it is said     ·  n is a strong pseudo prime to base b,\n    ·  b is a strong liar for (the primality of) n.\n\nOtherwise – if neither 1) nor 2) holds – it is said that\n    ·  b is a strong witness against (the primality of) n.",
+                "Like in Fermat's test one possibly has to try several bases. The difference:\nAgainst each composite number there are enough strong witnesses.\nThis will be proved two pages later. Consider some examples on the next page first.",
+            ]),
+            ZTPage(id: "3.3 - MR action", title: "The Miller-Rabin test in action", tool: .millerRabin, blocks: [
+                "This shows at once that n is no prime.",
+                "r      (b\u{E000}d\u{E001})2   mod n  ( ≡ –1 for an r < s, if n is prime)\nsquaring:",
+            ]),
+            ZTPage(id: "3.3 - max 1/4 Lügner", title: "At most 1/4 liars", tool: .millerRabin, blocks: [
+                "Lemma:    Let (A, *) be a finite group, m ∈ ℕ. Then holds:\n    x\u{E000}m\u{E001} = –1 has as many solutions in (A, *) as x\u{E000}m\u{E001} = 1 or none.    Example\nProof",
+                "Theorem:    Let n ≠ 9 be odd and composite. Then\nProof",
+                "Annotations:\n·  After x rounds of the Miller-Rabin test with x different test bases\n    the probability that n is composite is less than 4\u{E000}–x\u{E001}.\n·  Due to the little density of the primes compared with the composite numbers,\n    the probability that n is composite for big n can be estimated much better.\n    For a 500 bit long number, for example, even after one round it is less than 4\u{E000}–28\u{E001}.\n·  For the most composite big n already b = 2 is a strong witness.\n·  There are infinitely many composite big n whose least strong witness is arbitrary big.\n·  In the area ≤ n there are n\u{E000}1/(35·ln ln ln n)\u{E001} composite numbers with big least strong witnesses.",
+                "end of this lesson",
+            ]),
+        ]))
+        return ZTLesson(number: 3, title: "Prime Generation", chapters: chapters)
     }
     static func lesson4() -> ZTLesson {
         var chapters: [ZTChapter] = []
-        chapters.append(ZTChapter(number: "4.1", title: "Verschlüsselung", pages: [
-            ZTPage(id: "4.1 - 01", title: "Verschlüsselung", tool: .caesar, blocks: [
-                "Wer einen Text geheim halten will, hat zwei Möglichkeiten: Verstecken oder Verschlüsseln.\nHübsche Beispiele des Versteckens gibt [Singh 2000].\n\nBeim Verschlüsseln übersetzt man den Text in einen anderen Text, den Chiffretext.\nDie Umkehrung ist das Entschlüsseln: Es übersetzt den Chiffretext zurück in den ersten Text, den Klartext.\nverschlüsseln\nentschlüsseln",
-                "Anforderungen:     1. Unbefugte können den Chiffretext nicht entschlüsseln.     2. Das Entschlüsseln ist möglich: Man erhält wirklich wieder den Klartext.\nDie Schwierigkeit besteht darin, beide Anforderungen gleichzeitig zu erfüllen.\nAußerdem sollte das Ver- und Entschlüsseln den Befugten nur wenig Aufwand bereiten, denn ein veralteter Text ist meistens wertlos. Entsprechend kann hoher Aufwand bei der Entschlüsselung praktisch die erste Anforderung erfüllen.",
-                "Auf den nächsten Seiten werden zunächst einige allgemeine Begriffe und Techniken,\ndann die Idee der asymmetrischen Verschlüsselung vorgestellt.\nUnbefugte heißen: der Gegner, der Angreifer, der Lauscher etc.",
+        chapters.append(ZTChapter(number: "4.1", title: "Cryptography", pages: [
+            ZTPage(id: "4.1 - 01", title: "Cryptography", tool: .caesar, blocks: [
+                "Whoever wants to keep a text secret has two possibilities: hide or encrypt.\nNice examples of hiding provides [Singh 2000].\n\nEncryption translates the text into a different text, the cipher text.\nThe converse is decryption: It translates the cipher text back into the first text, the plain text.\nPlain Text    ———————→    Cipher Text\nencryption\ndecryption",
+                "Requirements:     1. Meddlers can not decrypt the cipher text.     2. The decryption is possible: One really gets back the plain text.\nThe difficulty lies in satisfying both requirements simultaneously.\nMoreover should the authorized persons be able to en- and decrypt with only little effort, since in general an out-dated text is worthless. Likewise a great effort in the decryption can practically satisfy the first requirement.",
+                "The next pages introduce some general concepts and techniques first,\nthen the idea of public key cryptography, before the next chapters go into details.\nMeddlers are called: the enemy, the attacker, the eavesdropper etc.",
             ]),
-            ZTPage(id: "4.1 - Cäsar", title: "Die Cäsar-Verschlüsselung", tool: .caesar, blocks: [
-                "Cäsar:    Lege zwei Alphabete verschoben über einander, dann steht jeweils\n    oben ein Zeichen im Klartext, darunter seine Entsprechung im Chiffretext.",
-                "¤Der Empfänger muss nun wissen, um wieviele Zeichen er das Alphabet verschieben soll.\nDiese Zahl vereinbart man als Schlüssel. Sie entspricht hier",
-                "Dieses Alphabet bereichert Cäsars Alphabet um J, U, W, Y, ℤ und das Leerzeichen.\nZur Vereinfachung werden Kleinbuchstaben groß gemacht und zählen auf diese Weise mit.\nAlle anderen Zeichen fallen unter den Tisch. Übernähme man sie in den Chiffretext, so könnten\nsie dem Gegner Anhaltspunkte zur Entschlüsselung geben. Dem Empfänger gegenüber bedeutet die Aufnahme des Leerzeichens ins Alphabet eine besondere Gnade.\nWer mehr Zeichen verschlüsseln will, braucht ein größeres Alphabet,\ngängig ist etwa der ASCII-Zeichensatz mit 128 Zeichen.",
+            ZTPage(id: "4.1 - Cäsar", title: "The Caesar cipher", tool: .caesar, blocks: [
+                "Caesar:    Lay two alphabets displaced over each other, then in each column you can find:\n    on top a letter in the plain text, below its counterpart in the cipher text.",
+                "The addressee needs to know by how many letters he has to shift the alphabet.\nUpon this number one agrees as key. Here it corresponds to",
+                "This alphabet expands Caesar's alphabet by J, U, W, Y, Z and the space character.\nFor simplification lowercase letters are capitalized and thus come into account, too.\nAll other characters are ignored. If they were put into the cipher text, they could provide the  enemy with hints for the decryption. An act of mercy against the addressee is the introduction of the space character into the alphabet.\nWhoever wants to encrypt more symbols needs a bigger alphabet,\nfor instance the ASCII character set with 128 symbols.",
             ]),
-            ZTPage(id: "4.1 - Schlüssel", title: "Schlüssel", tool: .caesar, blocks: [
-                "Im Folgenden dient als Alphabet das ABC plus Leerzeichen.\nEs eignet sich zu Demonstrationszwecken dank Kürze und Lesbarkeit.",
-                "Die Größe des Alphabets bezeichnet man mit |Alphabet|.\nDen Zeichen des Alphabets ordnet man Zahlen zu, damit man mit ihnen rechnen kann.\nSo berechnet man bei Cäsar zu jedem Zeichen x ein neues Zeichen x + b (mod 27).\nMan sagt:    Cäsar hat die Verschlüsselungsfunktion V(x) = x + b (mod 27).\nUnd:    Cäsar hat die Entschlüsselungsfunktion E(x) = x – b (mod 27).",
-                "Dabei dient b als Schlüssel. Er macht das Verfahren variabel. Für verschiedene Adressaten nimmt man nur verschiedene Schlüssel, das Verfahren behält man bei.",
-                "Hier zeigt sich eine Schwachstelle der Cäsar-Verschlüsselung:  Sie kennt nur 27 Schlüssel.\nDer Gegner muss also nicht lange probieren, bis er einen sinnvollen Text erhält.\n\nEine Überlegung wäre nun, das Verfahren geheim zu halten, doch das hat man aufgegeben.\nEin Verschlüsselungsverfahren, das man geheim halten muss, gilt als unsicher. Die Sicherheit darf nur davon abhängen, dass der Schlüssel geheim bleibt.\n\nMan braucht also Verfahren mit möglichst vielen Schlüsseln.",
+            ZTPage(id: "4.1 - Schlüssel", title: "Key", tool: .caesar, blocks: [
+                "From now on our alphabet is the ABC plus space character.\nIt is suitable for illustrations, because it is short and readable.",
+                "The size of the alphabet is denoted by |alphabet|.\nWe assign numbers to the symbols of the alphabet in order to allow calculations.\nFor instance, with Caesar one calculates for each symbol x a new symbol x + b (mod 27).\nWe say:    Caesar has the encryption function E(x) = x + b (mod 27).\nAnd:    Caesar has the decryption function D(x) = x – b (mod 27).",
+                "Here b serves as key. It makes the method flexible. For different adressees we only take different keys, but do not change the method. The method is called a cipher.",
+                "A weak point of the Caesar cipher gets clear:  It knows only 27 keys.\nThus the enemy needs only few tries to obtain a sensible text.\n\nNow we could think about keeping the method secret, but this idea was given up.\nA cypher that has to be kept secret is said to be unsafe. The security must only depend on keeping the key secret.\n\nThus we need methods with as many keys as possible.",
             ]),
-            ZTPage(id: "4.1 - multiplik", title: "Multiplikative Verschlüsselung", tool: .multiplicative, blocks: [
-                "Entschlüsselung mit der Umkehrfunktion:  E(x) = a'·(x–b') (mod 27)\nVerschlüsselung mit der Funktion:  V(x) = a·x + b (mod 27)\nAnzahl Schlüssel: φ(27) · 27\nDieses Verfahren arbeitet mit Addition und Multiplikation. Die Schlüssel sind Paare (a, b).\nProbieren Sie aus, bei welchen Paaren die Verschlüsselung umkehrbar ist.",
-                "Es muss gelten: a·a' ≡ 1 mod 27.",
+            ZTPage(id: "4.1 - multiplik", title: "Multiplicative cipher", tool: .multiplicative, blocks: [
+                "Decryption by the inverse function:  D(x) = a'·(x–b') (mod 27)\nEncryption by the function:      E(x) = a·x + b (mod 27)\nnumber of keys: φ(27) · 27\nThis method applies addition and multiplication. Its keys are pairs (a, b).\nTry out which pairs make the encryption reversible.",
+                "It must hold:  a·a' ≡ 1 mod 27.",
             ]),
-            ZTPage(id: "4.1 - Häuf", title: "Häufigkeitsanalyse", tool: .frequency, blocks: [
-                "Damit die Entschlüsselung immer klappt, muss man ungleiche Zeichen ungleich verschlüsseln:\nDie Verschlüssungsfunktion muss – wie jede umkehrbare Abbildung – injektiv sein.",
-                "Jede Verschlüsselungsfunktion, die einfach die Zeichen des Alphabets neu mischt, ist injektiv.\nAls Schlüssel gibt man das gemischte Alphabet an, zum Beispiel\n    Schlüssel k:    MNBWGHIRSTUJ KLACDEXZFOPQVY\nDas ergibt  27! = 27·26·...·2·1 = 10888869450418352160768000000  mögliche Schlüssel.",
-                "Doch auch das wäre leicht zu knacken – mittels Häufigkeitsanalyse:\n\nIn Texten natürlicher Sprachen treten die Buchstaben mit unterschiedlicher Häufigkeit auf.\nSo tritt das E in deutschen oder englischen Texten häufiger auf als das X.\nFür alle Sprachen gibt es Tabellen der durchschnittlichen Häufigkeit jedes Buchstabens. Vergleicht man damit die Häufigkeit jedes Zeichens im Chiffretext, so findet man bald erste Entsprechungen und kann den Rest erraten.",
-                "Was hilft gegen die Häufigkeitsanalyse?\nMan definiert den Schlüssel nicht für Einzelzeichen, sondern für Kombinationen von Zeichen.\nklassisches Beispiel",
+            ZTPage(id: "4.1 - Häuf", title: "Frequency analysis", tool: .frequency, blocks: [
+                "To make sure that a decryption is possible, different symbols must be encrypted differently:\nThe encrpytion function – like every reversible mapping –  must be injective.",
+                "Each encryption function that simply mixes the symbols of the alphabet is injective.\nThe key is the mixed alphabet, for example\n    key k:    MNBWGHIRSTUJ KLACDEXZFOPQVY\nThis provides  27! = 27·26·...·2·1 = 10888869450418352160768000000  possible keys.",
+                "But even this could be easily broken – by frequency analysis:\n\nIn natural language texts the letters occur with different frequencies.\nFor instance, in German or English texts the letter E occurs more often than the letter X.\nFor all languages there are tables of the average frequency of each letter. By comparison with the frequency of each symbol in the cipher text you can soon find some matches and then guess the rest.",
+                "What saves from frequency analysis?\nDefine the key not for single characters, but for combinations of characters.\nClassic Example",
             ]),
-            ZTPage(id: "4.1 - Text -> Zahl", title: "Text als Zahl", tool: .textToNumber, blocks: [
-                "Einen Text kann man als große Zahl lesen, mit der man dann rechnet:\nJedes Textzeichen bildet eine Ziffer dieser Zahl. Die Ziffern gehen von 0 bis |Alphabet| – 1.\nText:",
-                "Darf die Zahl eine Grenze G nicht überschreiten, so muss man den Text aufteilen\nin Blöcke der Länge L = ⌊log\u{E002}B\u{E003}G⌋. Dabei bildet jeder Block eine Zahl für sich.",
+            ZTPage(id: "4.1 - Text -> Zahl", title: "Text as number", tool: .textToNumber, blocks: [
+                "A text can be read as a big number, which can be transformed by calculations:\nEach character forms a digit of this number. The digits run from 0 to |alphabet| – 1.\n\nText:",
+                "If the number must not exceed a limit G, the text has to be divided into\nblocks of length L = ⌊log\u{E002}B\u{E003}G⌋. Then each block forms a number of its own.",
             ]),
-            ZTPage(id: "4.1 - 0 vorn", title: "Blöcke und führende Nullen", tool: .textToNumber, blocks: [
-                "Die Verwandlung eines Textes in eine Zahl ist nicht injektiv:\nIst dem Leerzeichen die Ziffer 0 zugeordnet, dann werden Leerzeichen am Text-Anfang\nzu Nullen am Zahl-Anfang – und verschwinden.\nNach der Rückverwandlung in einen Text fehlen also die Leerzeichen am Text-Anfang.",
-                "Hier bewährt sich das Leerzeichen im Alphabet:\nLieber das Leerzeichen als das A verschwinden lassen.\nTeilt man den Text in Blöcke auf, so verschwinden die Leerzeichen am Anfang jedes Blocks.\nMan kann sie aber ergänzen, wenn man die Blocklänge kennt. Damit der letzte Block nicht nach rechts \"verrutscht\", füllt man ihn vor der Verwandlung in eine Zahl mit Leerzeichen auf.",
-                "Teilt man den Text in Blöcke auf, so gibt es noch ein Problem:\nBeispiel:   V(x) = x + 2 (mod 30),  E(x) = x – 2 (mod 30),   Blocklänge = 1 = ⌊log \u{E002}27 \u{E003}30⌋ .\n     verschlüsseln:  A →  1 →  3  →  C    entschlüsseln:  C   →   3  →   1  →  A       ok",
-                "    verschlüsseln:  ℤ → 26 → 28 → AA    entschlüsseln:  A|A → 1 1 → 29 29 → AB|AB  falsch\n\nWegen der Blockbildung \"weiß\" AA nicht mehr, dass es aus 28 entstanden ist.",
-                "Dieses Problem tritt nicht auf, wenn man den Chiffretext als Zahl stehen lässt.\n   28  →  26 →  ℤ       ok",
+            ZTPage(id: "4.1 - 0 vorn", title: "Blocks and leading zeros", tool: .textToNumber, blocks: [
+                "Transforming a text into a number is not injective:\nIf the space character is mapped to the digit 0, the space characters at the text's beginning\nbecome zeros at the number's beginning – and vanish.\nThus after retransforming the number into a text the leading space characters are missing.",
+                "This is another reason for introducing the space character into the alphabet:  \nBetter let vanish the space character than the A.\nWhen dividing a text into blocks, the space characters at each block's beginning vanish.\nThey can be restored, if the block's length is well-known. To prevent the last block from shifting to the right, it must be stuffed with space characters before being transformed into a number.",
+                "When dividing a text into blocks, there is another problem:\nExample:   E(x) = x + 2 (mod 30),  D(x) = x – 2 (mod 30),   block length = 1 = ⌊log \u{E002}27 \u{E003}30⌋ .\n     encrypt:  A →  1  →  3 → C    decrypt:  C     →  3   →    1   →   A       ok",
+                "    encrypt:  Z → 26 → 28 → AA    decrypt:  A|A → 1 1 → 29 29 → AB|AB  wrong\n\nDue to the block-forming AA has \"forgotten\" it came from 28.",
+                "This problem does not occur, if you take the number as cipher text.\n28  →   26   →   Z       ok",
             ]),
-            ZTPage(id: "4.1 - asym", title: "Asymmetrische Verschlüsselung", tool: nil, blocks: [
-                "Das große kryptographische Problem war immer die Schlüsselverteilung. Um Geheimnisse auszutauschen, mussten Sender und Empfänger einen geheimen Schlüssel absprechen.\nWer das belauschte, konnte alle Geheimnisse entziffern.\nWenn bei n Personen jede mit jeder Geheimnisse haben will, müssen n·(n–1)/2 Schlüssel abgesprochen werden. Das sind bei n = 1000 schon 499500 Schlüssel.",
-                "In den 1970er Jahren wurde die asymmetrische Verschlüsselung erfunden. Sie benutzt zwei Schlüssel: A zum Verschlüsseln, B zum Entschlüsseln.\n\nA heißt öffentlicher Schlüssel, B heißt privater Schlüssel.\nA gibt die Empfängerin bekannt wie in einem Telefonbuch, B hält sie geheim.\nDann kann ihr jeder schreiben, aber nur sie kann es entschlüsseln.\nEs gibt keine geheimen Schlüssel-Absprachen mehr.",
-                "A und B müssen so beschaffen sein, dass niemand B aus A errechnen kann.\nDarin besteht die Asymmetrie.\n\nDie bisher betrachteten Verfahren sind dagegen symmetrisch:\nBeim Cäsar-Verfahren nimmt man den selben Schlüssel zur Ver- wie zur Entschlüsselung.\nBeim Verfahren mit Multiplikation errechnet man Faktor B leicht, weil A·B ≡ 1 mod |Alphabet|.",
-            ]),
-        ]))
-        chapters.append(ZTChapter(number: "4.2", title: "Das RSA-Verfahren", pages: [
-            ZTPage(id: "4.2 - 01", title: "Das RSA-Verfahren", tool: .rsa, blocks: [
-                "nach seinen Erfindern Ron Rivest, Adi Shamir und Len Adleman",
-                "Historisch das erste asymmetrische Verschlüsselungsverfahren ist RSA.\nEs beruht auf der Schwierigkeit, große Zahlen in Primfaktoren zu zerlegen.",
-                "Die Empfängerin wählt zwei Primzahlen p, q und berechnet den RSA-Modul m = p·q.\nDamit ist  φ(m) = (p–1)·(q–1)\nDann wählt die Empfängerin    eine Zahl b teilerfremd zu φ(m)\nund berechnet mit Euklid    eine Zahl a, so dass  a·b ≡ 1 mod φ(m)\nÖffentlicher Schlüssel ist das Paar (m, a),  privater Schlüssel ist b.",
-                "Der Sender verwandelt seine Nachricht zunächst in eine Zahl n < m.\nDabei muss n teilerfremd zu m sein – was bei großen Primzahlen p, q fast immer der Fall ist.\nDann berechnet und sendet er:      c = n\u{E000}a\u{E001} (mod m).",
-                "Die Empfängerin entschlüsselt:  c\u{E000}b\u{E001} = n\u{E000}a·b\u{E001} ≡ n\u{E000}1\u{E001} ≡ n mod m\nErinnerung:      x ≡ y mod φ(m)  ⇒  n\u{E000}x\u{E001} ≡ n\u{E000}y\u{E001} mod m",
-                "Um b aus (m, a) zu berechnen, braucht man φ(m), also die Primfaktoren p, q von m.\nOb es eine Möglichkeit gibt, c zu entschlüsseln, ohne b zu kennen, ist nicht bekannt.",
-            ]),
-            ZTPage(id: "4.2 - RSA machen", title: "RSA ausprobieren", tool: .rsa, blocks: [
-            ]),
-            ZTPage(id: "4.2 - trapdoor", title: "Einwegfunktion mit Falltür", tool: nil, blocks: [
-                "Verschlüsseln durch Potenzieren kann jeder, entschlüsseln nicht.\n\nEine Funktion, die selbst leicht, deren Umkehrung aber schwer zu berechnen ist,\nnennt man Einwegfunktion – \"Einbahnfunktion\" träfe es im Deutschen besser.",
-                "Die RSA-Verschlüsselung benutzt die Einwegfunktion  f(x) = x\u{E000}a\u{E001} (mod m).\nDiese Einwegfunktion ist gleichzeitig eine Trapdoor-Funktion,\nsie hat eine so genannte Geheimtür:\nWer φ(m) kennt, findet leicht den \"Gegen-Exponenten\" und damit die Umkehrfunktion.\nφ(m) bleibt ein Geheimnis, weil es schwer ist, die Primfaktoren von m zu finden.\nÜbrigens kann man die geheimen Primfaktoren des RSA-Moduls leicht errechnen,\nwenn man ein Paar zugehöriger Ver- und Entschlüsselungs-Exponenten kennt.\nWie das geht, beschreibt [Buchmann].",
-                "Digitale Signatur:\nVerschlüsselt Alice einen Klartext mit ihrem eigenen privaten Schlüssel,\ndann kann jeder mit ihrem öffentlichen Schlüssel den Klartext lesbar machen\n – und sie kann nicht abstreiten, ihn verschlüsselt zu haben.",
-            ]),
-            ZTPage(id: "4.2 - Low Exp Attack", title: "Low-Exponent-Angriff", tool: .crt, blocks: [
-                "Low-Exponent-Attacke:\n    Sei M = {m\u{E002}1\u{E003}, m\u{E002}2\u{E003}, ..., m\u{E002}e\u{E003}} eine Menge von e paarweise teilerfremden RSA-Moduln,     sei n ∈ ℕ eine Nachricht mit     n < m\u{E002}i\u{E003}  für alle m\u{E002}i\u{E003} ∈ M,\n       sei c ∈ ℕ mit    0 ≤ c < m\u{E002}1\u{E003}·m\u{E002}2\u{E003}·...·m\u{E002}e\u{E003}        und       c ≡ n\u{E000}e\u{E001} mod m\u{E002}i\u{E003}  für alle m\u{E002}i\u{E003} ∈ M.            Dann ist     c = n\u{E000}e\u{E001}.",
-                "    Die Zahl c' = n\u{E000}e\u{E001} erfüllt die simultane Kongruenz    c ≡ n\u{E000}e\u{E001} mod m\u{E002}i\u{E003}  für alle m\u{E002}i\u{E003} ∈ M,\n    und      0 ≤ c' < m\u{E002}1\u{E003}·m\u{E002}2\u{E003}·...·m\u{E002}e\u{E003},   weil n < m\u{E002}i\u{E003} für alle m\u{E002}i\u{E003} ∈ M.\n    Nach dem Chinesischen Restsatz ist eine solche Lösung c' eindeutig, also ist c = c'.",
-                "Sendet man eine Nachricht n an viele Empfänger, so benutze man den Exponenten e\nbei der Verschlüsselung  c\u{E002}i\u{E003} = n\u{E000}e\u{E001} (mod m\u{E002}i\u{E003}) weniger als e mal.\nSonst bildet ein Angreifer aus den Schlüsseltexten c\u{E002}i\u{E003} die simultane Kongruenz  c ≡ c\u{E002}i\u{E003} mod m\u{E002}i\u{E003}  und löst sie einfach mit dem Chinesischen Restsatz. Die e-te Wurzel aus c ist n.\n\nGegen die Low-Exponent-Attacke helfen große Verschlüsselungsexponenten e.",
-            ]),
-            ZTPage(id: "4.2 - Multiplikativität", title: "Multiplikativität", tool: .rsa, blocks: [
-                "Multiplikativität:\n    Sei (m, a) ein öffentlicher RSA-Schlüssel.\n    Werden damit zwei Nachrichten n\u{E002}1\u{E003} und n\u{E002}2\u{E003} verschlüsselt, so erhält man\nc\u{E002}1\u{E003} ≡ n\u{E002}1\u{E003}\u{E000}a\u{E001} mod m    und    c\u{E002}2\u{E003} ≡ n\u{E002}2\u{E003}\u{E000}a\u{E001} mod m.\n    Für c = c\u{E002}1\u{E003}·c\u{E002}2 \u{E003} gilt dann:\nc = c\u{E002}1\u{E003}·c\u{E002}2\u{E003}  ≡ (n\u{E002}1\u{E003}·n\u{E002}2\u{E003})\u{E000}a\u{E001} mod m",
-                "Ein Betrüger kann also einen Chiffretext c\u{E002}1\u{E003} um einen gefälschten Zusatz c\u{E002}2\u{E003} verlängern.\nDamit der Empfänger das merkt, kann man dem Klartext eine feste Struktur geben, die verletzt wird, wenn man zwei Klartexte multipliziert. Eine solche Struktur wäre zum Beispiel, dass das erste Zeichen mit dem letzten Zeichen überein stimmt.",
-            ]),
-            ZTPage(id: "4.2 - RSA machen lang", title: "RSA mit eigenen Zahlen", tool: .rsa, blocks: [
-                "ab hier mit BC suchen\n⊂|Än",
+            ZTPage(id: "4.1 - asym", title: "Asymmetric cryptography", tool: nil, blocks: [
+                "The big problem in cryptography always was the distribution of keys. In order to exchange secret messages, sender and addressee had to agree on a secret key. Whoever overheard this was able to decrypt the secret messages.\nIf each of n persons wants to share secrets with each other, n·(n–1)/2 keys must be agreed on. For instance, n = 1000 persons need 499500 keys.",
+                "In the 1970s public key cryptography was invented. It uses two keys:\nA for encryption, B for decryption.\n\nA is called public key, B is called private key.\nThe addressee publishes A like in a telephone book and keeps B secret.\nThen anybody can send messages which only the addressee can decrypt.\nThere are no secret key agreements any more.",
+                "For A and B must hold that nobody can deduce B from A.\nTherefore public key encryption is also called asymmetric cryptography.\n\nThe methods on the previous pages however are symmetric:\nCaesar's cipher has the same key for en- as for decryption.\nIn the cipher using multiplication one can easily find factor B, since A·B ≡ 1 mod |alphabet|.",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "4.3", title: "Weitere Verfahren", pages: [
-            ZTPage(id: "4.3 - 01", title: "Das Rabin-Verfahren", tool: .rabin, blocks: [
-                "Für x ∈ ℙ ist  c\u{E000}x–1\u{E001} ≡ 1 mod x.  \"kleiner Fermat\"",
-                "mit dem euklidischen Algorithmus",
-                "Im Rabin-Verfahren wählt Alice zwei Primzahlen p, q mit p ≡ q ≡ 3 mod 4.\nIhr öffentlicher Schlüssel ist  m = p·q,  ihr privater Schlüssel ist (p, q).",
-                "Bob verschlüsselt:     c = n\u{E000}2\u{E001} (mod m)\nAlice entschlüsselt durch Wurzelziehen aus c. Das geht so:",
-                "Alice berechnet:     P = c\u{E000}(p+1)/4\u{E001} (mod p),     Q = c\u{E000}(q+1)/4\u{E001} (mod q)\nEs gilt ja:           4 | p+1,             4 | q+1\nDann sind ±P die Quadratwurzeln von c in Z\u{E002}p\u{E003},  und ±Q entsprechend in Z\u{E002}q\u{E003}, denn\n\n    (c\u{E000}(x+1)/4\u{E001})\u{E000}2\u{E001}  =  c\u{E000}(x+1)/2\u{E001}  =  (c\u{E000}x–1+2\u{E001})\u{E000}1/2\u{E001}  =  (c\u{E000}x–1\u{E001}·c\u{E000}2\u{E001})\u{E000}1/2\u{E001}  ≡  c\u{E000}2/2\u{E001}  =  c mod x    für x ∈ ℙ.",
-                "Die vier Quadratwurzeln in Z\u{E002}m\u{E003} berechnet Alice mit dem Chinesischen Restsatz:\nSie bestimmt Koeffizienten x, y mit  x·p + y·q = 1.\nDann berechnet sie  r = (x·p·Q + y·q·P) (mod m),    s = (x·p·Q – y·q·P) (mod m).",
-                "Eine der vier Quadratwurzeln  ±r,  ±s  ist die Nachricht n.\nAlice muss ausprobieren, welche. Sie nimmt die, die den sinnvollsten Text ergibt.",
+        chapters.append(ZTChapter(number: "4.2", title: "RSA", pages: [
+            ZTPage(id: "4.2 - 01", title: "The RSA cipher", tool: .rsa, blocks: [
+                "after its inventors Ron Rivest, Adi Shamir and Len Adleman",
+                "Historically the first public key cipher is RSA.\nIt is based on the difficulty of decomposing big numbers into prime factors.",
+                "The addressee chooses two primes p, q and computes the RSA-modulus m = p·q.\nThus is  φ(m) = (p–1)·(q–1)\nThen the addressee chooses    any number b coprime to φ(m)\nand computes with Euclid    the  number a, such that  a·b ≡ 1 mod φ(m)\nThe public key is the pair (m, a),  the private key is b.",
+                "The sender first transforms his message into a number n < m.\nHere n must be coprime to m – which for big primes p, q is almost always true.\nThen he computes and sends:      c = n\u{E000}a\u{E001} (mod m).",
+                "The addressee decrypts:      c\u{E000}b\u{E001} = n\u{E000}a·b\u{E001} ≡ n\u{E000}1\u{E001} ≡ n mod m\nRemember:      x ≡ y mod φ(m)  ⇒  n\u{E000}x\u{E001} ≡ n\u{E000}y\u{E001} mod m",
+                "For deducing b from (m, a) one needs φ(m), thus the prime factors p, q of m.\nWhether there is any possibility of decrypting c without knowing b, is not known.",
             ]),
-            ZTPage(id: "4.3 - Diffie-Hellman", title: "Diffie-Hellman-Schlüsselaustausch", tool: .diffieHellman, blocks: [
-                "Diffie und Hellman haben ein Verfahren gefunden, wie man einen geheimen Schlüssel verabredet, ohne dass ein Lauscher ihn erfährt.",
-                "–Alice und Bob verabreden in aller Öffentlichkeit einen geheimen Schlüssel:\n1. Sie wählen offen eine Primzahl p und eine Primitivwurzel g mod p.\n2. Alice wählt heimlich eine Zahl a ∈ {1, 2, ..., p–2} und sendet Bob A = ga (mod p).\n3. Bob wählt heimlich eine Zahl b ∈ {1, 2, ..., p–2} und sendet Alice B = \u{E000}g\u{E001}b (mod p).\n4. Beide berechnen den selben geheimen Schlüssel \u{E000}ga·\u{E001}b (mod p):\n    Alice berechnet \u{E000}B\u{E001}a (mod p) = \u{E000}ga·\u{E001}b (mod p).\n    Bob berechnet \u{E000}A\u{E001}b (mod p) = \u{E000}ga·\u{E001}b (mod p).",
-                "Der Lauscher steht vor dem Diffie-Hellman-Problem:  Er erfährt zwar p, g, A und B,\n       aber nicht den Schlüssel g\u{E000}a·b\u{E001} (mod p) oder die Exponenten a, b.\n       Um a oder b zu ermitteln, müsste er diskrete Logarithmen in Z\u{E002}p\u{E003}* berechnen.\n       Diskrete Logarithmen in Z\u{E002}p\u{E003}* sind aber sehr unregelmäßig und schwer zu berechnen.",
-                "Gefahr:  Man-In-The-Middle-Attacke\nDer Lauscher tauscht unbemerkt Schlüssel mit Alice und Bob und kann alles lesen.",
+            ZTPage(id: "4.2 - RSA machen", title: "Trying RSA", tool: .rsa, blocks: [
             ]),
-            ZTPage(id: "4.3 - ElGamal", title: "Das ElGamal-Verfahren", tool: .elgamal, blocks: [
-                "Das ElGamal-Verfahren hängt eng mit dem Diffie-Hellman-Schlüsselaustausch zusammen.\n\nAlice wählt eine Primzahl p und eine Primitivwurzel g mod p.\nSie wählt eine Zahl a ∈ {1, 2, ..., p–2} und berechnet A = \u{E000}g\u{E001}a (mod p).\nIhr öffentlicher Schlüssel ist (p, g, A). Ihr geheimer Schlüssel ist der Exponent a.",
-                "OBob verschlüsselt n:  Er wählt eine Zahl b ∈ {1, 2, ..., p–2} und berechnet\n1. c = \u{E000}A\u{E001}b·n (mod p).    Der Faktor \u{E000}A\u{E001}b = (\u{E000}g\u{E001}a\u{E000})\u{E001}b    ist der geheime Schlüssel bei Diffie-Hellman.\n2. B = \u{E000}g\u{E001}b (mod p).     Die Zahl     B   =  \u{E000}g\u{E001}b     ist Bobs Anteil bei Diffie-Hellman.\nBob sendet (B, c).\nEin Nachteil des Verfahrens ist, dass B die Länge der Sendung verdoppelt.",
-                "Für p ∈ ℙ ist  g\u{E000}p–1\u{E001} ≡ 1 mod p.  \"kleiner Fermat\"",
-                "Alice berechnet     B\u{E000}p–1–a\u{E001}·c (mod p)   und erhält n, denn\n    B\u{E000}p–1–a\u{E001}·c  ≡  g\u{E000}b·(p–1–a)\u{E001}·A\u{E000}b\u{E001}·n  ≡  (g\u{E000}p–1\u{E001})\u{E000}b\u{E001}·(g\u{E000}a\u{E001})\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  ≡  A\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  ≡  n mod p",
-                "Bob muss für jede Nachricht n ein neues b wählen. Sonst gilt:\n    c ≡ A\u{E000}b\u{E001}·n mod p,      c' ≡ A\u{E000}b\u{E001}·n' mod p\n    ⇒    c'·c\u{E000}–1\u{E001} ≡ n'·n\u{E000}–1\u{E001} mod p      ⇒    n' ≡ c'·c\u{E000}–1\u{E001}·n mod p.  Jeder, der n kennt, kann auch n' lesen.",
+            ZTPage(id: "4.2 - trapdoor", title: "Trapdoor one-way function", tool: nil, blocks: [
+                "Encrypting by exponentiation is easy, decrypting is hard.\nA function that is easy to compute but hard to invert is called a one-way function.",
+                "The RSA cypher uses the one-way function  f(x) = x\u{E000}a\u{E001} (mod m).\nThis one-way function is a trapdoor function, it has a secret door:\nWhoever knows φ(m), can easily find the \"counter-exponent\" and hence the inverse function.\nφ(m) remains a secret, since it is hard to find the prime factors of m.\nBy the way: the secret prime factors of the RSA-Modulus can be found easily,\nif a corresponding pair of en- and decryption exponents is known.\nFor details see [Buchmann].",
+                "Digital Signature:\nIf Alice encrypts a plain text with her own private key,\nanybody can get the plain text by applying her public key\n – and she can't deny that she had encrypted this plain text.",
             ]),
-            ZTPage(id: "4.3 - ElGamal2", title: "ElGamal und elliptische Kurven", tool: .elgamal, blocks: [
-                "Im ElGamal-Verfahren verschlüsselt Bob jede Nachricht mit einem neuen Exponenten.\nDer Gegner merkt nicht, wenn zwei mal die selbe Nachricht auf die Reise geht.\nDas erschwert die Statistik des Gegners.",
-                "Erweiterung zu \"Euler-Fermat\":\nIn jeder Gruppe G gilt:  a\u{E000}|G|\u{E001} = e (neutral)  für alle a ∈ G.",
-                "Das ElGamal-Verfahren funktioniert nicht nur in primen Restklassengruppen,\nsondern in jeder zyklischen Gruppe G, in der diskrete Logarithmen schwer zu berechnen sind.\n\nDie Gruppen-Ordnung |G| ist nicht geheim. Alice braucht sie zur Entschlüsselung:\nAlice berechnet     B\u{E000}|G|–a\u{E001}·c  in G   und erhält n, denn\n    B\u{E000}|G|–a\u{E001}·c  =  g\u{E000}b·(|G|–a)\u{E001}·A\u{E000}b\u{E001}·n  =  (g\u{E000}|G|\u{E001})\u{E000}b\u{E001}·(g\u{E000}a\u{E001})\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  =  A\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  =  n",
-                "Beispiel:     Die Punktgruppe einer elliptischen Kurve über Z\u{E002}p\u{E003}* mit p ∈ ℙ\nDabei muss man die Nachrichten irgend wie in Gruppen-Elemente verwandeln.\nEs sei auf die Literatur unter [Elliptische Kurven] verwiesen, insbesondere auf:\nhttp://www.mi.uni-erlangen.de/~ruppert/WS0001",
-                "Ende des Kapitels",
+            ZTPage(id: "4.2 - Low Exp Attack", title: "Low exponent attack", tool: .crt, blocks: [
+                "Low-Exponent-Attack:\n    Let M = {m\u{E002}1\u{E003}, m\u{E002}2\u{E003}, ..., m\u{E002}e\u{E003}} be a set of e pairwise coprime RSA-moduli,     let n ∈ ℕ be a message such that     n < m\u{E002}i\u{E003}  for all m\u{E002}i\u{E003} ∈ M,\n       let c ∈ ℕ with    0 ≤ c < m\u{E002}1\u{E003}·m\u{E002}2\u{E003}·...·m\u{E002}e\u{E003}        and       c ≡ n\u{E000}e\u{E001} mod m\u{E002}i\u{E003}  for all m\u{E002}i\u{E003} ∈ M.            Then is     c = n\u{E000}e\u{E001}.",
+                "    The number c' = n\u{E000}e\u{E001} satisfies the simultaneous congruence c ≡ n\u{E000}e\u{E001} mod m\u{E002}i\u{E003}  for all m\u{E002}i\u{E003} ∈ M,\n    and      0 ≤ c' < m\u{E002}1\u{E003}·m\u{E002}2\u{E003}·...·m\u{E002}e\u{E003},   since n < m\u{E002}i\u{E003} for all m\u{E002}i\u{E003} ∈ M.\n    After the Chinese Remainder Theorem such a solution c' is unique, thus is c = c'.",
+                "When you send a message n to many addressees and you encrypt by  c\u{E002}i\u{E003} = n\u{E000}e\u{E001} (mod m\u{E002}i\u{E003}),\nthen use the exponent e less than e times.\nOtherwise an attacker builds the simultaneous congruence  c ≡ c\u{E002}i\u{E003} mod m\u{E002}i\u{E003}  from cipher texts c\u{E002}i\u{E003} and simply solves it with the Chinese Remainder Theorem. The e-th root of c is n.\n\nA sufficient means against the low exponent attack are big encryption exponents e.",
+            ]),
+            ZTPage(id: "4.2 - Multiplikativität", title: "Multiplicativity", tool: .rsa, blocks: [
+                "Multiplicativity:\n    Let (m, a) be a public RSA key.\n    If two messages n\u{E002}1\u{E003} and n\u{E002}2\u{E003} are encrypted, one gets\nc\u{E002}1\u{E003} ≡ n\u{E002}1\u{E003}\u{E000}a\u{E001} mod m    and    c\u{E002}2\u{E003} ≡ n\u{E002}2\u{E003}\u{E000}a\u{E001} mod m.\n    For c = c\u{E002}1\u{E003}·c\u{E002}2 \u{E003} holds:\nc = c\u{E002}1\u{E003}·c\u{E002}2\u{E003}  ≡ (n\u{E002}1\u{E003}·n\u{E002}2\u{E003})\u{E000}a\u{E001} mod m",
+                "Thus a swindler can enlarge a cipher text c\u{E002}1\u{E003} by a false addition c\u{E002}2\u{E003} .\nThe addressee can realize this swindle, if the plain text has some constant structure which gets hurt when two plain texts are multiplied. A structure for this purpose could be, for example, that the first symbol accords with the last symbol.",
+            ]),
+            ZTPage(id: "4.2 - RSA machen lang", title: "RSA with your own numbers", tool: .rsa, blocks: [
+                "ab here with BC suchen",
             ]),
         ]))
-        return ZTLesson(number: 4, title: "Asymmetrische Verschlüsselung", chapters: chapters)
+        chapters.append(ZTChapter(number: "4.3", title: "Other Ciphers", pages: [
+            ZTPage(id: "4.3 - 01", title: "The Rabin cipher", tool: .rabin, blocks: [
+                "For x ∈ ℙ is  c\u{E000}x–1\u{E001} ≡ 1 mod x.  \"Little Fermat\"",
+                "with the Euclidian algorithm",
+                "In the Rabin cipher Alice chooses two primes p, q such that p ≡ q ≡ 3 mod 4.\nHer public key is  m = p·q,  her private key is (p, q).",
+                "Bob encrypts:     c = n\u{E000}2\u{E001} (mod m)\nAlice decrypts by extracting the root from c. This can be done as follows:",
+                "Alice computes:     P = c\u{E000}(p+1)/4\u{E001} (mod p),     Q = c\u{E000}(q+1)/4\u{E001} (mod q)\nNotice:           4 | p+1,             4 | q+1\nThen ±P are the square roots of c in ℤ\u{E002}p\u{E003},  and ±Q likewise in ℤ\u{E002}q\u{E003}, because\n\n    (c\u{E000}(x+1)/4\u{E001})\u{E000}2\u{E001}  =  c\u{E000}(x+1)/2\u{E001}  =  (c\u{E000}x–1+2\u{E001})\u{E000}1/2\u{E001}  =  (c\u{E000}x–1\u{E001}·c\u{E000}2\u{E001})\u{E000}1/2\u{E001}  ≡  c\u{E000}2/2\u{E001}  =  c mod x    for x ∈ ℙ.",
+                "Alice computes the four square roots in ℤ\u{E002}m\u{E003} with the Chinese Remainder Theorem:\nShe identifies coefficients x, y such that  x·p + y·q = 1.\nThen she computes  r = (x·p·Q + y·q·P) (mod m),    s = (x·p·Q – y·q·P) (mod m).",
+                "One of the four square roots  ±r,  ±s  is the message n.\nAlice has to try which one it is. She will choose the one that provides the most sensible text.",
+            ]),
+            ZTPage(id: "4.3 - Diffie-Hellman", title: "Diffie-Hellman key exchange", tool: .diffieHellman, blocks: [
+                "Diffie and Hellman found a method, how to agree on a secret key if an eavesdropper is present.",
+                "Alice and Bob agree on a secret key while being overheard:\n1. They publicly choose a prime p and a primitive root g mod p.\n2. Alice secretly chooses a number a ∈ {1, 2, ..., p–2} and sends Bob A = g\u{E000}a\u{E001} (mod p).\n3. Bob secretly chooses a number b ∈ {1, 2, ..., p–2} and sends Alice B = g\u{E000}b\u{E001} (mod p).\n4. Both compute the same secret key g\u{E000}a·b\u{E001} (mod p):\n    Alice computes B\u{E000}a\u{E001} (mod p) = g\u{E000}a·b\u{E001} (mod p).\n    Bob computes A\u{E000}b\u{E001} (mod p) = g\u{E000}a·b\u{E001} (mod p).",
+                "The eavesdropper has to solve the Diffie-Hellman problem:  He knows p, g, A and B,\n       but not the key g\u{E000}a·b\u{E001} (mod p) or the exponents a, b.\n       For getting a or b, he has to compute discrete logarithms in ℤ\u{E002}p\u{E003}*.\n       But discrete logarithms in ℤ\u{E002}p\u{E003}* are very irregular and hard to compute.",
+                "Danger:  Man-in-the-middle attack\nThe eavesdropper exchanges keys with Alice and Bob without being noticed.",
+            ]),
+            ZTPage(id: "4.3 - ElGamal", title: "The ElGamal cipher", tool: .elgamal, blocks: [
+                "The ElGamal cipher is closely related to the Diffie-Hellman key exchange.\n\nAlice chooses a prime p and a primitive root g mod p.\nShe chooses any number a ∈ {1, 2, ..., p–2} and computes A = g\u{E000}a\u{E001} (mod p).\nHer public key is (p, g, A). Her secret key is the exponent a.",
+                "Bob encrypts n:  He chooses any number b ∈ {1, 2, ..., p–2} and computes\n1. c = A\u{E000}b\u{E001}·n (mod p).    The factor A\u{E000}b\u{E001} = (g\u{E000}a\u{E001})\u{E000}b\u{E001}    is the secret key in Diffie-Hellman.\n2. B = g\u{E000}b\u{E001} (mod p).     The number  B = g\u{E000}b\u{E001}     is Bob's part in Diffie-Hellman.\nBob sends (B, c).\nA drawback of this method is that B doubles the length of the sent packet.",
+                "For p ∈ ℙ is  g\u{E000}p–1\u{E001} ≡ 1 mod p.  \"Little Fermat\"",
+                "Alice computes     B\u{E000}p–1–a\u{E001}·c (mod p)   and gets n, because\n    B\u{E000}p–1–a\u{E001}·c  ≡  g\u{E000}b·(p–1–a)\u{E001}·A\u{E000}b\u{E001}·n  ≡  (g\u{E000}p–1\u{E001})\u{E000}b\u{E001}·(g\u{E000}a\u{E001})\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  ≡  A\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  ≡  n mod p",
+                "Bob has to choose b anew for each new message n. Otherwise holds:\n    c ≡ A\u{E000}b\u{E001}·n mod p,      c' ≡ A\u{E000}b\u{E001}·n' mod p\n    ⇒    c'·c\u{E000}–1\u{E001} ≡ n'·n\u{E000}–1\u{E001} mod p      ⇒    n' ≡ c'·c\u{E000}–1\u{E001}·n mod p.  Anybody who knows n can read n'.",
+            ]),
+            ZTPage(id: "4.3 - ElGamal2", title: "ElGamal and elliptic curves", tool: .elgamal, blocks: [
+                "When using the ElGamal cipher Bob encrypts each message with a new exponent.\nThe opponent doesn't even realize, if the same message is sent twice.\nThis hampers the opponent's statistics.",
+                "extension of \"Euler-Fermat\":\nIn each group G holds:  a\u{E000}|G|\u{E001} = e (neutral)  for all a ∈ G.",
+                "The ElGamal cipher is not restricted to groups of prime residue classes,\nbut is possible in each cyclic group G where discrete logarithms are hard to compute.\n\nThe group-order |G| is not secret. Alice needs it for decryption:\nAlice computes     B\u{E000}|G|–a\u{E001}·c  in G   and gets n, because\n    B\u{E000}|G|–a\u{E001}·c  =  g\u{E000}b·(|G|–a)\u{E001}·A\u{E000}b\u{E001}·n  =  (g\u{E000}|G|\u{E001})\u{E000}b\u{E001}·(g\u{E000}a\u{E001})\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  =  A\u{E000}–b\u{E001}·A\u{E000}b\u{E001}·n  =  n",
+                "Example:     The group of points of an elliptic curve over ℤ\u{E002}p\u{E003}* with p ∈ ℙ\nSomehow the messages must be related to group elements.\nFor details see in the Literature menu after [elliptic curves], especially:\nhttp://www.mi.uni-erlangen.de/~ruppert/WS0001",
+                "end of this lesson",
+            ]),
+        ]))
+        return ZTLesson(number: 4, title: "Public Key Cryptography", chapters: chapters)
     }
     static func lesson5() -> ZTLesson {
         var chapters: [ZTChapter] = []
-        chapters.append(ZTChapter(number: "5.1", title: "Teiler finden", pages: [
-            ZTPage(id: "5.1 - 01", title: "Teiler finden", tool: .trialDivision, blocks: [
-                "In diesem Kapitel geht es darum, wie man natürliche Zahlen n in Faktoren zerlegt,\nFaktorisierung ist ein anderes Wort für Faktorzerlegung.\nAls Faktoren sucht man nicht-triviale Teiler, also Teiler zwischen 1 und n. \nBei Primzahlen macht man eine Ausnahme: Die Faktorisierung einer Primzahl ist sie selbst.",
-                "Das einfachste Verfahren ist die Probedivision, die auch als Primzahltest dienen kann:\n    Man dividiert n durch alle Primzahlen 2, 3, 5, 7, 11, ..., um zu sehen, ob ein Rest bleibt.\n    Hat man bis zur Wurzel von n keinen Teiler gefunden, so ist n eine Primzahl.\n    Bei großen Zahlen geht man nicht bis zur Wurzel, sondern beispielsweise nur bis 10000,\n    und greift dann zu anderen Verfahren.\n    Die Probedivision ist gut, um kleine Teiler zu finden.",
-                "Hat man einen Teiler d gefunden, so erhält man seinen Komplementärteiler durch Division n/d\nund damit die Faktorzerlegung  n = d · n/d.\nFaktorisiert man nun die Teiler d und n/d, dann deren Teiler und alle Teiler, die noch kommen, so erhält man die Primfaktorzerlegung von n, die man etwa braucht, um φ(n) zu berechnen.",
+        chapters.append(ZTChapter(number: "5.1", title: "Finding Divisors", pages: [
+            ZTPage(id: "5.1 - 01", title: "Finding divisors", tool: .trialDivision, blocks: [
+                "This lesson is about decomposing natural numbers n into factors.\nFactorization is another word for factor decomposition.\nAs factors are wanted non-trivial divisors, thus divisors between 1 and n. \nPrimes are special: The factorization of a prime is the prime itself.",
+                "The simplest method is the trial division, that can also be used as a prime number test:\n    Divide n by all primes 2, 3, 5, 7, 11, ... to see whether a remainder is left.\n    If up to the root of n no divisor has been found, n is a prime.\n    If n is big, one does not go up to the root of n, but only up to 10000, for instance,\n    and applies other methods then.\n    The trial division is good for finding small divisors.",
+                "When a divisor d has been found, one gets its complementary divisor by the division n/d\nand hence the factor decomposition  n = d · n/d.\nBy factorizing the divisors d and n/d, then their divisors and all divisors still to come,\none gets the prime decomposition of n, which is needed, for instance, for computing φ(n).",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "5.2", title: "Fermat-Faktorisierung", pages: [
-            ZTPage(id: "5.2 - 01", title: "Fermat-Faktorisierung", tool: .fermatFactor, blocks: [
-                "Wenn sich n als    n = a\u{E000}2\u{E001} – b\u{E000}2\u{E001} schreiben lässt, ergibt sich die Faktorisierung von n einfach als     n = (a + b)·(a – b).",
-                "Jedes Produkt zweier ungerader Zahlen u·v mit u > v lässt sich so darstellen, da für\n     n = u·v      mit  a = (u+v)/2      und  b = (u–v)/2      gilt:  a\u{E000}2\u{E001} – b\u{E000}2\u{E001} = n.\n    15 = 15·1      mit  a = (15+1)/2 = 8     und  b = (15–1)/2 = 7    gilt:  a\u{E000}2\u{E001} – b\u{E000}2\u{E001} = 64 – 49 = 15\n    15 = 5·3       mit  a = (5+3)/2 = 4    und  b = (5–3)/2 = 1    gilt:  a\u{E000}2\u{E001} – b\u{E000}2\u{E001} = 16 – 1 = 15",
-                "Bei der Faktorisierungs-Methode nach Fermat setzt man für a die Werte  ⌈√n⌉,  ⌈√n⌉ + 1, ... ein\n       und prüft, ob a\u{E000}2\u{E001} – n eine Quadratzahl ist.\n    Wenn ja, ist mit a\u{E000}2\u{E001} – n = b\u{E000}2\u{E001} eine Faktorisierung  n = (a + b)·(a – b)  gefunden.",
-                "Beispiel:     n = 39\n              ⌈√n⌉ = 7\n    7\u{E000}2\u{E001} – n = 49 – 39 = 10\n    8\u{E000}2\u{E001} – n = 64 – 39 = 25 = 5\u{E000}2\u{E001}  Bingo!\n    ⇒   n = 8\u{E000}2\u{E001} – 5\u{E000}2\u{E001} = (8 + 5)·(8 – 5) = 13 · 3",
+        chapters.append(ZTChapter(number: "5.2", title: "Fermat Factorization", pages: [
+            ZTPage(id: "5.2 - 01", title: "Fermat factorization", tool: .fermatFactor, blocks: [
+                "If for n holds    n = a\u{E000}2\u{E001} – b\u{E000}2\u{E001}  with a, b ∈ ℕ, then the factorization of n is simply     \u{E002}n = (a + b)·(a – b).\u{E003}",
+                "Each product of two odd numbers u·v, u > v, can be written this way, because for  \n     n = u·v     with  a = (u+v)/2      and  b = (u–v)/2      holds:  a\u{E000}2\u{E001} – b\u{E000}2\u{E001} = n.\nExample:\n    15 = 15·1    with  a = (15+1)/2 = 8     and  b = (15–1)/2 = 7    holds:  a\u{E000}2\u{E001} – b\u{E000}2\u{E001} = 64 – 49 = 15\n    15 = 5·3     with  a = (5+3)/2 = 4    and  b = (5–3)/2 = 1    holds:  a\u{E000}2\u{E001} – b\u{E000}2\u{E001} = 16 – 1 = 15",
+                "Fermat's factorization method replaces a with the values  ⌈√n⌉,  ⌈√n⌉ + 1, ...\n     and tests wether a\u{E000}2\u{E001} – n is a square.\n              If so, then a\u{E000}2\u{E001} – n = b\u{E000}2\u{E001} yields the factorization  n = (a + b)·(a – b).",
+                "Example:     n = 39\n              ⌈√n⌉ = 7\n    7\u{E000}2\u{E001} – n = 49 – 39 = 10\n    8\u{E000}2\u{E001} – n = 64 – 39 = 25 = 5\u{E000}2\u{E001}  Bingo!\n    ⇒   n = 8\u{E000}2\u{E001} – 5\u{E000}2\u{E001} = (8 + 5)·(8 – 5) = 13 · 3",
             ]),
-            ZTPage(id: "5.2 - Fermat Abbruch", title: "Wann bricht das Verfahren ab?", tool: .fermatFactor, blocks: [
-                "Ist bis a = ⌊(n+9)/6⌋ keine Quadratzahl b\u{E000}2\u{E001} gefunden, dann ist n eine Primzahl.",
-                "Beispiel: n = 47\n          ⌈√n⌉ = 7        Grenze = ⌊(n+9)/6⌋ = 9\n    7\u{E000}2\u{E001} – n = 49 – 47 = 2\n    8\u{E000}2\u{E001} – n = 64 – 47 = 17\n    9\u{E000}2\u{E001} – n = 81 – 47 = 34\n    ⇒   n ist Primzahl.",
-                "Schieben Sie den blauen Punkt\nGrund",
+            ZTPage(id: "5.2 - Fermat Abbruch", title: "When does the method stop?", tool: .fermatFactor, blocks: [
+                "If up to a = ⌊(n+9)/6⌋ no square b\u{E000}2\u{E001} has been found, then n is prime.",
+                "Example:     n = 47\n               ⌈√n⌉ = 7        limit = ⌊(n+9)/6⌋ = 9\n    7\u{E000}2\u{E001} – n = 49 – 47 = 2\n    8\u{E000}2\u{E001} – n = 64 – 47 = 17\n    9\u{E000}2\u{E001} – n = 81 – 47 = 34\n    ⇒   n is prime.",
+                "Move the blue ball\nReason",
             ]),
-            ZTPage(id: "5.2 - Quadrate erkennen", title: "Quadrate erkennen", tool: .fermatFactor, blocks: [
-                "Hat man a\u{E000}2\u{E001} errechnet, so findet man die nächsten Quadratzahlen leicht, denn der Abstand zwischen den Quadratzahlen wächst immer um 2. Der erste Abstand ist (a+1)\u{E000}2\u{E001} – a\u{E000}2\u{E001} = 2·a + 1.",
-                "!Um zu entscheiden, ob \u{E000}a\u{E001}2 – n eine Quadratzahl ist, muss man nicht unbedingt die Wurzel ziehen. Quadratzahlen enden zum Beispiel nie auf 2, 3, 7 oder 8.\nModulo 10 gibt es nur die quadratischen Reste {0, 1, 4, 5, 6, 9}.",
-                "Ist eine Zahl x zu irgendeinem Modul quadratischer Nicht-Rest, so ist x keine Quadratzahl.\nMan betrachtet x also zuerst zu mehreren Moduln, z.B. den ungeraden Primzahlen < 20.  \nNur wenn x zu jedem dieser Moduln quadratischer Rest ist, muss man noch die Wurzel ziehen.\nEine Betrachtung mod 2 ist übrigens sinnlos, da jede Zahl quadratischer Rest mod 2 ist.\nEine Betrachtung mod 16 dagegen ist gut, weil nur 4 Zahlen quadratische Reste mod 16 sind.\n\nBeispiel",
-                "Der schlechteste Fall des Fermat-Verfahrens ist gerade der beste Fall der Probedivison\nund umgekehrt. Es bietet sich daher an, beide Verfahren zu kombinieren.",
-            ]),
-        ]))
-        chapters.append(ZTChapter(number: "5.3", title: "Pollards Rho-Faktorisierung", pages: [
-            ZTPage(id: "5.3 - 01", title: "Das Geburtstagsparadoxon", tool: .birthday, blocks: [
-                "Ab wieviel Personen auf einer Party lohnt sich die Wette darauf, dass\nmindestens zwei der Anwesenden am gleichen Tag Geburtstag haben?",
-                "im Sinne von: öfter gewinnen als verlieren",
-                "Die Tage des Jahres sind\nvon 1 bis 365 nummeriert,\n32 ist also der 1. Februar.\nDer 29. Februar entfällt.",
-                "Rechts steht, wieviele Partygäste an dem Tag links Geburtstag haben.",
-                "Geburtstagsparadox:\n    Auf der Erde reichen 23 Personen.     Beweis\n    Allgemein gilt:\n    Hat das Jahr n Tage, dann reichen etwas mehr als √n Personen.",
-                "Geburtstag     Personen\n_{> 365    gewinnt jede Wette\n(Zur Vereinfachung habe jedes Jahr 365 Tage.)\n   k    Wetten     davon gewonnen",
-            ]),
-            ZTPage(id: "5.3 - pollard rho", title: "Die Idee von Pollards Rho", tool: .rhoSequence, blocks: [
-                "der griechische Buchstabe Rho",
-                "Pollards r-Faktorisierungs-Methode arbeitet mit einer pseudozufälligen Folge von Werten:\n    x\u{E002}1\u{E003} := random(0, n–1)\n    x\u{E002}i+1\u{E003} := f(x\u{E002}i\u{E003}) (mod n)\nDabei ist x\u{E002}1\u{E003} ∈ ℤ der Startwert und f ein Polynom mit Koeffizienten ∈ ℤ, etwa x\u{E000}2\u{E001} + 1.",
-                "Sei d ein nicht-trivialer Teiler von n.\nDann existieren wahrscheinlich x\u{E002}i\u{E003} und x\u{E002}j\u{E003} mit:\n    x\u{E002}i\u{E003} ≡ x\u{E002}j\u{E003} mod d\n    x\u{E002}i\u{E003} ≠ x\u{E002}j\u{E003} mod n",
-                "Laut Geburtstagsparadox ist dieser Fall nach etwas mehr als √d Folgengliedern zu erwarten.\nDann gilt:     d teilt x\u{E002}i\u{E003} – x\u{E002}j\u{E003}  und  n teilt nicht x\u{E002}i\u{E003} – x\u{E002}j\u{E003} .\n    Also erhält man mit  ggT(x\u{E002}i\u{E003} – x\u{E002}j\u{E003}, n)  einen nicht-trivialen Teiler von n.",
-                "Es bleibt zu klären, wie man die richtigen x\u{E002}i\u{E003} und x\u{E002}j\u{E003} am schnellsten findet.\nMüsste man ggT(x\u{E002}i\u{E003} – x\u{E002}j\u{E003}, n) für alle Kombinationen von Folgengliedern x\u{E002}i\u{E003} und x\u{E002}j\u{E003} bestimmen,\ndann wäre der Algorithmus schlechter als die Probedivision.",
-            ]),
-            ZTPage(id: "5.3 - Kreise", title: "Folgen laufen im Kreis", tool: .rhoSequence, blocks: [
-                "Wegen  x\u{E002}i+1\u{E003} := f(x\u{E002}i\u{E003}) (mod n)  läuft die Folge spätestens nach n Gliedern im Kreis.\nSei nun d ein nicht-trivialer Teiler von n.\nGilt für zwei Folgenglieder x\u{E002}i\u{E003} ≡ x\u{E002}j\u{E003} mod d,  dann gilt wegen  x\u{E002}i+1\u{E003} := f(x\u{E002}i\u{E003}) (mod n)\n    auch  x\u{E002}i+k\u{E003} ≡ x\u{E002}j+k\u{E003} mod d  für alle k ∈ ℕ.\nDie Reduktion mod n subtrahiert Vielfache von d: die Kongruenz mod d bleibt bestehen.\nDaher bildet die Folge auch mod d einen Kreis – der kleiner sein kann als der Kreis mod n.",
-                "Beispiel:  n = 15,   f(x) = x\u{E000}2\u{E001} + 1,  zufälliger Startwert x\u{E002}1\u{E003} = 3.\ni        1    2    3    4    5    6    7    8    9\nx\u{E002}i\u{E003} mod 15    3    10    11    2    5    11    2    5    ...",
-                "Die Werte des Kreises, die also wiederkehren, bilden die so genannte Periode.\nDie Werte am Anfang, die nicht wiederkehren, bilden die so genannte Vorperiode.",
-                "Man sucht Folgenglieder mit x\u{E002}i\u{E003} ≡ x\u{E002}j\u{E003} mod d.\nWeil die Folge periodisch wird, hilft dabei ein Kreisfindungs-Algorithmus.",
-            ]),
-            ZTPage(id: "5.3 - Floyd, Brent", title: "Floyd und Brent", tool: .rhoSequence, blocks: [
-                "Als Pollard seinen r-Algorithmus 1975 vorstellte, benutzte er den\nKreisfindungs-Algorithmus von Floyd:\nFloyd startet zwei Variablen x und y mit dem selben Wert\nund rechnet in jedem Schritt:\n     x\u{E002}i+1 \u{E003}:= f(x\u{E002}i\u{E003}),    x\u{E002}i+2 \u{E003}:= f(x\u{E002}i+1\u{E003})\n    y\u{E002}j+1 \u{E003}:= f(y\u{E002}j\u{E003})\nAlso durchläuft x die Folge doppelt so schnell wie y\nund überrundet y bald. Dann ist der Kreis gefunden.",
-                "Das illustriert das Bild rechts,\nwenn Sie auf Floyd drücken.",
-                "1980 stellte Brent einen Kreisfindungs-Algorithmus vor,\nder in jedem Schritt nur einmal rechnet, nämlich so:\n    Wenn i eine 2er-Potenz ist, setze y := x\u{E002}i\u{E003}.\n    Berechne  x\u{E002}i+1 \u{E003}:= f(x\u{E002}i\u{E003})  und\n    vergleiche den aktuellen Wert x\u{E002}i\u{E003} mit y.\nBrent-Illustration mit Zahlen",
-                "Das Bild verewigte Pollard im Namen r-Algorithmus.",
-            ]),
-            ZTPage(id: "5.3 - pollard rho Algo", title: "Der Rho-Algorithmus", tool: .pollardRho, blocks: [
-                "Die Laufzeit des Kreisfindungs-Algorithmus hängt vom Startwert x\u{E002}1\u{E003} ab. Deshalb probiert man\nbei Überschreiten eines Limits einen anderen Startwert. Beim Limit berücksichtigt man das Geburtstagsparadox und die Tatsache, dass n \u{E000}∉\u{E001} ℙ einen Teiler d ≤ \u{E000}Ön hat.\u{E001}",
-                "VAlgorithmus:    Erläuterungen:\nlimit := sqrt( sqrt(n) ) + 1000    # Geburtstagsparadox bei Teiler von n\nx := random(0, n–1)    # zufälliger Startwert x\ni := 1\nd := 1\nSolange d = 1, wiederhole  {    # Brents Kreisfindungs-Algorithmus\n    φ := i\n    y := x    # y merkt sich xj , wobei φ = 2er-Potenz\n    Solange i < 2·j, wiederhole  {\n        x := f(x) (mod n)    # Üblich ist f(x) = \u{E000}x\u{E001}2 + 1.\n        i := i + 1\n          Wenn x = y oder i > limit, dann Stopp    # neuen Startwert x probieren\n        d := ggT( x–y, n )    # suche einen Kreis mod d, nicht mod n.\n        Wenn d > 1, dann Ausgabe: d    # Teiler von n gefunden\nStartwert",
-                "Die Laufzeit hängt außerdem ab:\n·  von der Folgenfunktion f, die man ebenfalls ändern kann,\n    so lange sie ganzzahlige Werte behält\n·  vom Modul n, den man nicht ändern kann,\n    wenn man ihn gerade faktorisieren will\n∅x := f(x) (mod n)",
-                "Der Algorithmus findet den Kreis schneller, wenn man neben dem letzten das vorletzte x\u{E002}j\u{E003} aufhebt:  y und y1\nUnten rechnet man dann:\nd := ggT( (x–y)·(x–y1), n)\ny1 := y\ny := 0P",
-                "Um einen Kreis mod n zu finden, reicht der Test, ob x = y",
-            ]),
-            ZTPage(id: "5.3 - Pollard Rho demo", title: "Pollard Rho in Aktion", tool: .pollardRho, blocks: [
-                " ∈ ℕ\n⇔\u{E002}xi+\u{E003}1 := \u{E002}x\u{E003}\u{E000}i\u{E001}2 + 1 (mod n)",
-                "⇔sqrt( sqrt(n) ) + 1000  wird durch\n10⌊Stellenzahl(n) / 4⌋ + 1000 angenähert.",
-                "⊂j    \u{E002}x\u{E003}j      i    \u{E002}x\u{E003}i     Limit für i:",
-                "Es wurde kein nicht-trivialer Teiler gefunden.",
+            ZTPage(id: "5.2 - Quadrate erkennen", title: "Recognizing squares", tool: .fermatFactor, blocks: [
+                "Having calculated a\u{E000}2\u{E001}, the next squares are easily found, since the difference between the squares  grows steadily by 2. The first difference is (a+1)\u{E000}2\u{E001} – a\u{E000}2\u{E001} = 2·a + 1.",
+                "For deciding whether a\u{E000}2\u{E001} – n is square, one not necessarily needs to extract the root.\nSquares, for example, never end with 2, 3, 7 or 8.\nModulo 10 there are only the quadratic residues {0, 1, 4, 5, 6, 9}.",
+                "If a number x is a quadratic non-residue with any module, then x is no square.\nSo one first examines x with several modules, e.g. the odd primes < 20.  \nOnly if x is a quadratic residue with each of these modules, one must extract the root.\nAn examination mod 2 is useless, since each number is a quadratic residue mod 2.\nAn examination mod 16 is good, since only 4 numbers are quadratic residues mod 16.\n\nExample",
+                "The Fermat factorization is good, if the factors of n are close together.\nThe worst case of Fermat's method is exactly the best case of the trial divison and vice versa.\nSo it's a good idea to combine both methods.",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "5.4", title: "Pollards p–1-Faktorisierung", pages: [
-            ZTPage(id: "5.4 - 01", title: "Die Idee von Pollards p–1", tool: .pollardPm1, blocks: [
-                "Pollard fand auch eine Faktorisierungs-Methode, die den \"kleinen Fermat\" einspannt.\nEine Zahl n habe den Primteiler p. Sei a teilerfremd zu n – und damit zu p – zufällig gewählt.\n⇒      a\u{E000}p–1\u{E001} ≡ 1 mod p    \"kleiner Fermat\"\n⇒      p | a\u{E000}p–1\u{E001}–1",
-                "⇒      ggT( a\u{E000}p–1\u{E001}–1, n ) > 1\nFalls     ggT( a\u{E000}p–1\u{E001}–1, n ) < n,  hätte man einen nicht-trivialen Teiler von n gefunden – doch leider\nkennt man den Exponenten p–1 nicht, wenn man p nicht kennt.",
-                "Idee:    Nimm als Exponenten ein Vielfaches von p–1.\n1. Wegen  a\u{E000}(p–1)·z\u{E001} = (a\u{E000}p–1\u{E001})\u{E000}z\u{E001} ≡ 1 mod p  geht obiger Trick auch mit (p–1)·z für alle z ∈ ℤ.\n2. Wähle zum Exponenten ein Produkt k aus vielen Primzahlen – und hoffe, dass p–1 | k.",
-                "Sei     p | a\u{E000}p–1\u{E001}–1  und glücklicher Weise  p–1 | k.\n⇒    p | a\u{E000}k\u{E001}–1    Man berechnet a\u{E000}k\u{E001} (mod n) mit \"square & multiply\".\n⇒    p | a\u{E000}k\u{E001} (mod n) – 1    Denn die Reduktion mod n zieht Vielfache von p ab, weil p | n.\nFalls    ggT(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) < n,  ist man erfolgreich fertig.",
+        chapters.append(ZTChapter(number: "5.3", title: "Pollard's Rho Factorization", pages: [
+            ZTPage(id: "5.3 - 01", title: "The birthday paradox", tool: .birthday, blocks: [
+                "How many persons are needed at a party before you should bet that there are duplicate birthdays?",
+                "when it is more likely to win than to loose",
+                "The days of the year are\ncounted from 1 to 365,\nthus 32 is February 1.\nFebruary 29 is ignored.",
+                "The right column says how many persons have their birthdays on the day left.",
+                "Birthday Paradox:\n    On Earth only 23 persons are needed.     Proof\n    In general:\n    If the year has n days, little more than √n persons are needed.",
+                "birthday     persons\n{> 365    each betting wins\n(For simplification each year has 365 days.)\n   k    bettings     won bettings",
             ]),
-            ZTPage(id: "5.4 - faktbas", title: "Faktorbasis und B-Glattheit", tool: .pollardPm1, blocks: [
-                "Sei     p | a\u{E000}p–1\u{E001}–1  und  p–1 | k.\n⇒    p | a\u{E000}k\u{E001}–1    Man berechnet a\u{E000}k\u{E001} (mod n) mit \"square & multiply\".\n⇒    p | a\u{E000}k\u{E001} (mod n) – 1    Denn die Reduktion mod n zieht Vielfache von p ab.\nFalls    ggT(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) < n,  ist man erfolgreich fertig.",
-                "Sei     p | a\u{E000}p–1\u{E001}–1  und  p–1 | k.",
-                "Falls    ggT(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) < n,  ist man erfolgreich fertig.",
-                "Den Exponenten k baut man so:\nMan wählt eine Zahl B und berechnet k als Produkt aller Primzahlpotenzen ≤ B.\nBeispiel:    B = 10     ⇒       k = 2\u{E000}3\u{E001}·5·7 = 280",
-                "Sollte Fermat oder ein anderes Genie früherer Zeiten\nauf die Idee der p–1-Faktorisierung gekommen sein,\nso brach ihnen die Berechnung von a\u{E000}k\u{E001} das Genick.\nAuf der nächsten Seite sehen Sie Beispiele.\nAllerdings darf der Exponent auch nicht so groß sein, dass die Berechnung der Potenz länger dauert als die Probedivision bis zur Wurzel von n.",
-                "Dieser Begriff ist angelehnt an den Begriff B-glatt:\n    Wenn p–1 keine Primzahl > B als Teiler hat, heißt  p–1 B-glatt.\nB-Glätte macht keine Einschränkung beim Exponenten eines Primteilers.\nBeispiel:      2\u{E000}3\u{E001}·5·7 = 280 ist 7-glatt, aber nicht 7-satt.",
-                "Wenn  p–1 | k,  wenn also p–1 keine Primzahlpotenz > B als Teiler hat, dann heißt p–1 B-satt.\n\nDie p–1-Methode hofft auf einen Primteiler p von n, für den p–1 B-satt ist.\nDaher wünscht man sich B möglichst groß.",
-                "Ist aber B zu groß, dann gilt für alle Primteiler q von n, dass q–1 B-satt ist.\n⇒    q | a\u{E000}k\u{E001} (mod n) – 1    für alle Primteiler q von n\nHat nun n keinen Primteiler q mehrfach, dann gilt:\n    ggT(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) = n.   Man findet also keinen Teiler < n.",
-                "Der Fall ggT = n bedeutet allgemein: Die Ordnung von [a]\u{E002}n\u{E003} teilt k. Deutlich ist das bei a = 1.\nMan verkleinert dann also B oder ändert a. Es gibt aber Zahlen n, bei denen nichts hilft:  Beispiel",
+            ZTPage(id: "5.3 - pollard rho", title: "The idea of Pollard's Rho", tool: .rhoSequence, blocks: [
+                "the greek letter Rho",
+                "Pollard's ρ-factorization starts a pseudo-random sequence of values:\n    x\u{E002}1\u{E003} := random(0, n–1)\n    x\u{E002}i+1\u{E003} := f(x\u{E002}i\u{E003}) (mod n)\nx\u{E002}1\u{E003} ∈ ℤ is the initial value, f is a polynomial with coefficients ∈ ℤ, like x\u{E000}2\u{E001} + 1.",
+                "Let d be a non-trivial divisor of n.\nThen it is likely that there exist x\u{E002}i\u{E003} and x\u{E002}j\u{E003} such that:\n    x\u{E002}i\u{E003} ≡ x\u{E002}j\u{E003} mod d\n    x\u{E002}i\u{E003} ≠ x\u{E002}j\u{E003} mod n",
+                "After the birthday paradox this case occurs after little more than √d sequence members.\nThen holds:     d divides x\u{E002}i\u{E003} – x\u{E002}j\u{E003} ,  but n doesn't divide x\u{E002}i\u{E003} – x\u{E002}j\u{E003} .\n    Thus  GCD(x\u{E002}i\u{E003} – x\u{E002}j\u{E003}, n)  yields a non-trivial divisor of n.",
+                "The question is, how to find the correct x\u{E002}i\u{E003} and x\u{E002}j\u{E003} quickly.\nIf GCD(x\u{E002}i\u{E003} – x\u{E002}j\u{E003}, n) had to be calculated for all combinations of sequence members x\u{E002}i\u{E003} and x\u{E002}j\u{E003} ,\nthe algorithm would be worse than trial division.",
             ]),
-            ZTPage(id: "5.4 - p-1 demo", title: "Pollard p–1 in Aktion", tool: .pollardPm1, blocks: [
-                "Das ist schon ein echter Teiler von n. Glück gehabt!",
-                "    ⇒  a ist teilerfremd zu allen Teilern von n.\n    Sei p ein Primteiler von n, und gelte glücklicher Weise p–1 | k.\n      ⇒  a\u{E000}k\u{E001} ≡ 1 mod p,      denn a\u{E000}p–1\u{E001} ≡ 1 mod p (\"kleiner Fermat\")\n      ⇒  p | a\u{E000}k\u{E001}–1\n      ⇒  p | a\u{E000}k\u{E001} (mod n) –1,    denn die Reduktion zieht Vielfache von p ab.\n      ⇒  ggT( a\u{E000}k\u{E001} (mod n) –1, n ) > 1\na\u{E000}k\u{E001} (mod n)",
+            ZTPage(id: "5.3 - Kreise", title: "Sequences run in cycles", tool: .rhoSequence, blocks: [
+                "Due to  x\u{E002}i+1\u{E003} := f(x\u{E002}i\u{E003}) (mod n)  the sequence runs cyclically after n members at latest.\nNow let d be a non-trivial divisor of n.\nIf for two sequence members holds x\u{E002}i\u{E003} ≡ x\u{E002}j\u{E003} mod d,  then due to  x\u{E002}i+1\u{E003} := f(x\u{E002}i\u{E003}) (mod n)\n    also holds x\u{E002}i+k\u{E003} ≡ x\u{E002}j+k\u{E003} mod d  for all k ∈ ℕ.\nThe reduction mod n subtracts multiples of d, so it preserves the congruence mod d.\nHence the sequence also forms a cycle mod d – which can be smaller than the cycle mod n.",
+                "Example:  n = 15,   f(x) = x\u{E000}2\u{E001} + 1,  random initial value x\u{E002}1\u{E003} = 3.\ni        1    2    3    4    5    6    7    8    9\nx\u{E002}i\u{E003} mod 15    3    10    11    2    5    11    2    5    ...",
+                "The values of the cycle, that return, form the period.\nThe values at the beginning, that do not return, form the preperiod.",
+                "One looks for members of the sequence such that x\u{E002}i\u{E003} ≡ x\u{E002}j\u{E003} mod d.\nSince the sequence runs cyclically, a cycle finding algorithm is helpful.",
             ]),
-            ZTPage(id: "5.4 - ECM", title: "Elliptische Kurven (ECM)", tool: .factorize, blocks: [
-                "Betrachten Sie a\u{E000}k\u{E001} in der Zerlegung Z\u{E002}n\u{E003} @ Z\u{E002}p\u{E003}× Z\u{E002}q\u{E003}× ... .\nggT( a\u{E000}k\u{E001}–1, n) liefert ein Vielfaches von p,\nwenn a\u{E000}k\u{E001}–1 = (0, ...)\nalso   a\u{E000}k\u{E001}     = (1, ...)\nMan hofft, durch Potenzieren mit k das neutrale Element 1 der Gruppe Z\u{E002}p\u{E003}* zu erreichen.\nDas gelingt, wenn man mit k glücklicherweise ein Vielfaches der Gruppen-Ordnung p–1 trifft.\nNun gibt es neben den Restklassengruppen auch Gruppen zu p mit anderer Ordnung als p–1.\nSie bieten k neue Treffer-Chancen.\nDarauf beruht die Faktorisierung mit der elliptischen-Kurven-Methode (ECM).\nBeschreibungen sind im Literaturverzeichnis unter [Elliptische Kurven] genannt.",
-                "Sie benutzt als Exponenten die globale Variable pollardk,\ndie man durch die Funktion faktbas(b) aus der Datei prims.txt berechnen lässt.\nDa BC nicht besonders schnell ist, erzeugt schon faktbas(10000) einen Exponenten,\nbei dem die Berechnung spürbar Zeit in Anspruch nimmt. Er hat 4349 Dezimalstellen.",
+            ZTPage(id: "5.3 - Floyd, Brent", title: "Floyd and Brent", tool: .rhoSequence, blocks: [
+                "When Pollard introduced his ρ-algorithm in 1975, he used\nFloyd's cycle finding algorithm:\nFloyd starts two variables  x and y at the same value\nand computes in each step:\n     x\u{E002}i+1 \u{E003}:= f(x\u{E002}i\u{E003}),    x\u{E002}i+2 \u{E003}:= f(x\u{E002}i+1\u{E003})\n    y\u{E002}j+1 \u{E003}:= f(y\u{E002}j\u{E003})\nThus x runs through the sequence twice as fast as y\nand soon overtakes y. Then the cycle is found.",
+                "In 1980 Brent introduced a cycle finding algorithm,\nthat in each step performs only one calculation:\n    If i is a power of 2, set y := x\u{E002}i\u{E003}.\n    Compute  x\u{E002}i+1 \u{E003}:= f(x\u{E002}i\u{E003})  and\n    compare the new value x\u{E002}i\u{E003} with y.\nBrent illustration with numbers",
+                "Pollard eternalized the picture in the name ρ-algorithm.",
+            ]),
+            ZTPage(id: "5.3 - pollard rho Algo", title: "The Rho algorithm", tool: .pollardRho, blocks: [
+                "The runtime of the cycle finding algorithm depends on the initial value x\u{E002}1\u{E003}. Hence, when having reached a certain limit, one tries another initial value. The limit is based on the birthday paradox and the fact that n ∉ ℙ has a divisor d ≤ √n .",
+                "Algorithm:    Comments:\nlimit := sqrt( sqrt(n) ) + 1000    # birthday paradox for divisor of n\nx := random(0, n–1)    # random initial value x\ni := 1\nd := 1\nwhile d = 1, repeat  {    # Brent's cycle findung algorithm\n    j := i\n    y := x    # y stores x\u{E002}j \u{E003}, when j = power of 2\n    while i < 2·j, repeat  {\n        x := f(x) (mod n)    # usually f(x) = x\u{E000}2\u{E001} + 1.\n        i := i + 1\n          if x = y or i > limit, then stop    # try new initial value x\n        d := GCD( x–y, n )    # want a cycle mod d, not mod n.\n        if d > 1, then output: d    # divisor of n found\ninitial value",
+                "The runtime also depends on:\n·  the sequence function f, which can be changed as well,\n    as long as it provides integer values\n·  the module n, which cannot be changed,\n    as it is just being factorized\nx := f(x) (mod n)",
+                "The algorithm finds the cycle faster, if next to the latest the latest but one x\u{E002}j\u{E003} is stored:  y and y1\nBelow one has to calculate:\nd := GCD( (x–y)·(x–y1), n)\ny1 := y",
+                "For finding a cycle mod n\nsimply test whether x = y.",
+            ]),
+            ZTPage(id: "5.3 - Pollard Rho demo", title: "Pollard's Rho in action", tool: .pollardRho, blocks: [
+                "x\u{E002}i+1\u{E003} := x\u{E002}i\u{E003}\u{E000}2\u{E001} + 1 (mod n)",
+                "sqrt( sqrt(n) ) + 1000  is approximized\nby 10⌊digitcount(n) / 4⌋ + 1000",
+                "j    x\u{E002}j\u{E003}      i    x\u{E002}i\u{E003}     Limit for i:",
+                "No non-trivial divisor has been found.",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "5.5", title: "Das Quadratische Sieb", pages: [
-            ZTPage(id: "5.5 - 01", title: "Das Quadratische Sieb", tool: .factorize, blocks: [
-                "/Beschreibung fast wörtlich aus [Buchmann]:\n\nEines der effizientesten Faktorisierungsverfahren ist das Quadratische Sieb.\nDas Prinzip:\nEs werden ganze Zahlen x und y bestimmt, für die gilt:\n   x2 ≡ y2 mod n  und\n   x  ≠ ±y  mod n\nDann ist n ein Teiler von x2 – y2 = (x – y)·(x + y), aber weder von x – y noch von x + y.\nAlso ist ggT(x – y, n) ein echter Teiler von n.\nBestimmung von x und y:\nDas beschriebene Prinzip wird auch in anderen Faktorisierungsalgorithmen angewendet, z.B. im Zahlkörpersieb. Die Verfahren unterscheiden sich darin, wie x und y berechnet werden.\nBeim Quadratischen Sieb geht es so:\n\nSei  m = ⌊√n⌋  und  f(X) = (X + m)2 – n.\nBeispiel:  n = 7429.  Also ist  m = 86,   f(X) = (X + 86)2 – 7429. Es gilt\n  f(–3)  =  832 – 7429  =  –540  =  –1·22·33·5\n  f(1)    =  872 – 7429  =    140  =       22·5·7\n  f(2)    =  882 – 7429  =    315  =       32·5·7\nHieraus folgt\n  832  ≡  –1·22·33·5 mod 7429\n  872  ≡       22·5·7 mod 7429\n  882  ≡       32·5·7 mod 7429\nMultipliziert man die letzten beiden Kongruenzen, so erhält man\n  (87·88)2 ≡ (2·3·5·7)2 mod n\nAlso setzt man\n  x = 227 ≡ 87·88 mod n\n  y = 210 ≡ 2·3·5·7 mod n\n\nIn diesem Beispiel werden Zahlen s angegeben, für die f(s) nur kleine Primfaktoren hat. Wie man solche Zahlen findet, wird weiter unten erklärt. Es wird ausgenutzt, dass\n  (s + m)2 ≡ f(s) mod n \nist, und es werden Kongruenzen dieser Form ausgewählt, deren Produkt auf der linken und rechten Seite ein Quadrat ergibt. Auf der linken Seite einer Kongruenz steht ohnehin ein Quadrat. Das Produkt beliebiger linker Seiten ist also immer ein Quadrat. Auf der rechten Seite ist die Primfaktorzerlegung bekannt. Man erhält also ein Quadrat, wenn die Exponenten aller Primfaktoren und der Exponent von –1 gerade sind.\n\nAuswahl geeigneter Kongruenzen:\nIm obigen Beispiel kann man direkt sehen, welche Kongruenzen multipliziert werden müssen, damit das Produkt der rechten Seiten der Kongruenzen ein Quadrat ergibt. Bei großen Zahlen n muss man die geeigneten Kongruenzen aus mehr als 100000 möglichen Kongruenzen auswählen. Dazu wendet man lineare Algebra an.\nAus den Kongruenzen des vorigen Beispiels werden die geeigneten durch Lösung eines linearen Gleichungssystems ausgewählt. Drei Kongruenzen stehen zur Wahl. Daraus sollen die Kongruenzen so ausgewählt werden, dass das Produkt der rechten Seiten ein Quadrat ergibt. Man sucht also Zahlen u, v, w ∈ {0, 1}, für die\n   (–1·22·33·5)u · (22·5·7)v · (32·5·7)w\n   (–1)u · 22·u+2·v · 33·u+2·w · 5u+v+w · 7v+w\nein Quadrat ist. Diese Zahl ist genau dann ein Quadrat, wenn der Exponent von –1 und die Exponenten aller Primzahlen gerade sind. Man erhält das folgende Kongruenzsystem:\n           u ≡ 0 mod 2\n  2·u+2·v ≡ 0 mod 2\n 3·u+2·w ≡ 0 mod 2\n   u+v+w ≡ 0 mod 2\n       v+w ≡ 0 mod 2\nDie Koeffizienten der Unbekannten u, v, w kann man modulo 2 reduzieren. Man erhält dann das vereinfachte System\n           u ≡ 0 mod 2\n   u+v+w ≡ 0 mod 2\n       v+w ≡ 0 mod 2.\nDaraus erhält man die Lösung\n   u = 0,  v = w = 1.\n\nallgemein:\nMan wählt eine natürliche Zahl B. Gesucht werden kleine ganze Zahlen s, für die f(s) nur Primfaktoren in der Faktorbasis  F(B) = {p ∈ ℙ: p ≤ B} ∪ {–1}  hat.\nSolche Werte f(s) heißen B-glatt. Hat man so viele Zahlen gefunden, wie die Faktorbasis Elemente hat, so stellt man das entsprechende lineare Kongruenzsystem auf und löst es.\nDa das Kongruenzsystem ein lineares Gleichungssystem über dem Körper Z2 ist, kann man zu seiner Lösung den Gauß-Algorithmus verwenden. Da aber die Anzahl der Gleichungen und Variablen im allgemeinen sehr groß ist, verwendet man statt dessen spezialisierte Verfahren, auf die hier nicht näher eingegangen wird. (Buchmann erwähnt an anderer Stelle einen Algorithmus von Wiedemann für dünn besetzte Gleichungssysteme).\n\nDas Sieb:\nEs bleibt noch zu klären, wie die Zahlen s gefunden werden, für die f(s) B-glatt ist. Man könnte für s = 0, ±1, ±2, ... den Wert f(s) berechnen und dann durch Probedivision testen, ob f(s) B-glatt ist. Das ist aber sehr aufwendig. Um herauszufinden, dass f(s) nicht B-glatt ist, muss man nämlich durch alle Primzahlen p ≤ B dividieren. In der Regel sind die Faktorbasen sehr groß, daher kann die Probedivision sehr lange dauern. Schneller geht ein Siebverfahren.\nMan fixiert ein Siebintervall S = {–C, –C+1, ...,–1, 0, 1, ..., C–1, C}.\nGesucht werden alle s∈S, für die f(s) B-glatt ist. Man berechnet zuerst alle Werte f(s), s∈S.\nFür jede Primzahl p der Faktorbasis dividiert man alle Werte f(s) durch die höchstmögliche p-Potenz. Die B-glatten Werte f(s) sind genau diejenigen, bei denen eine 1 oder –1 übrig bleibt.\n\nUm herauszufinden, welche Werte f(s) = (s + m)2 – n durch eine Primzahl p der Faktorbasis teilbar sind, bestimmt man zuerst die Zahlen s∈{0, 1, ..., p–1}, für die f(s) durch p teilbar ist. Da das Polynom f(X) höchstens zwei Nullstellen modulo p hat, sind das entweder zwei, eine oder keine Zahl s. Für kleine Primzahlen kann man die Nullstellen durch Ausprobieren finden.\nIst p groß, muss man andere Methoden anwenden (siehe unten [4]). Geht man von diesen\nNullstellen in Schritten der Länge p nach rechts und links durch das Siebintervall, so findet man alle s-Werte, für die f(s) durch p teilbar ist. Diesen Vorgang nennt man Sieb mit p. Man dividiert dabei nur die teilbaren Werte f(s). Es gibt keine erfolglosen Probedivisionen mehr.\n\nBeispiel:\nwie oben  n = 7429,  m = 86,   f(X) = (X + 86)2 – 7429.\nAls Faktorbasis wähle die Menge {2, 3, 5, 7} ∪ {–1}\nund als Siebintervall die Menge {–3, –2, ..., 3}.  Das Sieb sieht dann so aus:\n\ns       –3        –2        –1       0       1       2       3\n(s + m)2 – n    –540    –373    –204    –33    140    315    492\nSieb mit 2    –135          –51          35        123\nSieb mit 3       –5          –17    –11          35      41\nSieb mit 5       –1                   7       7\nSieb mit 7                       1       1\n\n\nDas Sieb kann noch sehr viel effizienter gestaltet werden. Siehe [28].\n\nLiteratur:\n[4]     E. Bach and J. Shallit. Algorithmic number theory. MIT Press, Cambridge, Massachusetts     and London, England, 1996.\n[28]    H. Riesel. Prime numbers and computer methods for factorization. Birkhäuser, 1994.",
-                "Ende des Kapitels",
+        chapters.append(ZTChapter(number: "5.4", title: "Pollard's p–1 Factorization", pages: [
+            ZTPage(id: "5.4 - 01", title: "The idea of Pollard's p–1", tool: .pollardPm1, blocks: [
+                "Pollard also found a factorization method that exploits \"Little Fermat\".\nLet n have the prime divisor p. Let a be randomly chosen and coprime to n – and thus to p.\n⇒      a\u{E000}p–1\u{E001} ≡ 1 mod p    \"Little Fermat\"\n⇒      p | a\u{E000}p–1\u{E001}–1",
+                "⇒      GCD( a\u{E000}p–1\u{E001}–1, n ) > 1\nIf     GCD( a\u{E000}p–1\u{E001}–1, n ) < n,  one has found a non-trivial divisor of n – but unfortunately the exponent p–1 is unknown, if p is unknown.",
+                "Idea:    Choose a multiple of p–1 as exponent.\n1. Due to  a\u{E000}(p–1)·z\u{E001} = (a\u{E000}p–1\u{E001})\u{E000}z\u{E001} ≡ 1 mod p  the above trick also works with (p–1)·z for all z ∈ ℤ.\n2. Choose as exponent a product k of many primes – and hope that p–1 | k.",
+                "Let     p | a\u{E000}p–1\u{E001}–1  and luckily  p–1 | k.\n⇒    p | a\u{E000}k\u{E001}–1    One computes a\u{E000}k\u{E001} (mod n) by \"square & multiply\".\n⇒    p | a\u{E000}k\u{E001} (mod n) – 1    Because the reduction mod n subtracts multiples of p, as p | n.\nIf    GCD(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) < n,  we are successful.",
+            ]),
+            ZTPage(id: "5.4 - faktbas", title: "Factor base and B-smoothness", tool: .pollardPm1, blocks: [
+                "Let     p | a\u{E000}p–1\u{E001}–1  and  p–1 | k.\n⇒    p | a\u{E000}k\u{E001}–1    Calculate a\u{E000}k\u{E001} (mod n) by \"square & multiply\".\n⇒    p | a\u{E000}k\u{E001} (mod n) – 1    because the reduction mod n subtracts multiples of p.\nIf    GCD(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) < n,  stop successfully.",
+                "Let     p | a\u{E000}p–1\u{E001}–1  and  p–1 | k.",
+                "If    GCD(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) < n,  we are successful.",
+                "The exponent k is built this way:\nChoose a number B and compute k as the product of all prime powers ≤ B.\nExample:    B = 10     ⇒       k = 2\u{E000}3\u{E001}·5·7 = 280",
+                "This concept is borrowed from the concept B-smooth:\n    If p–1 has no prime > B as divisor, p–1 is called B-smooth.\nB-smoothness makes no restriction for the exponent of a prime divisor.\nExample:      2\u{E000}3\u{E001}·5·7 = 280 is 7-smooth, but not 7-fed.",
+                "If  p–1 | k,  in other words: if p–1 has no prime power > B as divisor, then p–1 is called B-fed.\n\nThe p–1 method hopes there is a prime divisor p of n such that p–1 is B-fed.\nTherefore one wants to make B as big as possible.",
+                "But if B is too big, then for all prime divisors q of n holds that q–1 is B-fed.\n⇒    q | a\u{E000}k\u{E001} (mod n) – 1    for all prime divisors q of n\nIf in this situation n has no prime divisor q twice, then holds:\n    GCD(  a\u{E000}k\u{E001} (mod n) – 1,  n  ) = n.   So one finds no divisor < n.",
+                "The case GCD = n means in general: The order of [a]\u{E002}n\u{E003} divides k. This is obvious for a = 1.\nThus one decreases B or changes a. But there are numbers n that are helpless:  Example",
+            ]),
+            ZTPage(id: "5.4 - p-1 demo", title: "Pollard's p–1 in action", tool: .pollardPm1, blocks: [
+                "This is already a true divisor of n. That was good luck!",
+                "    ⇒  a is coprime to all divisors of n.\n    Let p be a prime divisor of n, and luckily be p–1 | k.\n      ⇒  a\u{E000}k\u{E001} ≡ 1 mod p,      since a\u{E000}p–1\u{E001} ≡ 1 mod p (\"Little Fermat\")\n      ⇒  p | a\u{E000}k\u{E001}–1\n      ⇒  p | a\u{E000}k\u{E001} (mod n) –1,    since the reduction subtracts multiples of p.\n      ⇒  GCD( a\u{E000}k\u{E001} (mod n) –1, n ) > 1\na\u{E000}k\u{E001} (mod n)",
+            ]),
+            ZTPage(id: "5.4 - ECM", title: "Elliptic curves (ECM)", tool: .factorize, blocks: [
+                "Consider a\u{E000}k\u{E001} in the decomposition ℤ\u{E002}n\u{E003} @ ℤ\u{E002}p\u{E003}× ℤ\u{E002}q\u{E003}× ... .\nGCD( a\u{E000}k\u{E001}–1, n) provides a multiple of p,\nif        a\u{E000}k\u{E001}–1 = (0, ...)\nthus    a\u{E000}k\u{E001}     = (1, ...)\nBy exponentiation with exponent k one hopes to reach the neutral element 1 of the group ℤ\u{E002}p\u{E003}*.\nThis succeeds, if luckily k is a multiple of the group order p–1.\nBesides groups of residue classes there are groups related to p with orders different from p–1.\nThey provide new chances for k.\nThis is exploited for factorization by the elliptic curve method (ECM).\nDescriptions are listed in the literature glossary after [elliptic curves].",
+                "Its exponent is the global variable pollardk,\nwhich can be computed by function faktbas(b) from file prims.txt.\nSince BC is not very fast, even faktbas(10000) generates an exponent,\nwhere calculations take considerable time. It consists of 4349 decimals.",
             ]),
         ]))
-        return ZTLesson(number: 5, title: "Faktorisierung", chapters: chapters)
+        chapters.append(ZTChapter(number: "5.5", title: "Quadratic Sieve Factorization", pages: [
+            ZTPage(id: "5.5 - 01", title: "The Quadratic Sieve", tool: .factorize, blocks: [
+                "Translation of a description from [Buchmann]:\n\nOne of the most efficient factorization methods is the Quadratic Sieve.\n\nThe principle:\nOne identifies integers x and y for which holds:\n   x\u{E000}2\u{E001} ≡ y\u{E000}2\u{E001} mod n  and\n   x  ≠ ±y  mod n\nThen n is a divisor of x\u{E000}2\u{E001} – y\u{E000}2\u{E001} = (x – y)·(x + y), but neither of x – y nor of x + y.\nThus GCD(x – y, n) is a non-trivial divisor of n.\n\nIdentification of x and y:\nThe above principle is also applied in other factorization algorithms, for instance in the\nnumber field sieve. The methods differ in how x and y are found.\nIn the quadratic sieve it works as follows:\n\nLet  m = ⌊√n⌋  and  f(X) = (X + m)\u{E000}2\u{E001} – n.\nExample:  n = 7429.  Thus is  m = 86,   f(X) = (X + 86)\u{E000}2\u{E001} – 7429. It holds\n  f(–3)  =  83\u{E000}2\u{E001} – 7429  =  –540  =  –1·2\u{E000}2\u{E001}·3\u{E000}3\u{E001}·5\n  f(1)    =  87\u{E000}2\u{E001} – 7429  =    140  =       2\u{E000}2\u{E001}·5·7\n  f(2)    =  88\u{E000}2\u{E001} – 7429  =    315  =       3\u{E000}2\u{E001}·5·7\nFrom this follows\n  83\u{E000}2\u{E001}  ≡  –1·2\u{E000}2\u{E001}·3\u{E000}3\u{E001}·5 mod 7429\n  87\u{E000}2\u{E001}  ≡       2\u{E000}2\u{E001}·5·7 mod 7429\n  88\u{E000}2\u{E001}  ≡       3\u{E000}2\u{E001}·5·7 mod 7429\nBy multiplying the last two congruences one gets\n  (87·88)\u{E000}2\u{E001} ≡ (2·3·5·7)\u{E000}2\u{E001} mod n\nThus one sets\n  x = 227 ≡ 87·88 mod n\n  y = 210 ≡ 2·3·5·7 mod n\n\nThis example yields numbers s where f(s) has only small prime factors. How to find such numbers will be explained below. One utilizes that \n  (s + m)\u{E000}2\u{E001} ≡ f(s) mod n\nand selects congruences of this shape whose products on the left and right side are squares. The left side of a congruence always is square. Thus the product of any left sides is square. On the right sides the prime decompositions are known; thus one gets a square, when the exponents of all prime factors and the exponent of –1 are even.\n\nSelection of suitable congruences:\nIn the above example one can see directly which congruences must be multiplied so that the product of the right sides yield a square. For big numbers n one must select suitable congruences from more than 100000 possible congruences. Here one applies linear algebra.\n\nExample:\n   (–1·2\u{E000}2\u{E001}·3\u{E000}3\u{E001}·5)\u{E000}u\u{E001} · (2\u{E000}2\u{E001}·5·7)\u{E000}v\u{E001} · (3\u{E000}2\u{E001}·5·7)\u{E000}w\u{E001}\n   (–1)\u{E000}u\u{E001} · 2\u{E000}2·u+2·v\u{E001} · 3\u{E000}3·u+2·w\u{E001} · 5\u{E000}u+v+w\u{E001} · 7\u{E000}v+w\u{E001}\nis square. This number is square, if the exponent of –1 and the exponents of all primes are even. One gets the following system of congruences:\n           u ≡ 0 mod 2\n  2·u+2·v ≡ 0 mod 2\n 3·u+2·w ≡ 0 mod 2\n   u+v+w ≡ 0 mod 2\n       v+w ≡ 0 mod 2\nThe coefficients of the unknown u, v, w can be reduced modulo 2. One gets the simpler system\n           u ≡ 0 mod 2\n   u+v+w ≡ 0 mod 2\n       v+w ≡ 0 mod 2.\nFrom this one gets the solution\n   u = 0,  v = w = 1.\n\nIn general:\nOne chooses a natural number B. One looks for small integers s for which f(s) only has small prime factors in the factorbase  F(B) = {p ∈ ℙ: p ≤ B} ∪ {–1}.\nSuch values f(s) are called B-smooth. When one has found as many numbers as the factorbase has elements, one builds the corresponding linear system of congruences and solves it.\nSince the system of congruences is a linear system of equations over the field ℤ\u{E002}2\u{E003} , one can solve it with the Gauss algorithm. But since the number of equations and variables in general is very big, one prefers special methods, which won't be further explained here. (Buchmann somewhere else mentions an algorithm by Wiedemann for thinnly filled systems of equations).\n\nThe sieve:\nStill to be explained is, how to find numbers s for which f(s) is B-smooth. One could compute f(s) for s = 0, ±1, ±2, ... and then test by trial division whether f(s) is B-smooth. But this is very laborious. For checking that f(s) is not B-smooth, one must divide f(s) by all primes p ≤ B. In general factorbases are very big, thus trial division can take very long. Faster is a sieve method.\nOne looks for all s∈S for which f(s) is B-smooth. One first calculates all values f(s), s∈S.\nFor each prime p from the factorbase one divides all values f(s) by the highest possible p-power. The B-smooth values f(s) are exactly the ones where remains 1 or –1.\n\nFor deciding which values f(s) = (s + m)\u{E000}2\u{E001} – n are divisible by a prime p from the factorbase, one first identifies the numbers s∈{0, 1, ..., p–1} for which f(s) is divisible by p. Since the polynomial f(X) has at most two roots modulo p, there are either two, one or no numbers s.\nFor small primes one can find the roots by trial and error.\nIf p is big, one must apply different methods (see below [4]). By wandering from these roots  through the sieve interval rightwards and leftwards in steps of length p, one finds all s-values for which f(s) is divisible by p. This procedure is called sieve with p. One divides only divisible values f(s). There are no unsuccessful trial divisions any more.\n\nExample:\nLike above  n = 7429,  m = 86,   f(X) = (X + 86)\u{E000}2\u{E001} – 7429.\nAs factorbase take the set {2, 3, 5, 7} ∪ {–1},\nas sieve interval the set {–3, –2, ..., 3}.  Then the sieve looks like this:\n\n s       –3        –2        –1       0       1       2       3\n(s + m)\u{E000}2\u{E001} – n    –540    –373    –204    –33    140    315    492\nsieve with 2    –135          –51          35        123\nsieve with 3       –5          –17    –11          35      41\nsieve with 5       –1                   7       7\nsieve with 7                       1       1\n\n\nThe sieve can be made much more efficient. See [28].\n\nLiterature:\n[4]     E. Bach and J. Shallit. Algorithmic number theory. MIT Press, Cambridge, Massachusetts     and London, England, 1996.\n[28]    H. Riesel. Prime numbers and computer methods for factorization. Birkhäuser, 1994.",
+                "end of this lesson",
+            ]),
+        ]))
+        return ZTLesson(number: 5, title: "Factorization", chapters: chapters)
     }
     static func lesson6() -> ZTLesson {
         var chapters: [ZTChapter] = []
-        chapters.append(ZTChapter(number: "6.1", title: "Exponenten finden", pages: [
-            ZTPage(id: "6.1 - 01", title: "Diskrete Logarithmen", tool: .dlogEnum, blocks: [
-                "Gegeben sei eine endliche zyklische Gruppe G, ein Erzeuger g von G und ein Element a.\nDie kleinste nicht negative Zahl x mit g\u{E000}x\u{E001} = a heißt diskreter Logarithmus von a zur Basis g.",
-                "· eine Primzahl, z.B. 2, oder\n· eine Potenz einer ungeraden Primzahl, z.B. 9, oder\n· das Doppelte davon, z.B. 4 oder 18.\n(Z/m)* ist zyklisch  ⇔  m ist",
-                "Der diskrete Logarithmus ist in der Regel sehr unregelmäßig und schwer zu bestimmen.\n\nBeim Aufzählungs-Verfahren – vornehm: Enumeration – setzt man für x der Reihe nach\nalle Gruppenelemente ein und testet, ob g\u{E000}x\u{E001} = a ist. Das kann allerdings sehr lange dauern.",
+        chapters.append(ZTChapter(number: "6.1", title: "Finding Exponents", pages: [
+            ZTPage(id: "6.1 - 01", title: "Discrete logarithms", tool: .dlogEnum, blocks: [
+                "Let G be a finite cyclic group, g be a generator of G and a an element of G.\nThe smallest not negative number x with g\u{E000}x\u{E001} = a is called discrete logarithm of a to base g.",
+                "· a prime, e.g. 2, or\n· a power of an odd prime, e.g. 9, or\n· twice of the above, e.g. 4 or 18.\n(ℤ/m)* is cyclic  ⇔  m is",
+                "The discrete logarithm in general is very irregular and hard to find.\n\nThe simplest method is the enumeration: Sequencially replace x with all group elements a and test whether g\u{E000}x\u{E001} = a is true. But this can take a very long time.",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "6.2", title: "Shanks Babystep-Giantstep-Methode", pages: [
-            ZTPage(id: "6.2 - 01", title: "Die Babystep-Giantstep-Idee", tool: .bsgs, blocks: [
-                "Dieser Algorithmus löst g\u{E000}x\u{E001} = a schneller als die Enumeration, braucht aber mehr Speicherplatz:\n          Löse die untere Gleichung, grob gesagt, so:\n          Sammle alle rechten Seite, vergleiche damit die linken Seiten, bis es passt.\nSetze  w = ⌈√n ⌉ , wobei n die Gruppen-Ordnung ist.\nIdee:   g\u{E000}x\u{E001} = g\u{E000}q·w+r\u{E001} = a             (mit q, r ∈ ℕ\u{E002}0\u{E003} und  0 ≤ r < w)\n          ⇔   g\u{E000}q·w\u{E001} = a·g\u{E000}–r \u{E001}",
-                "Die gesammelten rechten Seiten bilden die Babysteps B = { (a·g\u{E000}–r\u{E001}, r) | 0 ≤ r < w }.\nEnthält B ein Paar (1, r), so ist man mit  q = 0  und  x = r  sofort fertig.",
-                "Giantsteps: Prüfe für q = 1, 2, 3, ..., ob B ein Paar (g\u{E000}q·w\u{E001}, ...) enthält.\nDann ist die zweite Komponente des Paares das gesuchte r, und es gilt   g\u{E000}q·w\u{E001} = a·g\u{E000}–r\u{E001},\nund damit ist der diskrete Logarithmus   x = q·w + r   gefunden.\nZur Beschleunigung setzt man am Anfang d = g\u{E000}w\u{E001}  und berechnet in jedem Giantstep nur d\u{E000}q\u{E001}.",
-                "Um möglichst schnell prüfen zu können, ob B ein Paar (d\u{E000}q\u{E001}, ...) enthält,\nordnet man die Babysteps nach ihren ersten Komponenten in eine Hashtabelle ein.",
+        chapters.append(ZTChapter(number: "6.2", title: "Shanks's Babystep Giantstep Method", pages: [
+            ZTPage(id: "6.2 - 01", title: "The babystep giantstep idea", tool: .bsgs, blocks: [
+                "This algorithm solves g\u{E000}x\u{E001} = a faster than enumeration, but it needs more memory space:\n          Solve the lower equation, roughly spoken, this way:\n          Collect all right sides, compare them to the left sides, until they are equal.\nSet     w = ⌈√n ⌉ , where n is the group's order.\nIdea:   g\u{E000}x\u{E001} = g\u{E000}q·w+r\u{E001} = a             (with q, r ∈ ℕ\u{E002}0\u{E003} and  0 ≤ r < w)\n          ⇔   g\u{E000}q·w\u{E001} = a·g\u{E000}–r \u{E001}",
+                "The collected right sides form the babysteps B = { (a·g\u{E000}–r\u{E001}, r) | 0 ≤ r < w }.\nIf B contains a pair (1, r), it is clear at once that  q = 0  and  x = r.",
+                "Giantsteps: Try for q = 1, 2, 3, ... whether B contains a pair (g\u{E000}q·w\u{E001}, ...).\nIf so, the second component of the pair is the wanted r such that  g\u{E000}q·w\u{E001} = a·g\u{E000}–r\u{E001},\nand hence the discrete logarithm is  x = q·w + r .\nFor speeding-up one first sets d = g\u{E000}w\u{E001}  and in each giantstep only computes d\u{E000}q\u{E001}.",
+                "To enable fast checks whether B contains a pair (d\u{E000}q\u{E001}, ...),\none keeps the babysteps in a hash table, sorted by their first components.",
             ]),
-            ZTPage(id: "6.2 - Baby-Giant", title: "Babystep-Giantstep in Aktion", tool: .bsgs, blocks: [
-                "6.2 Shanks Babystep-Giantstep-Methode – Beispiele in Z\u{E002}m\u{E003}*",
-                "Babysteps (a·g\u{E000}–r\u{E001}, r),  0 ≤ r < w.           Hashtabelle",
-                "Sobald  g\u{E000}w·q\u{E001} = a·g\u{E000}–r\u{E001},  ist  a = g\u{E000}w·q+r\u{E001} = g\u{E000}x\u{E001}.",
-            ]),
-        ]))
-        chapters.append(ZTChapter(number: "6.3", title: "Pollards Rho-Algorithmus", pages: [
-            ZTPage(id: "6.3 - 01", title: "Pollards Rho für Logarithmen", tool: .dlogEnum, blocks: [
-                "Um g\u{E000}x\u{E001} = a in G mit Erzeuger g zu lösen, kann man auch Pollards Rho-Algorithmus benutzen.\nSein Vorteil: konstanter Speicherbedarf. Wie bei seiner Anwendung zur Faktorisierung\nberechnet man eine Pseudo-Zufalls-Folge und sucht darin nach einem Zyklus:",
-                "Dafür zerlegt man G in drei Teilmengen \u{E002}G\u{E003}1, \u{E002}G\u{E003}2, \u{E002}G\u{E003}3 und definiert f: G → G mit\n    g·b    falls b ∈ \u{E002}G\u{E003}1\n    f(b) =    \u{E000}b\u{E001}2    falls b ∈ \u{E002}G\u{E003}2\n    a·b    falls b ∈ \u{E002}G\u{E003}3\nMan wählt \u{E002}z\u{E003}1 ∈ {1, ..., |G|} zufällig, setzt    b1 = gz1     und macht weiter mit bi+1 = f(bi).",
-                "Dabei führt man Buch über die Anzahl der Faktoren g und a. Man setzt  y\u{E002}1\u{E003} = 0  und dann:\n    z\u{E002}i\u{E003} + 1    (mod |G|)    falls b\u{E002}i\u{E003} ∈ G\u{E002}1\u{E003}    y\u{E002}i\u{E003}         falls b\u{E002}i\u{E003} ∈ G\u{E002}1\u{E003}\n    z\u{E002}i+1\u{E003} =    2·z\u{E002}i\u{E003}     (mod |G|)    falls b\u{E002}i\u{E003} ∈ G\u{E002}2\u{E003}         y\u{E002}i+1\u{E003} =    2·y\u{E002}i\u{E003}     (mod |G|)    falls b\u{E002}i\u{E003} ∈ G\u{E002}2\u{E003}\n    z\u{E002}i\u{E003}         falls b\u{E002}i\u{E003} ∈ G\u{E002}3\u{E003}    y\u{E002}i\u{E003} + 1    (mod |G|)    falls b\u{E002}i\u{E003} ∈ G\u{E002}3\u{E003}    z zählt die Faktoren g,     y zählt die Faktoren a.\nFür die Folgenglieder gilt:       b\u{E002}i\u{E003} = g\u{E000}z\u{E001}i · a\u{E000}y\u{E001}i",
-            ]),
-            ZTPage(id: "6.3 - Pollard log", title: "Die Kongruenz lösen", tool: .dlogEnum, blocks: [
-                "Für die Folgenglieder b\u{E002}i\u{E003} ∈ G gilt:     b\u{E002}i\u{E003} = g\u{E000}z\u{E001}i · a\u{E000}y\u{E001}i\n\nGemäß Geburtstagsparadox wiederholen sich die Folgenglieder b\u{E002}i\u{E003} nach k ≈ √ |G| Schritten.",
-                "Dann gilt:    g\u{E000}z\u{E001}i · a\u{E000}y\u{E001}i  =  g\u{E000}z\u{E001}i+k · a\u{E000}y\u{E001}i+k\nund damit:    g\u{E000}z\u{E001}i \u{E000}– z\u{E001}i+k  =  a\u{E000}y\u{E001}i+k \u{E000}– y\u{E001}i\nFür den diskreten Logarithmus x von a zur Basis g  gilt also:     z\u{E002}i \u{E003}–z\u{E002}i+k\u{E003}  ≡  x·(y\u{E002}i+k\u{E003} – y\u{E002}i\u{E003})  mod |G|",
-                "Hat diese Kongruenz mehrere Lösungen, so findet man die richtige durch Ausprobieren.\nSind es zu viele, so wiederholt man die Berechnung mit einem neuen Startwert z\u{E002}1\u{E003}.\n\nBeispiele in primen Restklassengruppen:",
+            ZTPage(id: "6.2 - Baby-Giant", title: "Babystep giantstep in action", tool: .bsgs, blocks: [
+                "6.2 Shanks's Babystep-Giantstep-Method – Examples in ℤ\u{E002}m\u{E003}*",
+                "Babysteps (a·g\u{E000}–r\u{E001}, r),  0 ≤ r < w.             Hashtable",
+                "As soon as  g\u{E000}w·q\u{E001} = a·g\u{E000}–r\u{E001},  holds  a = g\u{E000}w·q+r\u{E001} = g\u{E000}x\u{E001}.",
             ]),
         ]))
-        chapters.append(ZTChapter(number: "6.4", title: "Weitere Verfahren", pages: [
-            ZTPage(id: "6.4 - 01", title: "Weitere Verfahren", tool: .dlogEnum, blocks: [
-                "Buchmann setzt die Beschreibung fort mit stärkeren Verfahren:\n\n·  Pohlig-Hellman-Algorithmus\n    Kennt man die Primfaktorzerlegung der Gruppen-Ordnung |G|,\n    so löst man g\u{E000}x\u{E001} = a in vielen kleinen Gruppen\n    und konstruiert daraus die Lösung in G.\n\n·  Index-Calculus-Methoden\n    Sie sind verwandt mit Quadratischem Sieb und Zahlkörpersieb bei der Faktorisierung.",
-                "Ende des Kapitels",
+        chapters.append(ZTChapter(number: "6.3", title: "Pollard's Rho Algorithm", pages: [
+            ZTPage(id: "6.3 - 01", title: "Pollard's Rho for logarithms", tool: .dlogEnum, blocks: [
+                "For solving g\u{E000}x\u{E001} = a in G with generator g, one can also use Pollard's Rho algorithm.\nIts advantage: constant need of memory. Like in its application for factorization,\none calculates a pseudo random sequence searching for a cycle:",
+                "Divide G into three subsets G\u{E002}1\u{E003}, G\u{E002}2\u{E003}, G\u{E002}3\u{E003} and define a function f: G → G with\n    g·b    if b ∈ G\u{E002}1\u{E003}\n    f(b) =    b\u{E000}2\u{E001}    if b ∈ G\u{E002}2\u{E003}\n    a·b    if b ∈ G\u{E002}3\u{E003}\nChoose a random z\u{E002}1\u{E003} ∈ {1, ..., |G|}, set    b\u{E002}1\u{E003} = g\u{E000}z\u{E001}1   and continue with  b\u{E002}i+1\u{E003} = f(b\u{E002}i\u{E003}).",
+                "Keep an account of the number of factors g and a. Set  y\u{E002}1\u{E003} = 0  and then:\n    z\u{E002}i\u{E003} + 1    (mod |G|)    if b\u{E002}i\u{E003} ∈ G\u{E002}1\u{E003}    y\u{E002}i\u{E003}         if b\u{E002}i\u{E003} ∈ G\u{E002}1\u{E003}\n    z\u{E002}i+1\u{E003} =    2·z\u{E002}i\u{E003}     (mod |G|)    if b\u{E002}i\u{E003} ∈ G\u{E002}2\u{E003}               y\u{E002}i+1\u{E003} =    2·y\u{E002}i\u{E003}     (mod |G|)    if b\u{E002}i\u{E003} ∈ G\u{E002}2\u{E003}\n    z\u{E002}i\u{E003}         if b\u{E002}i\u{E003} ∈ G\u{E002}3\u{E003}    y\u{E002}i\u{E003} + 1    (mod |G|)    if b\u{E002}i\u{E003} ∈ G\u{E002}3\u{E003}    z counts the factors g,     y counts the factors a.\nFor the members of the sequence holds:     b\u{E002}i\u{E003} = g\u{E000}z\u{E001}i · a\u{E000}y\u{E001}i",
+            ]),
+            ZTPage(id: "6.3 - Pollard log", title: "Solving the congruence", tool: .dlogEnum, blocks: [
+                "For the members of the sequence b\u{E002}i\u{E003} ∈ G holds:     b\u{E002}i\u{E003} = g\u{E000}z\u{E001}i · a\u{E000}y\u{E001}i\n\nAfter the birthday paradox the members of the sequence b\u{E002}i\u{E003} recur after k ≈ √ |G| steps.",
+                "Then holds:    g\u{E000}z\u{E001}i · a\u{E000}y\u{E001}i  =  g\u{E000}z\u{E001}i+k · a\u{E000}y\u{E001}i+k\nand hence:    g\u{E000}z\u{E001}i \u{E000}– z\u{E001}i+k  =  a\u{E000}y\u{E001}i+k \u{E000}– y\u{E001}i\nFor the discrete logarithm x of a to base g  holds thus:     z\u{E002}i \u{E003}–z\u{E002}i+k\u{E003}  ≡  x·(y\u{E002}i+k\u{E003} – y\u{E002}i\u{E003})  mod |G|",
+                "If this congruence has several solutions, the correct one can be found by trial and error.\nIf there are too many, one repeats the calculation with a new initial value z\u{E002}1\u{E003}.\n\nExamples in groups of prime residue classes:",
             ]),
         ]))
-        return ZTLesson(number: 6, title: "Diskrete Logarithmen", chapters: chapters)
+        chapters.append(ZTChapter(number: "6.4", title: "Other Methods", pages: [
+            ZTPage(id: "6.4 - 01", title: "Other methods", tool: .dlogEnum, blocks: [
+                "[Buchmann] continuous the course with stronger methods:\n\n·  Pohlig-Hellman algorithm\n    If the prime decomposition of the group's order |G| is known,\n    one solves g\u{E000}x\u{E001} = a in many small groups\n    and constructs from this the solution in G.\n\n·  Index Calculus methods\n    They are related with Quadratic Sieve and Number Field Sieve for factorization.",
+                "end of this lesson",
+            ]),
+        ]))
+        return ZTLesson(number: 6, title: "Discrete Logarithms", chapters: chapters)
     }
     static let glossary: [ZTGlossaryEntry] = [
-        ZTGlossaryEntry(term: "abgeschlossen", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Addition von Restklassen", pageID: "2.1 - Summe, Produkt"),
-        ZTGlossaryEntry(term: "algebraische Struktur", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Alphabet", pageID: "4.1 - Cäsar"),
-        ZTGlossaryEntry(term: "assoziativ", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "asymmetrische Verschlüsselung", pageID: "4.1 - asym"),
-        ZTGlossaryEntry(term: "Ausklammern von Nullstellen", pageID: "2.4 - Polynome"),
-        ZTGlossaryEntry(term: "B-satt", pageID: "5.4 - faktbas"),
-        ZTGlossaryEntry(term: "Babystep-Giantstep-Algorithmus", pageID: "6.2 - 01"),
-        ZTGlossaryEntry(term: "bijektiv", pageID: "2.2 - Chinesischer Restsatz"),
-        ZTGlossaryEntry(term: "binomische Formel", pageID: "2.4 - zyklisch komplett"),
-        ZTGlossaryEntry(term: "Brent, Kreisfindungs-Algorithmus", pageID: "5.3 - Floyd, Brent"),
-        ZTGlossaryEntry(term: "Carmichael-Zahl", pageID: "3.2 - Carmichael"),
-        ZTGlossaryEntry(term: "cartesisches Produkt", pageID: "2.2 - Chinesischer Restsatz"),
-        ZTGlossaryEntry(term: "Chiffretext", pageID: "4.1 - 01"),
-        ZTGlossaryEntry(term: "Chinesischer Restsatz", pageID: "2.2 - Chinesischer Restsatz"),
-        ZTGlossaryEntry(term: "Cäsar-Verschlüsselung", pageID: "4.1 - Cäsar"),
-        ZTGlossaryEntry(term: "Diffie-Hellman-Schlüsselaustausch", pageID: "4.3 - Diffie-Hellman"),
-        ZTGlossaryEntry(term: "digitale Signatur", pageID: "4.2 - trapdoor"),
-        ZTGlossaryEntry(term: "direktes Produkt", pageID: "2.2 - Zerlegung Ring"),
-        ZTGlossaryEntry(term: "diskreter Logarithmus", pageID: "6.1 - 01"),
-        ZTGlossaryEntry(term: "distributiv", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Division mit Rest", pageID: "2.1 - Division mit Rest"),
-        ZTGlossaryEntry(term: "Dreieckszahlen", pageID: "2.1 - Wozu mod"),
-        ZTGlossaryEntry(term: "Einheit", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Einheitengruppe", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Einselement", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Einwegfunktion", pageID: "4.2 - trapdoor"),
-        ZTGlossaryEntry(term: "ElGamal-Verschlüsselung", pageID: "4.3 - ElGamal"),
-        ZTGlossaryEntry(term: "elliptische Kurven", pageID: "4.3 - ElGamal2"),
-        ZTGlossaryEntry(term: "elliptische Kurven, Faktorisierung", pageID: "5.4 - ECM"),
-        ZTGlossaryEntry(term: "Entschlüsselungfunktion", pageID: "4.1 - Schlüssel"),
-        ZTGlossaryEntry(term: "Enumeration", pageID: "6.1 - 01"),
-        ZTGlossaryEntry(term: "Eratosthenes, Sieb des", pageID: "1.2 - Eratosthenes"),
-        ZTGlossaryEntry(term: "Erzeuger", pageID: "2.3 - Erzeugnis"),
-        ZTGlossaryEntry(term: "Erzeugnis", pageID: "2.3 - Erzeugnis"),
-        ZTGlossaryEntry(term: "Euklidischer Algorithmus", pageID: "1.3 - Euklid Ablauf"),
-        ZTGlossaryEntry(term: "Euler-Fermat, Satz von", pageID: "2.2 - Fermat, Euler"),
-        ZTGlossaryEntry(term: "Euler-Funktion", pageID: "2.2 - Euler-Funktion"),
-        ZTGlossaryEntry(term: "Euler-Funktion, Berechnung (1)", pageID: "2.2 - Berechnung Euler 1"),
-        ZTGlossaryEntry(term: "Euler-Funktion, Berechnung (2)", pageID: "2.2 - Berechnung Euler 2"),
-        ZTGlossaryEntry(term: "Faktorisierung", pageID: "5.1 - 01"),
-        ZTGlossaryEntry(term: "Faktorzerlegung", pageID: "1.2 - Fundamentalsatz"),
-        ZTGlossaryEntry(term: "Fermat, Faktorisierung", pageID: "5.2 - 01"),
-        ZTGlossaryEntry(term: "Fermat, großer Satz von", pageID: "2.2 - Fermat, Euler"),
-        ZTGlossaryEntry(term: "Fermat, kleiner Satz von", pageID: "2.2 - Fermat, Euler"),
-        ZTGlossaryEntry(term: "Fermat-Test", pageID: "3.2 - 01"),
-        ZTGlossaryEntry(term: "Fermat-Zahl", pageID: "3.1 - Mersenne, Fermat"),
-        ZTGlossaryEntry(term: "Floyd, Kreisfindungs-Algorithmus", pageID: "5.3 - Floyd, Brent"),
-        ZTGlossaryEntry(term: "Fundamentalsatz der Zahlentheorie", pageID: "1.2 - Fundamentalsatz"),
-        ZTGlossaryEntry(term: "ganzzahliger Quotient", pageID: "2.1 - Division mit Rest"),
-        ZTGlossaryEntry(term: "Geburtstagsparadox", pageID: "5.3 - 01"),
-        ZTGlossaryEntry(term: "ggT", pageID: "1.1 - Def ggT"),
-        ZTGlossaryEntry(term: "ggT als Vielfachsumme", pageID: "1.3 - Eigenschaften ggT"),
-        ZTGlossaryEntry(term: "Gruppe", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Halbgruppe", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Homomorphismus", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Häufigkeitsanalyse", pageID: "4.1 - Häuf"),
-        ZTGlossaryEntry(term: "injektiv", pageID: "2.2 - Chinesischer Restsatz"),
-        ZTGlossaryEntry(term: "inverses Element", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Isomorphismus", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "kanonische Primfaktorzerlegung", pageID: "1.2 - kanonische PFZ"),
-        ZTGlossaryEntry(term: "kgV", pageID: "1.4 - 01"),
-        ZTGlossaryEntry(term: "Klartext", pageID: "4.1 - 01"),
-        ZTGlossaryEntry(term: "kleiner Fermat", pageID: "2.2 - Fermat, Euler"),
-        ZTGlossaryEntry(term: "Koeffizienten einer Vielfachsumme", pageID: "1.3 - 01"),
-        ZTGlossaryEntry(term: "kommutativ", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Komplementärteiler", pageID: "1.1 - 01"),
-        ZTGlossaryEntry(term: "Kongruenz", pageID: "2.1 - Kongruenz"),
-        ZTGlossaryEntry(term: "Kongruenzen lösen", pageID: "2.2 - Kongruenzen lösen"),
-        ZTGlossaryEntry(term: "Kreisfindungs-Algorithmen", pageID: "5.3 - Floyd, Brent"),
-        ZTGlossaryEntry(term: "Körper", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Lagrange, Satz von", pageID: "2.3 - Lagrange"),
-        ZTGlossaryEntry(term: "Lucas-Lehmer-Test", pageID: "3.1 - Mersenne, Fermat"),
-        ZTGlossaryEntry(term: "Lösungen von Kongruenzen", pageID: "2.2 - Kongruenzen lösen"),
-        ZTGlossaryEntry(term: "Lügner", pageID: "3.2 - 01"),
-        ZTGlossaryEntry(term: "Lügner, starker", pageID: "3.3 - stark pseudo"),
-        ZTGlossaryEntry(term: "Mersenne-Zahl", pageID: "3.1 - Mersenne, Fermat"),
-        ZTGlossaryEntry(term: "Miller-Rabin-Test", pageID: "3.3 - 01"),
-        ZTGlossaryEntry(term: "Modul", pageID: "2.1 - Kongruenz"),
-        ZTGlossaryEntry(term: "Monoid", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Montgomery-Multiplikation", pageID: "2.2 - modulare Potenz"),
-        ZTGlossaryEntry(term: "Multiplikation von Restklassen", pageID: "2.1 - Summe, Produkt"),
-        ZTGlossaryEntry(term: "neutrales Element", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Nullelement", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Nullstelle", pageID: "2.4 - Polynome"),
-        ZTGlossaryEntry(term: "Nullteiler", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Ordnung einer Gruppe", pageID: "2.3 - |G|"),
-        ZTGlossaryEntry(term: "Ordnung eines Elements", pageID: "2.3 - ord(a)"),
-        ZTGlossaryEntry(term: "Ordnung eines Elements berechnen", pageID: "2.3 - ord(a) berechnen"),
-        ZTGlossaryEntry(term: "Ordnung eines Zeugen", pageID: "3.2 - Zeugen Staffel"),
-        ZTGlossaryEntry(term: "Pollard, p–1: Faktorisierung", pageID: "5.4 - 01"),
-        ZTGlossaryEntry(term: "Pollard, Rho: diskreter Logarithmus", pageID: "6.3 - 01"),
-        ZTGlossaryEntry(term: "Pollard, Rho: Faktorisierung", pageID: "5.3 - 01"),
-        ZTGlossaryEntry(term: "Polynom", pageID: "2.4 - Polynome"),
-        ZTGlossaryEntry(term: "positives Erzeugnis", pageID: "2.3 - pos Erz"),
-        ZTGlossaryEntry(term: "Potenzen bei Assoziativität", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Potenzen in einer Gruppe", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "prim", pageID: "1.1 - Def ggT"),
-        ZTGlossaryEntry(term: "prime Restklasse", pageID: "2.2 - Zm*"),
-        ZTGlossaryEntry(term: "prime Restklassengruppe", pageID: "2.2 - Zm*"),
-        ZTGlossaryEntry(term: "Primfaktor", pageID: "1.2 - Fundamentalsatz"),
-        ZTGlossaryEntry(term: "Primfaktorzerlegung", pageID: "1.2 - Fundamentalsatz"),
-        ZTGlossaryEntry(term: "primitive Restklasse", pageID: "2.4 - 01"),
-        ZTGlossaryEntry(term: "Primitivwurzel", pageID: "2.4 - 01"),
-        ZTGlossaryEntry(term: "Primitivwurzeln berechnen", pageID: "2.4 - finden"),
-        ZTGlossaryEntry(term: "Primteiler", pageID: "1.2 - 01"),
-        ZTGlossaryEntry(term: "Primzahl", pageID: "1.2 - 01"),
-        ZTGlossaryEntry(term: "Primzahlsatz", pageID: "3.1 - 01"),
-        ZTGlossaryEntry(term: "Primzahltest", pageID: "3.1 - Tests"),
-        ZTGlossaryEntry(term: "privater Schlüssel", pageID: "4.1 - asym"),
-        ZTGlossaryEntry(term: "probabilistischer Test", pageID: "3.1 - Tests"),
-        ZTGlossaryEntry(term: "Probedivision", pageID: "3.1 - Tests"),
-        ZTGlossaryEntry(term: "Pseudoprimzahl", pageID: "3.2 - 01"),
-        ZTGlossaryEntry(term: "Pseudoprimzahl, starke", pageID: "3.3 - stark pseudo"),
-        ZTGlossaryEntry(term: "quadratischer Rest", pageID: "5.2 - Quadrate erkennen"),
-        ZTGlossaryEntry(term: "Quadratisches-Sieb-Verfahren", pageID: "5.5 - 01"),
-        ZTGlossaryEntry(term: "Quersummen", pageID: "2.1 - Quersummen"),
-        ZTGlossaryEntry(term: "Rabin-Verschlüsselung", pageID: "4.3 - 01"),
-        ZTGlossaryEntry(term: "Reduktion mod m", pageID: "2.1 - Standardvertreter"),
-        ZTGlossaryEntry(term: "regulär", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Rest", pageID: "2.1 - Division mit Rest"),
-        ZTGlossaryEntry(term: "Restklasse", pageID: "2.1 - Restklassen"),
-        ZTGlossaryEntry(term: "Restklasse, Menge aller", pageID: "2.1 - Summe, Produkt"),
-        ZTGlossaryEntry(term: "Restklassenring", pageID: "2.1 - Restklassenring"),
-        ZTGlossaryEntry(term: "Ring", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "RSA-Verschlüsselung", pageID: "4.2 - 01"),
-        ZTGlossaryEntry(term: "Schlüssel", pageID: "4.1 - Schlüssel"),
-        ZTGlossaryEntry(term: "simultane Kongruenz", pageID: "2.2 - Chinesischer Restsatz"),
+        ZTGlossaryEntry(term: "addition of residue classes", pageID: "2.1 - Summe, Produkt"),
+        ZTGlossaryEntry(term: "algebraic structure", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "alphabet", pageID: "4.1 - Cäsar"),
+        ZTGlossaryEntry(term: "associative", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "asymmetric cryptography", pageID: "4.1 - asym"),
+        ZTGlossaryEntry(term: "babystep giantstep algorithmus", pageID: "6.2 - 01"),
+        ZTGlossaryEntry(term: "B-fed", pageID: "5.4 - faktbas"),
+        ZTGlossaryEntry(term: "bijective", pageID: "2.2 - Chinesischer Restsatz"),
+        ZTGlossaryEntry(term: "binomial formula", pageID: "2.4 - zyklisch komplett"),
+        ZTGlossaryEntry(term: "birthday paradox", pageID: "5.3 - 01"),
+        ZTGlossaryEntry(term: "Brent's cycle finding algorithm", pageID: "5.3 - Floyd, Brent"),
+        ZTGlossaryEntry(term: "Caesar cipher", pageID: "4.1 - Cäsar"),
+        ZTGlossaryEntry(term: "canonical prime decomposition", pageID: "1.2 - kanonische PFZ"),
+        ZTGlossaryEntry(term: "Cartesian product", pageID: "2.2 - Chinesischer Restsatz"),
+        ZTGlossaryEntry(term: "Carmichael number", pageID: "3.2 - Carmichael"),
+        ZTGlossaryEntry(term: "Chinese remainder theorem", pageID: "2.2 - Chinesischer Restsatz"),
+        ZTGlossaryEntry(term: "cipher", pageID: "4.1 - Schlüssel"),
+        ZTGlossaryEntry(term: "clock setting", pageID: "2.2 - Uhren verstellen"),
+        ZTGlossaryEntry(term: "closed", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "coefficients of a linear combination", pageID: "1.3 - 01"),
+        ZTGlossaryEntry(term: "commutative", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "complementary divisor", pageID: "1.1 - 01"),
+        ZTGlossaryEntry(term: "composed number", pageID: "1.2 - 01"),
+        ZTGlossaryEntry(term: "congruence", pageID: "2.1 - Kongruenz"),
+        ZTGlossaryEntry(term: "congruences, solving", pageID: "2.2 - Kongruenzen lösen"),
+        ZTGlossaryEntry(term: "connection", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "cycle finding algorithm", pageID: "5.3 - Floyd, Brent"),
+        ZTGlossaryEntry(term: "cyclic group", pageID: "2.3 - Erzeugnis"),
+        ZTGlossaryEntry(term: "cyclic group of prime residue classes", pageID: "2.4 - zyklisch komplett"),
+        ZTGlossaryEntry(term: "cipher text", pageID: "4.1 - 01"),
+        ZTGlossaryEntry(term: "decomposition of a ring", pageID: "2.2 - Zerlegung Ring"),
+        ZTGlossaryEntry(term: "decryption function", pageID: "4.1 - Schlüssel"),
+        ZTGlossaryEntry(term: "Diffie-Hellman key exchange", pageID: "4.3 - Diffie-Hellman"),
+        ZTGlossaryEntry(term: "digital signature", pageID: "4.2 - trapdoor"),
+        ZTGlossaryEntry(term: "direct product", pageID: "2.2 - Zerlegung Ring"),
+        ZTGlossaryEntry(term: "discrete logarithm", pageID: "6.1 - 01"),
+        ZTGlossaryEntry(term: "distributive", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "divisibility criteria", pageID: "2.1 - Quersummen"),
+        ZTGlossaryEntry(term: "divisibility rules", pageID: "1.1 - Teiler in Z"),
+        ZTGlossaryEntry(term: "divisible", pageID: "1.1 - Teiler in Z"),
+        ZTGlossaryEntry(term: "division with remainder", pageID: "2.1 - Division mit Rest"),
+        ZTGlossaryEntry(term: "divisor", pageID: "1.1 - 01"),
+        ZTGlossaryEntry(term: "divisor set", pageID: "1.1 - Teilermenge"),
+        ZTGlossaryEntry(term: "ElGamal cipher", pageID: "4.3 - ElGamal"),
+        ZTGlossaryEntry(term: "elliptic curve", pageID: "4.3 - ElGamal2"),
+        ZTGlossaryEntry(term: "elliptic curve factorization", pageID: "5.4 - ECM"),
+        ZTGlossaryEntry(term: "encryption function", pageID: "4.1 - Schlüssel"),
+        ZTGlossaryEntry(term: "enumeration", pageID: "6.1 - 01"),
+        ZTGlossaryEntry(term: "equivalence class", pageID: "2.1 - Restklassen"),
+        ZTGlossaryEntry(term: "equivalence relation", pageID: "2.1 - Kongruenz"),
+        ZTGlossaryEntry(term: "Eratosthenes, sieve of", pageID: "1.2 - Eratosthenes"),
+        ZTGlossaryEntry(term: "Euclidian algorithm", pageID: "1.3 - Euklid Ablauf"),
+        ZTGlossaryEntry(term: "Euler function", pageID: "2.2 - Euler-Funktion"),
+        ZTGlossaryEntry(term: "Euler function, computing (1)", pageID: "2.2 - Berechnung Euler 1"),
+        ZTGlossaryEntry(term: "Euler function, computing (2)", pageID: "2.2 - Berechnung Euler 2"),
+        ZTGlossaryEntry(term: "Euler-Fermat, theorem", pageID: "2.2 - Fermat, Euler"),
+        ZTGlossaryEntry(term: "factor decomposition", pageID: "1.2 - Fundamentalsatz"),
+        ZTGlossaryEntry(term: "factoring out of roots", pageID: "2.4 - Polynome"),
+        ZTGlossaryEntry(term: "factorization", pageID: "5.1 - 01"),
+        ZTGlossaryEntry(term: "Fermat factorization", pageID: "5.2 - 01"),
+        ZTGlossaryEntry(term: "Fermat number", pageID: "3.1 - Mersenne, Fermat"),
+        ZTGlossaryEntry(term: "Fermat's last theorem", pageID: "2.2 - Fermat, Euler"),
+        ZTGlossaryEntry(term: "Fermat's little theorem", pageID: "2.2 - Fermat, Euler"),
+        ZTGlossaryEntry(term: "Fermat test", pageID: "3.2 - 01"),
+        ZTGlossaryEntry(term: "field", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "Floyd's cycle finding algorithm", pageID: "5.3 - Floyd, Brent"),
+        ZTGlossaryEntry(term: "frequency analysis", pageID: "4.1 - Häuf"),
+        ZTGlossaryEntry(term: "fundamental theorem of arithmetic", pageID: "1.2 - Fundamentalsatz"),
+        ZTGlossaryEntry(term: "GCD", pageID: "1.1 - Def ggT"),
+        ZTGlossaryEntry(term: "GCD as linear combination", pageID: "1.3 - Eigenschaften ggT"),
+        ZTGlossaryEntry(term: "generation", pageID: "2.3 - Erzeugnis"),
+        ZTGlossaryEntry(term: "generator", pageID: "2.3 - Erzeugnis"),
+        ZTGlossaryEntry(term: "group", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "homomorphism", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "injective", pageID: "2.2 - Chinesischer Restsatz"),
+        ZTGlossaryEntry(term: "integer quotient", pageID: "2.1 - Division mit Rest"),
+        ZTGlossaryEntry(term: "inverse element", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "isomorphism", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "key", pageID: "4.1 - Schlüssel"),
+        ZTGlossaryEntry(term: "Lagrange's theorem", pageID: "2.3 - Lagrange"),
+        ZTGlossaryEntry(term: "LCM", pageID: "1.4 - 01"),
+        ZTGlossaryEntry(term: "little Fermat", pageID: "2.2 - Fermat, Euler"),
+        ZTGlossaryEntry(term: "Lucas-Lehmer test", pageID: "3.1 - Mersenne, Fermat"),
+        ZTGlossaryEntry(term: "liar", pageID: "3.2 - 01"),
+        ZTGlossaryEntry(term: "liar, strong", pageID: "3.3 - stark pseudo"),
+        ZTGlossaryEntry(term: "linear combination", pageID: "1.3 - 01"),
+        ZTGlossaryEntry(term: "Mersenne number", pageID: "3.1 - Mersenne, Fermat"),
+        ZTGlossaryEntry(term: "Miller-Rabin test", pageID: "3.3 - 01"),
+        ZTGlossaryEntry(term: "modulus", pageID: "2.1 - Kongruenz"),
+        ZTGlossaryEntry(term: "Montgomery multiplication", pageID: "2.2 - modulare Potenz"),
+        ZTGlossaryEntry(term: "monoid", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "multiple", pageID: "1.1 - Teiler in Z"),
+        ZTGlossaryEntry(term: "multiples set", pageID: "1.4 - 01"),
+        ZTGlossaryEntry(term: "multiplication of residue classes", pageID: "2.1 - Summe, Produkt"),
+        ZTGlossaryEntry(term: "neutral element", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "Number Field Sieve", pageID: "5.5 - 01"),
+        ZTGlossaryEntry(term: "one-element", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "one-way function", pageID: "4.2 - trapdoor"),
+        ZTGlossaryEntry(term: "order of an element", pageID: "2.3 - ord(a)"),
+        ZTGlossaryEntry(term: "order of an element, computing", pageID: "2.3 - ord(a) berechnen"),
+        ZTGlossaryEntry(term: "order of a group", pageID: "2.3 - |G|"),
+        ZTGlossaryEntry(term: "order of a witness", pageID: "3.2 - Zeugen Staffel"),
+        ZTGlossaryEntry(term: "plain text", pageID: "4.1 - 01"),
+        ZTGlossaryEntry(term: "Pollard, p–1 factorization", pageID: "5.4 - 01"),
+        ZTGlossaryEntry(term: "Pollard, Rho: factorization", pageID: "5.3 - 01"),
+        ZTGlossaryEntry(term: "Pollard, Rho: discrete logarithm", pageID: "6.3 - 01"),
+        ZTGlossaryEntry(term: "polynomial", pageID: "2.4 - Polynome"),
+        ZTGlossaryEntry(term: "polynomial, root", pageID: "2.4 - Polynome"),
+        ZTGlossaryEntry(term: "positive generation", pageID: "2.3 - pos Erz"),
+        ZTGlossaryEntry(term: "powers and associativity", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "powers in a group", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "prime", pageID: "1.1 - Def ggT"),
+        ZTGlossaryEntry(term: "prime residue class", pageID: "2.2 - Zm*"),
+        ZTGlossaryEntry(term: "prime residue classes, group of", pageID: "2.2 - Zm*"),
+        ZTGlossaryEntry(term: "prime factor", pageID: "1.2 - Fundamentalsatz"),
+        ZTGlossaryEntry(term: "prime decomposition", pageID: "1.2 - Fundamentalsatz"),
+        ZTGlossaryEntry(term: "prime divisor", pageID: "1.2 - 01"),
+        ZTGlossaryEntry(term: "prime number", pageID: "1.2 - 01"),
+        ZTGlossaryEntry(term: "prime number theorem", pageID: "3.1 - 01"),
+        ZTGlossaryEntry(term: "prime number test", pageID: "3.1 - Tests"),
+        ZTGlossaryEntry(term: "primitive residue class", pageID: "2.4 - 01"),
+        ZTGlossaryEntry(term: "primitive root", pageID: "2.4 - 01"),
+        ZTGlossaryEntry(term: "primitive root, computing", pageID: "2.4 - finden"),
+        ZTGlossaryEntry(term: "private key", pageID: "4.1 - asym"),
+        ZTGlossaryEntry(term: "probabilistic test", pageID: "3.1 - Tests"),
+        ZTGlossaryEntry(term: "pseudo prime", pageID: "3.2 - 01"),
+        ZTGlossaryEntry(term: "pseudo prime, strong", pageID: "3.3 - stark pseudo"),
+        ZTGlossaryEntry(term: "public key", pageID: "4.1 - asym"),
+        ZTGlossaryEntry(term: "quadratic residue", pageID: "5.2 - Quadrate erkennen"),
+        ZTGlossaryEntry(term: "Quadratic Sieve factorization", pageID: "5.5 - 01"),
+        ZTGlossaryEntry(term: "Rabin cipher", pageID: "4.3 - 01"),
+        ZTGlossaryEntry(term: "reduction mod m", pageID: "2.1 - Standardvertreter"),
+        ZTGlossaryEntry(term: "regular", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "remainder", pageID: "2.1 - Division mit Rest"),
+        ZTGlossaryEntry(term: "representative", pageID: "2.1 - Restklassen"),
+        ZTGlossaryEntry(term: "residue class", pageID: "2.1 - Restklassen"),
+        ZTGlossaryEntry(term: "residue classes, set of all", pageID: "2.1 - Summe, Produkt"),
+        ZTGlossaryEntry(term: "residue class ring", pageID: "2.1 - Restklassenring"),
+        ZTGlossaryEntry(term: "ring", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "root of a polynomial", pageID: "2.4 - Polynome"),
+        ZTGlossaryEntry(term: "RSA cipher", pageID: "4.2 - 01"),
+        ZTGlossaryEntry(term: "semigroup", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "simultaneous clock setting", pageID: "2.2 - Uhren verstellen"),
+        ZTGlossaryEntry(term: "simultaneous congruence", pageID: "2.2 - Chinesischer Restsatz"),
+        ZTGlossaryEntry(term: "solving congruences", pageID: "2.2 - Kongruenzen lösen"),
         ZTGlossaryEntry(term: "square & multiply", pageID: "2.2 - schnelle Potenz"),
-        ZTGlossaryEntry(term: "Standardvertreter", pageID: "2.1 - Standardvertreter"),
-        ZTGlossaryEntry(term: "surjektiv", pageID: "2.2 - Chinesischer Restsatz"),
-        ZTGlossaryEntry(term: "teilbar", pageID: "1.1 - Teiler in Z"),
-        ZTGlossaryEntry(term: "Teilbarkeitskriterien", pageID: "2.1 - Quersummen"),
-        ZTGlossaryEntry(term: "Teilbarkeitsregeln", pageID: "1.1 - Teiler in Z"),
-        ZTGlossaryEntry(term: "Teiler", pageID: "1.1 - 01"),
-        ZTGlossaryEntry(term: "Teilermenge", pageID: "1.1 - Teilermenge"),
-        ZTGlossaryEntry(term: "Text als Zahl", pageID: "4.1 - Text -> Zahl"),
-        ZTGlossaryEntry(term: "Trapdoor-Funktion", pageID: "4.2 - trapdoor"),
-        ZTGlossaryEntry(term: "Uhren verstellen", pageID: "2.2 - Uhren verstellen"),
-        ZTGlossaryEntry(term: "Untergruppe", pageID: "2.3 - |G|"),
-        ZTGlossaryEntry(term: "Verknüpfung", pageID: "2.1 - 01"),
-        ZTGlossaryEntry(term: "Verschlüsselungsfunktion", pageID: "4.1 - Schlüssel"),
-        ZTGlossaryEntry(term: "Vertreter", pageID: "2.1 - Restklassen"),
-        ZTGlossaryEntry(term: "Vielfachenmenge", pageID: "1.4 - 01"),
-        ZTGlossaryEntry(term: "Vielfaches", pageID: "1.1 - 01"),
-        ZTGlossaryEntry(term: "Vielfachsumme", pageID: "1.3 - 01"),
-        ZTGlossaryEntry(term: "Vigenère-Verschlüsselung", pageID: "4.1 - Häuf"),
-        ZTGlossaryEntry(term: "wohldefiniert", pageID: "2.1 - Summe, Produkt"),
-        ZTGlossaryEntry(term: "Zerlegung eines Ringes", pageID: "2.2 - Zerlegung Ring"),
-        ZTGlossaryEntry(term: "Zeuge", pageID: "3.2 - 01"),
-        ZTGlossaryEntry(term: "Zeuge, starker", pageID: "3.3 - stark pseudo"),
-        ZTGlossaryEntry(term: "zusammengesetzte Zahl", pageID: "1.2 - 01"),
-        ZTGlossaryEntry(term: "zyklische Gruppe", pageID: "2.3 - Erzeugnis"),
-        ZTGlossaryEntry(term: "zyklische prime Restklassengruppen", pageID: "2.4 - zyklisch komplett"),
-        ZTGlossaryEntry(term: "Äquivalenzklasse", pageID: "2.1 - Restklassen"),
-        ZTGlossaryEntry(term: "Äquivalenzrelation", pageID: "2.1 - Kongruenz"),
-        ZTGlossaryEntry(term: "öffentlicher Schlüssel", pageID: "4.1 - asym"),
+        ZTGlossaryEntry(term: "subgroup", pageID: "2.3 - |G|"),
+        ZTGlossaryEntry(term: "surjective", pageID: "2.2 - Chinesischer Restsatz"),
+        ZTGlossaryEntry(term: "standard representative", pageID: "2.1 - Standardvertreter"),
+        ZTGlossaryEntry(term: "text as number", pageID: "4.1 - Text -> Zahl"),
+        ZTGlossaryEntry(term: "transversal sums", pageID: "2.1 - Quersummen"),
+        ZTGlossaryEntry(term: "trapdoor function", pageID: "4.2 - trapdoor"),
+        ZTGlossaryEntry(term: "trial division", pageID: "3.1 - Tests"),
+        ZTGlossaryEntry(term: "triangle numbers", pageID: "2.1 - Wozu mod"),
+        ZTGlossaryEntry(term: "unit", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "unity group", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "Vigenère cipher", pageID: "4.1 - Häuf"),
+        ZTGlossaryEntry(term: "well-defined", pageID: "2.1 - Summe, Produkt"),
+        ZTGlossaryEntry(term: "witness", pageID: "3.2 - 01"),
+        ZTGlossaryEntry(term: "witness, strong", pageID: "3.3 - stark pseudo"),
+        ZTGlossaryEntry(term: "zero divisor", pageID: "2.1 - 01"),
+        ZTGlossaryEntry(term: "zero-element", pageID: "2.1 - 01"),
     ]
 }

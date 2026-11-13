@@ -19,19 +19,19 @@ struct Random3DView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Auflösung \(resolution), Dichte \(density), Verschiebung \(shift) %, Wortlänge \(wordLength) Byte – <\(document.shortName)>")
+                Text("Resolution: \(resolution), Density: \(density), Shift: \(shift) %, Word length (in bytes): \(wordLength) – <\(document.shortName)>")
                     .foregroundStyle(.secondary)
                 Spacer()
-                Toggle("Box (Würfelkanten zeigen)", isOn: $showBox)
-                Button("Optionen …") { showOptions = true }
+                Toggle("Show Box (cube's borderlines)", isOn: $showBox)
+                Button("Options ...") { showOptions = true }
             }
             PointCloudView(bytes: document.bytes, resolution: resolution, density: density, shift: shift,
                            wordLength: wordLength, showBox: showBox)
                 .contextMenu {
-                    Button("Eigenschaften …") { showOptions = true }
-                    Toggle("Box (Würfelkanten zeigen)", isOn: $showBox)
+                    Button("Properties...") { showOptions = true }
+                    Toggle("Show Box (cube's borderlines)", isOn: $showBox)
                 }
-            Text("Mit der Maus drehen, mit Scrollen/Pinch zoomen. Je drei aufeinanderfolgende Differenzen benachbarter Wörter ergeben einen Punkt; häufig getroffene Punkte erscheinen heller.")
+            Text("Rotate with the mouse, zoom by scrolling/pinching. Every three consecutive differences of adjacent words yield one point; points that are hit often appear brighter.")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .padding()
@@ -56,27 +56,27 @@ struct Visualization3DOptionsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("3D-Visualisierung - Optionen").font(.headline)
+            Text("3D Visualization - Options").font(.headline)
             Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 8) {
                 GridRow {
-                    Text("Auflösung:")
+                    Text("Resolution:")
                     Slider(value: $res, in: 64...255, step: 1).frame(width: 200)
                     Text("\(Int(res))").monospacedDigit().frame(width: 40, alignment: .trailing)
                 }
                 GridRow {
-                    Text("Dichte:")
+                    Text("Density:")
                     Slider(value: $dens, in: 1...255, step: 1).frame(width: 200)
                     Text("\(Int(dens))").monospacedDigit().frame(width: 40, alignment: .trailing)
                 }
                 GridRow {
-                    Text("Verschiebung:")
+                    Text("Shift:")
                     Slider(value: $sh, in: 0...50, step: 1).frame(width: 200)
                     Text("\(Int(sh))").monospacedDigit().frame(width: 40, alignment: .trailing)
                 }
             }
-            GroupBox("Analyseparameter") {
+            GroupBox("Analysis parameter") {
                 HStack {
-                    Text("Wortlänge (in Bytes):")
+                    Text("Word length (in bytes):")
                     Picker("", selection: $word) {
                         Text("1").tag(1); Text("2").tag(2); Text("4").tag(4)
                     }
@@ -90,7 +90,7 @@ struct Visualization3DOptionsView: View {
                     sh = Double(CT1Volume.defaultShift); word = CT1Volume.defaultWordLength
                 }
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
                 Button("OK") {
                     resolution = Int(res); density = Int(dens); shift = Int(sh); wordLength = word
                     close()

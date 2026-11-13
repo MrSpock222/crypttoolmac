@@ -79,7 +79,7 @@ func runAESToolTests() {
             try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: cmd.path)
             check((try? AESToolFile.decrypt(file, key: key))?.data == plain, "CrypTool entschlüsselt .command")
             let wrong = runWithInput(cmd.path, "falsch\nfalsch\nfalsch\n")
-            check(wrong.status != 0 && wrong.output.contains("Falscher Schlüssel"), "Skript: falscher Schlüssel abgelehnt")
+            check(wrong.status != 0 && wrong.output.contains("Wrong key"), "Skript: falscher Schlüssel abgelehnt")
             let r = runWithInput(cmd.path, input + "\n")
             let out = dir.appendingPathComponent(name)
             check(r.status == 0, "Skript läuft (\(name)): \(r.output)")

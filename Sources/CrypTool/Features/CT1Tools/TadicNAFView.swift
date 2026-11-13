@@ -3,7 +3,7 @@ import CTBigNum
 import CTCommon
 import SwiftUI
 
-/// German version of CT1's front end t-adicNAF.hta ("t-adic NAF GUI v1.3.3b") for the generator
+/// CT1's front end t-adicNAF.hta ("t-adic NAF GUI v1.3.3b", original English captions) for the generator
 /// t-adicNAF.exe by Anastasios Kanakis; the computation is TauAdicNAF (CTBigNum).
 struct TadicNAFView: View {
     @CTState private var aIsOne = false
@@ -17,72 +17,72 @@ struct TadicNAFView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Binären Schlüssel in die t-adic-NAF-Darstellung umwandeln").font(.headline)
-                Text("Dieses Werkzeug benötigt zwei Eingabeparameter:")
+                Text("Transform a binary key into the t-adic NAF representation").font(.headline)
+                Text("This tool requires two input parameters:")
 
-                Text("1) Der erste Parameter ist der Wert „a“ der Koblitz-Kurve: y² + xy = x³ + a·x² + 1")
-                Toggle(isOn: $aIsOne) { Text("(angehakt: a = 1, sonst a = 0)").italic() }
+                Text("1) The first parameter is the value 'a' of the Koblitz curve: y² + xy = x³ + a·x² + 1")
+                Toggle(isOn: $aIsOne) { Text("(checked a=1; otherwise a=0)").italic() }
                     .padding(.leading, 16)
 
-                Text("2) Der zweite Parameter ist der binäre Schlüssel als Text (nur die Ziffern 0 und 1).")
+                Text("2) The second parameter is the binary form of the key as text (only the digits 0 and 1).")
                 HStack {
                     TextField("", text: $keyText)
                         .font(.system(.body, design: .monospaced))
                         .textFieldStyle(.roundedBorder)
-                        .onChange(of: keyText) { _, new in if new != loadedText { source = "Eingabefeld" } }
-                    Button("Datei laden…") { loadFile() }
+                        .onChange(of: keyText) { _, new in if new != loadedText { source = "input field" } }
+                    Button("Load file...") { loadFile() }
                 }
                 .padding(.leading, 16)
 
                 Button { generate() } label: {
-                    Text("t-adic-NAF-Schlüssel erzeugen").frame(maxWidth: .infinity)
+                    Text("Click to generate t-adic NAF key").frame(maxWidth: .infinity)
                 }
                 .controlSize(.large)
                 .keyboardShortcut(.defaultAction)
 
                 Divider()
-                Text("Eingabe:").bold()
-                lengthRow("Länge des Eingabeschlüssels:", result?.key.count)
-                field("Binärer Schlüssel vom höchstwertigen (MSB) zum niederwertigsten Bit (LSB):", result?.key)
+                Text("Input:").bold()
+                lengthRow("Length of input key:", result?.key.count)
+                field("Binary key from the most significant (MSB) to the least significant bit (LSB):", result?.key)
 
-                Text("Ausgabe:").bold().padding(.top, 4)
-                Text("Ergebnis von Algorithmus A:")
-                lengthRow("Länge des erzeugten Schlüssels:", result?.generated.count)
-                field("Erzeugter t-adic-NAF-Schlüssel (von MSB zu LSB):", result.map { TauAdicNAF.digitString($0.generated) })
+                Text("Output:").bold().padding(.top, 4)
+                Text("Result of algorithm A:")
+                lengthRow("Length of the generated key:", result?.generated.count)
+                field("Generated 't-adic NAF' key (from MSB to LSB):", result.map { TauAdicNAF.digitString($0.generated) })
 
-                Text("Ergebnis von Algorithmus B:").padding(.top, 4)
-                lengthRow("Länge des reduzierten Schlüssels:", result?.reduced.count)
-                field("Reduzierter Schlüssel (von MSB zu LSB):", result.map { TauAdicNAF.digitString($0.reduced) })
+                Text("Result of algorithm B:").padding(.top, 4)
+                lengthRow("Length of the reduced key:", result?.reduced.count)
+                field("Reduced key (from MSB to LSB):", result.map { TauAdicNAF.digitString($0.reduced) })
 
-                Text("Ergebnis von Algorithmus C:").padding(.top, 4)
-                lengthRow("Länge des regenerierten Schlüssels:", result?.regenerated.count)
-                field("Der regenerierte t-adic-NAF-Schlüssel (von MSB zu LSB):", result.map { TauAdicNAF.digitString($0.regenerated) })
+                Text("Result of algorithm C:").padding(.top, 4)
+                lengthRow("Length of the regenerated key:", result?.regenerated.count)
+                field("The regenerated 't-adic NAF' key (from MSB to LSB):", result.map { TauAdicNAF.digitString($0.regenerated) })
 
                 HStack {
-                    Text("Gesamte Rechenzeit:")
+                    Text("Total time for calculations:")
                     Text(result == nil ? "" : "\(milliseconds)").monospacedDigit().frame(minWidth: 60, alignment: .trailing)
-                    Text("ms")
+                    Text("msec")
                 }
 
                 Divider()
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("© 2009 – 2015 PhD Anastasios Kanakis")
-                    Text("Danksagung: PhD M. H. Nabil, Dr. M. Benaissa und Prof. B. Esslinger")
-                    Text("Department of EEE, University of Sheffield. Seit 2012 Teil von CrypTool.")
+                    Text("(c) 2009 - 2015 by PhD Anastasios Kanakis")
+                    Text("Acknowledgement: PhD M. H. Nabil, Dr M. Benaissa, and Prof. B. Esslinger")
+                    Text("Department of EEE, University of Sheffield. Part of CrypTool from 2012.")
                 }
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
                 HStack {
-                    Button("Ausgabe (key-out.txt) als Dokument öffnen") {
+                    Button("Open output (key-out.txt) as document") {
                         DocumentFactory.openResult(text: keyOut, title: "key-out.txt")
                     }
                     .disabled(keyOut.isEmpty)
                     Spacer()
-                    Button("Dokumentation des Autors (PDF)") {
-                        if let u = Resources.url("Help/de/files/tadicnafkeys/t-adicNAF.pdf") { NSWorkspace.shared.open(u) }
+                    Button("Author's documentation (PDF)") {
+                        if let u = Resources.url("Help/en/files/tadicnafkeys/t-adicNAF.pdf") { NSWorkspace.shared.open(u) }
                     }
-                    Button("Hilfe") { HelpCenter.show(topic: "hid_generation_tadic_naf_keys.html") }
+                    Button("Help") { HelpCenter.show(topic: "hid_generation_tadic_naf_keys.html") }
                 }
             }
             .padding(16)
@@ -95,7 +95,7 @@ struct TadicNAFView: View {
         HStack {
             Text(label)
             Text(value.map(String.init) ?? "").monospacedDigit().frame(minWidth: 60, alignment: .trailing)
-            Text("Bit")
+            Text("bit")
         }
     }
 
@@ -112,7 +112,7 @@ struct TadicNAFView: View {
         panel.canChooseDirectories = false
         guard panel.runModal() == .OK, let url = panel.url else { return }
         guard let data = try? Data(contentsOf: url) else {
-            Alerts.error("Die Datei „\(url.lastPathComponent)“ kann nicht geöffnet werden.")
+            Alerts.error("The file \"\(url.lastPathComponent)\" could not be opened.")
             return
         }
         // The HTA uses the first line of the file.
@@ -133,7 +133,7 @@ struct TadicNAFView: View {
             keyOut += TauAdicNAF.keyOutText(r, source: source, milliseconds: milliseconds)
         } catch {
             result = nil
-            Alerts.error(error.localizedDescription, title: "t-adic-NAF-Schlüsselgenerator")
+            Alerts.error(error.localizedDescription, title: "t-adic NAF Key Generator")
         }
     }
 }

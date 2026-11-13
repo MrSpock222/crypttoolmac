@@ -383,7 +383,7 @@ public struct ECKeyPair: Codable, Hashable, Sendable {
 
     /// Random key pair.
     public static func generate(curve: EllipticCurve) -> ECKeyPair {
-        precondition(!curve.n.isZero, "Die Kurve hat keinen Basispunkt")
+        precondition(!curve.n.isZero, "The curve has no base point")
         return ECKeyPair(curve: curve, d: BigUInt.random(below: curve.n - 1) + 1)
     }
 }
@@ -440,11 +440,11 @@ public enum ECDH {
     /// x coordinate of d·Q. Throws if Q is not a valid point or the result is O.
     public static func sharedSecret(privateKey: BigUInt, publicKey: ECPoint, curve: EllipticCurve) throws -> BigUInt {
         guard !publicKey.isInfinity, curve.contains(publicKey) else {
-            throw CTError("Der öffentliche Schlüssel ist kein gültiger Punkt der Kurve.")
+            throw CTError("The public key is not a valid point on the curve.")
         }
         let S = curve.multiply(privateKey, publicKey)
         guard case let .affine(x, _) = S else {
-            throw CTError("Das gemeinsame Geheimnis ist der Punkt im Unendlichen.")
+            throw CTError("The shared secret is the point at infinity.")
         }
         return x
     }

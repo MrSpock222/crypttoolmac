@@ -19,7 +19,7 @@ import CTCommon
 //    result; it is rated by the longest dictionary word that begins with the decrypted text.
 //
 // The analysis works on the letters A–Z of the text only (independent of the text options), like
-// CT1. All texts of the result log are the German CT1 strings.
+// CT1. All texts of the result log are the English CT1 strings.
 
 /// Digram/trigram statistics of one language (one section of CT1's
 /// `VigenereAnalysisSchroedelDigrams.txt` / `…Trigrams.txt`).
@@ -277,30 +277,30 @@ public struct VigenereSchroedelReport: Sendable {
 }
 
 public enum VigenereSchroedel {
-    // German CT1 strings (string table of CrypTool 1.4.x)
-    static let tagLoadingCiphertext = "Lade Geheimtext..."
-    static let tagLoadingDictionary = "Lade Wörterbuch..."
-    static let tagLoadingDigrams = "Lade Digramme..."
-    static let tagLoadingTrigrams = "Lade Trigramme..."
-    static let tagCharacter = ["1. Zeichen des Geheimtexts: ", "2. Zeichen des Geheimtexts: ", "3. Zeichen des Geheimtexts: "]
-    static let tagPossiblePairs = "%d mögliche Paare:"
-    static let tagRemoveDuplicates = "%d entfernte Duplikate:"
-    static let tagRemaining = "Verbleibende Paare: "
-    static let tagSortedAll = "Sortierte Liste aller Paare:"
-    static let tagSortedAfterDiscarding = "Sortierte Liste aller verbliebenen Paare:"
-    static let tagSortedLeaders = "Sortierte Liste der besten Paare:"
-    static let tagCheckingRatings = "Mögliche Lösungen mit dem Wörterbuch abgleichen:"
-    public static let headerTag = "CrypTool: Ciphertext-Only-Analyse nach Schrödel gegen die Vigenère-Verschlüsselung"
-    static let timeNeededTag = "Benötigte Zeit für die Durchführung der Analyse: "
-    static let unitSeconds = " Sekunden"
-    static let ciphertextLengthTag = "Länge des analysierten Geheimtexts:"
-    static let unitCharacters = "Zeichen"
-    static let keywordLanguagesTag = "Sprache(n) für Schlüsselworte: "
-    static let ciphertextLanguageTag = "Sprache für Geheimtext: "
-    public static let ciphertextTag = "Geheimtext:"
-    public static let possibleKeyTag = "Möglicher Schlüssel:"
-    public static let foundCleartextTag = "Gefundener Klartext:"
-    public static let noResultsMessage = "Die Analyse war nicht erfolgreich. Es wurden keine möglichen Lösungen gefunden."
+    // English CT1 strings (string table of CrypTool 1.4.x)
+    static let tagLoadingCiphertext = "Loading ciphertext..."
+    static let tagLoadingDictionary = "Loading dictionary..."
+    static let tagLoadingDigrams = "Loading digrams..."
+    static let tagLoadingTrigrams = "Loading trigrams..."
+    static let tagCharacter = ["1st character of the ciphertext: ", "2nd character of the ciphertext: ", "3rd character of the ciphertext: "]
+    static let tagPossiblePairs = "%d possible pairs: "
+    static let tagRemoveDuplicates = "%d removed duplicates:"
+    static let tagRemaining = "Remaining pairs: "
+    static let tagSortedAll = "Sorted list of all pairs:"
+    static let tagSortedAfterDiscarding = "Sorted list of all remaining pairs:"
+    static let tagSortedLeaders = "Sorted list of the best pairs:"
+    static let tagCheckingRatings = "Checking dictionary for possible solutions:"
+    public static let headerTag = "CrypTool: Ciphertext-only analysis according to Schroedel against Vigenère cipher"
+    static let timeNeededTag = "Time needed to perform analysis:"
+    static let unitSeconds = " seconds"
+    static let ciphertextLengthTag = "Length of analyzed ciphertext:"
+    static let unitCharacters = "characters"
+    static let keywordLanguagesTag = "Keyword language(s): "
+    static let ciphertextLanguageTag = "Ciphertext language: "
+    public static let ciphertextTag = "Ciphertext:"
+    public static let possibleKeyTag = "Possible key:"
+    public static let foundCleartextTag = "Found cleartext:"
+    public static let noResultsMessage = "The analysis was not successful. There were no possible results found."
 
     /// CT1 preprocessing: letters A–Z (lowercase converted), everything else removed.
     public static func preprocess(_ text: String) -> String {
@@ -372,8 +372,9 @@ public enum VigenereSchroedel {
     ///   - ciphertextLanguage: language of the plaintext (digram/trigram statistics).
     ///   - extensiveLogging: CT1 "Ausführliche Protokollierung" (Analyseoptionen): the result log
     ///     then contains all analysis steps.
-    ///   - germanLocale: CT1 checks `GetThreadLocale() == 1031` (German Windows) and then rates
-    ///     unseen digrams beginning with A or I with 20. German CT1 installations do this.
+    ///   - germanLocale: CT1 checks `GetThreadLocale() == 1031` (Windows region format
+    ///     "German (Germany)", independent of CT1's own language) and then rates unseen digrams
+    ///     beginning with A or I with 20. The app passes `true` (class uses that region format).
     ///   - found: called (on the analysis thread) for every new result with a dictionary match.
     /// - Throws: if the text contains fewer than three letters A–Z or a language is unknown.
     public static func analyze(ciphertext text: String, data: SchroedelLanguageData,
@@ -383,11 +384,11 @@ public enum VigenereSchroedel {
                                found: (@Sendable (VigenereSchroedelResult) -> Void)? = nil) throws -> VigenereSchroedelReport {
         let selected = SchroedelLanguageData.sortedNames(keywordLanguages.filter { data.dictionaries[$0] != nil })
         guard !selected.isEmpty, let ngram = data.ngrams[ciphertextLanguage] else {
-            throw CTError("Bitte wählen Sie MINDESTENS EINE Schlüsselwort-Sprache und GENAU EINE Geheimtext-Sprache aus.")
+            throw CTError("Please choose AT LEAST ONE keyword language and EXACTLY ONE ciphertext language.")
         }
         let ct = letters(text)
         guard ct.count >= 3 else {
-            throw CTError("Der Geheimtext muss mindestens drei Buchstaben (A–Z) enthalten.")
+            throw CTError("The ciphertext must contain at least three letters (A-Z).")
         }
         let lists = selected.map { data.dictionaries[$0]! }
         var offsets: [Int] = []

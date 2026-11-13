@@ -15,14 +15,14 @@ final class SignatureAttackSettings: ObservableObject {
 @MainActor
 enum SignatureAttackWindows {
     static func openAttack() {
-        WindowPresenter.tool(id: "sigattack", title: "Angriff auf den Hashwert der digitalen Signatur",
+        WindowPresenter.tool(id: "sigattack", title: "Attack on the Hash Value of the Digital Signature",
                              size: CGSize(width: 620, height: 640), resizable: false) {
             SignatureAttackView()
         }
     }
 
     static func openModificationDemo(document: CTDocument?) {
-        WindowPresenter.tool(id: "sigattmodific", title: "Nachrichtenmodifikation durch einen Hashwert",
+        WindowPresenter.tool(id: "sigattmodific", title: "Modification of as Message by a Hash Value",
                              size: CGSize(width: 560, height: 420), resizable: false) {
             ModificationDemoView(document: document)
         }
@@ -70,26 +70,26 @@ struct SignatureAttackView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Der hier implementierte Angriff auf die digitale Signatur beruht auf dem Versuch, zwei verschiedene Nachrichten mit gleichem Hashwert zu finden.")
+            Text("This attack attempts to find two different messages that hash to the same value.")
                 .fixedSize(horizontal: false, vertical: true)
-            Button("Default-Nachrichten benutzen", action: useDefaults).frame(maxWidth: .infinity)
-            GroupBox("\"Harmlose\" Datei auswählen") {
+            Button("Use default messages", action: useDefaults).frame(maxWidth: .infinity)
+            GroupBox("Choose \"harmless\" file") {
                 fileRow(path: $settings.harmlessPath,
-                        text: "Die \"harmlose\" Datei ist eine Nachricht, von der der Angreifer vermutet, dass der Unterzeichner sie digital signieren wird.")
+                        text: "The attacker assumes that his victim will digitally sign the \"harmless\" message due to its non-malicious content.")
             }
-            GroupBox("\"Gefährliche\" Datei auswählen") {
+            GroupBox("Choose \"dangerous\" file") {
                 fileRow(path: $settings.dangerousPath,
-                        text: "Die \"gefährliche\" Datei ist eine Nachricht, von der der Angreifer nach erfolgreichem Angriff behaupten wird: \"Diese Nachricht wurde vom Unterzeichner digital signiert.\"")
+                        text: "If the attack is successful, the attacker can argue that the victim has digitally signed the \"dangerous\" instead of the \"harmless\" message.")
             }
-            GroupBox("Suche starten / Optionen festlegen") {
+            GroupBox("Start search / Set options") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Mit \"Nachrichtenpaar suchen\" starten Sie den Versuch, zu den oben eingestellten Nachrichten zwei Modifikationen zu finden, die denselben Hashwert haben.")
-                    Text("Der Sinn (Semantik) der Nachrichten ändert sich während der Suche nicht, da zum Modifizieren nicht darstellbare bzw. Formatierungszeichen verwendet werden.")
-                    Text("Unter \"Optionen\" können Sie das Hashverfahren, die Anzahl der für den Vergleich der Hashwerte herangezogenen Bits sowie verschiedene Modifikationsverfahren auswählen.")
-                    Text("Aktuell: \(settings.options.hash.displayName), \(settings.options.significantBits) signifikante Bits, \(methodDescription(settings.options.method))")
+                    Text("Click \"Start search\" to initiate the attack. The program will search for modifications of the two messages that hash to the same value.")
+                    Text("The message will not appear to change, since only unprintable characters will be used to modify them.")
+                    Text("In the \"Options\" you can select the hash function, the required minimum number of matching bits, and the message modification method.")
+                    Text("Current: \(settings.options.hash.displayName), \(settings.options.significantBits) significant bits, \(methodDescription(settings.options.method))")
                         .font(.callout).foregroundStyle(.secondary)
                     if model.running {
-                        ProgressView(value: model.progress) { Text("Suche läuft …") }
+                        ProgressView(value: model.progress) { Text("Searching for a pair of messages ...") }
                     }
                 }
                 .font(.callout).fixedSize(horizontal: false, vertical: true)
@@ -98,16 +98,16 @@ struct SignatureAttackView: View {
             Spacer(minLength: 0)
             HStack {
                 if model.running {
-                    Button("Abbrechen") { model.cancel() }
+                    Button("Cancel") { model.cancel() }
                 } else {
-                    Button("Nachrichtenpaar suchen", action: start).keyboardShortcut(.defaultAction)
+                    Button("Start search", action: start).keyboardShortcut(.defaultAction)
                 }
-                Button("Optionen …") { showOptions = true }.disabled(model.running)
-                Button("Modifikations-Demo …") {
+                Button("Options ...") { showOptions = true }.disabled(model.running)
+                Button("Modification demo ...") {
                     SignatureAttackWindows.openModificationDemo(document: NSDocumentController.shared.currentDocument as? CTDocument)
                 }
                 Spacer()
-                Button("Dialog beenden") { model.cancel(); closeKeyWindow() }
+                Button("Cancel") { model.cancel(); closeKeyWindow() }
             }
         }
         .padding(16)
@@ -123,7 +123,7 @@ struct SignatureAttackView: View {
             Text(text).font(.callout).fixedSize(horizontal: false, vertical: true)
             HStack {
                 TextField("", text: path).font(.system(.body, design: .monospaced))
-                Button("Suchen …") {
+                Button("Search...") {
                     let p = NSOpenPanel()
                     if p.runModal() == .OK, let u = p.url { path.wrappedValue = u.path }
                 }
@@ -132,23 +132,23 @@ struct SignatureAttackView: View {
     }
 
     private func useDefaults() {
-        settings.harmlessPath = Resources.url("Examples/Original.txt")?.path ?? ""
-        settings.dangerousPath = Resources.url("Examples/Faelschung.txt")?.path ?? ""
+        settings.harmlessPath = Resources.url("Examples/original.txt")?.path ?? ""
+        settings.dangerousPath = Resources.url("Examples/fake.txt")?.path ?? ""
     }
 
     private func methodDescription(_ m: SignatureAttack.Method) -> String {
         switch m {
         case let .blanks(le, db):
-            return "Leerzeichen einfügen (" + [le ? "vor Zeilenende" : nil, db ? "Leerzeichenverdoppelung" : nil].compactMap { $0 }.joined(separator: ", ") + ")"
+            return "Insert blanks (" + [le ? "in front of end of line" : nil, db ? "double blanks" : nil].compactMap { $0 }.joined(separator: ", ") + ")"
         case let .attachments(printable):
-            return "Zeichen anhängen (" + (printable ? "druckbare Zeichen" : "nicht druckbare Zeichen") + ")"
+            return "Attach characters (" + (printable ? "printable characters" : "unprintable characters") + ")"
         }
     }
 
     private func start() {
         guard let h = FileManager.default.contents(atPath: settings.harmlessPath),
               let d = FileManager.default.contents(atPath: settings.dangerousPath) else {
-            Alerts.error("Bitte eine harmlose und eine gefährliche Datei auswählen.")
+            Alerts.error("Please select a harmless and a dangerous file.")
             return
         }
         let opts = settings.options
@@ -157,11 +157,11 @@ struct SignatureAttackView: View {
             if r.cancelled { return }
             if r.success {
                 let hv = SignatureAttackWindows.hashTitle(r.harmlessHash, bits: opts.significantBits)
-                DocumentFactory.openResult(r.harmless, title: "Harmlose Nachricht: \(opts.hash.displayName), <\(hv)>", key: Hex.encode(r.harmlessHash))
-                DocumentFactory.openResult(r.dangerous, title: "Gefährliche Nachricht: \(opts.hash.displayName), <\(hv)>", key: Hex.encode(r.dangerousHash))
-                Alerts.info("Der Angriff war erfolgreich: Es wurden zwei Nachrichten gefunden, deren Hashwert innerhalb der ersten \(opts.significantBits) Bits identisch ist.")
+                DocumentFactory.openResult(r.harmless, title: "Harmless message: \(opts.hash.displayName), <\(hv)>", key: Hex.encode(r.harmlessHash))
+                DocumentFactory.openResult(r.dangerous, title: "Dangerous message: \(opts.hash.displayName), <\(hv)>", key: Hex.encode(r.dangerousHash))
+                Alerts.info("The attack was successful: Two different messages were found where the message hash is equal for the first \(opts.significantBits) bits.")
             } else {
-                Alerts.info("Der Angriff schlug fehl: Es konnte kein Nachrichtenpaar gefunden werden.")
+                Alerts.info("The attack failed: no pair of messages could be found.")
             }
             showStatistics = true
         }, onError: { Alerts.error($0) })
@@ -180,47 +180,47 @@ struct SignatureAttackOptionsView: View {
     @CTState private var printable = true
 
     var body: some View {
-        DialogScaffold(title: "Optionen für den Angriff auf den Hashwert der digitalen Signatur", minWidth: 520) {
-            GroupBox("Hashfunktion") {
+        DialogScaffold(title: "Options for the Attack on the Hash Value of the Digital Signature", minWidth: 520) {
+            GroupBox("Hash function") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Wählen Sie eines der sechs Hashverfahren sowie die Anzahl der Bits, die für den Vergleich der Hashwerte herangezogen werden sollen.")
+                    Text("Choose a hash function and the minimum required number of matching bits for the attack to be considered successful.")
                         .font(.callout).fixedSize(horizontal: false, vertical: true)
                     Picker("", selection: $hash) {
                         ForEach(SignatureAttack.Options.hashes, id: \.self) { Text($0.displayName).tag($0) }
                     }.pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                     HStack {
-                        Text("Signifikante Bitlänge")
+                        Text("Significant bit length")
                         TextField("", value: $bits, format: .number).frame(width: 50)
                         Text("(1 … \(hash.digestLength * 8))").foregroundStyle(.secondary)
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Optionen für die Nachrichtenmodifikation") {
+            GroupBox("Options for the modification of messages") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Entscheiden Sie, nach welchem Verfahren die Nachrichten modifiziert werden sollen.").font(.callout)
+                    Text("Determine the way messages are modified throughout the attack.").font(.callout)
                     Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 6) {
                         GridRow {
-                            Toggle("Leerzeichen einfügen", isOn: Binding(get: { blanks }, set: { if $0 { blanks = true } })).toggleStyle(.radioLike)
+                            Toggle("Insert blanks", isOn: Binding(get: { blanks }, set: { if $0 { blanks = true } })).toggleStyle(.radioLike)
                             VStack(alignment: .leading) {
-                                Toggle("Vor Zeilenende", isOn: $beforeLineEnd)
-                                Toggle("Leerzeichenverdoppelung", isOn: $doubleBlanks)
+                                Toggle("In front of end of line", isOn: $beforeLineEnd)
+                                Toggle("Double blanks", isOn: $doubleBlanks)
                             }.disabled(!blanks)
                         }
                         GridRow {
-                            Toggle("Zeichen anhängen", isOn: Binding(get: { !blanks }, set: { if $0 { blanks = false } })).toggleStyle(.radioLike)
+                            Toggle("Attach characters", isOn: Binding(get: { !blanks }, set: { if $0 { blanks = false } })).toggleStyle(.radioLike)
                             Picker("", selection: $printable) {
-                                Text("Druckbare Zeichen (zur Demonstration)").tag(true)
-                                Text("Nicht druckbare Zeichen").tag(false)
+                                Text("Printable characters (demonstration)").tag(true)
+                                Text("Unprintable characters").tag(false)
                             }.pickerStyle(.radioGroup).labelsHidden().disabled(blanks)
                         }
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
         } buttons: {
-            Button("Standard wiederherstellen") { load(.standard) }
+            Button("Restore defaults") { load(.standard) }
             Spacer()
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Übernehmen") {
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Apply") {
                 let maxBits = hash.digestLength * 8
                 settings.options = SignatureAttack.Options(
                     hash: hash, significantBits: min(max(1, bits), maxBits),
@@ -267,39 +267,39 @@ struct SignatureAttackStatisticsView: View {
     struct Row: Identifiable { let id: Int; let r: SignatureAttack.RunStatistics }
 
     var body: some View {
-        DialogScaffold(title: "Statistische Auswertung des Angriffs", minWidth: 560) {
-            GroupBox("Abschätzung des Aufwands zum Finden eines Nachrichtenpaares") {
+        DialogScaffold(title: "Statistics of the Attack", minWidth: 560) {
+            GroupBox("Assumed efforts") {
                 VStack(alignment: .leading) {
-                    LabeledContent("Rechenzeit", value: SignatureAttackStatisticsView.time(result.expectedSeconds))
-                    LabeledContent("Benötigte Schritte", value: "\(result.expectedSteps)")
+                    LabeledContent("Calculation time", value: SignatureAttackStatisticsView.time(result.expectedSeconds))
+                    LabeledContent("Steps required", value: "\(result.expectedSteps)")
                 }.padding(4)
             }
-            GroupBox("Tatsächlich geleisteter Aufwand") {
+            GroupBox("Efforts made to find a pair of messages") {
                 VStack(alignment: .leading) {
-                    LabeledContent("Rechenzeit", value: SignatureAttackStatisticsView.time(result.elapsed))
-                    LabeledContent("Benötigte Schritte", value: "\(result.totalSteps)")
-                    LabeledContent("Ausgeführte Hash-Operationen", value: "\(result.hashOperations)")
-                    Text("Aufschlüsselung der Einzelschritte").font(.callout).padding(.top, 4)
+                    LabeledContent("Calculation time", value: SignatureAttackStatisticsView.time(result.elapsed))
+                    LabeledContent("Steps required", value: "\(result.totalSteps)")
+                    LabeledContent("Hash operations performed", value: "\(result.hashOperations)")
+                    Text("Steps required sorted by run").font(.callout).padding(.top, 4)
                     Table(result.runs.enumerated().map { Row(id: $0.offset, r: $0.element) }) {
-                        TableColumn("Durchlauf") { Text("\($0.r.run)") }.width(70)
-                        TableColumn("Kollisionssuche") { Text("\($0.r.collisionSteps)") }.width(110)
-                        TableColumn("Bestätigung") { Text("\($0.r.confirmationSteps)") }.width(90)
-                        TableColumn("Ergebnis") { Text($0.r.outcome) }
+                        TableColumn("Run No.") { Text("\($0.r.run)") }.width(70)
+                        TableColumn("Steps until collision") { Text("\($0.r.collisionSteps)") }.width(110)
+                        TableColumn("Collision check") { Text("\($0.r.confirmationSteps)") }.width(90)
+                        TableColumn("Result") { Text($0.r.outcome) }
                     }.frame(height: 130)
                 }.padding(4)
             }
-            GroupBox("Hinzugefügte Bytes") {
+            GroupBox("Additional bytes") {
                 VStack(alignment: .leading) {
-                    Text("Harmlose Nachricht: \(result.addedBytesHarmless) Bytes")
-                    Text("Gefährliche Nachricht: \(result.addedBytesDangerous) Bytes")
+                    Text("\(result.addedBytesHarmless) bytes were added to the harmless message.")
+                    Text("\(result.addedBytesDangerous) bytes were added to the dangerous message.")
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
         } buttons: {
-            Button("Statistik ausgeben") {
-                DocumentFactory.openResult(text: report, title: "Statistik des Angriffs")
+            Button("Print statistics") {
+                DocumentFactory.openResult(text: report, title: "Statistics of the attack")
             }
             Spacer()
-            Button("Dialog beenden", action: close).keyboardShortcut(.defaultAction)
+            Button("Cancel", action: close).keyboardShortcut(.defaultAction)
         }
     }
 
@@ -308,24 +308,24 @@ struct SignatureAttackStatisticsView: View {
         if s < 120 { return String(format: "%.1f s", s) }
         if s < 7200 { return String(format: "%.1f min", s / 60) }
         if s < 172_800 { return String(format: "%.1f h", s / 3600) }
-        return String(format: "%.1f Tage", s / 86_400)
+        return String(format: "%.1f days", s / 86_400)
     }
 
     private var report: String {
         let s = SignatureAttackSettings.shared
-        var t = "Partielle \(options.hash.displayName)-Kollisionssuche\n\n"
-        t += "Dateiname Original: \(s.harmlessPath)\n"
-        t += "Dateiname Fälschung: \(s.dangerousPath)\n"
-        t += "Signifikante Bitlänge: \(options.significantBits)\n\n"
-        t += "Erwartete Schritte: \(result.expectedSteps)\nErwartete Rechenzeit: \(SignatureAttackStatisticsView.time(result.expectedSeconds))\n\n"
-        t += "Benötigte Schritte: \(result.totalSteps)\nRechenzeit: \(SignatureAttackStatisticsView.time(result.elapsed))\n"
-        t += "Ausgeführte Hash-Operationen: \(result.hashOperations)\n\n"
+        var t = "Partial \(options.hash.displayName)-Collision Search\n\n"
+        t += "Filename original: \(s.harmlessPath)\n"
+        t += "Filename fake: \(s.dangerousPath)\n"
+        t += "Significant bit length: \(options.significantBits)\n\n"
+        t += "Expected steps: \(result.expectedSteps)\nExpected calculating time: \(SignatureAttackStatisticsView.time(result.expectedSeconds))\n\n"
+        t += "Steps required: \(result.totalSteps)\nCalculating time: \(SignatureAttackStatisticsView.time(result.elapsed))\n"
+        t += "Hash operations performed: \(result.hashOperations)\n\n"
         for r in result.runs {
-            t += "Durchlauf \(r.run): Kollisionssuche \(r.collisionSteps) Schritte, Bestätigung \(r.confirmationSteps) Schritte – \(r.outcome)\n"
+            t += "Run \(r.run): collision search \(r.collisionSteps) steps, collision check \(r.confirmationSteps) steps – \(r.outcome)\n"
         }
         if result.success {
-            t += "\nHashwert harmlose Nachricht:   \(Hex.encode(result.harmlessHash))\n"
-            t += "Hashwert gefährliche Nachricht: \(Hex.encode(result.dangerousHash))\n"
+            t += "\nHash value of harmless message:  \(Hex.encode(result.harmlessHash))\n"
+            t += "Hash value of dangerous message: \(Hex.encode(result.dangerousHash))\n"
         }
         return t
     }
@@ -350,32 +350,32 @@ struct ModificationDemoView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            GroupBox("Hashwert") {
+            GroupBox("Hash value") {
                 VStack(alignment: .leading, spacing: 6) {
-                    HStack { Text("Hashwert").frame(width: 110, alignment: .leading); TextField("", text: $hashHex).font(.system(.body, design: .monospaced)) }
+                    HStack { Text("Hash value").frame(width: 110, alignment: .leading); TextField("", text: $hashHex).font(.system(.body, design: .monospaced)) }
                     HStack {
-                        Text("Signifikante Bitlänge").frame(width: 110, alignment: .leading)
+                        Text("Significant bit length").frame(width: 110, alignment: .leading)
                         TextField("", value: $bits, format: .number).frame(width: 50)
                         Spacer()
-                        Text("Parität des Hashwerts"); Text(parityText).font(.system(.body, design: .monospaced)).frame(width: 30)
+                        Text("Parity of the hash value"); Text(parityText).font(.system(.body, design: .monospaced)).frame(width: 30)
                     }
                 }.padding(4)
             }
-            GroupBox("Optionen für die Nachrichtenmodifikation") {
+            GroupBox("Options for the message modification") {
                 Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 6) {
                     GridRow {
-                        Toggle("Leerzeichen einfügen", isOn: Binding(get: { blanks }, set: { if $0 { blanks = true } })).toggleStyle(.radioLike)
+                        Toggle("Insert blanks", isOn: Binding(get: { blanks }, set: { if $0 { blanks = true } })).toggleStyle(.radioLike)
                         VStack(alignment: .leading) {
-                            Toggle("Vor Zeilenende", isOn: $beforeLineEnd)
-                            Toggle("Leerzeichenverdoppelung", isOn: $doubleBlanks)
+                            Toggle("In front of end of line", isOn: $beforeLineEnd)
+                            Toggle("Double blanks", isOn: $doubleBlanks)
                         }.disabled(!blanks)
                     }
                     GridRow {
-                        Toggle("Zeichen anhängen", isOn: Binding(get: { !blanks }, set: { if $0 { blanks = false } })).toggleStyle(.radioLike)
+                        Toggle("Attach characters", isOn: Binding(get: { !blanks }, set: { if $0 { blanks = false } })).toggleStyle(.radioLike)
                         VStack(alignment: .leading) {
                             Picker("", selection: $printable) {
-                                Text("Druckbare Zeichen (zur Demonstration)").tag(true)
-                                Text("Nicht druckbare Zeichen").tag(false)
+                                Text("Printable characters (demonstration)").tag(true)
+                                Text("Unprintable characters").tag(false)
                             }.pickerStyle(.radioGroup).labelsHidden()
                             Picker("Run", selection: $run) {
                                 ForEach(1...16, id: \.self) { Text(String(format: "%02d.", $0)).tag($0) }
@@ -384,13 +384,13 @@ struct ModificationDemoView: View {
                     }
                 }.padding(4)
             }
-            Text(document.map { "Dokument: <\($0.shortName)>" } ?? "Kein Dokument geöffnet – bitte zuerst ein Dokument öffnen.")
+            Text(document.map { "Document: <\($0.shortName)>" } ?? "No document opened – please open a document first.")
                 .font(.callout).foregroundStyle(.secondary)
             Spacer(minLength: 0)
             HStack {
-                Button("Modifikation berechnen", action: compute).keyboardShortcut(.defaultAction).disabled(document == nil)
+                Button("Compute modification", action: compute).keyboardShortcut(.defaultAction).disabled(document == nil)
                 Spacer()
-                Button("Abbrechen", action: closeKeyWindow).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: closeKeyWindow).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -398,14 +398,14 @@ struct ModificationDemoView: View {
 
     private func compute() {
         guard let doc = document, let v = value, bits >= 1, v.count * 8 >= bits else {
-            Alerts.error("Der Hashwert muss mindestens so viele Bits enthalten wie die signifikante Bitlänge.")
+            Alerts.error("The hash value must contain at least as many bits as the significant bit length.")
             return
         }
         do {
             let m = try SignatureAttack.modify(doc.bytes, value: v, bits: bits,
                                                method: blanks ? .blanks(beforeLineEnd: beforeLineEnd, doubleBlanks: doubleBlanks) : .attachments(printable: printable),
                                                run: run - 1)
-            DocumentFactory.openResult(m, title: "Modifikation von <\(doc.shortName)>", parent: doc, key: Hex.encode(v))
+            DocumentFactory.openResult(m, title: "Modification of <\(doc.shortName)>", parent: doc, key: Hex.encode(v))
         } catch { Alerts.error(error.localizedDescription) }
     }
 }

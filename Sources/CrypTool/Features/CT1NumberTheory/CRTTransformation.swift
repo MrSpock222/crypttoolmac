@@ -6,7 +6,7 @@ import CTBigNum
 /// CT1 IDD_CRT_TRANSFORMATION: "Visualisierung Hin- und Rücktransformation von Zahlen in
 /// Berechnungen mit Hilfe des CRT" (DlgCrtTransformation.cpp).
 struct CT1CRTTransformationDialog: View {
-    static let title = "Visualisierung Hin- und Rücktransformation von Zahlen in Berechnungen mit Hilfe des CRT"
+    static let title = "Visualization of the Transformation from Number Notation into the Modular Representation with the CRT"
 
     @StateObject private var win = CT1WindowRef()
     /// 0 Multiplikation (default), 1 Addition, 2 Subtraktion
@@ -33,67 +33,67 @@ struct CT1CRTTransformationDialog: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             GroupBox {
-                Text("Dieser Dialog visualisiert die Hin- und Rücktransformation der Zifferndarstellung in die modulare Darstellung mit Hilfe des Chinesischen Restsatzes (CRT).\nNach Auswahl der mathematischen Operation, der Eingabe der Zahlen A und B sowie der höchstens 5 Moduln kann die Berechnung über den Button \"Lösen\" gestartet werden.")
+                Text("This dialog is supposed to show the transformation of the integer number notation into the set of the according modular number representation - based on the Chinese Remainder Theorem (CRT).  After selecting the mathematical operation, entering the numbers A and B and entering the modules, you can click on 'Solve' to start the visualization.")
                     .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 10) {
-                    CRTGroup(title: "Zifferndarstellung") {
-                        CRTGroup(title: "1. Mathematische Operation auswählen:") {
+                    CRTGroup(title: "Number notation") {
+                        CRTGroup(title: "1. Choose a mathematic operation:") {
                             Picker("", selection: Binding(get: { op }, set: { op = $0; clearResults() })) {
-                                Text("Multiplikation").tag(0); Text("Addition").tag(1); Text("Subtraktion").tag(2)
+                                Text("Multiplication").tag(0); Text("Addition").tag(1); Text("Subtraction").tag(2)
                             }.pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                         }
-                        CRTGroup(title: "2. Bitte zwei Zahlen eingeben:") {
-                            numberRow("Zahl A", Binding(get: { aText }, set: { aText = CRTUtil.digits($0); clearResults() }))
-                            numberRow("Zahl B", Binding(get: { bText }, set: { bText = CRTUtil.digits($0); clearResults() }))
+                        CRTGroup(title: "2. Please enter two numbers:") {
+                            numberRow("A:", Binding(get: { aText }, set: { aText = CRTUtil.digits($0); clearResults() }))
+                            numberRow("B:", Binding(get: { bText }, set: { bText = CRTUtil.digits($0); clearResults() }))
                         }
-                        CRTGroup(title: "3. Bitte die Felder der Moduln mit paarweise primen Zahlen füllen:") {
+                        CRTGroup(title: "3. Please enter modules, that are relatively prime to each other:") {
                             Picker("", selection: Binding(get: { genMode }, set: { genMode = $0; m = Array(repeating: "", count: 5); clearResults() })) {
-                                Text("Moduln selbst eingeben").tag(0); Text("Prime Moduln generieren lassen ").tag(1)
+                                Text("enter modules manually").tag(0); Text("generate prime modules automatically").tag(1)
                             }.pickerStyle(.radioGroup).horizontalRadioGroupLayout().labelsHidden()
                             if genMode == 1 {
                                 HStack {
-                                    Text("Wertebereich der Primzahlen innerhalb des Intervalls:")
+                                    Text("Range of values for prime numbers within this closed interval:")
                                     Spacer()
-                                    Text("Anzahl:")
+                                    Text("Number:")
                                     TextField("", text: Binding(get: { count }, set: { count = CRTUtil.digits($0); clearResults() })).frame(width: 36)
                                 }
                                 HStack {
-                                    Text("Untergrenze:")
+                                    Text("Lower limit:")
                                     TextField("", text: Binding(get: { lower }, set: { lower = $0; clearResults() })).frame(width: 80)
-                                    Text("Obergrenze:")
+                                    Text("Upper limit:")
                                     TextField("", text: Binding(get: { upper }, set: { upper = $0; clearResults() })).frame(width: 80)
                                     Spacer()
-                                    Button("Generieren", action: generate)
+                                    Button("Generate", action: generate)
                                 }
                             }
                             ForEach(0..<5, id: \.self) { i in
-                                numberRow("Modul \(i + 1)", Binding(get: { m[i] }, set: { m[i] = CRTUtil.digits($0); clearResults() }))
+                                numberRow("Module \(i + 1)", Binding(get: { m[i] }, set: { m[i] = CRTUtil.digits($0); clearResults() }))
                             }
                         }
                     }
-                    CRTGroup(title: "Darstellbarer Zahlenbereich (abhängig von der Größe der Moduln)") { CRTOutputField(text: range) }
-                    CRTGroup(title: "Lösung") { CRTOutputField(text: x) }
+                    CRTGroup(title: "Representable range (depends on the size of the modules)") { CRTOutputField(text: range) }
+                    CRTGroup(title: "Solution") { CRTOutputField(text: x) }
                     HStack {
-                        Button("Lösen", action: solve).keyboardShortcut(.defaultAction).disabled(!canSolve)
-                        Button("Zurücksetzen", action: reset)
-                        Button("Beenden") { win.window?.close() }
+                        Button("Solve", action: solve).keyboardShortcut(.defaultAction).disabled(!canSolve)
+                        Button("Reset", action: reset)
+                        Button("Exit") { win.window?.close() }
                         Spacer()
                         CT1HelpButton(action: .crtTransformation)
                     }
                 }
                 .frame(width: 470)
                 VStack(alignment: .leading, spacing: 10) {
-                    CRTGroup(title: "Modulare Darstellung") {
-                        HStack { Text("Zahl A").frame(width: 50, alignment: .leading); CRTOutputField(text: ma) }
-                        HStack { Text("Zahl B").frame(width: 50, alignment: .leading); CRTOutputField(text: mb) }
+                    CRTGroup(title: "Modular representation") {
+                        HStack { Text("A:").frame(width: 50, alignment: .leading); CRTOutputField(text: ma) }
+                        HStack { Text("B:").frame(width: 50, alignment: .leading); CRTOutputField(text: mb) }
                     }
                     Image(systemName: "arrow.down").frame(maxWidth: .infinity)
-                    CRTGroup(title: "Ergebnis der Operation") { CRTOutputField(text: mab) }
+                    CRTGroup(title: "Result of operation") { CRTOutputField(text: mab) }
                     Image(systemName: "arrow.down").frame(maxWidth: .infinity)
-                    CRTGroup(title: "Basisberechnung") { CRTOutputField(text: basis) }
-                    CRTGroup(title: "Rücktransformation") { CRTOutputField(text: back, multiline: true, minHeight: 170) }
+                    CRTGroup(title: "Base calculation") { CRTOutputField(text: basis) }
+                    CRTGroup(title: "Transformation back") { CRTOutputField(text: back, multiline: true, minHeight: 170) }
                 }
                 .frame(minWidth: 320)
             }
@@ -124,17 +124,17 @@ struct CT1CRTTransformationDialog: View {
         m = Array(repeating: "", count: 5)
         clearResults()
         guard let n = Int(count), n >= 1, n <= 5 else {
-            CRTUtil.message("Es können nur 1 bis 5 Primzahlen erzeugt werden!"); return
+            CRTUtil.message("Only 1 to 5 prime numbers can be generated!"); return
         }
         if lower.trimmingCharacters(in: .whitespaces).isEmpty || upper.trimmingCharacters(in: .whitespaces).isEmpty {
-            CRTUtil.message("Geben Sie Ober- und Untergrenze ein!"); return
+            CRTUtil.message("Enter an upper limit and a lower limit."); return
         }
-        let inputFalse = "In diesem Feld wird eine Zahl oder ein Ausdruck erwartet,\naus dem sich ein Zahlenwert berechnen lässt.\nBitte geben Sie einen gültigen Ausdruck ein!\n\nBeispiele: 123, 2^15+1, (2^17-5)^2."
+        let inputFalse = "Please enter into this field an integer or an expression, that\nevaluates to an integer!\nExamples: 123, 2^15+1, (2^17-5)^2."
         guard let lo = CRTUtil.formula(lower) else { Alerts.error(inputFalse); return }
         guard let hi = CRTUtil.formula(upper) else { Alerts.error(inputFalse); return }
-        let tooBig = "Die Demonstration unterstützt nur positive ganze Zahlen der Bitlänge kleiner 186.\nDas sind Zahlen mit höchstens 56 Dezimalstellen.\nBitte senken Sie den Wertebereich. "
+        let tooBig = "The demonstration supports only positive integers of bit length smaller than 186.\nThese are decimal numbers with at most 56 digits.\nPlease decrease the Co-domain."
         if hi.isZero || hi.description.count > 56 || lo.description.count > 56 { CRTUtil.message(tooBig); return }
-        if lo > hi { Alerts.error("Die Untergrenze darf nicht größer als die Obergrenze sein!"); return }
+        if lo > hi { Alerts.error("The lower limit must not be greater than the upper limit!"); return }
         var primes: [BigUInt] = []
         for _ in 0..<n {
             var found: BigUInt?
@@ -142,7 +142,7 @@ struct CT1CRTTransformationDialog: View {
                 if let p = CRTUtil.randomPrime(lo, hi), !primes.contains(p) { found = p; break }
             }
             guard let p = found else {
-                CRTUtil.message("Beim zufälligen Generieren der Primzahlen für die benötigten \(n) Moduln sind Primzahlen doppelt aufgetreten.\nFür die Anwendung des Chinesischen Restsatzes müssen die Module jedoch alle verschieden sein.\nBitte drücken Sie (evtl. mehrfach) erneut den Button 'Generieren' oder vergrößern Sie das Intervall für den Wertebereich der Primzahlen.\n")
+                CRTUtil.message("While generating prime numbers for \(n) moduli, some of these numbers arose doubly.\nTo apply the Chinese remainder theorem, all these modules have to be different.\nPlease click 'Generate' again or increase the range of values for the prime numbers.\n")
                 return
             }
             primes.append(p)
@@ -167,25 +167,25 @@ struct CT1CRTTransformationDialog: View {
             for j in (i + 1)..<5 where !m[i].isEmpty && !m[j].isEmpty {
                 let mi = BigUInt(m[i]) ?? 0, mj = BigUInt(m[j]) ?? 0
                 if !mi.gcd(mj).isOne {
-                    text += "Modul \(i + 1) (\(m[i])) und Modul \(j + 1) (\(m[j])) sind nicht teilerfremd.\n"
+                    text += "Module \(i + 1) (\(m[i])) and module \(j + 1) (\(m[j])) are not coprime.\n"
                     ok = false
                 }
             }
             if m[i] == "1" || m[i] == "0" { ok = false; one = true }
         }
-        if one { CRTUtil.message("Das Modul m muss größer als 1 sein !") }
+        if one { CRTUtil.message("The module m has to be larger than 1!") }
         if !text.isEmpty {
-            CRTUtil.message(text + "\nTeilerfremde Moduln sind eine Voraussetzung für die Anwendung des Chinesischen Restsatzes. \n")
+            CRTUtil.message(text + "\nCoprime modules are a pre-condition to apply the Chinese remainder theorem. \n")
         }
         guard ok, !mods.isEmpty else { return }
-        let rangeText = "0 bis " + (M - BigInt(1)).description
+        let rangeText = "0 to " + (M - BigInt(1)).description
         let res: BigInt = op == 0 ? a * b : (op == 1 ? a + b : a - b)
         if (op == 0 && a * b > M) || (op == 1 && a + b > M) || (op == 2 && (a - b > M || a - b < BigInt(0))) {
             range = rangeText
             if op == 2 && a - b < BigInt(0) {
-                CRTUtil.message("Das Ergebnis darf nicht negativ sein. Berechnet wurde \(res.description).\n")
+                CRTUtil.message("The result must be non-negative. \(res.description) was calculated.\n")
             } else {
-                CRTUtil.message("Der Zahlenbereich [\(rangeText)] wurde überschritten. Berechnet wurde \(res.description).\nDeshalb ist keine Lösung mit den gewählten Moduln möglich.")
+                CRTUtil.message("The range [\(rangeText)] was exceeded. \(res.description) was calculated.\nUnder this circumstance, no solution with the chosen modules is possible.")
             }
             return
         }

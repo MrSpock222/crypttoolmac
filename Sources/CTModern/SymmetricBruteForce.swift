@@ -70,14 +70,14 @@ public enum SymmetricBruteForce {
         let pattern = try Pattern(keyPattern, alg)
         let total = pattern.radices.reduce(1.0) { $0 * Double($1) }
         guard total <= Double(1 << 62) else {
-            throw CTError("Der Schlüsselraum (\(String(format: "%.3g", total)) Schlüssel) ist zu groß für eine vollständige Suche.")
+            throw CTError("The key space (\(String(format: "%.3g", total)) keys) is too large for an exhaustive search.")
         }
         let keyCount = pattern.radices.reduce(UInt64(1)) { $0 * UInt64($1) }
 
         // ciphertext prefix (block aligned)
         let unit = alg == .rc4 ? 1 : alg.paddingUnit
         guard ciphertext.count >= unit, !ciphertext.isEmpty else {
-            throw CTError("Der Geheimtext ist zu kurz (mindestens \(unit) Byte für \(alg.displayName)).")
+            throw CTError("The ciphertext is too short (at least \(unit) bytes for \(alg.displayName)).")
         }
         let window = max(windowLength, unit)
         let prefixLength = min(ciphertext.count, window) / unit * unit
@@ -213,17 +213,17 @@ public enum SymmetricBruteForce {
                 case "*", "?": nibbles.append(nil)
                 default:
                     guard let v = Int(String(ch), radix: 16) else {
-                        throw CTError("Ungültiges Zeichen „\(ch)“ im Schlüsselmuster (erlaubt: 0–9, A–F und *).")
+                        throw CTError("Invalid character \"\(ch)\" in the key pattern (allowed: 0-9, A-F and *).")
                     }
                     nibbles.append(v)
                 }
             }
             guard !nibbles.isEmpty, nibbles.count % 2 == 0 else {
-                throw CTError("Das Schlüsselmuster muss aus ganzen Bytes (gerade Anzahl Hex-Ziffern) bestehen.")
+                throw CTError("The key pattern must consist of whole bytes (even number of hex digits).")
             }
             let bytes = nibbles.count / 2
             guard alg.isValidKeyLength(bytes) else {
-                throw CTError("Das Schlüsselmuster beschreibt \(bytes * 8) Bit; \(alg.displayName) erlaubt \(alg.keySizesText).")
+                throw CTError("The key pattern describes \(bytes * 8) bits; \(alg.displayName) allows \(alg.keySizesText).")
             }
             var key = [UInt8](repeating: 0, count: bytes)
             var positions: [Int] = [], radices: [Int] = [], steps: [UInt8] = []

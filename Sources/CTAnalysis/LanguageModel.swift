@@ -43,7 +43,7 @@ public struct LanguageModel: Sendable {
     public static func from(referenceText: String, options: TextOptions) -> LanguageModel {
         let table = LetterTable(options: options)
         let seq = table.indices(referenceText)
-        return from(indices: seq, alphabet: table.characters, name: "Referenztext")
+        return from(indices: seq, alphabet: table.characters, name: "Reference text")
     }
 
     /// Builds a model from a sequence of alphabet indices.
@@ -107,12 +107,12 @@ public struct LanguageModel: Sendable {
     /// Model with the embedded German letter frequencies (A–Z, Ä, Ö, Ü, ß; space if part of the
     /// alphabet). Letters of the alphabet without a table entry get a tiny probability.
     public static func defaultGerman(options: TextOptions) -> LanguageModel {
-        fromTable(germanFrequencies, spaceShare: 0.15, options: options, name: "Deutsch (Standard)")
+        fromTable(germanFrequencies, spaceShare: 0.15, options: options, name: "German (default)")
     }
 
     /// Model with the embedded English letter frequencies (A–Z; space if part of the alphabet).
     public static func defaultEnglish(options: TextOptions) -> LanguageModel {
-        fromTable(englishFrequencies, spaceShare: 0.18, options: options, name: "Englisch (Standard)")
+        fromTable(englishFrequencies, spaceShare: 0.18, options: options, name: "English (default)")
     }
 
     private static func fromTable(_ tab: [Character: Double], spaceShare: Double, options: TextOptions, name: String) -> LanguageModel {

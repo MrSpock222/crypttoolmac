@@ -108,42 +108,42 @@ struct PKIHybridEncryptionDemo: View {
     @CTState private var loaded = false
 
     private var key: StoredKey? { keyID.flatMap { KeyStore.shared.key(id: $0) } }
-    private let inactiveF1 = "\n\nMit F1 erhalten Sie Informationen darüber, in welcher Reihenfolge\nSie die Aktivitäten im Datenflussplan steuern können."
+    private let inactiveF1 = "\n\nUse F1 to get information about the sequence you\nshould follow to activate this button."
 
     var body: some View {
         VStack(spacing: 6) {
-            Text("Hybridverschlüsselung mit RSA-AES - Visualisierung anhand eines Datenflussplans").font(.title3.weight(.semibold))
+            Text("Hybrid Encryption with RSA-AES - Visualization with a Flow Chart").font(.title3.weight(.semibold))
             Grid(horizontalSpacing: 24, verticalSpacing: 4) {
                 GridRow {
-                    PKIFlowButton(title: "Dokument wählen", shape: .hexagon, state: docBytes.isEmpty ? .todo : .done, action: chooseDocument)
-                    PKIFlowButton(title: "Symmetrischen Schlüssel generieren", shape: .hexagon, state: sessionKey == nil ? .todo : .done, action: generateKey)
-                    PKIFlowButton(title: "Asymmetrischen Schlüssel wählen", shape: .hexagon, state: keyID == nil ? .todo : .done, action: chooseKey)
+                    PKIFlowButton(title: "Open document", shape: .hexagon, state: docBytes.isEmpty ? .todo : .done, action: chooseDocument)
+                    PKIFlowButton(title: "Generate session key", shape: .hexagon, state: sessionKey == nil ? .todo : .done, action: generateKey)
+                    PKIFlowButton(title: "Select asymmetr. key", shape: .hexagon, state: keyID == nil ? .todo : .done, action: chooseKey)
                 }
                 GridRow { PKIFlowArrow(); PKIFlowArrow(); PKIFlowArrow() }
                 GridRow {
-                    PKIFlowButton(title: "Dokument", shape: .diamond, state: docBytes.isEmpty ? .inactive : .info, action: showDocument)
-                    PKIFlowButton(title: "Sessionkey", shape: .diamond, state: sessionKey == nil ? .inactive : .info, action: showSessionKey)
-                    PKIFlowButton(title: "Öffentlicher Schlüssel", shape: .diamond, state: keyID == nil ? .inactive : .info, action: showPublicKey)
+                    PKIFlowButton(title: "Document", shape: .diamond, state: docBytes.isEmpty ? .inactive : .info, action: showDocument)
+                    PKIFlowButton(title: "Session key", shape: .diamond, state: sessionKey == nil ? .inactive : .info, action: showSessionKey)
+                    PKIFlowButton(title: "Asymmetr. key", shape: .diamond, state: keyID == nil ? .inactive : .info, action: showPublicKey)
                 }
                 GridRow { PKIFlowArrow(); PKIFlowArrow(); PKIFlowArrow() }
                 GridRow {
-                    PKIFlowButton(title: "Text symmetrisch verschlüsseln", shape: .rectangle,
+                    PKIFlowButton(title: "Encrypt document symmetr.", shape: .rectangle,
                                   state: (docBytes.isEmpty || sessionKey == nil) ? .inactive : (cipher == nil ? .todo : .done), action: encryptDocument)
                         .gridCellColumns(1)
                     Color.clear.frame(width: 1, height: 1)
-                    PKIFlowButton(title: "Schlüssel asymmetrisch verschlüsseln", shape: .rectangle,
+                    PKIFlowButton(title: "Encrypt session key asymmetr.", shape: .rectangle,
                                   state: (sessionKey == nil || keyID == nil) ? .inactive : (encKey == nil ? .todo : .done), action: encryptKey)
                 }
                 GridRow { PKIFlowArrow(); Color.clear.frame(width: 1, height: 1); PKIFlowArrow() }
                 GridRow {
-                    PKIFlowButton(title: "Verschlüsseltes Dokument", shape: .diamond, state: cipher == nil ? .inactive : .info, action: showCipher)
+                    PKIFlowButton(title: "Encrypted document", shape: .diamond, state: cipher == nil ? .inactive : .info, action: showCipher)
                     Color.clear.frame(width: 1, height: 1)
-                    PKIFlowButton(title: "Verschlüsselter Schlüssel", shape: .diamond, state: encKey == nil ? .inactive : .info, action: showEncKey)
+                    PKIFlowButton(title: "Encrypted session key", shape: .diamond, state: encKey == nil ? .inactive : .info, action: showEncKey)
                 }
                 GridRow {
-                    PKIFlowButton(title: "Abbrechen", shape: .oval, state: .done, width: 150, height: 40, action: close)
+                    PKIFlowButton(title: "Cancel", shape: .oval, state: .done, width: 150, height: 40, action: close)
                     PKIHelpButton(action: .hybridRSAEncrypt)
-                    PKIFlowButton(title: "Datenausgabe", shape: .oval, state: (cipher != nil && encKey != nil) ? .done : .inactive,
+                    PKIFlowButton(title: "Save", shape: .oval, state: (cipher != nil && encKey != nil) ? .done : .inactive,
                                   width: 150, height: 40, action: output)
                 }
                 .padding(.top, 6)
@@ -161,7 +161,7 @@ struct PKIHybridEncryptionDemo: View {
         }
     }
 
-    private func inactive(_ msg: String) { PKIModal.warning("Dieser Button ist im Moment inaktiv!\n" + msg + inactiveF1) }
+    private func inactive(_ msg: String) { PKIModal.warning("This button is currently inactive!\n" + msg + inactiveF1) }
 
     private func chooseDocument() {
         let p = NSOpenPanel()
@@ -184,13 +184,13 @@ struct PKIHybridEncryptionDemo: View {
 
     private func chooseKey() {
         guard KeyStore.shared.keys.contains(where: { $0.type.isRSA }) else {
-            PKIModal.warning("Es ist kein RSA-Schlüssel vorhanden.\nErzeugen Sie zuerst ein RSA-Schlüsselpaar (Digitale Signaturen/PKI ▸ PKI ▸ Schlüssel erzeugen/importieren).")
+            PKIModal.warning("There is no RSA key available!\nGenerate an RSA key pair first (Digital Signatures/PKI ▸ PKI ▸ Generate/Import Keys).")
             return
         }
         var chosen: UUID? = keyID
-        PKIModal.run(title: "RSA-Schlüssel für die Hybridverschlüsselung") { done in
-            PKIKeyChooser(headline: "Wähle den Empfängerschlüssel von der Liste.",
-                          note: "Bemerkung: Es werden nur Namen angezeigt, die einen RSA-Schlüssel haben.",
+        PKIModal.run(title: "RSA key for the hybrid encryption") { done in
+            PKIKeyChooser(headline: "Select the receiver key from the list.",
+                          note: "Note: Here only names are displayed, which have an RSA key.",
                           filter: .rsaOnly, initial: keyID, withPIN: false) { id, _ in
                 chosen = id
                 done()
@@ -204,26 +204,26 @@ struct PKIHybridEncryptionDemo: View {
     }
 
     private func showDocument() {
-        guard !docBytes.isEmpty else { return inactive("Sie müssen vorher eine Datei auswählen.") }
+        guard !docBytes.isEmpty else { return inactive("Please select a file.") }
         infoTitle = docTitle
         infoText = HexDump.format(docBytes)
     }
 
     private func showSessionKey() {
-        guard let k = sessionKey else { return inactive("Sie müssen vorher einen Schlüssel generieren.") }
-        infoTitle = "Zufällig gewählter symmetrischer Sessionkey:"
+        guard let k = sessionKey else { return inactive("Please generate a session key first.") }
+        infoTitle = "Symmetric session key, selected randomly:"
         infoText = PKIText.hex(k)
     }
 
     private func showPublicKey() {
-        guard let k = key, let p = k.rsaPublic else { return inactive("Sie müssen vorher einen Schlüssel wählen!") }
-        infoTitle = "Öffentlicher Schlüssel von: \(k.firstLast)"
-        infoText = "Schlüsselbezeichner: \(k.ct1Identifier)\n\nRSA-Modul N (\(p.n.bitLength) Bit):\n\(p.n)\n\nÖffentlicher Schlüssel e:\n\(p.e)"
+        guard let k = key, let p = k.rsaPublic else { return inactive("Please select the public key of the recipient.") }
+        infoTitle = "Public key of: \(k.firstLast)"
+        infoText = "Key identifier: \(k.ct1Identifier)\n\nRSA modulus N (\(p.n.bitLength) bits):\n\(p.n)\n\nPublic key e:\n\(p.e)"
     }
 
     private func encryptDocument() {
         guard let k = sessionKey, !docBytes.isEmpty else {
-            return PKIModal.warning("Dieser Button ist im Moment inaktiv!" + inactiveF1)
+            return PKIModal.warning("This button is currently inactive!" + inactiveF1)
         }
         do {
             cipher = try SymmetricCipher.encrypt(.aes, key: k, data: docBytes)
@@ -232,29 +232,29 @@ struct PKIHybridEncryptionDemo: View {
     }
 
     private func encryptKey() {
-        guard let s = sessionKey, let p = key?.rsaPublic else { return inactive("Sie müssen vorher einen Schlüssel wählen!") }
+        guard let s = sessionKey, let p = key?.rsaPublic else { return inactive("Please select the public key of the recipient.") }
         encKey = PKIHybridDocument.encryptSessionKey(s, with: p)
         showEncKey()
     }
 
     private func showCipher() {
-        guard let c = cipher else { return inactive("Sie müssen vorher die Datei mit dem symmetrischen Schlüssel verschlüsseln.") }
-        infoTitle = "Dokument, symmetrisch verschlüsselt mit dem Sessionkey:"
+        guard let c = cipher else { return inactive("Please encrypt the document with your session key.") }
+        infoTitle = "Document encrypted symmetrically with the session key:"
         infoText = HexDump.format(c)
     }
 
     private func showEncKey() {
-        guard let e = encKey else { return inactive("Sie müssen vorher den symmetrischen Schlüssel asymmetrisch verschlüsseln.") }
-        infoTitle = "Sessionkey, asymmetrisch verschlüsselt mit dem Public-Key des Empfängers:"
+        guard let e = encKey else { return inactive("Please encrypt the session key first.") }
+        infoTitle = "Session key encrypted asymmetrically with recipient's public key:"
         infoText = PKIText.hex(e)
     }
 
     private func output() {
         guard let c = cipher, let e = encKey, let k = key, let s = sessionKey else {
-            return inactive("Sie müssen vorher das Dokument symmetrisch\nund den Sessionkey asymmetrisch verschlüsseln.")
+            return PKIModal.warning("This button is currently inactive!\nBefore saving, the document must be encrypted symmetric\nand the session key must be encrypted asymmetric.\n\nThe F1 key will give you further information on which sequence you can control the activities on the flowchart.")
         }
         let out = PKIHybridDocument(keyID: k.ct1Identifier, encryptedSessionKey: e, ciphertext: c).serialize()
-        DocumentFactory.openResult(out, title: "Hybridverschlüsselung von <\(docTitle)> für <\(k.firstLast)>",
+        DocumentFactory.openResult(out, title: "Hybrid encryption of <\(docTitle)> for <\(k.firstLast)>",
                                    parent: document, method: "hybrid", key: "Sessionkey: " + PKIText.hex(s), viewMode: .hex)
         close()
     }
@@ -280,7 +280,7 @@ struct PKIKeyChooser: View {
                 Text(note).font(.callout)
                 Spacer()
                 if withPIN {
-                    Text("PIN-Code:")
+                    Text("PIN code:")
                     SecureField("", text: $pin).frame(width: 110)
                 }
             }
@@ -288,7 +288,7 @@ struct PKIKeyChooser: View {
             HStack {
                 Button("OK") { if let s = sel { ok(s, pin) } }.keyboardShortcut(.defaultAction).disabled(sel == nil)
                 Spacer()
-                Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: cancel).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -316,8 +316,8 @@ struct PKIHybridDecryptionDemo: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Hybridentschlüsselung mit RSA-AES").font(.title3.weight(.semibold))
-            Text("Schrittweise Hybrid-Entschlüsselung:").bold()
+            Text("Hybrid Decryption with RSA-AES").font(.title3.weight(.semibold))
+            Text("Step-by-step hybrid decryption:").bold()
             ScrollViewReader { proxy in
                 ScrollView {
                     Text(display).font(.system(.body, design: .monospaced)).textSelection(.enabled)
@@ -332,12 +332,12 @@ struct PKIHybridDecryptionDemo: View {
             Text(stepLine).bold()
             Divider()
             HStack {
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Entschlüsseln") { decryptMessage() }.disabled(sessionKey == nil)
-                Button("Zertifikat anzeigen") { if let k = key { PKICertificate.show(k) } }.disabled(key == nil)
+                Button("Decrypt") { decryptMessage() }.disabled(sessionKey == nil)
+                Button("Show certificate") { if let k = key { PKICertificate.show(k) } }.disabled(key == nil)
                 PKIHelpButton(action: .hybridRSADecrypt)
-                Button("Weiter >") { advance() }.keyboardShortcut(.defaultAction).disabled(step > maxSteps || parsed == nil)
+                Button("Continue >") { advance() }.keyboardShortcut(.defaultAction).disabled(step > maxSteps || parsed == nil)
             }
         }
         .padding(16)
@@ -347,7 +347,7 @@ struct PKIHybridDecryptionDemo: View {
             started = true
             do {
                 parsed = try PKIHybridDocument.parse(document.bytes)
-                display = "Im 1. Schritt wählen Sie Ihr Zertifikat und geben Ihre PIN ein,\num Ihren privaten RSA-Schlüssel aus der PSE lesen zu können.\n\nKlicken Sie auf Weiter...\n\n"
+                display = "As step 1 please select your certificate from the PSE and enter \nyour PIN, to be able to read your private RSA key from the PSE.\n\nClick Continue > ...\n\n"
                 step = 1
             } catch {
                 DispatchQueue.main.async {
@@ -363,9 +363,9 @@ struct PKIHybridDecryptionDemo: View {
         switch step {
         case 1:
             var chosen: (UUID, String)?
-            PKIModal.run(title: "RSA-Schlüssel für die Hybridentschlüsselung") { done in
-                PKIKeyChooser(headline: "Wählen Sie Ihren geheimen Schlüssel aus der Liste der PSEs aus:",
-                              note: "Bemerkung: Es werden nur Namen mit einem RSA Schlüssel angezeigt.",
+            PKIModal.run(title: "RSA key for Hybrid decryption") { done in
+                PKIKeyChooser(headline: "Select your secret key from the PSE list.",
+                              note: "Note: Only PSEs containing an RSA key are shown.",
                               filter: .rsaOnly, initial: KeyStore.shared.key(ct1Identifier: doc.keyID)?.id, withPIN: true) { id, pin in
                     chosen = (id, pin)
                     done()
@@ -374,23 +374,23 @@ struct PKIHybridDecryptionDemo: View {
             guard let (id, pin) = chosen, let k = KeyStore.shared.key(id: id) else { return }
             guard case .rsa(let p)? = PKIPinAccess.open(k, pin: pin) else { return }
             guard k.ct1Identifier == doc.keyID.trimmingCharacters(in: .whitespaces) else {
-                PKIModal.warning("Sie haben das falsche Zertifikat gewählt!")
+                PKIModal.warning("You have selected the wrong Certificate!")
                 return
             }
             key = k; pair = p
-            display += "Im 2. Schritt erhalten Sie Informationen zum privaten RSA-Schlüssel.\nDieser wird gebraucht, um den Sessionkey zu entschlüsseln.\n\nKlicken Sie auf Weiter...\n\n"
+            display += "As step 2 your private RSA key is shown. It is used to decrypt\nthe session key.\n\nClick Continue > ...\n\n"
         case 2:
             guard let p = pair else { return }
-            display += "Ihr privater RSA-Schlüssel d ist die Zahl: \nd = \(p.d)\n\n\nIm 3. Schritt wird der Session-Key entschlüsselt und angezeigt.\n\nKlicken Sie auf Weiter...\n"
+            display += "Your private RSA key d is the integer number:\nd = \(p.d)\n\n\nAs step 3 your session key will be decrypted and displayed.\n\nClick Continue > ...\n"
         case 3:
             guard let p = pair else { return }
             let k = PKIHybridDocument.decryptSessionKey(doc.encryptedSessionKey, with: p).key
             sessionKey = k
-            display += "\nDer Session-Key ist die folgende 128 Bit lange Zahl:\nSession-Key: \(PKIText.hex(k)) \n\nWenn Sie auf Entschlüsseln klicken, wird\n- die Nachricht mit dem Session-Key entschlüsselt und\n- die entschlüsselte Nachricht in einem Fenster ausgegeben und\n dieser Dialog geschlossen.\n\nKlicken Sie auf Entschlüsseln.\n\n"
+            display += "\nThe session key is the following 128 bit number:\nSession key: \(PKIText.hex(k)) \n\nClicking Decrypt\n- decrypts the message with the session key and\n- displays the decrypted message within the main window and\n- closes this dialog box.\n\nClick Decrypt.\n\n"
         default:
             return
         }
-        stepLine = "Ausgeführt: Schritt \(step) von maximal \(maxSteps) Schritten."
+        stepLine = "Step \(step) out of a maximum of \(maxSteps) steps."
         step += 1
     }
 
@@ -398,7 +398,7 @@ struct PKIHybridDecryptionDemo: View {
         guard let doc = parsed, let k = sessionKey else { return }
         do {
             let plain = try SymmetricCipher.decrypt(.aes, key: k, data: doc.ciphertext)
-            DocumentFactory.openResult(plain, title: "Hybridentschlüsselung von <\(document.shortName)>", parent: document,
+            DocumentFactory.openResult(plain, title: "Hybrid decryption of <\(document.shortName)>", parent: document,
                                        viewMode: TextCoding.looksLikeText(plain) ? .text : .hex)
             close()
         } catch { Alerts.error(error.localizedDescription) }

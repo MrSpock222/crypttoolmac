@@ -12,14 +12,14 @@ public enum BigExpression {
     /// Maximum result size in bits.
     public static let maxBits = 10_000_000
 
-    /// Evaluates the expression; throws `CTError` with a German message on syntax errors,
+    /// Evaluates the expression; throws `CTError` with an English message on syntax errors,
     /// division by zero or absurd sizes.
     public static func evaluate(_ expr: String) throws -> BigInt {
         var p = Parser(Array(expr.unicodeScalars))
         let v = try p.parseExpression()
         p.skipSpaces()
         if p.pos < p.chars.count {
-            throw CTError("Unerwartetes Zeichen „\(String(p.chars[p.pos]))“ an Position \(p.pos + 1).")
+            throw CTError("Unexpected character \"\(String(p.chars[p.pos]))\" at position \(p.pos + 1).")
         }
         return v
     }
@@ -27,7 +27,7 @@ public enum BigExpression {
     /// Evaluates and requires a non-negative result.
     public static func evaluateUnsigned(_ expr: String) throws -> BigUInt {
         let v = try evaluate(expr)
-        if v.isNegative { throw CTError("Das Ergebnis ist negativ.") }
+        if v.isNegative { throw CTError("The result is negative.") }
         return v.magnitude
     }
 
@@ -66,10 +66,10 @@ public enum BigExpression {
                     let r = try parseUnary()
                     switch c {
                     case "/", ":":
-                        if r.isZero { throw CTError("Division durch null.") }
+                        if r.isZero { throw CTError("Division by zero.") }
                         v = v / r
                     case "%":
-                        if r.isZero { throw CTError("Division durch null.") }
+                        if r.isZero { throw CTError("Division by zero.") }
                         v = v % r
                     default:
                         try checkProduct(v, r)
@@ -118,19 +118,19 @@ public enum BigExpression {
             var v = try parsePrimary()
             while let c = peek(), c == "!" {
                 pos += 1
-                guard !v.isNegative, let n = v.intValue else { throw CTError("Fakultät nur für nicht-negative Zahlen definiert.") }
-                if n > 300_000 { throw CTError("Die Fakultät \(n)! ist zu groß.") }
+                guard !v.isNegative, let n = v.intValue else { throw CTError("The factorial is only defined for non-negative numbers.") }
+                if n > 300_000 { throw CTError("The factorial \(n)! is too large.") }
                 v = BigInt(BigUInt.factorial(n))
             }
             return v
         }
 
         mutating func parsePrimary() throws -> BigInt {
-            guard let c = peek() else { throw CTError("Unerwartetes Ende des Ausdrucks.") }
+            guard let c = peek() else { throw CTError("Unexpected end of the expression.") }
             if c == "(" {
                 pos += 1
                 let v = try parseExpression()
-                guard let close = peek(), close == ")" else { throw CTError("Schließende Klammer fehlt.") }
+                guard let close = peek(), close == ")" else { throw CTError("Closing parenthesis is missing.") }
                 pos += 1
                 return v
             }
@@ -141,43 +141,43 @@ public enum BigExpression {
                     let start = pos
                     while pos < chars.count, chars[pos].properties.isASCIIHexDigit || chars[pos] == "_" { pos += 1 }
                     let s = String(String.UnicodeScalarView(chars[start..<pos]))
-                    guard let v = BigUInt(s, radix: 16) else { throw CTError("Ungültige Hexadezimalzahl.") }
+                    guard let v = BigUInt(s, radix: 16) else { throw CTError("Invalid hexadecimal number.") }
                     return BigInt(v)
                 }
                 let start = pos
                 while pos < chars.count, ("0"..."9").contains(chars[pos]) || chars[pos] == "_" { pos += 1 }
                 let s = String(String.UnicodeScalarView(chars[start..<pos]))
-                guard let v = BigUInt(s, radix: 10) else { throw CTError("Ungültige Zahl.") }
+                guard let v = BigUInt(s, radix: 10) else { throw CTError("Invalid number.") }
                 return BigInt(v)
             }
-            throw CTError("Unerwartetes Zeichen „\(String(c))“ an Position \(pos + 1).")
+            throw CTError("Unexpected character \"\(String(c))\" at position \(pos + 1).")
         }
 
         func power(_ base: BigInt, _ e: BigInt) throws -> BigInt {
             if e.isNegative {
                 // only ±1 have integer inverses
                 if base.magnitude.isOne { return base.power(Int(e.magnitude.low64 & 1)) }
-                throw CTError("Negative Exponenten sind nicht erlaubt.")
+                throw CTError("Negative exponents are not allowed.")
             }
             if base.isZero { return e.isZero ? 1 : 0 }
             if base.magnitude.isOne { return base.power(Int(e.magnitude.low64 & 1)) }
-            guard let ei = e.magnitude.intValue else { throw CTError("Der Exponent ist zu groß.") }
+            guard let ei = e.magnitude.intValue else { throw CTError("The exponent is too large.") }
             let bits = Double(base.magnitude.bitLength - 1) * Double(ei)
             if bits > Double(BigExpression.maxBits) {
-                throw CTError("Das Ergebnis wäre zu groß (mehr als \(BigExpression.maxBits) Bit).")
+                throw CTError("The result would be too large (more than \(BigExpression.maxBits) bits).")
             }
             return base.power(ei)
         }
 
         func checkSize(_ v: BigInt) throws {
             if v.magnitude.bitLength > BigExpression.maxBits + 64 {
-                throw CTError("Das Ergebnis wäre zu groß (mehr als \(BigExpression.maxBits) Bit).")
+                throw CTError("The result would be too large (more than \(BigExpression.maxBits) bits).")
             }
         }
 
         func checkProduct(_ a: BigInt, _ b: BigInt) throws {
             if a.magnitude.bitLength + b.magnitude.bitLength > BigExpression.maxBits + 64 {
-                throw CTError("Das Ergebnis wäre zu groß (mehr als \(BigExpression.maxBits) Bit).")
+                throw CTError("The result would be too large (more than \(BigExpression.maxBits) bits).")
             }
         }
     }

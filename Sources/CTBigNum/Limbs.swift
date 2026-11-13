@@ -395,7 +395,7 @@ enum Limbs {
 
     /// Returns (quotient, remainder) of a / b; b must be non-empty (non-zero) and normalised.
     static func divMod(_ a: [UInt64], _ b: [UInt64]) -> ([UInt64], [UInt64]) {
-        precondition(!b.isEmpty, "Division durch null")
+        precondition(!b.isEmpty, "Division by zero")
         if compare(a, b) < 0 { return ([], a) }
         if b.count == 1 {
             let (q, r) = divSmall(a, b[0])

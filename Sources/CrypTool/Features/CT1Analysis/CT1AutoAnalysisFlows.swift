@@ -61,7 +61,7 @@ enum CT1AutoFlows {
         if option("analysis.caesarHistograms", false) {
             CT1AutoUI.letterHistogram(o.indices(of: refText), name: refName, alphabet: alphabet)
             CT1AutoUI.letterHistogram(seq, name: doc.shortName, alphabet: alphabet)
-            Alerts.info("Vergleiche Geheimtext mit der Referenzdatei <\(refName)>.", title: title)
+            Alerts.info("Compare ciphertext with reference file <\(refName)>.", title: title)
         }
         guard seq.count >= 2, n > 0 else { Alerts.error(A.inputTooShortMessage(2)); return }
         guard !refText.isEmpty else { Alerts.error(A.referenceFileError); return }
@@ -70,15 +70,15 @@ enum CT1AutoFlows {
         let refCounts = A.counts(o.indices(of: refText), symbolCount: n)
         let corr = A.caesarCorrelation(textCounts: A.counts(seq, symbolCount: n), referenceCounts: refCounts)
         if option("analysis.caesarCorrelation", true) {
-            CT1AutoUI.correlationPlot(corr, title: "Korrelation der Verteilungen <\(doc.shortName)> und <\(refName)>", alphabet: alphabet)
-            Alerts.info("Analyse der Überlagerungen", title: title)
+            CT1AutoUI.correlationPlot(corr, title: "Correlation of the distributions <\(doc.shortName)> and <\(refName)>", alphabet: alphabet)
+            Alerts.info("Analysis of the superposition", title: title)
         }
 
         // 3. key dialog (key offset 1: the text is decrypted by index + 1)
         var shift = A.findPeak(corr)
         if option("analysis.caesarShowKey", true) {
             let proposed = String(alphabet[shift])
-            guard let entered: String = CT1AutoUI.runModal(title: "Automatische Caesar-Analyse", content: { done in
+            guard let entered: String = CT1AutoUI.runModal(title: "Automatic Caesar Analysis", content: { done in
                 CT1AutoCaesarKeyDialog(key: proposed, alphabet: alphabet, ignoreCase: !o.distinguishCase, done: done)
             }) else { return }
             // CT1: an empty field means shift 0
@@ -114,7 +114,7 @@ enum CT1AutoFlows {
         var period = A.keyLength(autocorrelation: c)
         if option("analysis.vigKeyLength", true) {
             let proposed = period
-            guard let p: Int = CT1AutoUI.runModal(title: "Automatische Vigenère-Analyse", content: { done in
+            guard let p: Int = CT1AutoUI.runModal(title: "Automatic Vigenère Analysis", content: { done in
                 CT1AutoKeyLengthDialog(length: proposed, expectedHex: nil) { r in done(r?.0) }
             }) else { return }
             period = p
@@ -131,13 +131,13 @@ enum CT1AutoFlows {
         for i in 0..<period {
             let col = A.columnCounts(seq, period: period, column: i, symbolCount: n)
             if more {
-                CT1AutoUI.letterHistogram(counts: col, name: "Caesar \(i + 1) von <\(doc.shortName)>", alphabet: alphabet)
+                CT1AutoUI.letterHistogram(counts: col, name: "Caesar \(i + 1) of <\(doc.shortName)>", alphabet: alphabet)
             }
             let corr = A.caesarCorrelation(textCounts: col, referenceCounts: refCounts)
             let k = (A.findPeak(corr) + 1) % n
             key.append(k)
             if more {
-                CT1AutoUI.correlationPlot(corr, title: "Korrelation der Verteilungen <Caesar \(i + 1)> und <\(refName)>", alphabet: alphabet)
+                CT1AutoUI.correlationPlot(corr, title: "Correlation of the distributions <Caesar \(i + 1)> and <\(refName)>", alphabet: alphabet)
                 if !Alerts.confirm(A.ascertainedKeyCharacterMessage(position: i + 1, key: alphabet[k]), title: title) { more = false }
             }
         }
@@ -146,7 +146,7 @@ enum CT1AutoFlows {
         var keyString = o.string(from: key)
         if option("analysis.vigKey", true) {
             let proposed = keyString
-            guard let k: String = CT1AutoUI.runModal(title: "Automatische Analyse", content: { done in
+            guard let k: String = CT1AutoUI.runModal(title: "Automatic Analysis", content: { done in
                 CT1AutoKeyDialog(key: proposed, alphabet: alphabet, ignoreCase: !o.distinguishCase, done: done)
             }) else { return }
             keyString = k
@@ -196,8 +196,8 @@ enum CT1AutoFlows {
         for i in 0..<period {
             let counts = A.byteColumnCounts(data, period: period, column: i)
             if more {
-                CT1AutoUI.byteHistogram(counts, name: "\(kind.columnName) \(i + 1) von <\(doc.shortName)>")
-                if !Alerts.confirm("Fortsetzen", title: title) { more = false }
+                CT1AutoUI.byteHistogram(counts, name: "\(kind.columnName) \(i + 1) of <\(doc.shortName)>")
+                if !Alerts.confirm("Continue", title: title) { more = false }
             }
             shift = A.mostFrequentByte(counts, previous: shift)
             key.append(xor ? UInt8(shift) ^ expected : UInt8(shift) &- expected)
@@ -254,7 +254,7 @@ enum CT1AutoUI {
         var window: NSWindow?
         if seq.count > 300_000 {
             let w = NSWindow(contentRect: .zero, styleMask: [.titled], backing: .buffered, defer: false)
-            w.title = "Autokorrelation"
+            w.title = "Autocorrelation"
             w.isReleasedWhenClosed = false
             let host = NSHostingController(rootView: CT1AutoProgressView(model: model) { token.cancel() })
             host.sizingOptions = [.preferredContentSize]
@@ -280,9 +280,9 @@ enum CT1AutoUI {
     static func autocorrelationPlot(_ c: [Int], textLength: Int, document: String) {
         let relative = AppSettings.shared.plotRelativeAutocorrelation
         let values = CT1AutoAnalysis.autocorrelationPlotValues(c, textLength: textLength, relative: relative)
-        chartWindow("Autokorrelation von <\(document)>") {
-            SeriesChartView(title: "Autokorrelation", xLabel: "Verschiebung",
-                            yLabel: relative ? "Relative Übereinstimmung [%]" : "Anzahl der übereinstimmenden Zeichen",
+        chartWindow("Autocorrelation of <\(document)>") {
+            SeriesChartView(title: "Autocorrelation", xLabel: "Offset",
+                            yLabel: relative ? "Relative agreement [%]" : "Number of characters that match",
                             values: values, xOffset: 1, bars: true)
         }
     }
@@ -290,7 +290,7 @@ enum CT1AutoUI {
     /// "Korrelation der Verteilungen <…> und <…>" – x axis: shift (labelled with the alphabet).
     static func correlationPlot(_ corr: [Double], title: String, alphabet: [Character]) {
         chartWindow(title) {
-            CT1AutoBarChart(heading: title, xLabel: "Verschiebung", yLabel: "Korrelation",
+            CT1AutoBarChart(heading: title, xLabel: "Offset", yLabel: "Correlation",
                             labels: corr.indices.map { CT1AutoBarChart.label(alphabet[$0 % max(1, alphabet.count)]) }, values: corr)
         }
     }
@@ -302,10 +302,10 @@ enum CT1AutoUI {
 
     static func letterHistogram(counts: [Int], name: String, alphabet: [Character]) {
         let total = counts.reduce(0, +)
-        let title = "ASCII-Histogramm von <\(name)> (\(total) Zeichen)"
+        let title = "ASCII Histogram of <\(name)> (\(total) characters)"
         let values = counts.map { total == 0 ? 0 : Double($0) * 100 / Double(total) }
         chartWindow(title) {
-            CT1AutoBarChart(heading: title, xLabel: "Wert", yLabel: "Häufigkeit (%)",
+            CT1AutoBarChart(heading: title, xLabel: "Value", yLabel: "Frequency (%)",
                             labels: alphabet.map { CT1AutoBarChart.label($0) }, values: values)
         }
     }
@@ -313,10 +313,10 @@ enum CT1AutoUI {
     /// CT1 `HistogramBin`: "Binäres Histogramm von <name> (N Zeichen)".
     static func byteHistogram(_ counts: [Int], name: String) {
         let total = counts.reduce(0, +)
-        let title = "Binäres Histogramm von <\(name)> (\(total) Zeichen)"
+        let title = "Binary Histogram of <\(name)> (\(total) characters)"
         let values = counts.map { total == 0 ? 0 : Double($0) * 100 / Double(total) }
         chartWindow(title) {
-            CT1AutoBarChart(heading: title, xLabel: "Wert", yLabel: "Häufigkeit (%)",
+            CT1AutoBarChart(heading: title, xLabel: "Value", yLabel: "Frequency (%)",
                             labels: (0..<256).map { String(format: "%02X", $0) }, values: values)
         }
     }
@@ -333,9 +333,9 @@ struct CT1AutoProgressView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Autokorrelation erledigt: \(Int(model.value * 100))%")
+            Text("Autocorrelation finished: \(Int(model.value * 100))%")
             ProgressView(value: model.value).frame(width: 300)
-            HStack { Spacer(); Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction) }
+            HStack { Spacer(); Button("Cancel", action: cancel).keyboardShortcut(.cancelAction) }
         }
         .padding(16)
     }
@@ -411,20 +411,20 @@ struct CT1AutoCaesarKeyDialog: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("Ermittelter Caesar-Schlüssel:")
+                Text("Derived Caesar key:")
                 TextField("", text: $key).frame(width: 34).multilineTextAlignment(.center)
                     .font(.system(.body, design: .monospaced))
                     .ct1Filter($key) { ct1AutoFilterKey($0, alphabet: alphabet, ignoreCase: ignoreCase, maxLength: 1) }
             }.frame(maxWidth: .infinity)
-            GroupBox("Bemerkung") {
+            GroupBox("Remark") {
                 Text(CT1AutoAnalysis.caesarKeyOffsetRemark(derivedKey: key.first ?? alphabet.first ?? "A", alphabet: alphabet))
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack {
-                Button("Abbrechen") { done(nil) }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { done(nil) }.keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Entschlüsseln") { done(key) }.keyboardShortcut(.defaultAction)
+                Button("Decrypt") { done(key) }.keyboardShortcut(.defaultAction)
             }
         }
         .padding(16)
@@ -451,7 +451,7 @@ struct CT1AutoKeyLengthDialog: View {
         VStack(alignment: .leading, spacing: 12) {
             Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 10) {
                 GridRow {
-                    Text("Ermittelte Schlüssellänge:")
+                    Text("Derived key length:")
                     TextField("", text: $lengthText).frame(width: 70)
                         .ct1Filter($lengthText) { s in
                             let d = s.filter { $0.isASCII && $0.isNumber }
@@ -460,7 +460,7 @@ struct CT1AutoKeyLengthDialog: View {
                 }
                 if showsExpected {
                     GridRow {
-                        Text("Erwartetes häufigstes Zeichen (Hex):")
+                        Text("Expected most common character (hex):")
                         TextField("", text: $hexText).frame(width: 44).font(.system(.body, design: .monospaced))
                             .ct1Filter($hexText) { s in
                                 let d = s.uppercased().filter { $0.isASCII && $0.isHexDigit }
@@ -470,9 +470,9 @@ struct CT1AutoKeyLengthDialog: View {
                 }
             }
             HStack {
-                Button("Abbrechen") { done(nil) }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { done(nil) }.keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Weiter", action: next).keyboardShortcut(.defaultAction)
+                Button("Continue", action: next).keyboardShortcut(.defaultAction)
             }
         }
         .padding(16)
@@ -481,7 +481,7 @@ struct CT1AutoKeyLengthDialog: View {
 
     private func next() {
         guard let l = Int(lengthText), (1...200).contains(l) else {
-            Alerts.error("Geben Sie eine ganze Zahl zwischen 1 und 200 ein.")
+            Alerts.error("Please enter an integer between 1 and 200.")
             return
         }
         // CDlgBinKeyLength::OnOK: hex digits accumulated, empty field = 00
@@ -506,14 +506,14 @@ struct CT1AutoKeyDialog: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text("Ermittelter Schlüssel:")
+            Text("Derived key:")
             TextField("", text: $key, axis: .vertical).lineLimit(2...4)
                 .font(.system(.body, design: .monospaced))
                 .ct1Filter($key) { ct1AutoFilterKey($0, alphabet: alphabet, ignoreCase: ignoreCase, maxLength: 200) }
             HStack {
-                Button("Abbrechen") { done(nil) }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { done(nil) }.keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Entschlüsseln") { done(key) }.keyboardShortcut(.defaultAction).disabled(key.isEmpty)
+                Button("Decrypt") { done(key) }.keyboardShortcut(.defaultAction).disabled(key.isEmpty)
             }
         }
         .padding(16)
@@ -533,14 +533,14 @@ struct CT1AutoHexKeyDialog: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text("Ermittelter Schlüssel:")
+            Text("Derived key:")
             TextField("", text: $key, axis: .vertical).lineLimit(2...4)
                 .font(.system(.body, design: .monospaced))
                 .ct1Filter($key) { CT1KeyInput.hex($0, maxDigits: 400) }
             HStack {
-                Button("Abbrechen") { done(nil) }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { done(nil) }.keyboardShortcut(.cancelAction)
                 Spacer()
-                Button("Entschlüsseln") { if let b = CT1KeyInput.hexBytes(key) { done(b) } }
+                Button("Decrypt") { if let b = CT1KeyInput.hexBytes(key) { done(b) } }
                     .keyboardShortcut(.defaultAction).disabled(CT1KeyInput.hexBytes(key) == nil)
             }
         }

@@ -5,7 +5,7 @@ import SwiftUI
 @MainActor
 enum StartDialog {
     static func show() {
-        WindowPresenter.tool(id: "startdialog", title: "Wie Sie starten", size: CGSize(width: 420, height: 380), resizable: false) {
+        WindowPresenter.tool(id: "startdialog", title: "How to Start", size: CGSize(width: 420, height: 380), resizable: false) {
             StartDialogView()
         }
     }
@@ -17,7 +17,7 @@ struct StartDialogView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if let url = Resources.url("Images/CrypToolStartLogo-de.png"), let img = NSImage(contentsOf: url) {
+            if let url = Resources.url("Images/CrypToolStartLogo-en.png"), let img = NSImage(contentsOf: url) {
                 Image(nsImage: img)
                     .resizable()
                     .interpolation(.high)
@@ -25,11 +25,11 @@ struct StartDialogView: View {
                     .frame(maxWidth: .infinity)
             }
             HStack {
-                Toggle("Diesen Dialog in Zukunft nicht mehr anzeigen", isOn: $dontShow)
+                Toggle("Don't show this dialog again", isOn: $dontShow)
                 Spacer()
-                Button("Hilfe (F1)") { HelpLink.startPage() }
+                Button("Help (F1)") { HelpLink.startPage() }
                     .keyboardShortcut(KeyEquivalent(Character(UnicodeScalar(NSF1FunctionKey)!)), modifiers: [])
-                Button("Schließen") {
+                Button("Close") {
                     settings.showStartDialog = !dontShow
                     closeKeyWindow()
                 }.keyboardShortcut(.defaultAction)

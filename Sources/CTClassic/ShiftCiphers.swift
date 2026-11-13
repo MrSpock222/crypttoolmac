@@ -66,7 +66,7 @@ public enum Vigenere {
     public static func keyShifts(_ key: String, options: TextOptions) throws -> [Int] {
         let k = LetterMapper(options).indices(of: key)
         guard !k.isEmpty else {
-            throw CTError("Der Schlüssel enthält keine Zeichen des eingestellten Alphabets.")
+            throw CTError("The key does not contain any characters of the current alphabet.")
         }
         return k
     }
@@ -124,12 +124,12 @@ public enum Beaufort {
 
 /// Affine cipher c = a·p + b (modulo the alphabet size n); `a` must be coprime to n.
 public enum Affine {
-    /// Throws a German error message if `a` is not invertible modulo the alphabet size.
+    /// Throws an error message if `a` is not invertible modulo the alphabet size.
     public static func validate(a: Int, options: TextOptions) throws {
         let n = options.alphabetSize
-        guard n > 0 else { throw CTError("Das Alphabet ist leer.") }
+        guard n > 0 else { throw CTError("The alphabet is empty.") }
         guard modInverse(a, n) != nil else {
-            throw CTError("Der Faktor a = \(a) ist nicht teilerfremd zur Alphabetlänge \(n) und daher nicht umkehrbar.")
+            throw CTError("The factor a = \(a) is not coprime to the alphabet length \(n) and therefore not invertible.")
         }
     }
 

@@ -5,29 +5,29 @@ import CTCommon
 public enum FactorizationMethod: String, CaseIterable, Codable, Sendable {
     case trialDivision, pollardRhoBrent, pollardPMinus1, williamsPPlus1, lenstraECM, fermat, quadraticSieve
 
-    /// Short German name as used by CT1.
+    /// Short name as used by CT1.
     public var displayName: String {
         switch self {
-        case .trialDivision: return "Brute-Force"
+        case .trialDivision: return "Brute-force"
         case .pollardRhoBrent: return "Brent"
         case .pollardPMinus1: return "Pollard"
         case .williamsPPlus1: return "Williams"
         case .lenstraECM: return "Lenstra"
         case .fermat: return "Fermat"
-        case .quadraticSieve: return "Quadratisches Sieb"
+        case .quadraticSieve: return "Quadratic sieve"
         }
     }
 
-    /// Longer German description of the algorithm.
+    /// Longer description of the algorithm.
     public var longName: String {
         switch self {
-        case .trialDivision: return "Probedivision (Brute-Force)"
-        case .pollardRhoBrent: return "Pollard-Rho-Verfahren (Variante von Brent)"
-        case .pollardPMinus1: return "Pollards (p−1)-Verfahren"
-        case .williamsPPlus1: return "Williams' (p+1)-Verfahren"
-        case .lenstraECM: return "Lenstras Elliptische-Kurven-Methode (ECM)"
-        case .fermat: return "Fermat-Faktorisierung"
-        case .quadraticSieve: return "Quadratisches Sieb (MPQS)"
+        case .trialDivision: return "Trial division (brute-force)"
+        case .pollardRhoBrent: return "Pollard rho method (Brent's variant)"
+        case .pollardPMinus1: return "Pollard's (p−1) method"
+        case .williamsPPlus1: return "Williams' (p+1) method"
+        case .lenstraECM: return "Lenstra's elliptic curve method (ECM)"
+        case .fermat: return "Fermat factorization"
+        case .quadraticSieve: return "Quadratic sieve (MPQS)"
         }
     }
 }
@@ -52,13 +52,13 @@ public enum Factorization {
     /// The methods are tried in the given order with growing time budgets until every cofactor
     /// is prime (if `.trialDivision` is selected, primes < 2^16 are removed first). Throws
     /// `CTError` on cancellation, for n = 0, or if the selected methods cannot split a
-    /// composite cofactor. `log` receives German progress messages (called on the calling
+    /// composite cofactor. `log` receives English progress messages (called on the calling
     /// thread). Blocking – call from a background task.
     public static func factorize(_ n: BigUInt,
                                  methods: [FactorizationMethod] = [.trialDivision, .pollardRhoBrent, .lenstraECM, .quadraticSieve],
                                  cancel: CancellationToken? = nil,
                                  log: ((String) -> Void)? = nil) throws -> [(prime: BigUInt, exponent: Int)] {
-        if n.isZero { throw CTError("Die Zahl 0 kann nicht faktorisiert werden.") }
+        if n.isZero { throw CTError("The number 0 cannot be factorized.") }
         if n.isOne { return [] }
         let methods = methods.isEmpty ? [.trialDivision, .pollardRhoBrent, .lenstraECM, .quadraticSieve] : methods
         var primes: [BigUInt: Int] = [:]
@@ -86,28 +86,28 @@ public enum Factorization {
                 if BigUInt(p * p) > m { break }
             }
             if !found.isEmpty {
-                log?("Brute-Force: kleine Primfaktoren \(found.map { $0.description }.joined(separator: ", "))")
+                log?("Brute-force: small prime factors \(found.map { $0.description }.joined(separator: ", "))")
             }
             work = m.isOne ? [] : [(m, 1)]
         }
 
         while let (m, mult) = work.popLast() {
-            if cancel?.isCancelled == true { throw CTError("Faktorisierung abgebrochen.") }
+            if cancel?.isCancelled == true { throw CTError("The factorization has been aborted.") }
             if m.isOne { continue }
             if Primality.isProbablePrime(m) {
                 addPrime(m, mult)
                 continue
             }
             if let (b, k) = m.perfectPower() {
-                log?("\(m) ist die \(k)-te Potenz von \(b)")
+                log?("\(m) is the \(k)-th power of \(b)")
                 work.append((b, mult * k))
                 continue
             }
-            log?("Suche Faktor von \(m) (\(m.digitCount()) Stellen)")
+            log?("Searching for a factor of \(m) (\(m.digitCount()) digits)")
             var factor: BigUInt? = nil
             var level = 0
             while factor == nil {
-                if cancel?.isCancelled == true { throw CTError("Faktorisierung abgebrochen.") }
+                if cancel?.isCancelled == true { throw CTError("The factorization has been aborted.") }
                 var anyUnlimited = false
                 for method in methods {
                     let (budget, unlimited) = budgetFor(method, level: level, digits: m.digitCount())
@@ -116,17 +116,17 @@ public enum Factorization {
                     let start = Date()
                     let deadline = Deadline(seconds: budget, cancel: cancel)
                     if let f = findFactor(m, method: method, deadline: deadline, level: level, log: log) {
-                        log?(String(format: "%@: Faktor %@ gefunden (%.2f s)", method.displayName, f.description,
+                        log?(String(format: "%@: factor %@ found (%.2f s)", method.displayName, f.description,
                                     Date().timeIntervalSince(start)))
                         factor = f
                         break
                     }
-                    if cancel?.isCancelled == true { throw CTError("Faktorisierung abgebrochen.") }
+                    if cancel?.isCancelled == true { throw CTError("The factorization has been aborted.") }
                 }
                 if factor == nil {
                     level += 1
                     if level > 12 && !anyUnlimited {
-                        throw CTError("Die Zahl \(m) konnte mit den gewählten Verfahren nicht faktorisiert werden.")
+                        throw CTError("The number \(m) could not be factorized with the selected methods.")
                     }
                 }
             }

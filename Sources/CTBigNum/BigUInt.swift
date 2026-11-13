@@ -33,7 +33,7 @@ public struct BigUInt: Sendable {
 
     /// Creates a value from a non-negative `Int` (precondition: `v >= 0`).
     public init(_ v: Int) {
-        precondition(v >= 0, "BigUInt kann keine negativen Werte darstellen")
+        precondition(v >= 0, "BigUInt cannot represent negative values")
         limbs = v == 0 ? [] : [UInt64(v)]
     }
 
@@ -50,7 +50,7 @@ public struct BigUInt: Sendable {
 
     /// Creates a value from any non-negative binary integer (precondition: `v >= 0`).
     public init<T: BinaryInteger>(_ v: T) {
-        precondition(v >= 0, "BigUInt kann keine negativen Werte darstellen")
+        precondition(v >= 0, "BigUInt cannot represent negative values")
         self.init(limbs: v.words.map { UInt64($0) })
     }
 
@@ -254,7 +254,7 @@ public struct BigUInt: Sendable {
     /// String representation in radix 2…36 (no prefix). Power-of-two radices are linear time;
     /// other radices use divide & conquer (≈0.3 s for 1 Mbit, roughly quadratic beyond that).
     public func toString(radix: Int = 10, uppercase: Bool = true) -> String {
-        precondition((2...36).contains(radix), "Ungültige Basis")
+        precondition((2...36).contains(radix), "Invalid radix")
         if limbs.isEmpty { return "0" }
         let digitChars: [UInt8] = Array((uppercase ? "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                                    : "0123456789abcdefghijklmnopqrstuvwxyz").utf8)
@@ -383,7 +383,7 @@ extension BigUInt: Comparable {
 extension BigUInt: ExpressibleByIntegerLiteral {
     /// Arbitrarily large integer literals are supported (`let n: BigUInt = 2305843009213693951…`).
     public init(integerLiteral value: StaticBigInt) {
-        precondition(value.signum() >= 0, "BigUInt kann keine negativen Werte darstellen")
+        precondition(value.signum() >= 0, "BigUInt cannot represent negative values")
         let words = (value.bitWidth + UInt.bitWidth - 1) / UInt.bitWidth
         var l = [UInt64]()
         l.reserveCapacity(words)
@@ -409,7 +409,7 @@ extension BigUInt: Codable {
         let c = try decoder.singleValueContainer()
         let s = try c.decode(String.self)
         guard let v = BigUInt(s, radix: 16) else {
-            throw DecodingError.dataCorruptedError(in: c, debugDescription: "Ungültige Hex-Zahl: \(s)")
+            throw DecodingError.dataCorruptedError(in: c, debugDescription: "Invalid hex number: \(s)")
         }
         self = v
     }

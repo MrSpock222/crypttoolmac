@@ -20,7 +20,7 @@ import CTCommon
 public enum CT1SubstLanguage: String, Sendable, CaseIterable {
     case german, english
     /// CT1 strings IDS_MONO_SUBST_AUTO_LANG_DE / _EN.
-    public var displayName: String { self == .german ? "Deutsch" : "Englisch" }
+    public var displayName: String { self == .german ? "German" : "English" }
 }
 
 // MARK: - Text handling of the manual analysis dialog

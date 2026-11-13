@@ -63,23 +63,23 @@ public enum ShamirSecretSharing {
     /// Variant with explicit x values (CT1 uses random distinct public values).
     public static func split(secret: BigUInt, threshold: Int, shareCount: Int, prime: BigUInt,
                              coefficients: [BigUInt]?, xValues: [BigUInt]) throws -> (shares: [Share], coefficients: [BigUInt]) {
-        guard threshold >= 1 else { throw CTError("Der Schwellenwert muss mindestens 1 sein.") }
+        guard threshold >= 1 else { throw CTError("The threshold must be at least 1.") }
         guard shareCount >= threshold else {
-            throw CTError("Der Schwellenwert darf nicht größer als die Anzahl der Teilnehmer sein.")
+            throw CTError("The threshold must not be greater than the number of participants.")
         }
-        guard Primality.isProbablePrime(prime) else { throw CTError("Der Modul \(prime) ist keine Primzahl.") }
-        guard secret < prime else { throw CTError("Das Geheimnis muss kleiner als die Primzahl \(prime) sein.") }
+        guard Primality.isProbablePrime(prime) else { throw CTError("The modulus \(prime) is not a prime number.") }
+        guard secret < prime else { throw CTError("The secret must be less than the prime number \(prime).") }
         guard BigUInt(shareCount) < prime else {
-            throw CTError("Die Primzahl muss größer als die Anzahl der Teilnehmer sein.")
+            throw CTError("The prime number must be greater than the number of participants.")
         }
-        guard xValues.count == shareCount else { throw CTError("Anzahl der x-Werte passt nicht zur Teilnehmerzahl.") }
+        guard xValues.count == shareCount else { throw CTError("The number of x values does not match the number of participants.") }
         guard Set(xValues.map { $0 % prime }).count == shareCount, !xValues.contains(where: { ($0 % prime).isZero }) else {
-            throw CTError("Die öffentlichen x-Werte müssen verschieden und ungleich 0 (mod p) sein.")
+            throw CTError("The public x values must be different and not equal to 0 (mod p).")
         }
         var coeffs: [BigUInt]
         if let c = coefficients {
             guard c.count == threshold - 1 else {
-                throw CTError("Es werden genau \(threshold - 1) Koeffizienten benötigt.")
+                throw CTError("Exactly \(threshold - 1) coefficients are required!")
             }
             coeffs = c.map { $0 % prime }
         } else {
@@ -216,9 +216,9 @@ public enum CRTSecretSharing {
     /// Chooses moduli for Mignotte's scheme (randomised within the admissible range).
     static func mignotteModuli(secret s: BigUInt, shareCount n: Int, threshold k: Int) throws -> [BigUInt] {
         guard n >= 1, k >= 1, k <= n else {
-            throw CTError("Der Schwellenwert k muss zwischen 1 und der Anzahl der Anteile n liegen.")
+            throw CTError("The threshold k must be between 1 and the number of shares n.")
         }
-        guard n <= 1000 else { throw CTError("Zu viele Anteile (höchstens 1000).") }
+        guard n <= 1000 else { throw CTError("Too many shares (at most 1000).") }
         if k == 1 {
             // every single share must determine the secret: all moduli > s
             let start = s + 1 + BigUInt.random(below: max(s, 1000))
@@ -239,7 +239,7 @@ public enum CRTSecretSharing {
         }
         let bMin = lo
         guard ok(bMin).maxOK else {
-            throw CTError("Das Geheimnis \(s) ist für k = \(k) und n = \(n) zu klein: das Produkt der k−1 größten Moduln wäre nicht kleiner als das Geheimnis. Bitte eine größere Zahl wählen.")
+            throw CTError("The secret \(s) is too small for k = \(k) and n = \(n): the product of the k−1 largest modules would not be less than the secret. Please choose a larger number.")
         }
         // largest B with maxK1(B) < s
         var lo2 = bMin, hi2 = s
@@ -263,20 +263,20 @@ public enum CRTSecretSharing {
     /// [lowerBound, upperBound].
     public static func split(secret: BigUInt?, shareCount: Int, threshold: Int,
                              lowerBound: BigUInt, upperBound: BigUInt) throws -> Setup {
-        guard shareCount >= 2 else { throw CTError("Es werden mindestens 2 Teilnehmer benötigt.") }
+        guard shareCount >= 2 else { throw CTError("At least 2 participants are required.") }
         guard threshold >= 2, threshold <= shareCount else {
-            throw CTError("Die Anzahl der zur Rekonstruktion nötigen Teilnehmer muss zwischen 2 und \(shareCount) liegen.")
+            throw CTError("The number of participants required for the reconstruction must be between 2 and \(shareCount).")
         }
-        guard lowerBound < upperBound else { throw CTError("Die untere Grenze muss kleiner als die obere Grenze sein.") }
+        guard lowerBound < upperBound else { throw CTError("The lower bound must be less than the upper bound.") }
         var primes = Set<BigUInt>()
         var attempts = 0
         while primes.count < shareCount {
             attempts += 1
             if attempts > 50 * shareCount {
-                throw CTError("Im angegebenen Bereich konnten nicht genügend verschiedene Primzahlen gefunden werden.")
+                throw CTError("Not enough different prime numbers could be found in the given range.")
             }
             if let p = Primality.randomPrime(in: lowerBound...upperBound) { primes.insert(p) } else {
-                throw CTError("Im angegebenen Bereich liegt keine Primzahl.")
+                throw CTError("There is no prime number in the given range.")
             }
         }
         return try split(secret: secret, moduli: Array(primes), threshold: threshold)
@@ -287,12 +287,12 @@ public enum CRTSecretSharing {
         let m = moduli.sorted()
         let t = m.count
         guard t >= 2, threshold >= 1, threshold <= t else {
-            throw CTError("Ungültige Anzahl von Moduln oder ungültiger Schwellenwert.")
+            throw CTError("Invalid number of modules or invalid threshold.")
         }
         for i in 0..<t {
-            guard m[i] > 1 else { throw CTError("Die Moduln müssen größer als 1 sein.") }
+            guard m[i] > 1 else { throw CTError("The modules must be greater than 1.") }
             for j in (i + 1)..<t where !m[i].gcd(m[j]).isOne {
-                throw CTError("Die Moduln \(m[i]) und \(m[j]) sind nicht teilerfremd.")
+                throw CTError("The modules \(m[i]) and \(m[j]) are not coprime.")
             }
         }
         var minK = BigUInt(1)
@@ -304,7 +304,7 @@ public enum CRTSecretSharing {
         let s: BigUInt
         if let given = secret {
             guard given < w else {
-                throw CTError("Das Geheimnis muss kleiner als w = \(w) sein (w = ⌊min(k)/max(k−1)⌋).")
+                throw CTError("The secret must be less than w = \(w) (w = ⌊min(k)/max(k−1)⌋).")
             }
             s = given
         } else {

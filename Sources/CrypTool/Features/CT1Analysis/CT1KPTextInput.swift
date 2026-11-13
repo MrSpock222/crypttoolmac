@@ -87,8 +87,8 @@ struct CT1KPTextInputView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Picker("", selection: $model.tab) {
-                Text("Klartext").tag(0)
-                Text("Geheimtext").tag(1)
+                Text("Plaintext").tag(0)
+                Text("Ciphertext").tag(1)
             }
             .pickerStyle(.segmented)
             .labelsHidden()
@@ -97,11 +97,11 @@ struct CT1KPTextInputView: View {
                        minHeight: editorHeight)
                 .id(model.tab)
             Picker("", selection: Binding(get: { model.selection[model.tab] }, set: { model.select($0) })) {
-                Text("[Bitte wählen Sie ein Dokument.]").tag("none")
+                Text("[Please select a document.]").tag("none")
                 ForEach(model.documents, id: \.self) { d in
-                    Text((d === model.active ? "(Aktiv) " : "") + (d.displayName ?? d.shortName)).tag(CT1KPTextPair.tag(d))
+                    Text((d === model.active ? "(Active) " : "") + (d.displayName ?? d.shortName)).tag(CT1KPTextPair.tag(d))
                 }
-                Text("[Aus Datei laden...]").tag("file")
+                Text("[Open document ...]").tag("file")
             }
             .labelsHidden()
         }

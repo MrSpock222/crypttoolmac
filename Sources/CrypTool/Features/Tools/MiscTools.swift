@@ -14,7 +14,7 @@ struct NumberSharkView: View {
     @CTState private var limit = 20
     @CTState private var owner: [Owner] = []
     @CTState private var history: [[Owner]] = []
-    @CTState private var message = "Wählen Sie eine Zahl. Der Hai erhält alle noch freien Teiler dieser Zahl."
+    @CTState private var message = "Choose a number. The shark gets all free divisors of this number."
 
     private var playerScore: Int { owner.indices.filter { owner[$0] == .player }.map { $0 + 1 }.reduce(0, +) }
     private var sharkScore: Int { owner.indices.filter { owner[$0] == .shark }.map { $0 + 1 }.reduce(0, +) }
@@ -23,13 +23,13 @@ struct NumberSharkView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Stepper("Zahlen 1 bis \(limit)", value: $limit, in: 5...100)
+                Stepper("Numbers 1 to \(limit)", value: $limit, in: 5...100)
                     .onChange(of: limit) { _, _ in newGame() }
                 Spacer()
-                Button("Rückgängig") { if let h = history.popLast() { owner = h } }.disabled(history.isEmpty)
-                Button("Neues Spiel", action: newGame)
+                Button("Undo") { if let h = history.popLast() { owner = h } }.disabled(history.isEmpty)
+                Button("New game", action: newGame)
             }
-            Text("Regeln: Sie dürfen nur Zahlen wählen, von denen noch mindestens ein echter Teiler frei ist. Alle freien Teiler der gewählten Zahl bekommt der Zahlenhai. Gibt es keinen gültigen Zug mehr, bekommt der Hai alle restlichen Zahlen. Ziel: mehr Punkte (Summe der Zahlen) als der Hai.")
+            Text("Rules: You may only choose numbers that still have at least one free proper divisor. The number shark gets all free divisors of the chosen number. If there is no valid move left, the shark gets all remaining numbers. Goal: more points (sum of the numbers) than the shark.")
                 .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
             LazyVGrid(columns: Array(repeating: GridItem(.fixed(52), spacing: 6), count: 10), spacing: 6) {
                 ForEach(0..<owner.count, id: \.self) { i in
@@ -45,9 +45,9 @@ struct NumberSharkView: View {
                 }
             }
             HStack(spacing: 30) {
-                Label("Sie: \(playerScore)", systemImage: "person.fill").foregroundStyle(.green).font(.title3.bold())
-                Label("Zahlenhai: \(sharkScore)", systemImage: "fish.fill").foregroundStyle(.red).font(.title3.bold())
-                Text("Noch frei: \(total - playerScore - sharkScore)").foregroundStyle(.secondary)
+                Label("You: \(playerScore)", systemImage: "person.fill").foregroundStyle(.green).font(.title3.bold())
+                Label("Number Shark: \(sharkScore)", systemImage: "fish.fill").foregroundStyle(.red).font(.title3.bold())
+                Text("Still free: \(total - playerScore - sharkScore)").foregroundStyle(.secondary)
             }
             Text(message).font(.callout)
             Spacer(minLength: 0)
@@ -70,7 +70,7 @@ struct NumberSharkView: View {
     private func newGame() {
         owner = Array(repeating: .free, count: limit)
         history = []
-        message = "Wählen Sie eine Zahl. Der Hai erhält alle noch freien Teiler dieser Zahl."
+        message = "Choose a number. The shark gets all free divisors of this number."
     }
 
     private func pick(_ n: Int) {
@@ -79,12 +79,12 @@ struct NumberSharkView: View {
         let divs = freeDivisors(of: n)
         owner[n - 1] = .player
         divs.forEach { owner[$0 - 1] = .shark }
-        message = "Sie erhalten \(n), der Hai frisst " + divs.map(String.init).joined(separator: ", ") + "."
+        message = "You get \(n), the shark eats " + divs.map(String.init).joined(separator: ", ") + "."
         if !(1...limit).contains(where: isValid) {
             let rest = (1...limit).filter { owner[$0 - 1] == .free }
             rest.forEach { owner[$0 - 1] = .shark }
-            if !rest.isEmpty { message += " Kein gültiger Zug mehr – der Hai bekommt die restlichen Zahlen: " + rest.map(String.init).joined(separator: ", ") + "." }
-            message += playerScore > sharkScore ? " 🎉 Gewonnen!" : (playerScore == sharkScore ? " Unentschieden." : " Der Hai hat gewonnen.")
+            if !rest.isEmpty { message += " No valid move left – the shark gets the remaining numbers: " + rest.map(String.init).joined(separator: ", ") + "." }
+            message += playerScore > sharkScore ? " 🎉 You won!" : (playerScore == sharkScore ? " Draw." : " The shark won.")
         }
     }
 }

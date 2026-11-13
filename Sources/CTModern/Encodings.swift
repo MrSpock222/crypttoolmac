@@ -56,9 +56,9 @@ public enum Base64Codec {
             default:
                 let v = decodeTable[Int(c)]
                 if v < 0 {
-                    throw CTError("Ungültiges Zeichen für Base64 an Position \(position): „\(String(decoding: [c], as: UTF8.self))“.")
+                    throw CTError("Invalid Base64 character at position \(position): \"\(String(decoding: [c], as: UTF8.self))\".")
                 }
-                if padding > 0 { throw CTError("Base64: Daten nach dem Füllzeichen „=“.") }
+                if padding > 0 { throw CTError("Base64: Data after the padding character \"=\".") }
                 acc = acc << 6 | UInt32(v)
                 n += 1
                 if n == 4 {
@@ -69,7 +69,7 @@ public enum Base64Codec {
         }
         switch n {
         case 0: break
-        case 1: throw CTError("Base64: Unvollständige Daten (Länge ist kein gültiges Vielfaches von 4 Zeichen).")
+        case 1: throw CTError("Base64: Incomplete data (length is not a valid multiple of 4 characters).")
         case 2: out.append(UInt8((acc >> 4) & 255))
         default: out.append(UInt8((acc >> 10) & 255)); out.append(UInt8((acc >> 2) & 255))
         }
@@ -126,7 +126,7 @@ public enum UUCodec {
             if u.isEmpty { continue }
             func dec(_ c: UInt8) throws -> UInt8 {
                 guard c >= 0x20 && c <= 0x60 else {
-                    throw CTError("UU-Decodierung: ungültiges Zeichen in Zeile \(lineNo).")
+                    throw CTError("UU decoding: invalid character in line \(lineNo).")
                 }
                 return (c - 0x20) & 63
             }
@@ -134,7 +134,7 @@ public enum UUCodec {
             if n == 0 { continue }
             let needed = (n + 2) / 3 * 4
             guard u.count - 1 >= (n * 4 + 2) / 3 else {
-                throw CTError("UU-Decodierung: Zeile \(lineNo) ist zu kurz.")
+                throw CTError("UU decoding: line \(lineNo) is too short.")
             }
             var chars = Array(u[1...])
             while chars.count < needed { chars.append(0x60) }   // tolerate stripped trailing blanks
@@ -148,7 +148,7 @@ public enum UUCodec {
             }
         }
         if fileName != nil {
-            throw CTError("UU-Decodierung: Die Zeile „end“ fehlt.")
+            throw CTError("UU decoding: The line \"end\" is missing.")
         }
         return (out, fileName)
     }

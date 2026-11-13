@@ -22,7 +22,7 @@ struct CTContainer {
         let lines = text.replacingOccurrences(of: "\r", with: "").components(separatedBy: "\n")
         guard let begin = lines.firstIndex(of: "-----BEGIN CRYPTOOL \(kind)-----"),
               let end = lines.firstIndex(of: "-----END CRYPTOOL \(kind)-----"), end > begin else {
-            throw CTError("Das Dokument hat nicht das erwartete Format (\(kind)).")
+            throw CTError("The document does not have the expected format (\(kind)).")
         }
         var fields: [(String, String)] = []
         var i = begin + 1
@@ -46,7 +46,7 @@ enum AsymmetricOps {
     static func rsaEncrypt(_ data: [UInt8], key: RSAPublicKey) throws -> [UInt8] {
         let k = (key.n.bitLength + 7) / 8
         let chunk = k - 11
-        guard chunk > 0 else { throw CTError("Der Schlüssel ist zu kurz.") }
+        guard chunk > 0 else { throw CTError("The key is too short.") }
         var out: [UInt8] = []
         var i = 0
         repeat {
@@ -59,7 +59,7 @@ enum AsymmetricOps {
 
     static func rsaDecrypt(_ data: [UInt8], key: RSAKeyPair) throws -> [UInt8] {
         let k = (key.n.bitLength + 7) / 8
-        guard data.count % k == 0 else { throw CTError("Die Länge des Chiffrats (\(data.count) Bytes) ist kein Vielfaches der Schlüssellänge (\(k) Bytes).") }
+        guard data.count % k == 0 else { throw CTError("The length of the ciphertext (\(data.count) bytes) is not a multiple of the key length (\(k) bytes).") }
         var out: [UInt8] = []
         var i = 0
         while i < data.count {
@@ -92,13 +92,13 @@ struct HybridDialog: View {
             PKIECCHybridDialog(document: document, decrypt: decrypt, close: close)
         } else if decrypt {
             if let legacy = try? CTContainer.parse(document.text, kind: "HYBRID") {
-                PKIKeyChooser(headline: "Wählen Sie Ihren geheimen Schlüssel aus der Liste der PSEs aus:",
-                              note: "Bemerkung: Es werden nur Namen mit einem RSA Schlüssel angezeigt.",
+                PKIKeyChooser(headline: "Select your secret key from the PSE list.",
+                              note: "Note: Only PSEs containing an RSA key are shown.",
                               filter: .rsaOnly, initial: legacy.field("Schlüssel-ID").flatMap(UUID.init(uuidString:)), withPIN: true) { id, pin in
                     guard let k = KeyStore.shared.key(id: id), let m = PKIPinAccess.open(k, pin: pin) else { return }
                     do {
                         let plain = try HybridDialog.legacyDecrypt(legacy, material: m)
-                        DocumentFactory.openResult(plain, title: "Hybridentschlüsselung von <\(document.shortName)>", parent: document,
+                        DocumentFactory.openResult(plain, title: "Hybrid decryption of <\(document.shortName)>", parent: document,
                                                    viewMode: TextCoding.looksLikeText(plain) ? .text : .hex)
                         close()
                     } catch { Alerts.error(error.localizedDescription) }
@@ -117,15 +117,15 @@ struct HybridDialog: View {
         let bits = Int(c.field("Symmetrisches Verfahren")?.split(separator: "-").dropFirst().first?.prefix(3) ?? "128") ?? 128
         switch material {
         case .rsa(let pair):
-            guard let hex = c.field("Verschlüsselter Sitzungsschlüssel"), let enc = Hex.decode(hex) else { throw CTError("Kein RSA-verschlüsselter Sitzungsschlüssel im Dokument.") }
+            guard let hex = c.field("Verschlüsselter Sitzungsschlüssel"), let enc = Hex.decode(hex) else { throw CTError("No RSA-encrypted session key in the document.") }
             sessionKey = try PKCS1.decrypt(enc, key: pair)
         case .ecc(let pair):
             guard let xs = c.field("Ephemerer Punkt x"), let ys = c.field("Ephemerer Punkt y"),
-                  let x = BigUInt(xs, radix: 16), let y = BigUInt(ys, radix: 16) else { throw CTError("Kein ephemerer EC-Punkt im Dokument.") }
+                  let x = BigUInt(xs, radix: 16), let y = BigUInt(ys, radix: 16) else { throw CTError("No ephemeral EC point in the document.") }
             let shared = try ECDH.sharedSecret(privateKey: pair.d, publicKey: .affine(x: x, y: y), curve: pair.curve)
             sessionKey = Array(Hashing.hash(shared.bigEndianBytes(length: (pair.curve.p.bitLength + 7) / 8), algorithm: .sha256).prefix(bits / 8))
         case .dsa:
-            throw CTError("Mit einem DSA-Schlüssel kann nicht entschlüsselt werden.")
+            throw CTError("A DSA key cannot be used for decryption.")
         }
         return try SymmetricCipher.decrypt(.aes, key: sessionKey, data: c.payload)
     }
@@ -154,7 +154,7 @@ enum SignatureOps {
     static func verify(_ doc: CTDocument) {
         do {
             let signed = try PKISignedDocument.parse(doc.bytes)
-            WindowPresenter.sheet(on: doc.windowControllers.first?.window, title: "Verifizieren einer Signatur") { close in
+            WindowPresenter.sheet(on: doc.windowControllers.first?.window, title: "Signature Verification") { close in
                 PKIVerifyDialog(document: doc, signed: signed, close: close)
             }
         } catch { PKIModal.warning(error.localizedDescription) }
@@ -164,7 +164,7 @@ enum SignatureOps {
     static func extract(_ doc: CTDocument) {
         do {
             let signed = try PKISignedDocument.parse(doc.bytes)
-            WindowPresenter.sheet(on: doc.windowControllers.first?.window, title: "Extrahierte Signatur") { close in
+            WindowPresenter.sheet(on: doc.windowControllers.first?.window, title: "Extracted Signature") { close in
                 PKIExtractDialog(document: doc, signed: signed, close: close)
             }
         } catch { PKIModal.warning(error.localizedDescription) }

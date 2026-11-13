@@ -68,11 +68,11 @@ public final class ASN1Node: Sendable {
         case 3:
             guard let unused = value.first else { return "" }
             let bits = Array(value.dropFirst())
-            return (unused > 0 ? "(\(unused) ungenutzte Bits) " : "") + ASN1.hexPreview(bits)
+            return (unused > 0 ? "(\(unused) unused bits) " : "") + ASN1.hexPreview(bits)
         case 4: return ASN1.hexPreview(value)
         case 5: return nil
         case 6:
-            guard let oid = ASN1.oidString(value) else { return "ungültige OID" }
+            guard let oid = ASN1.oidString(value) else { return "invalid OID" }
             if let name = ASN1.oidNames[oid] { return "\(name) (\(oid))" }
             return oid
         case 13: return ASN1.relativeOIDString(value) ?? ASN1.hexPreview(value)
@@ -162,14 +162,14 @@ public enum ASN1 {
             if line.hasPrefix("-----END") { if inBlock { break } else { continue } }
             if inBlock && !line.contains(":") { body += line }   // skip "Proc-Type:" style headers
         }
-        guard !body.isEmpty else { throw CTError("PEM: Kein Base64-Inhalt zwischen BEGIN und END gefunden.") }
+        guard !body.isEmpty else { throw CTError("PEM: No Base64 content found between BEGIN and END.") }
         return try Base64Codec.decode(body)
     }
 
     // MARK: - DER parser
 
     static func parseDER(_ der: [UInt8]) throws -> [ASN1Node] {
-        guard !der.isEmpty else { throw CTError("ASN.1: Keine Daten.") }
+        guard !der.isEmpty else { throw CTError("ASN.1: No data.") }
         var pos = 0
         var nodes: [ASN1Node] = []
         while pos < der.count {
@@ -182,10 +182,10 @@ public enum ASN1 {
     }
 
     private static func parseNode(_ d: [UInt8], _ pos: inout Int, end: Int, depth: Int) throws -> ASN1Node {
-        guard depth <= maxDepth else { throw CTError("ASN.1: Verschachtelung zu tief (> \(maxDepth)).") }
+        guard depth <= maxDepth else { throw CTError("ASN.1: Nesting too deep (> \(maxDepth)).") }
         let start = pos
         func byte() throws -> UInt8 {
-            guard pos < end else { throw CTError("ASN.1: Unerwartetes Datenende bei Offset \(pos).") }
+            guard pos < end else { throw CTError("ASN.1: Unexpected end of data at offset \(pos).") }
             defer { pos += 1 }
             return d[pos]
         }
@@ -200,7 +200,7 @@ public enum ASN1 {
                 let b = try byte()
                 tagNumber = tagNumber << 7 | Int(b & 0x7F)
                 count += 1
-                guard count <= 4 else { throw CTError("ASN.1: Tag-Nummer zu groß bei Offset \(start).") }
+                guard count <= 4 else { throw CTError("ASN.1: Tag number too large at offset \(start).") }
                 if b & 0x80 == 0 { break }
             }
         }
@@ -210,17 +210,17 @@ public enum ASN1 {
         if lb < 0x80 {
             length = Int(lb)
         } else if lb == 0x80 {
-            guard constructed else { throw CTError("ASN.1: Unbestimmte Länge bei primitivem Element (Offset \(start)).") }
+            guard constructed else { throw CTError("ASN.1: Indefinite length for a primitive element (offset \(start)).") }
             indefinite = true
         } else {
             let n = Int(lb & 0x7F)
-            guard n <= 4 else { throw CTError("ASN.1: Längenangabe zu groß bei Offset \(start).") }
+            guard n <= 4 else { throw CTError("ASN.1: Length field too large at offset \(start).") }
             for _ in 0..<n { length = length << 8 | Int(try byte()) }
         }
         let headerLength = pos - start
         if !indefinite {
             guard length <= end - pos else {
-                throw CTError("ASN.1: Länge \(length) bei Offset \(start) überschreitet das Datenende.")
+                throw CTError("ASN.1: Length \(length) at offset \(start) exceeds the end of the data.")
             }
         }
         var children: [ASN1Node] = []
@@ -229,7 +229,7 @@ public enum ASN1 {
         if constructed {
             if indefinite {
                 while true {
-                    guard pos + 1 < end else { throw CTError("ASN.1: Ende-Kennung (00 00) fehlt für Element bei Offset \(start).") }
+                    guard pos + 1 < end else { throw CTError("ASN.1: End-of-contents marker (00 00) is missing for the element at offset \(start).") }
                     if d[pos] == 0 && d[pos + 1] == 0 { break }
                     children.append(try parseNode(d, &pos, end: end, depth: depth + 1))
                 }
@@ -269,7 +269,7 @@ public enum ASN1 {
 
     static func hexPreview(_ bytes: [UInt8], limit: Int = 32) -> String {
         if bytes.count <= limit { return Hex.encode(bytes, separator: "") }
-        return Hex.encode(bytes.prefix(limit), separator: "") + "… (\(bytes.count) Byte)"
+        return Hex.encode(bytes.prefix(limit), separator: "") + "… (\(bytes.count) bytes)"
     }
 
     static func integerDescription(_ v: [UInt8]) -> String {

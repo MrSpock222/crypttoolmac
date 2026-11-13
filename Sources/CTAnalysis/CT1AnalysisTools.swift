@@ -9,21 +9,22 @@ import CTCommon
 
 // MARK: - Number formatting
 
-/// CT1 number formatting (German CT1: thousands separator ".", decimal comma).
+/// CT1 number formatting. The separators are language resources in CT1; the English program
+/// uses "," as thousands separator (IDS_STRING_PT) and a decimal point (IDS_STRING_COMMA).
 public enum CT1Format {
-    /// `itoa_fmt`: integer with "." as thousands separator ("12.345").
+    /// `itoa_fmt`: integer with "," as thousands separator ("12,345").
     public static func integer(_ v: Int) -> String {
         let digits = String(abs(v))
         var out = ""
         for (i, ch) in digits.enumerated() {
-            if i > 0 && (digits.count - i) % 3 == 0 { out.append(".") }
+            if i > 0 && (digits.count - i) % 3 == 0 { out.append(",") }
             out.append(ch)
         }
         return (v < 0 ? "-" : "") + out
     }
 
-    /// `double_fmt`: integer part with thousands separators, decimal comma and `decimals`
-    /// *truncated* (not rounded) decimals, e.g. 4,7 → "4,69" for 4.6999.
+    /// `double_fmt`: integer part with thousands separators, decimal point and `decimals`
+    /// *truncated* (not rounded) decimals, e.g. "4.69" for 4.6999.
     public static func double(_ x: Double, decimals: Int) -> String {
         guard x.isFinite else { return String(x) }
         let prec = min(max(decimals, 0), 9)
@@ -34,7 +35,7 @@ public enum CT1Format {
         let i = Int(frac * pow(10.0, Double(prec)))
         var f = String(i)
         f.removeFirst()
-        s += "," + f
+        s += "." + f
         return s
     }
 
@@ -91,10 +92,10 @@ public enum CT1RandomTests {
         /// CT1 test names (IDS_STRING_TEST_FREQ …).
         public var name: String {
             switch self {
-            case .frequency: return "Frequency-Test"
-            case .serial: return "Serial-Test"
-            case .poker: return "Poker-Test"
-            case .runs: return "Runs-Test"
+            case .frequency: return "Frequency test"
+            case .serial: return "Serial test"
+            case .poker: return "Poker test"
+            case .runs: return "Runs test"
             }
         }
     }
@@ -110,9 +111,9 @@ public enum CT1RandomTests {
         public let blocks: Int
 
         /// "%s bestanden!" / "%s nicht bestanden!".
-        public func verdict(_ name: String) -> String { passed ? "\(name) bestanden!" : "\(name) nicht bestanden!" }
+        public func verdict(_ name: String) -> String { passed ? "\(name) passed!" : "\(name) failed!" }
         /// IDS_STRING_TESTS_ERGEBNIS_INFO: "Maximaler Testwert: %lf\nTestergebnis: %lf".
-        public var info: String { "Maximaler Testwert: \(CT1Format.cDouble(threshold))\nTestergebnis: \(CT1Format.cDouble(statistic))" }
+        public var info: String { "Maximal test value: \(CT1Format.cDouble(threshold))\nTest result: \(CT1Format.cDouble(statistic))" }
     }
 
     // MARK: Statistics (exact ports)
@@ -369,7 +370,7 @@ public enum CT1RandomTests {
     /// last byte and the final run, so e.g. a file of zero bytes passed in CT1.
     public static func longRunTest(_ d: [UInt8], maxRun: Int = 34) -> (passed: Bool, longest: Int, info: String) {
         let l = longestRunCorrect(d)
-        return (l < maxRun, l, "Maximaler Testwert: \(maxRun)\nLängster Run: \(l)")
+        return (l < maxRun, l, "Maximal test value: \(maxRun)\nLongest Run: \(l)")
     }
 
     // MARK: FIPS PUB 140-1
@@ -391,12 +392,12 @@ public enum CT1RandomTests {
         public var batteryPassed: Bool { monobitPassed && longRunPassed && pokerPassed && runsPassed }
 
         /// CT1 lines.
-        public var entropyLine: String { "Entropie: \(CT1Format.double(entropy, decimals: 3)) bit/Zeichen" }
-        public var longRunLine: String { longRunPassed ? "Longrun Test bestanden!" : "Longrun Test nicht bestanden!" }
-        public var monobitLine: String { monobitPassed ? "Mono-Bit Test bestanden!" : "Mono-Bit Test nicht bestanden!" }
-        public var pokerLine: String { pokerPassed ? "Poker-Test bestanden!" : "Poker Test nicht bestanden!" }
-        public var runsLine: String { runsPassed ? "Runs Test bestanden!" : "Runs Test nicht bestanden!" }
-        public var batteryLine: String { batteryPassed ? "Testbatterie bestanden!" : "Testbatterie nicht bestanden!" }
+        public var entropyLine: String { "Entropy: \(CT1Format.double(entropy, decimals: 3)) bit/character" }
+        public var longRunLine: String { longRunPassed ? "Longrun Test passed!" : "Longrun Test failed!" }
+        public var monobitLine: String { monobitPassed ? "Mono-Bit Test passed!" : "Mono-Bit Test failed!" }
+        public var pokerLine: String { pokerPassed ? "Poker-Test passed!" : "Poker Test failed!" }
+        public var runsLine: String { runsPassed ? "Runs Test passed!" : "Runs Test failed!" }
+        public var batteryLine: String { batteryPassed ? "Test battery passed!" : "Test battery failed!" }
     }
 
     /// FIPS-PUB-140-1 battery on the first 2500 bytes.
@@ -512,20 +513,20 @@ public enum CT1NGram {
     /// Method prefix used in titles: "Histogramm-", "Digramm-", "Trigramm-", "%i-Gramm-".
     public static func method(n: Int, freeN: Bool) -> String {
         if !freeN {
-            switch n { case 1: return "Histogramm-"; case 2: return "Digramm-"; case 3: return "Trigramm-"; default: break }
+            switch n { case 1: return "Histogram"; case 2: return "Digram"; case 3: return "Trigram"; default: break }
         }
-        return "\(n)-Gramm-"
+        return "\(n) Gram"
     }
 
     /// Content of the document written by "Liste speichern" (CT1 format).
     public static func listDocument(_ r: Result, rows: Int, method: String, title: String, fileSize: Int) -> String {
         func pad(_ s: String, _ w: Int) -> String { s.count >= w ? s : String(repeating: " ", count: w - s.count) + s }
-        var out = "\(method)Analyse von <\(title)>. Dateigröße: \(fileSize) Bytes.\n"
-        out += "Absteigend sortiert nach der Häufigkeit.\n\n"
-        let substr = "Teilstring"
+        var out = "\(method) Analysis of <\(title)>. File size \(fileSize) bytes.\n"
+        out += "Descending sorted on frequency.\n\n"
+        let substr = "Substring"
         var wd = substr.count
         if r.binary { wd = wd > r.n * 3 - 1 ? wd + 2 : r.n * 3 + 1 } else { wd = wd > r.n ? wd + 2 : r.n + 2 }
-        out += pad("Nr.", 5) + "\t" + pad(substr, wd) + "\t" + pad("Häufigkeit (in %)", 12) + "\t" + "Häufigkeit\n"
+        out += pad("No.", 5) + "\t" + pad(substr, wd) + "\t" + pad("Frequency (in %)", 12) + "\t" + "Frequency\n"
         for (i, e) in r.entries.prefix(max(0, rows)).enumerated() {
             out += pad(String(i + 1), 5) + "\t"
             out += pad(r.label(e), wd) + "\t"
@@ -560,8 +561,8 @@ public enum CT1Periodicity {
 
     /// Document of "Liste im Hauptfenster anzeigen"; `results` in display order (outermost first).
     public static func listDocument(_ results: [Statistics.PeriodResult], title: String) -> String {
-        var out = "Periodenanalyse von \(title):\n"
-        out += "Nr\tOffset\tLänge\tPeriodenzahl\tPeriodeninhalt\n"
+        var out = "Periodicity analysis of \(title):\n"
+        out += "No.\tOffset\tLength\tNumber of cycles\tCycle content\n"
         guard let first = results.first else { return out }
         let maxtxt = min(first.length, maxPrint)
         for (i, r) in results.enumerated() {

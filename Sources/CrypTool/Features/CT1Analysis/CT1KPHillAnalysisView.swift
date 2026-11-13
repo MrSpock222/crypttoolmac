@@ -12,7 +12,7 @@ extension CT1Analysis {
         let holder = CT1KPWindowHolder()
         let model = CT1KPTextPair(active: document)
         holder.window = WindowPresenter.tool(id: "ct1-kp-hill-\(ObjectIdentifier(document).hashValue)",
-                                             title: "Hill-Analyse (Known Plaintext)",
+                                             title: "Hill Analysis (Known Plaintext)",
                                              size: CGSize(width: 640, height: 700)) {
             CT1KPHillAnalysisView(model: model, holder: holder)
         }
@@ -33,15 +33,15 @@ struct CT1KPHillAnalysisView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Dies ist eine Known-Plaintext-Analyse einer Hill-Chiffre. Mit dieser Analyse können Sie aus dem Klartext und dem Geheimtext den Hill-Schlüssel berechnen.")
+            Text("This is a known-plaintext analysis of Hill encryption. If the plaintext is available along with the ciphertext, the Hill key can be recomputed.")
                 .fixedSize(horizontal: false, vertical: true)
             CT1KPTextInputView(model: model)
-            GroupBox("Welche Varianten der Hill-Verschlüsselung sollen analysiert werden") {
-                GroupBox("Multiplikationsart") {
+            GroupBox("Hill encryption variants ") {
+                GroupBox("Multiplication variant") {
                     VStack(alignment: .leading, spacing: 4) {
-                        Toggle("(Vektorreihe) x (Matrix)", isOn: $checkVM)
+                        Toggle("(row vector) * (matrix)", isOn: $checkVM)
                             .onChange(of: checkVM) { _, v in if !v && !checkMV { checkMV = true } }
-                        Toggle("(Matrix) x (Vektorspalte)", isOn: $checkMV)
+                        Toggle("(matrix) * (column vector)", isOn: $checkMV)
                             .onChange(of: checkMV) { _, v in if !v && !checkVM { checkVM = true } }
                     }
                     .toggleStyle(.checkbox)
@@ -50,13 +50,13 @@ struct CT1KPHillAnalysisView: View {
                 }
                 .padding(4)
             }
-            GroupBox("Optionen") {
+            GroupBox("Options") {
                 HStack(spacing: 8) {
-                    Text("Durchsuchen der Dimensionen von")
+                    Text("Search through the dimensions from")
                     Picker("", selection: $dimFrom) { ForEach(1...10, id: \.self) { Text("\($0)").tag($0) } }
                         .labelsHidden().fixedSize()
                         .onChange(of: dimFrom) { _, v in if v > dimTo { dimTo = v } }
-                    Text("bis")
+                    Text("to")
                     Picker("", selection: $dimTo) { ForEach(1...10, id: \.self) { Text("\($0)").tag($0) } }
                         .labelsHidden().fixedSize()
                         .onChange(of: dimTo) { _, v in if v < dimFrom { dimFrom = v } }
@@ -65,12 +65,12 @@ struct CT1KPHillAnalysisView: View {
                 .padding(4)
             }
             HStack {
-                Button("Schlüssel suchen", action: search).keyboardShortcut(.defaultAction).disabled(busy)
+                Button("Continue", action: search).keyboardShortcut(.defaultAction).disabled(busy)
                 if busy { ProgressView().controlSize(.small) }
                 Spacer()
-                Button("Textoptionen...") { OptionsWindows.showTextOptions() }
+                Button("Text options") { OptionsWindows.showTextOptions() }
                 Spacer()
-                Button("Schließen") { holder.window?.close() }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { holder.window?.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -80,8 +80,8 @@ struct CT1KPHillAnalysisView: View {
     /// CDlgHillAnaylsis::OnBnClickedSearchKey.
     private func search() {
         let p = model.plain, c = model.cipher
-        guard !p.isEmpty else { Alerts.error("Klartext: Datei ist leer!\nBitte wählen Sie eine nicht leere Datei aus."); return }
-        guard !c.isEmpty else { Alerts.error("Geheimtext: Datei ist leer!\nBitte wählen Sie eine nicht leere Datei aus."); return }
+        guard !p.isEmpty else { Alerts.error("Plaintext: File is empty!\nPlease select a non empty file."); return }
+        guard !c.isEmpty else { Alerts.error("Ciphertext: File is empty!\nPlease select a non empty file."); return }
         let o = settings.textOptions
         let d = UserDefaults.standard
         // CT1 registry "Hill" (Weitere Hill-Optionen): OrdChrOffset, PaddingDefaultChr / PaddingOwnChr.
@@ -102,9 +102,9 @@ struct CT1KPHillAnalysisView: View {
                 case .notFound(let failures):
                     Alerts.error(CT1HillKnownPlaintext.notFoundMessage(failures))
                 case .found(let r):
-                    if r.lengthMismatch { Alerts.info("Die Dokumente haben nicht die gleiche Länge !") }
+                    if r.lengthMismatch { Alerts.info("The documents are of different lengths!") }
                     let alphabet = o.alphabetCharacters
-                    WindowPresenter.sheet(on: holder.window, title: "Anzeige Hill-Schlüsselmatrix") { close in
+                    WindowPresenter.sheet(on: holder.window, title: "Display Hill Key Matrix") { close in
                         CT1KPHillKeyView(matrix: r.matrix, multiplication: r.multiplication, alphabet: alphabet,
                                          offsetOne: offsetOne, close: close)
                     }
@@ -172,42 +172,42 @@ struct CT1KPHillKeyView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            CT1Group(title: "Benutztes Alphabet (\(n) Zeichen)") {
+            CT1Group(title: "Selected alphabet (\(n) characters)") {
                 CT1ReadOnlyLine(text: String(alphabet))
             }
-            CT1Group(title: "Hill-Schlüsselmatrix") {
+            CT1Group(title: "Hill key matrix") {
                 if let m = shown {
                     HStack(alignment: .top, spacing: 12) {
-                        GroupBox("Alphabetzeichen") { grid(m, letters: true).frame(maxWidth: .infinity) }
-                        GroupBox("Zahlenwerte") { grid(m, letters: false).frame(maxWidth: .infinity) }
+                        GroupBox("Alphabet characters") { grid(m, letters: true).frame(maxWidth: .infinity) }
+                        GroupBox("Number values") { grid(m, letters: false).frame(maxWidth: .infinity) }
                     }
                 } else {
-                    Text("Die Matrix ist nicht invertierbar.").foregroundStyle(.red)
+                    Text("The matrix is not invertible.").foregroundStyle(.red)
                 }
-                CT1Radio(title: "Hill-Schlüsselmatrix (Verschlüsseln)", selected: !inverse) { inverse = false }
-                CT1Radio(title: "Inverse Hill-Schlüsselmatrix (Entschlüsseln)", selected: inverse) { inverse = true }
+                CT1Radio(title: "Hill key matrix (encrypt)", selected: !inverse) { inverse = false }
+                CT1Radio(title: "Inverse Hill key matrix (decrypt)", selected: inverse) { inverse = true }
             }
             HStack(alignment: .top, spacing: 12) {
-                CT1Group(title: "Multiplikationsart") {
-                    CT1Radio(title: "(Vektorreihe) * (Matrix)", selected: multiplication == .vectorTimesMatrix) {}
-                    CT1Radio(title: "(Matrix) * (Vektorspalte)", selected: multiplication == .matrixTimesVector) {}
+                CT1Group(title: "Multiplication variant") {
+                    CT1Radio(title: "(row vector) * (matrix)", selected: multiplication == .vectorTimesMatrix) {}
+                    CT1Radio(title: "(matrix) * (column vector)", selected: multiplication == .matrixTimesVector) {}
                 }
                 .disabled(true)
-                CT1Group(title: "Wert des ersten Alphabetzeichens") {
-                    CT1Radio(title: "0 (z.B. \"A\"=0)", selected: !offsetOne) { offsetOne = false }
-                    CT1Radio(title: "1 (z.B. \"A\"=1)", selected: offsetOne) { offsetOne = true }
+                CT1Group(title: "Value of the first alphabet character") {
+                    CT1Radio(title: "0 (e.g. \"A\"=0)", selected: !offsetOne) { offsetOne = false }
+                    CT1Radio(title: "1 (e.g. \"A\"=1)", selected: offsetOne) { offsetOne = true }
                 }
             }
             HStack {
                 // CKeyHillBase::copyKey: the matrix currently shown, with the selected offset.
-                Button("Schlüssel kopieren") {
+                Button("Copy key") {
                     guard let m = shown else { return }
                     CT1KeyStore.shared.copy(CT1HillKnownPlaintext.keyString(matrix: m, alphabet: alphabet, firstLetterIsOne: offsetOne,
                                                                             multiplication: multiplication), method: "hill")
                 }
                 .disabled(shown == nil)
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(16)

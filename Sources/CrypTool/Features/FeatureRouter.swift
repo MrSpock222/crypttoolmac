@@ -20,8 +20,8 @@ enum FeatureRouter {
     static func perform(_ action: CTAction, document doc: CTDocument?, window: NSWindow?) {
         guard isAvailable(action) else { NSSound.beep(); return }
         if notIncluded.contains(action) {
-            Alerts.info("Diese Funktion von CrypTool 1 ist in der macOS-Version nicht enthalten.\n\nDie Beschreibung aus der CT1-Online-Hilfe wird jetzt angezeigt.",
-                        title: "Nicht enthalten")
+            Alerts.info("This function of CrypTool 1 is not included in the macOS version.\n\nThe description from the CT1 online help will be displayed now.",
+                        title: "Not included")
             HelpCenter.show(action: action)
             return
         }
@@ -60,73 +60,73 @@ enum FeatureRouter {
         case .rijndaelAnimation: CT1Visualizations.openRijndaelAnimation(); return
         case .rijndaelFlow: CT1Visualizations.openRijndaelFlow(); return
         case .rsaDemo:
-            tool("rsademo", "RSA-Demo", 720, 820) { RSADemoView(initialText: doc?.text ?? "") }
+            tool("rsademo", "RSA Demonstration", 720, 820) { RSADemoView(initialText: doc?.text ?? "") }
             return
         case .keyGeneration:
-            tool("keygen", "Schlüssel erzeugen", 760, 640) { KeyGenerationView() }
+            tool("keygen", "Generation of an Asymmetric Key Pair", 760, 640) { KeyGenerationView() }
             return
         case .keyList:
-            tool("keylist", "Schlüssel anzeigen/exportieren", 860, 560) { KeyListView() }
+            tool("keylist", "Available Asymmetric Key Pairs", 860, 560) { KeyListView() }
             return
         case .signatureDemo:
-            tool("sigdemo", "Signaturdemo", 760, 820) { SignatureDemoView(document: doc) }
+            tool("sigdemo", "Step by Step Signature Generation", 760, 820) { SignatureDemoView(document: doc) }
             return
         case .hashOfFile:
-            tool(nil, "Hashwert einer Datei", 760, 360) { FileHashView() }
+            tool(nil, "Hash of a file", 760, 360) { FileHashView() }
             return
         case .hashDemo:
-            tool("hashdemo", "Hash-Demo", 720, 820) { HashDemoView(document: doc) }
+            tool("hashdemo", "Hash Demonstration", 720, 820) { HashDemoView(document: doc) }
             return
         case .pkcs5:
-            tool("pkcs5", "Schlüssel aus Passwort generieren (PKCS #5)", 600, 480) { PKCS5View() }
+            tool("pkcs5", "Key Generation from Password According to PKCS #5", 600, 480) { PKCS5View() }
             return
         case .hmac:
-            tool("hmac", "Generieren von HMACs", 800, 880) { HMACView(initialMessage: String((doc?.text ?? "").prefix(100_000)), sourceTitle: doc?.shortName) }
+            tool("hmac", "Keyed-Hash Message Authentication Code (HMAC)", 800, 880) { HMACView(initialMessage: String((doc?.text ?? "").prefix(100_000)), sourceTitle: doc?.shortName) }
             return
         case .primeTest:
-            tool("primetest", "Primzahltest", 560, 480) { PrimeTestView() }
+            tool("primetest", "Prime Number Test", 560, 480) { PrimeTestView() }
             return
         case .primeGeneration:
-            tool("primegen", "Primzahlen generieren", 640, 480) { PrimeGenerationView() }
+            tool("primegen", "Prime Number Generation", 640, 480) { PrimeGenerationView() }
             return
         case .factorization:
-            tool("factor", "Faktorisieren einer Zahl", 640, 700) { FactorizationView() }
+            tool("factor", "Factorization of a Number", 640, 700) { FactorizationView() }
             return
         case .diffieHellman:
-            tool("dh", "Diffie-Hellman-Demo", 1080, 660) { DiffieHellmanView() }
+            tool("dh", "Diffie-Hellman Demonstration - Visualization of the Diffie-Hellman Key Exchange Protocol", 1080, 660) { DiffieHellmanView() }
             return
         case .crtAstronomy:
-            tool("crtastro", "Astronomie und Planetenbewegung", 640, 460) { CRTAstronomyView() }
+            tool("crtastro", "Planetary Motion and the Chinese Remainder Theorem", 640, 460) { CRTAstronomyView() }
             return
         case .crtTransformation:
-            tool("crttrans", "Modulare Hin- und Rücktransformation", 620, 600) { CRTTransformationView() }
+            tool("crttrans", "Visualization of the Transformation from Number Notation into the Modular Representation with the CRT", 620, 600) { CRTTransformationView() }
             return
         case .crtSecretSharing:
-            tool("crtss", "Secret-Sharing mittels CRT", 640, 640) { CRTSecretSharingView() }
+            tool("crtss", "Secret Sharing by CRT", 640, 640) { CRTSecretSharingView() }
             return
         case .shamirSecretSharing:
-            tool("shamir", "Secret-Sharing-Demo (nach Shamir)", 680, 680) { ShamirView() }
+            tool("shamir", "Secret Sharing Demonstration: Initializing the Threshold Scheme", 680, 680) { ShamirView() }
             return
         case .enigma:
             CT1Games.openEnigma(document: doc)
             return
         case .aesInspector:
-            tool("aesinspector", "Rijndael-Inspektor", 760, 560) { AESInspectorView() }
+            tool("aesinspector", "Rijndael Inspector", 760, 560) { AESInspectorView() }
             return
         case .caesarVisualization:
-            tool("caesardisk", "Caesar-Scheibe", 720, 420) { CaesarDiskView() }
+            tool("caesardisk", "Caesar Disk", 720, 420) { CaesarDiskView() }
             return
         case .randomGenerator:
-            tool("randomgen", "Zufallsdaten erzeugen", 600, 560) { RandomGeneratorView() }
+            tool("randomgen", "Generation of Random Numbers", 600, 560) { RandomGeneratorView() }
             return
         case .passwordQuality:
-            tool("pwquality", "Passwort-Qualitätsmesser", 520, 440) { PasswordQualityView() }
+            tool("pwquality", "Password Quality Meter", 520, 440) { PasswordQualityView() }
             return
         case .passwordEntropy:
-            tool("pwentropy", "Passwörter mit bestimmter Entropie", 560, 560) { PasswordEntropyView() }
+            tool("pwentropy", "Generate Passwords with Given Entropy", 560, 560) { PasswordEntropyView() }
             return
         case .numberLength:
-            tool("numlength", "Länge einer Zahl", 560, 440) { NumberLengthView() }
+            tool("numlength", "Length of a Number", 560, 440) { NumberLengthView() }
             return
         case .numberShark:
             CT1Games.openNumberShark()
@@ -135,7 +135,7 @@ enum FeatureRouter {
             CT1Games.openECCDemo()
             return
         case .mersenne:
-            tool("mersenne", "Mersenne-Zahlen berechnen", 560, 480) { MersenneView() }
+            tool("mersenne", "Compute Mersenne Numbers", 560, 480) { MersenneView() }
             return
         default:
             break
@@ -151,13 +151,13 @@ enum FeatureRouter {
         case .substitution: sheet(window, "Substitution") { SubstitutionDialog(document: doc, close: $0) }
         case .playfair: sheet(window, "Playfair") { PlayfairDialog(document: doc, close: $0) }
         case .adfgvx: sheet(window, "ADFGVX") { ADFGVXDialog(document: doc, close: $0) }
-        case .byteAddition: sheet(window, "Byteweise Addition") { ByteCipherDialog(kind: .addition, document: doc, close: $0) }
+        case .byteAddition: sheet(window, "Byte Addition") { ByteCipherDialog(kind: .addition, document: doc, close: $0) }
         case .xor: sheet(window, "XOR") { ByteCipherDialog(kind: .xor, document: doc, close: $0) }
         case .vernam: sheet(window, "Vernam") { VernamDialog(document: doc, close: $0) }
         case .homophone: sheet(window, "Homophone") { HomophoneDialog(document: doc, close: $0) }
         case .permutation: sheet(window, "Permutation") { PermutationDialog(document: doc, close: $0) }
         case .solitaire: sheet(window, "Solitaire") { SolitaireDialog(document: doc, close: $0) }
-        case .scytaleRailFence: sheet(window, "Skytale / Gartenzaun") { ScytaleDialog(document: doc, close: $0) }
+        case .scytaleRailFence: sheet(window, "Scytale / Rail Fence") { ScytaleDialog(document: doc, close: $0) }
 
         // Modern
         case .symmetric(let raw):
@@ -165,7 +165,7 @@ enum FeatureRouter {
             sheet(window, alg.displayName) { SymmetricDialog(algorithm: alg, document: doc, close: $0) }
         case .bruteForce(let raw):
             guard let alg = SymmetricAlgorithm(rawValue: raw) else { return }
-            sheet(window, "Brute-Force") { BruteForceDialog(algorithm: alg, document: doc, close: $0) }
+            sheet(window, "Brute-Force Analysis") { BruteForceDialog(algorithm: alg, document: doc, close: $0) }
 
         // Asymmetrisch / Hybrid / Signaturen
         case .rsaEncrypt: sheet(window, "RSA") { RSAEncryptDialog(document: doc, decrypt: false, close: $0) }
@@ -174,50 +174,50 @@ enum FeatureRouter {
         case .hybridRSADecrypt: sheet(window, "Hybrid") { HybridDialog(document: doc, ecc: false, decrypt: true, close: $0) }
         case .hybridECCEncrypt: sheet(window, "Hybrid") { HybridDialog(document: doc, ecc: true, decrypt: false, close: $0) }
         case .hybridECCDecrypt: sheet(window, "Hybrid") { HybridDialog(document: doc, ecc: true, decrypt: true, close: $0) }
-        case .signDocument: sheet(window, "Signieren") { SignDialog(document: doc, close: $0) }
+        case .signDocument: sheet(window, "Sign a Document") { SignDialog(document: doc, close: $0) }
         case .verifySignature: SignatureOps.verify(doc)
         case .extractSignature: SignatureOps.extract(doc)
 
         // Hash
         case .hash(let raw):
             guard let alg = HashAlgorithm(rawValue: raw) else { return }
-            sheet(window, "Hashwert") { HashResultSheet(algorithm: alg, document: doc, close: $0) }
+            sheet(window, "Hash value") { HashResultSheet(algorithm: alg, document: doc, close: $0) }
 
         // Codierungen / Kompression
         case .base64Encode:
-            open(Base64Codec.encode(doc.bytes), "Base64-Codierung", doc)
+            open(Base64Codec.encode(doc.bytes), "Base64 encoding", doc)
         case .base64Decode:
-            run(doc) { DocumentFactory.openResult(try Base64Codec.decode(doc.text), title: DocumentFactory.title("Base64-Decodierung", of: doc), parent: doc) }
+            run(doc) { DocumentFactory.openResult(try Base64Codec.decode(doc.text), title: DocumentFactory.title("Base64 decoding", of: doc), parent: doc) }
         case .uuEncode:
-            open(UUCodec.encode(doc.bytes, fileName: doc.shortName), "UU-Codierung", doc)
+            open(UUCodec.encode(doc.bytes, fileName: doc.shortName), "UU Encoding", doc)
         case .uuDecode:
             run(doc) {
                 let r = try UUCodec.decode(doc.text)
-                DocumentFactory.openResult(r.bytes, title: DocumentFactory.title("UU-Decodierung", of: doc) + (r.fileName.map { " (\($0))" } ?? ""), parent: doc)
+                DocumentFactory.openResult(r.bytes, title: DocumentFactory.title("UU Decoding", of: doc) + (r.fileName.map { " (\($0))" } ?? ""), parent: doc)
             }
         case .asn1Decode:
-            run(doc) { open(try ASN1.dump(doc.bytes), "ASN.1-Decodierung", doc) }
+            run(doc) { open(try ASN1.dump(doc.bytes), "ASN.1 decoding", doc) }
         case .zip: CT1ZipFeature.zip(doc)
         case .unzip: CT1ZipFeature.unzip(doc)
 
         // Analyse-Werkzeuge
         case .entropy: CT1Analysis.openEntropy(document: doc)
         case .histogram:
-            tool(nil, "Histogramm von <\(doc.shortName)>", 820, 460) { HistogramView(document: doc) }
+            tool(nil, "Histogram of <\(doc.shortName)>", 820, 460) { HistogramView(document: doc) }
         case .floatingFrequency:
             let v = Statistics.floatingFrequency(doc.bytes, window: 64)
-            tool(nil, "Gleitende Häufigkeit von <\(doc.shortName)>", 820, 420) {
-                SeriesChartView(title: "Gleitende Häufigkeit", xLabel: "Position im Dokument", yLabel: "Verschiedene Zeichen im Fenster (64)",
-                                values: v, note: "Anzahl verschiedener Zeichen in einem gleitenden Fenster von 64 Bytes. Verschlüsselte oder komprimierte Bereiche heben sich deutlich von Klartext ab.", parent: doc)
+            tool(nil, "Floating frequency of <\(doc.shortName)>", 820, 420) {
+                SeriesChartView(title: "Floating frequency", xLabel: "Section offset", yLabel: "Different characters per 64 byte block",
+                                values: v, note: "Number of different characters in a sliding window of 64 bytes. Encrypted or compressed sections stand out clearly from plaintext.", parent: doc)
             }
         case .ngram: CT1Analysis.openNGram(document: doc)
         case .autocorrelation:
             let raw = Statistics.autocorrelation(doc.bytes, maxShift: min(max(1, doc.bytes.count - 1), 256)).map(Double.init)
             let relative = AppSettings.shared.plotRelativeAutocorrelation
             let v = relative ? raw.enumerated().map { $0.element * 100 / Double(max(1, doc.bytes.count - $0.offset - 1)) } : raw
-            tool(nil, "Autokorrelation von <\(doc.shortName)>", 820, 420) {
-                SeriesChartView(title: "Autokorrelation", xLabel: "Verschiebung", yLabel: relative ? "Übereinstimmungen (%)" : "Übereinstimmungen", values: v, xOffset: 1, bars: true,
-                                note: "Anzahl übereinstimmender Bytes zwischen dem Dokument und seiner um k Positionen verschobenen Kopie. Spitzen bei Vielfachen von k deuten auf eine Periode (Schlüssellänge) hin.", parent: doc)
+            tool(nil, "Autocorrelation of <\(doc.shortName)>", 820, 420) {
+                SeriesChartView(title: "Autocorrelation", xLabel: "Offset", yLabel: relative ? "Relative agreement [%]" : "Number of characters that match", values: v, xOffset: 1, bars: true,
+                                note: "Number of matching bytes between the document and its copy shifted by k positions. Peaks at multiples of k indicate a period (key length).", parent: doc)
             }
         case .periodicity: CT1Analysis.openPeriodicity(document: doc)
 
@@ -245,12 +245,12 @@ enum FeatureRouter {
         case .random3D: CT1Analysis.open3DVisualization(document: doc)
 
         default:
-            Alerts.info("Diese Funktion ist in der macOS-Version nicht verfügbar.", title: "Nicht verfügbar")
+            Alerts.info("This function is not available in the macOS version.", title: "Not available")
         }
     }
 
     static func openManualSubstitution(_ doc: CTDocument, initialKey: [Int]?) {
-        tool(nil, "Manuelle Substitutions-Analyse von <\(doc.shortName)>", 900, 560) { ManualSubstitutionView(document: doc, initialKey: initialKey) }
+        tool(nil, "Manual substitution analysis of <\(doc.shortName)>", 900, 560) { ManualSubstitutionView(document: doc, initialKey: initialKey) }
     }
 
     // MARK: helpers
@@ -272,6 +272,6 @@ enum FeatureRouter {
     }
 
     private static func randomTest(_ kind: RandomTestView.Kind, _ doc: CTDocument) {
-        tool(nil, "Zufallsanalyse von <\(doc.shortName)>", 600, 520) { RandomTestView(kind: kind, document: doc) }
+        tool(nil, "Randomness analysis of <\(doc.shortName)>", 600, 520) { RandomTestView(kind: kind, document: doc) }
     }
 }

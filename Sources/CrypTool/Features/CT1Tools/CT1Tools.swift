@@ -1,8 +1,8 @@
 import AppKit
 import SwiftUI
 
-/// Entry points of the formerly external CT1 tools "AES (selbstextrahierend)" (AES-Tool 2.7) and
-/// "Generischer t-adic-NAF-Schlüsselgenerator" (t-adicNAF.hta / t-adicNAF.exe 1.3.3).
+/// Entry points of the formerly external CT1 tools "AES (self extracting)" (AES-Tool 2.7) and
+/// "Generic t-adic NAF Key Generator" (t-adicNAF.hta / t-adicNAF.exe 1.3.3).
 @MainActor
 enum CT1Tools {
     private static weak var aesModel: AESToolModel?
@@ -26,7 +26,7 @@ enum CT1Tools {
     }
 
     static func openTadicNAF() {
-        WindowPresenter.tool(id: "ct1tools.tadicnaf", title: "Generischer t-adic-NAF-Schlüsselgenerator",
+        WindowPresenter.tool(id: "ct1tools.tadicnaf", title: "Generic t-adic NAF Key Generator",
                              size: CGSize(width: 720, height: 780)) {
             TadicNAFView()
         }
@@ -44,7 +44,7 @@ enum CT1Tools {
             try Data(doc.bytes).write(to: url)
             return url
         } catch {
-            Alerts.error("Die temporäre Datei \(url.path) kann nicht geschrieben werden.")
+            Alerts.error("The temporary file \(url.path) could not be written.")
             return nil
         }
     }

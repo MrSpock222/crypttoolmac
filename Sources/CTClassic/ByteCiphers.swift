@@ -31,10 +31,10 @@ public enum ByteCiphers {
     /// data (CT1 only warned and reused the key cyclically – use `xor` for that behaviour).
     public static func vernam(_ data: [UInt8], pad: [UInt8]) throws -> [UInt8] {
         guard !pad.isEmpty else {
-            throw CTError("Die Schlüsseldatei ist leer. Für die Vernam-Verschlüsselung wird ein Schlüssel benötigt, der mindestens so lang ist wie die Daten.")
+            throw CTError("The key file is empty. The Vernam encryption requires a key that is at least as long as the data.")
         }
         guard pad.count >= data.count else {
-            throw CTError("Der Schlüssel (\(pad.count) Byte) ist kürzer als die Daten (\(data.count) Byte). Bei der Vernam-Chiffre muss der Schlüssel mindestens so lang sein wie der Klartext.")
+            throw CTError("The key (\(pad.count) bytes) is shorter than the data (\(data.count) bytes). For the Vernam cipher the key must be at least as long as the plaintext.")
         }
         var out = data
         for i in out.indices { out[i] ^= pad[i] }

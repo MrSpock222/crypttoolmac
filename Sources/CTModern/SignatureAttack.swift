@@ -105,7 +105,7 @@ public enum SignatureAttack {
                 i -= 1
             }
             guard positions.count >= bits else {
-                throw CTError("Mindestens eine Nachricht enthält weniger modifizierbare Stellen als signifikante Bits in den Optionen eingestellt wurden.")
+                throw CTError("At least one of the messages contains less modifiable positions than the number of significant bits set in the options.")
             }
             var out = message
             // positions are descending, so inserting keeps the remaining indices valid
@@ -134,13 +134,13 @@ public enum SignatureAttack {
         let bits = options.significantBits
         let hashLen = options.hash.digestLength * 8
         guard bits >= 1, bits <= hashLen else {
-            throw CTError("Die signifikante Bitlänge muss zwischen 1 und \(hashLen) liegen.")
+            throw CTError("The chosen hash algorithm requires a significant bit length between the borders 1 and \(hashLen).")
         }
         if case let .blanks(le, db) = options.method {
-            guard le || db else { throw CTError("Bitte mindestens eine Art der Leerzeichen-Modifikation wählen.") }
+            guard le || db else { throw CTError("Please select at least one kind of blank modification.") }
             if modifiablePositions(harmless, beforeLineEnd: le, doubleBlanks: db) < bits
                 || modifiablePositions(dangerous, beforeLineEnd: le, doubleBlanks: db) < bits {
-                throw CTError("Mindestens eine Nachricht enthält weniger modifizierbare Stellen als signifikante Bits in den Optionen eingestellt wurden.")
+                throw CTError("At least one of the messages contains less modifiable positions than the number of significant bits set in the options.")
             }
         }
 
@@ -189,7 +189,7 @@ public enum SignatureAttack {
             totalSteps += steps
             if cancel?.isCancelled == true {
                 hashOps += runHashOps
-                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: 0, outcome: "abgebrochen"))
+                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: 0, outcome: "aborted"))
                 return Result(success: false, harmless: harmless, dangerous: dangerous, harmlessHash: [], dangerousHash: [],
                               runs: runs, totalSteps: totalSteps, hashOperations: hashOps, elapsed: Date().timeIntervalSince(start),
                               expectedSteps: expected, expectedSeconds: Double(expected) * 5 / perSecond,
@@ -197,7 +197,7 @@ public enum SignatureAttack {
             }
             if aborted {
                 hashOps += runHashOps
-                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: 0, outcome: "Schrittlimit erreicht"))
+                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: 0, outcome: "step limit reached"))
                 continue
             }
 
@@ -206,7 +206,7 @@ public enum SignatureAttack {
             var confirm = 0
             if x == y {
                 hashOps += runHashOps
-                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: 0, outcome: "unbrauchbare Kollision"))
+                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: 0, outcome: "unusable collision"))
                 continue
             }
             var found: ([UInt8], [UInt8])?
@@ -220,14 +220,14 @@ public enum SignatureAttack {
             totalSteps += confirm
             hashOps += runHashOps
             guard let (a, b) = found, parity(a, bits: bits) != parity(b, bits: bits) else {
-                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: confirm, outcome: "unbrauchbare Kollision (gleiche Nachricht)"))
+                runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: confirm, outcome: "unusable collision (same message)"))
                 continue
             }
             // a and b have different parities → one modifies the harmless, the other the dangerous text
             let (hv, dv) = parity(a, bits: bits) == 0 ? (a, b) : (b, a)
             let h = try modify(harmless, value: hv, bits: bits, method: options.method, run: run)
             let d = try modify(dangerous, value: dv, bits: bits, method: options.method, run: run)
-            runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: confirm, outcome: "erfolgreich"))
+            runs.append(RunStatistics(run: run + 1, collisionSteps: steps, confirmationSteps: confirm, outcome: "successful"))
             progress?(1)
             return Result(success: true, harmless: h, dangerous: d,
                           harmlessHash: Hashing.hash(h, algorithm: options.hash),

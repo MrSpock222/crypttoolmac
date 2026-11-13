@@ -42,38 +42,38 @@ struct PlayfairDialog: View {
     }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Playfair", minWidth: 480) {
-            CT1Group(title: "Optionen") {
-                Toggle("Doppelbuchstaben trennen", isOn: $separate)
+        DialogScaffold(title: "Key Entry: Playfair", minWidth: 480) {
+            CT1Group(title: "Options") {
+                Toggle("Separate duplicate letters", isOn: $separate)
                 Group {
                     HStack {
-                        Text("Erstes Trennzeichen:").frame(width: 150, alignment: .leading)
+                        Text("First separator:").frame(width: 150, alignment: .leading)
                         TextField("", text: $separator1).frame(width: 30).multilineTextAlignment(.center)
                             .ct1Filter($separator1, separatorFilter)
                     }
                     HStack {
-                        Text("Zweites Trennzeichen:").frame(width: 150, alignment: .leading)
+                        Text("Second separator:").frame(width: 150, alignment: .leading)
                         TextField("", text: $separator2).frame(width: 30).multilineTextAlignment(.center)
                             .ct1Filter($separator2, separatorFilter)
                     }
-                    Toggle("Doppelbuchstaben nur innerhalb von Paaren trennen", isOn: $onlyWithinPairs)
+                    Toggle("Separate duplicate letters only within pairs", isOn: $onlyWithinPairs)
                 }
                 .padding(.leading, 20)
                 .disabled(!separate)
-                Toggle("Doppelte Zeichen im Schlüssel ignorieren", isOn: $ignoreDuplicates)
+                Toggle("Ignore duplicate letters in the key phrase", isOn: $ignoreDuplicates)
             }
-            CT1Group(title: "Playfair-Schlüssel") {
-                Text("Kurzform des Playfair-Schlüssels:")
+            CT1Group(title: "Playfair key") {
+                Text("Short version of the Playfair key:")
                 HStack {
                     TextField("", text: $keyword).font(.system(.body, design: .monospaced))
                         .ct1Filter($keyword, letterFilter)
                     CT1PasteKeyButton(method: "playfair") { pasteKey($0) }
                 }
                 HStack(alignment: .top) {
-                    GroupBox("Schlüsselmatrix") { CharMatrixView(matrix: cipher.matrix).padding(4) }
+                    GroupBox("Key matrix") { CharMatrixView(matrix: cipher.matrix).padding(4) }
                     VStack(alignment: .leading) {
-                        CT1Radio(title: "5x5 Matrix", selected: size == .fiveByFive) { size = .fiveByFive }
-                        CT1Radio(title: "6x6 Matrix", selected: size == .sixBySix) { size = .sixBySix }
+                        CT1Radio(title: "5x5 matrix", selected: size == .fiveByFive) { size = .fiveByFive }
+                        CT1Radio(title: "6x6 matrix", selected: size == .sixBySix) { size = .sixBySix }
                     }.padding(.top, 20)
                 }
             }
@@ -107,14 +107,14 @@ struct PlayfairDialog: View {
         let key = keyString
         let text = document.text
         guard c.letters(text).count >= 2 else {
-            Alerts.error("Die Eingabe muss mindestens 2 (nicht unbedingt verschiedene) Buchstaben des eingestellten Alphabets enthalten. Das Alphabet können Sie unter Optionen \\ Textoptionen ändern.")
+            Alerts.error("The input must contain at least 2 (not necessarily different) character(s) from the current alphabet. The alphabet can be configured in Options \\ Text Options.")
             return
         }
         // CT1 opens the preformatted plaintext (encryption only) and the result, both in the
         // Playfair (digraph) view.
         if encrypt {
             DocumentFactory.openResult(text: PlayfairCipher.grouped(c.preformat(text).joined()),
-                                       title: "Playfair-Vorformatierung von <\(document.shortName)>", parent: document)
+                                       title: "Playfair pre-formatting of <\(document.shortName)>", parent: document)
         }
         if CipherRun.text(document, method: "playfair", name: "Playfair", encrypt: encrypt, key: key, {
             PlayfairCipher.grouped(encrypt ? c.encrypt(text) : c.decrypt(text))
@@ -168,10 +168,10 @@ struct ADFGVXDialog: View {
     }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: ADFGVX", minWidth: 560) {
-            CT1Group(title: "Stufe 1: Substitution") {
+        DialogScaffold(title: "Key Entry: ADFGVX", minWidth: 560) {
+            CT1Group(title: "Step 1: Substitution") {
                 HStack(alignment: .top, spacing: 16) {
-                    GroupBox("Substitutionsmatrix") {
+                    GroupBox("Substitution matrix") {
                         Grid(horizontalSpacing: 2, verticalSpacing: 2) {
                             GridRow {
                                 Text("")
@@ -188,58 +188,58 @@ struct ADFGVXDialog: View {
                             }
                         }.padding(4)
                     }
-                    Text("Die Substitutionsmatrix ersetzt jeden Klartext-Buchstaben durch ein Paar aus den Buchstaben A,D,F,G,V und X.\n\nDie Matrix muss jeden Buchstaben A-Z sowie jede Ziffer 0-9 genau einmal enthalten.")
+                    Text("The substitution matrix replaces each plaintext letter by a pair of the letters A,D,F,G,V,X.\n\nThe matrix must contain each letter A-Z and each cipher 0-9 exactly once. ")
                         .font(.callout).fixedSize(horizontal: false, vertical: true)
                 }
                 HStack {
-                    Button("Standardmatrix") { cells = ADFGVXCipher.standardMatrix.map { $0.map(String.init) } }
-                    Button("Zufallsmatrix") { cells = ADFGVXCipher.randomMatrix().map { $0.map(String.init) } }
-                    Button("Matrix leeren") {
-                        if Alerts.confirm("Alle bisherigen Einträge der Substitutionsmatrix werden gelöscht!\nFortfahren?", title: "ADFGVX", ok: "Ja") {
+                    Button("Standard matrix") { cells = ADFGVXCipher.standardMatrix.map { $0.map(String.init) } }
+                    Button("Random matrix") { cells = ADFGVXCipher.randomMatrix().map { $0.map(String.init) } }
+                    Button("Erase matrix") {
+                        if Alerts.confirm("All current entries in the substitution matrix will be erased!\nContinue?", title: "ADFGVX", ok: "Yes") {
                             cells = Array(repeating: Array(repeating: "*", count: 6), count: 6)
                         }
                     }
-                    Button("Zeichenkette eingeben") { stringBoxText = ""; showStringBox = true }
+                    Button("Enter string") { stringBoxText = ""; showStringBox = true }
                 }
             }
-            CT1Group(title: "Stufe 2: Transposition") {
-                Text("Für das Transpositionspasswort werden bei der Verschlüsselung nur die Zeichen verwendet, die im eingestellten Alphabet (siehe Textoptionen) vorhanden sind.")
+            CT1Group(title: "Step 2: Transposition") {
+                Text("The encryption only uses the characters of the transposition password that are part of the current alphabet (see text options).")
                     .font(.callout).fixedSize(horizontal: false, vertical: true)
-                Text("Transpositionspasswort")
+                Text("Transposition password")
                 HStack {
                     TextField("", text: $password).font(.system(.body, design: .monospaced))
                         .ct1Filter($password) { CT1KeyInput.filter($0, alphabet: settings.textOptions.alphabetCharacters) }
                     CT1PasteKeyButton(method: "adfgvx") { pasteKey($0) }
                 }
-                Text("Reihenfolge der Spalten")
+                Text("Column sequence")
                 CT1ReadOnlyLine(text: columnOrder)
-                Button("Textoptionen") { OptionsWindows.showTextOptions() }.frame(maxWidth: .infinity)
+                Button("Text options") { OptionsWindows.showTextOptions() }.frame(maxWidth: .infinity)
             }
-            CT1Group(title: "Ausgabeoptionen") {
-                GroupBox("Endergebnis: Geheimtext nach Stufe 2") {
+            CT1Group(title: "Output options") {
+                GroupBox("Result: Ciphertext after step 2") {
                     blockOptions(block: $block2, length: $blockLen2, newLine: $newLine2).padding(4)
                 }
-                Toggle("Zwischenergebnis ausgeben", isOn: $outputStage1)
-                GroupBox("Zwischenergebnis: Geheimtext nach Stufe 1") {
+                Toggle("Print out intermediate result", isOn: $outputStage1)
+                GroupBox("Intermediate result: Ciphertext after step 1") {
                     blockOptions(block: $block1, length: $blockLen1, newLine: $newLine1).padding(4)
                 }.disabled(!outputStage1)
             }
         } buttons: {
-            Button("Hilfe") { HelpCenter.show(action: .adfgvx) }
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Entschlüsseln") { run(false) }.disabled(cipher == nil || !validCiphertext)
-            Button("Verschlüsseln") { run(true) }.keyboardShortcut(.defaultAction).disabled(cipher == nil)
+            Button("Help") { HelpCenter.show(action: .adfgvx) }
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Decrypt") { run(false) }.disabled(cipher == nil || !validCiphertext)
+            Button("Encrypt") { run(true) }.keyboardShortcut(.defaultAction).disabled(cipher == nil)
         }
         .onChange(of: block1) { _, on in if on { blockLen1 = String(max(1, password.count)) } else { blockLen1 = "2"; newLine1 = false } }
         .onChange(of: block2) { _, on in if !on { blockLen2 = "5"; newLine2 = false } }
         .onChange(of: outputStage1) { _, on in if !on { block1 = false } }
         .sheet(isPresented: $showStringBox) {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Substitutionspasswort").font(.title3.weight(.semibold))
+                Text("Substitution Password").font(.title3.weight(.semibold))
                 TextField("", text: $stringBoxText).frame(width: 300)
                 HStack {
                     Spacer()
-                    Button("Abbrechen") { showStringBox = false }.keyboardShortcut(.cancelAction)
+                    Button("Cancel") { showStringBox = false }.keyboardShortcut(.cancelAction)
                     Button("OK") {
                         cells = ADFGVXCipher.matrix(fromKeyword: stringBoxText).map { $0.map(String.init) }
                         showStringBox = false
@@ -252,12 +252,12 @@ struct ADFGVXDialog: View {
     private func blockOptions(block: Binding<Bool>, length: Binding<String>, newLine: Binding<Bool>) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Toggle("Leerzeichen zwischen den Blöcken", isOn: block)
+                Toggle("Separate output blocks by blanks", isOn: block)
                 Spacer()
-                Text("Blocklänge (1-26):")
+                Text("Block length (1-26):")
                 TextField("", text: length).frame(width: 36).multilineTextAlignment(.center).disabled(!block.wrappedValue)
             }
-            Toggle("Zusätzlicher Zeilenumbruch nach jedem Block", isOn: newLine).disabled(!block.wrappedValue)
+            Toggle("New line after each block", isOn: newLine).disabled(!block.wrappedValue)
         }.frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -272,17 +272,17 @@ struct ADFGVXDialog: View {
         let l2 = Int(blockLen2) ?? 0, l1 = Int(blockLen1) ?? 0
         if block2 && !(1...26).contains(l2) {
             blockLen2 = "5"
-            Alerts.error("Blocklänge Stufe 2:\nBitte als Blocklänge nur Werte zwischen 1 und 26 eingeben!")
+            Alerts.error("Blocklength stage1:\nFor block length please enter values between 1 and 26 only!")
             return
         }
         if outputStage1 && block1 && !(1...26).contains(l1) {
             blockLen1 = String(password.count)
-            Alerts.error("Blocklänge Stufe 1:\nBitte als Blocklänge nur Werte zwischen 1 und 26 eingeben!")
+            Alerts.error("Blocklength stage1:\nFor block length please enter values between 1 and 26 only!")
             return
         }
         let key = password + ", " + String(matrix.flatMap { $0 })
         let text = document.text
-        let stage1Title = CT1.title("ADFGVX-Stufe 1", encrypt: true, of: document, key: key)
+        let stage1Title = CT1.title("ADFGVX stage 1", encrypt: true, of: document, key: key)
         do {
             if encrypt {
                 let stage1 = c.substitute(text)

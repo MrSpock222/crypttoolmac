@@ -19,7 +19,7 @@ public enum Nihilist {
     public static func encrypt(_ text: String, squareKeyword: String, key: String) throws -> String {
         let sq = square(keyword: squareKeyword)
         let k = coordinates(key, square: sq)
-        guard !k.isEmpty else { throw CTError("Der Schlüssel enthält keine Buchstaben.") }
+        guard !k.isEmpty else { throw CTError("The key does not contain any letters.") }
         let p = coordinates(text, square: sq)
         return p.enumerated().map { String($0.element + k[$0.offset % k.count]) }.joined(separator: " ")
     }
@@ -28,14 +28,14 @@ public enum Nihilist {
     public static func decrypt(_ text: String, squareKeyword: String, key: String) throws -> String {
         let sq = square(keyword: squareKeyword)
         let k = coordinates(key, square: sq)
-        guard !k.isEmpty else { throw CTError("Der Schlüssel enthält keine Buchstaben.") }
+        guard !k.isEmpty else { throw CTError("The key does not contain any letters.") }
         var out = String()
         for (i, token) in text.split(whereSeparator: { !$0.isNumber }).enumerated() {
-            guard let v = Int(token) else { throw CTError("„\(token)“ ist keine gültige Zahl.") }
+            guard let v = Int(token) else { throw CTError("\"\(token)\" is not a valid number.") }
             let d = v - k[i % k.count]
             let r = d / 10, c = d % 10
             guard (1...5).contains(r), (1...5).contains(c) else {
-                throw CTError("Die Zahl \(v) passt nicht zum Schlüssel (Position \(i + 1)).")
+                throw CTError("The number \(v) does not match the key (position \(i + 1)).")
             }
             out.append(sq[r - 1][c - 1])
         }

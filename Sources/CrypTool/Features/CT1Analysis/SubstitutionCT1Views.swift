@@ -23,7 +23,7 @@ extension CT1Analysis {
     static func openAutomaticSubstitution(document: CTDocument) {
         guard SubstitutionCT1Support.checkDocument(document) else { return }
         WindowPresenter.sheet(on: document.windowControllers.first?.window,
-                              title: "Methodenauswahl zur automatische Substitutionsanalyse") { close in
+                              title: "Method Selection for Automatic Substitution Analysis") { close in
             AutomaticSubstitutionCT1Sheet(document: document, close: close)
         }
     }
@@ -42,11 +42,11 @@ enum SubstitutionCT1Support {
         let bytes = doc.bytes
         let hasLetter = bytes.contains { ($0 >= 65 && $0 <= 90) || ($0 >= 97 && $0 <= 122) }
         guard hasLetter else {
-            Alerts.error("Die Eingabe muss mindestens 1 (nicht unbedingt verschiedene) Buchstaben des eingestellten Alphabets enthalten. Das Alphabet können Sie unter Optionen \\ Textoptionen ändern.")
+            Alerts.error("The input must contain at least 1 (not necessarily different) character(s) from the current alphabet. The alphabet can be configured in Options \\ Text Options.")
             return false
         }
         if bytes.contains(where: { $0 < 65 || $0 > 90 }) {
-            Alerts.info("Die in CrypTool implementierten Algorithmen für die Analyse der Substitutions-Verschlüsselung arbeiten auf einem statischen Alphabet (A-Z).\n\nDas aktuell ausgewählte Dokument enthält aber auch Zeichen, die nicht zu diesem statischen Alphabet gehören.\n\nDie Ergebnisse der Analyse können daher falsch sein.")
+            Alerts.info("The algorithms implemented in CrypTool to analyze the Substitution encryption operate on a static alphabet (A-Z).\n\nThe current document contains characters which are not part of this static alphabet.\n\nPlease note that the results of the analysis may therefore be incorrect.")
         }
         return true
     }
@@ -116,28 +116,27 @@ struct AutomaticSubstitutionCT1Sheet: View {
 
     // IDD_AUTO_SUBSTITUTION_ANALYSIS_ALGORITHM_CHOICE
     private var choiceView: some View {
-        DialogScaffold(title: "Methodenauswahl zur automatische Substitutionsanalyse", minWidth: 560) {
-            GroupBox("Bitte wählen Sie zwischen folgenden Algorithmen aus:") {
+        DialogScaffold(title: "Method Selection for Automatic Substitution Analysis", minWidth: 560) {
+            GroupBox("Please choose between the following algorithms:") {
                 VStack(alignment: .leading, spacing: 8) {
-                    SubstitutionCT1Radio(title: "Verfahren 1 basierend auf der Häufigkeitsanalyse der Digramme im Text", selected: algorithm == 1) { algorithm = 1 }
+                    SubstitutionCT1Radio(title: "Method 1 based on the frequency analysis of digrams in the text", selected: algorithm == 1) { algorithm = 1 }
                     description([
-                        "Der Algorithmus analysiert die Häufigkeit einzelner Digramme im verschlüsselten Text und versucht, anhand einer Standardverteilung den Schlüssel zu erraten.",
-                        "Dieses Verfahren eignet sich am besten für die Analyse längerer Texte.\nEine automatische Spracherkennung ist eingebaut. Das Verfahren arbeitet auch auf verschlüsselten Texten, die keine Leerzeichen enthalten.",
-                        "Quelle: Thomas Jakobsen \"A Fast Method for Cryptanalysis of Substitution Ciphers\", Cryptologia 19:3, 1995",
+                        "This method analyses the frequency of digrams in the ciphertext and guesses the key based on a standard digram distribution.",
+                        "The method is suited best for longer texts.\nAutomatic language recognition is included. Processing of texts that do not contain space characters is also possible.",
+                        "Source: Thomas Jakobsen \"A Fast Method for Cryptanalysis of Substitution Ciphers\", Cryptologia 19:3, 1995",
                     ])
-                    SubstitutionCT1Radio(title: "Verfahren 2 basierend auf der Erkennung der häufigsten Wörter einer Sprache", selected: algorithm == 2) { algorithm = 2 }
+                    SubstitutionCT1Radio(title: "Method 2 based on the recognition of the most frequent words of a language", selected: algorithm == 2) { algorithm = 2 }
                     description([
-                        "Die Analyse basiert auf einer Liste mit den häufigsten Wörtern der jeweiligen Sprache. Die Wörter des Chiffrats werden (ihrem Muster nach) mit den Wörtern in der Liste verglichen.",
-                        "Bei jeder möglichen Zuordnung ergibt sich daraus eine (partielle) Substitution. Durch einen Suchbaum wird diejenige Substitution ermittelt, die mit den meisten partiellen Substitutionen verträglich ist.",
-                        "Dieses Verfahren arbeitet mit deutschen und englischen Standardtexten. Die Leerzeichen müssen im Chiffrat an den richtigen Stellen enthalten sein.",
-                        "Quelle: George W. Hart \"To Decode Short Cryptograms\", Communications of the ACM, Sept 1994, Vol 37, No.4",
+                        "This method is based on a list of the most frequent words of a particular language. The words of the ciphertext are compared (according to their pattern) with the words of the list.",
+                        "Using a search tree the substitution compatible with the most partial substitutions is determined. This method can process German and English standard texts. Space characters must be preserved on correct positions in the ciphertext.",
+                        "Source: George W. Hart \"To Decode Short Cryptograms\", Communications of the ACM, Sept 1994, Vol 37, No.4",
                     ])
                 }
                 .padding(6)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         } buttons: {
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             Button("OK") { step = algorithm == 1 ? .options1 : .options2 }.keyboardShortcut(.defaultAction)
         }
     }
@@ -151,20 +150,20 @@ struct AutomaticSubstitutionCT1Sheet: View {
 
     // IDD_OPTIONS_SUBSTITUTION_AUTO_ANALYSIS
     private var options1View: some View {
-        DialogScaffold(title: "Automatische Substitutionsanalyse 1 - Optionen", minWidth: 420) {
-            GroupBox("Leerzeichen") {
+        DialogScaffold(title: "Automatic Substitution Analysis 1 - Options", minWidth: 420) {
+            GroupBox("SPACE character") {
                 VStack(alignment: .leading, spacing: 2) {
-                    Toggle("Das Leerzeichen wurde substituiert", isOn: $spaceInAlphabet)
-                    Text("(d.h. durch einen anderen Buchstaben ersetzt).").font(.callout).foregroundStyle(.secondary).padding(.leading, 20)
+                    Toggle("The SPACE character was also substituted", isOn: $spaceInAlphabet)
+                    Text("(i.e. the encryption alphabet contains \"SPACE\").").font(.callout).foregroundStyle(.secondary).padding(.leading, 20)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             GroupBox("GUI") {
-                Toggle("Zwischenergebnisse nicht anzeigen (schneller).", isOn: $noGUI)
+                Toggle("Do not show intermediate results (faster).", isOn: $noGUI)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
         } buttons: {
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             Button("OK", action: startMethod1).keyboardShortcut(.defaultAction)
         }
     }
@@ -173,7 +172,7 @@ struct AutomaticSubstitutionCT1Sheet: View {
         let reference = settings.referenceText
         let refName = "\(settings.referenceLanguage.fileName).txt"
         guard !reference.isEmpty else {
-            Alerts.error("Der Analysevorgang wird abgebrochen, da ein Fehler beim Öffnen der folgenden Datei aufgetreten ist:\n \(refName)")
+            Alerts.error("Analysis canceled since an error occurred during opening the following file:\n\(refName)")
             return
         }
         let jakobsen = CT1SubstJakobsen(spaceInAlphabet: spaceInAlphabet)
@@ -183,7 +182,7 @@ struct AutomaticSubstitutionCT1Sheet: View {
         let doc = document, nogui = noGUI
         close()
         if count < 200 {
-            Alerts.info("Der eingegebene Text ist zu kurz, um verlässliche Ergebnisse zu produzieren. \nWie Versuche zeigen, braucht das Jakobsen-Verfahren eine Textlänge von mindestens 300 Zeichen. \nSollte die automatische Analyse fehlschlagen, können Sie es mit der manuellen Analyse versuchen.")
+            Alerts.info("Input text is too short to produce reliable results. \nAs experiments show, the Jakobsen algorithm needs at least 300 characters. \nIf the automatic analysis fails, you can try to analyze this ciphertext manually.")
         }
         JakobsenSubstitutionCT1View.open(document: doc, jakobsen: jakobsen, language: language, validCharacters: count,
                                          reference: reference, referenceName: refName, noGUI: nogui)
@@ -198,33 +197,33 @@ struct AutomaticSubstitutionCT1Sheet: View {
         let lang: CT1SubstLanguage = german ? .german : .english
         let url = german ? wordListGerman : wordListEnglish
         let listShown = url?.path ?? "Words/" + SubstitutionCT1Support.wordListName(lang)
-        return DialogScaffold(title: "Automatische Substitutionsanalyse 2 - Optionen",
-                              subtitle: "Die automatische Substitutionsanalyse ist nur für deutsche bzw. englische Klartexte implementiert. Für alle anderen Sprachen sollte die Analyse manuell durchgeführt werden.",
+        return DialogScaffold(title: "Automatic Substitution Analysis 2 - Options",
+                              subtitle: "The automatic substitution analysis is implemented for German and for English plaintexts only. For all other languages the manual analysis is recommended.",
                               minWidth: 480) {
             VStack(alignment: .leading, spacing: 4) {
-                SubstitutionCT1Radio(title: "Automatische Analyse", selected: automatic, enabled: !hart.running) { automatic = true }
-                SubstitutionCT1Radio(title: "Manuelle Analyse", selected: !automatic, enabled: !hart.running) { automatic = false }
+                SubstitutionCT1Radio(title: "Automatic analysis", selected: automatic, enabled: !hart.running) { automatic = true }
+                SubstitutionCT1Radio(title: "Manual analysis", selected: !automatic, enabled: !hart.running) { automatic = false }
             }
-            GroupBox("Optionen für automatische Analyse") {
+            GroupBox("Options for automatic analysis") {
                 VStack(alignment: .leading, spacing: 6) {
-                    SubstitutionCT1Radio(title: "Der erwartete Klartext ist Deutsch.", selected: german, enabled: automatic) { german = true }
-                    SubstitutionCT1Radio(title: "Der erwartete Klartext ist Englisch.", selected: !german, enabled: automatic) { german = false }
+                    SubstitutionCT1Radio(title: "The expected plaintext is German.", selected: german, enabled: automatic) { german = true }
+                    SubstitutionCT1Radio(title: "The expected plaintext is English.", selected: !german, enabled: automatic) { german = false }
                     HStack {
                         Text(listShown).font(.system(.callout, design: .monospaced)).lineLimit(1).truncationMode(.head)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(4).background(Color(nsColor: .textBackgroundColor))
                             .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color(nsColor: .separatorColor)))
-                        Button("Suchen...", action: chooseWordList).disabled(!automatic)
+                        Button("Find...", action: chooseWordList).disabled(!automatic)
                     }
-                    Text("Die Annahme, dass im Klartext der Buchstabe 'e' am häufigsten ist, verbessert oft das Ergebnis der automatischen Analyse:")
+                    Text("In many cases the automatic analysis could be improved by the assumption that 'e' is the most frequent letter on the plaintext:")
                         .font(.callout).foregroundStyle(automatic ? .primary : .secondary).fixedSize(horizontal: false, vertical: true)
-                    Toggle("'e' als häufigstes Zeichen annehmen", isOn: Binding(get: { option1 }, set: { v in
+                    Toggle("Use 'e' as most frequent character.", isOn: Binding(get: { option1 }, set: { v in
                         option1 = v
                         if !v { option2 = false }      // CT1: deactivating option 1 deactivates option 2
                     })).padding(.leading, 12).disabled(!automatic)
-                    Text("In deutschen Klartexten sind die Digramme 'en' und 'er' sehr häufig. Die erweiterte Analyse benutzt diese Annahme:")
+                    Text("On German plaintext the digrams 'en' and 'er' are very frequent. This assumption could improve the analysis:")
                         .font(.callout).foregroundStyle(automatic ? .primary : .secondary).fixedSize(horizontal: false, vertical: true)
-                    Toggle("erweiterte Analyse (deutscher Klartext)", isOn: Binding(get: { option2 }, set: { v in
+                    Toggle("Extended analysis (German plaintext)", isOn: Binding(get: { option2 }, set: { v in
                         option2 = v
                         if v { option1 = true }        // CT1: activating option 2 activates option 1
                     })).padding(.leading, 12).disabled(!automatic)
@@ -232,31 +231,31 @@ struct AutomaticSubstitutionCT1Sheet: View {
                 .padding(4).frame(maxWidth: .infinity, alignment: .leading)
             }
             .disabled(hart.running)
-            GroupBox("Optionen für manuelle Analyse") {
-                Toggle("Manuelle Analyse mit dem gespeicherten Schlüssel.", isOn: $manualWithStoredKey)
+            GroupBox("Options for manual analysis") {
+                Toggle("Manual analysis using the stored key.", isOn: $manualWithStoredKey)
                     .disabled(automatic || storedKey == nil || hart.running)
                     .padding(4).frame(maxWidth: .infinity, alignment: .leading)
             }
             if hart.running {
                 ProgressView(value: hart.progress) {
-                    Text("Substitutionsanalyse")
+                    Text("Substitution Analysis")
                 } currentValueLabel: {
-                    Text("Substitutionsanalyse erledigt: \(Int(hart.progress * 100))%")
+                    Text("Substitution analysis finished: \(Int(hart.progress * 100))%")
                 }
             }
         } buttons: {
             if hart.running {
-                Button("Abbrechen") { hart.cancel() }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { hart.cancel() }.keyboardShortcut(.cancelAction)
             } else {
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-                Button("Starten", action: startMethod2).keyboardShortcut(.defaultAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+                Button("Start", action: startMethod2).keyboardShortcut(.defaultAction)
             }
         }
     }
 
     private func chooseWordList() {
         let panel = NSOpenPanel()
-        panel.title = "Wortliste wählen"
+        panel.title = "Choose word list"
         panel.allowedContentTypes = [.plainText, .text]
         panel.allowsOtherFileTypes = true
         panel.canChooseDirectories = false
@@ -282,7 +281,7 @@ struct AutomaticSubstitutionCT1Sheet: View {
         }
         guard let list = content else {
             let name = "Words/" + SubstitutionCT1Support.wordListName(lang)
-            Alerts.error("Die mit CrypTool ausgelieferte Wortliste für die Substitutions-Analyse in \(german ? "Deutsch" : "Englisch") (\(name)) ist nicht vorhanden.")
+            Alerts.error("The \(german ? "German" : "English") word list for the substitution analysis (\(name)) does not exist although it was rolled out with CrypTool.")
             return
         }
         let words = CT1SubstHart.words(fromList: list)
@@ -292,7 +291,7 @@ struct AutomaticSubstitutionCT1Sheet: View {
             // best substitution found so far in the post-processing dialog
             if result.cancelled && result.mapping.allSatisfy({ $0 < 0 }) { return }
             if result.frequencyTie {
-                Alerts.info("Mehrere Zeichen sind gleich häufig.\nHäufigstes Zeichen wird nicht berücksichtigt.\nDadurch ist auch keine erweiterte Analyse möglich.")
+                Alerts.info("Several characters occur equally often.\nThe most common character has been ignored.\nThis means that an extended analysis is not possible.")
             }
             ManualSubstitutionCT1View.open(document: doc, mapping: result.mapping, convertUmlauts: true)
         }
@@ -331,7 +330,7 @@ final class HartRunModel: ObservableObject {
 @MainActor
 final class JakobsenSubstitutionCT1Model: ObservableObject {
     @Published var key: [Int]?
-    @Published var displayText = "Die statistische Textanalyse wird durchgeführt. Bitte warten Sie..."
+    @Published var displayText = "The statistic analysis of the text is running. Please wait..."
     @Published var finished = false
     let jakobsen: CT1SubstJakobsen
     let ciphertext: String
@@ -402,7 +401,7 @@ struct JakobsenSubstitutionCT1View: View {
                      reference: String, referenceName: String, noGUI: Bool) {
         let model = JakobsenSubstitutionCT1Model(jakobsen: jakobsen, ciphertext: document.text)
         let handle = SubstitutionCT1WindowHandle()
-        let w = WindowPresenter.tool(title: "Automatische Substitutionsanalyse mittels Digrammhäufigkeit",
+        let w = WindowPresenter.tool(title: "Automatic Substitution Analysis by Digram Frequency",
                                      size: CGSize(width: 720, height: 600)) {
             JakobsenSubstitutionCT1View(document: document, language: language, validCharacters: validCharacters,
                                         referenceName: referenceName, handle: handle, model: model)
@@ -421,7 +420,7 @@ struct JakobsenSubstitutionCT1View: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top, spacing: 10) {
                 VStack(alignment: .leading, spacing: 10) {
-                    GroupBox("Aktuelle Substitution (Schlüssel)") {
+                    GroupBox("Current substitution (key)") {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(alphabetLine)
                             Text(keyLine).foregroundStyle(.blue)
@@ -429,21 +428,21 @@ struct JakobsenSubstitutionCT1View: View {
                         .font(.system(.body, design: .monospaced)).textSelection(.enabled)
                         .frame(maxWidth: .infinity, alignment: .leading).padding(4)
                     }
-                    GroupBox("Referenzdatei für Sprachanalyse") {
+                    GroupBox("Reference file for automatic language recognition") {
                         Text(referenceName).font(.callout).frame(maxWidth: .infinity, alignment: .leading).padding(4)
                     }
                 }
                 VStack(alignment: .leading, spacing: 10) {
-                    GroupBox("Anzahl der validen Zeichen im Text") {
+                    GroupBox("Number of valid characters in text") {
                         Text("\(validCharacters)").frame(maxWidth: .infinity, alignment: .leading).padding(4)
                     }
-                    GroupBox("Erkannte Sprache") {
+                    GroupBox("Language recognition information") {
                         Text(language.displayName).frame(maxWidth: .infinity, alignment: .leading).padding(4)
                     }
                 }
                 .frame(width: 230)
             }
-            GroupBox("Aktuelles Substitutionsergebnis") {
+            GroupBox("Current substitution result") {
                 ScrollView {
                     Text(model.displayText)
                         .font(.system(.body, design: .monospaced))
@@ -458,10 +457,10 @@ struct JakobsenSubstitutionCT1View: View {
                 if !model.finished { ProgressView().controlSize(.small) }
                 if let copied { Text(copied).font(.caption).foregroundStyle(.secondary).lineLimit(1) }
                 Spacer()
-                Button("Substitution akzeptieren", action: accept).keyboardShortcut(.defaultAction).disabled(model.key == nil)
-                Button("Schlüssel kopieren", action: copyKey).disabled(model.key == nil)
-                Button("Manuelle Analyse", action: manual).disabled(model.key == nil)
-                Button("Abbrechen") { model.stop(); handle.close() }.keyboardShortcut(.cancelAction)
+                Button("Accept substitution", action: accept).keyboardShortcut(.defaultAction).disabled(model.key == nil)
+                Button("Copy key", action: copyKey).disabled(model.key == nil)
+                Button("Manual analysis", action: manual).disabled(model.key == nil)
+                Button("Cancel") { model.stop(); handle.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -485,13 +484,13 @@ struct JakobsenSubstitutionCT1View: View {
         let keyText = CT1SubstJakobsen.keyString(k)
         copyToPasteboard(keyText)
         if !model.jakobsen.spaceInAlphabet { KeyMemory.remember(keyText, for: "substitution") }
-        copied = "Schlüssel kopiert: \(keyText)"
+        copied = "Key copied: \(keyText)"
     }
 
     private func manual() {
         guard let k = model.key else { return }
         if model.jakobsen.spaceInAlphabet {
-            Alerts.info("Manuelle Analyse ist nicht möglich, \nda das Leerzeichen substituiert wurde \n(d.h. durch einen anderen Buchstaben ersetzt).")
+            Alerts.info("Manual analysis is currently not possible \nsince the \"Space\" character belongs to the alphabet. \nI.e. it has been replaced by another character.")
             return
         }
         model.stop()
@@ -561,12 +560,12 @@ final class ManualSubstitutionCT1Model: ObservableObject {
         f[index] = ch
         if ch != "*", let other = f.indices.first(where: { $0 != index && f[$0] == ch }) {
             let cipher = CT1SubstText.letters[index], otherCipher = CT1SubstText.letters[other]
-            let message = "Ihre Eingabe: \(cipher) -> \(ch)\nkollidiert mit der Eingabe: \(otherCipher) -> \(ch)\n\nWollen Sie an Ihrer Eingabe trotzdem festhalten?\n\n\nBei JA wird Ihre Eingabe übernommen und das \nkollidierende Feld auf unbestimmt gesetzt.\n\n\nBei NEIN wird ihre Eingabe ignoriert und das Feld \nauf seinen letzten gültigen Wert zurückgesetzt."
+            let message = "Your input: \(cipher) -> \(ch)\nclashes with the input \(otherCipher) -> \(ch)\n\nDo you still wish to retain your entries?\n\n\nIf YES, your inputs will be adopted and the\nconflicting field will be set to indeterminate.\n\n\nIf NO, your input will be ignored and the field \nwill be reset to its last valid value."
             let alert = NSAlert()
             alert.messageText = "CrypTool"
             alert.informativeText = message
-            alert.addButton(withTitle: "Ja")
-            alert.addButton(withTitle: "Nein")
+            alert.addButton(withTitle: "Yes")
+            alert.addButton(withTitle: "No")
             if alert.runModal() == .alertFirstButtonReturn {
                 f[other] = "*"
                 lastValid[other] = "*"
@@ -629,7 +628,7 @@ struct ManualSubstitutionCT1View: View {
     static func open(document: CTDocument, mapping: [Int], convertUmlauts: Bool) {
         let model = ManualSubstitutionCT1Model(text: document.text, mapping: mapping, convertUmlauts: convertUmlauts)
         let handle = SubstitutionCT1WindowHandle()
-        let w = WindowPresenter.tool(title: "Substitutionsanalyse: Manuelle Nachbearbeitung", size: CGSize(width: 660, height: 640)) {
+        let w = WindowPresenter.tool(title: "Substitution Analysis: Manual Post-Processing", size: CGSize(width: 660, height: 640)) {
             ManualSubstitutionCT1View(document: document, convertUmlauts: convertUmlauts, handle: handle, model: model)
         }
         handle.window = w
@@ -643,9 +642,9 @@ struct ManualSubstitutionCT1View: View {
     var body: some View {
         let total = max(1, model.counts.reduce(0, +))
         VStack(alignment: .leading, spacing: 10) {
-            Text("In diesem Dialog sind Zeichen des Geheimtextes klein geschrieben und Zeichen des Klartextes groß geschrieben (Beispiel: a -->C bedeutet, dass das Zeichen 'a' in den Buchstaben 'C' entschlüsselt wird).")
+            Text("In this dialog window ciphertext characters are shown in small letters and plaintext characters are shown in capital letters (example: a --> C means that the letter 'a' is decrypted into 'C').")
                 .font(.callout).fixedSize(horizontal: false, vertical: true)
-            Text("Jede Änderung in der Substitutionsliste wird in der unteren Anzeige der Entschlüsselung angezeigt. Der aktuelle Zwischenstand der Entschlüsselung hilft Ihnen, weitere Substitutionen zu bestimmen.")
+            Text("Each change of the substitution list below will result into a change of the intermediate status of decryption below. Using the actual state of decryption you may try out other substitutions. ")
                 .font(.callout).fixedSize(horizontal: false, vertical: true)
             Grid(alignment: .leading, horizontalSpacing: 14, verticalSpacing: 8) {
                 ForEach(0..<4, id: \.self) { row in
@@ -661,7 +660,7 @@ struct ManualSubstitutionCT1View: View {
                                         .multilineTextAlignment(.center)
                                         .frame(width: 30)
                                 }
-                                .help(String(format: "Häufigkeit von '%@' im Geheimtext: %d (%.1f %%)",
+                                .help(String(format: "Frequency of '%@' in the ciphertext: %d (%.1f %%)",
                                              String(Character(Unicode.Scalar(UInt8(97 + i)))), model.counts[i],
                                              Double(model.counts[i]) * 100 / Double(total)))
                             } else {
@@ -672,21 +671,21 @@ struct ManualSubstitutionCT1View: View {
                 }
             }
             HStack {
-                Button("Ergebnis der automatischen Analyse wieder herstellen") { model.restore() }
+                Button("Reset entries to the result of the automatic analysis") { model.restore() }
                 Spacer()
                 Button { model.undo() } label: { Image(systemName: "arrow.uturn.backward") }
-                    .help("Zurück (letzte Änderung rückgängig machen)").disabled(!model.canUndo)
+                    .help("Back (undo the last change)").disabled(!model.canUndo)
                 Button { model.redo() } label: { Image(systemName: "arrow.uturn.forward") }
-                    .help("Vor (rückgängig gemachte Änderung wiederherstellen)").disabled(!model.canRedo)
+                    .help("Forward (redo the undone change)").disabled(!model.canRedo)
             }
-            Text("Aktueller Zwischenstand:")
+            Text("Current intermediate status of decryption:")
             ResultBox(text: model.preview, minHeight: 200)
             HStack {
                 if let note { Text(note).font(.caption).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle) }
                 Spacer()
-                Button("Aktuellen Zwischenstand ausgeben", action: output).keyboardShortcut(.defaultAction)
-                Button("Schlüssel kopieren", action: copyKey)
-                Button("Abbrechen") { handle.close() }.keyboardShortcut(.cancelAction)
+                Button("Show current status", action: output).keyboardShortcut(.defaultAction)
+                Button("Copy key", action: copyKey)
+                Button("Cancel") { handle.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -699,7 +698,7 @@ struct ManualSubstitutionCT1View: View {
         let key = CT1SubstText.titleKey(mapping)
         let text = CT1SubstText.output(document.text, mapping: mapping, convertUmlauts: convertUmlauts)
         KeyMemory.remember(key, for: SubstitutionCT1Support.analysisKeyMethod)
-        DocumentFactory.openResult(text: text, title: "Substitutionsanalyse von <\(document.shortName)>, Schlüssel: <\(key)>",
+        DocumentFactory.openResult(text: text, title: "Substitution analysis of <\(document.shortName)>, key <\(key)>",
                                    parent: document, method: SubstitutionCT1Support.analysisKeyMethod, key: key)
         handle.close()
     }
@@ -712,6 +711,6 @@ struct ManualSubstitutionCT1View: View {
         let key = CT1SubstText.invertAlphabet(decryptionAlphabet)
         KeyMemory.remember(key, for: "substitution")
         copyToPasteboard(key)
-        note = "Schlüssel (Substitution) kopiert: \(key)"
+        note = "Key (substitution) copied: \(key)"
     }
 }

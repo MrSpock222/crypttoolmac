@@ -7,25 +7,25 @@ import CTCommon
 @MainActor
 enum OptionsWindows {
     static func showTextOptions() {
-        WindowPresenter.tool(id: "textoptions", title: "Textoptionen", size: CGSize(width: 560, height: 600), resizable: false) {
+        WindowPresenter.tool(id: "textoptions", title: "Text Options", size: CGSize(width: 560, height: 600), resizable: false) {
             TextOptionsView()
         }
     }
 
     static func showAnalysisOptions() {
-        WindowPresenter.tool(id: "analysisoptions", title: "Analyseoptionen", size: CGSize(width: 600, height: 640), resizable: false) {
+        WindowPresenter.tool(id: "analysisoptions", title: "Analysis Options", size: CGSize(width: 600, height: 640), resizable: false) {
             AnalysisOptionsView()
         }
     }
 
     static func showPlotOptions() {
-        WindowPresenter.tool(id: "plotoptions", title: "Grafikoptionen", size: CGSize(width: 400, height: 260), resizable: false) {
+        WindowPresenter.tool(id: "plotoptions", title: "Drawing Parameters", size: CGSize(width: 400, height: 260), resizable: false) {
             PlotOptionsView()
         }
     }
 
     static func showStartOptions() {
-        WindowPresenter.tool(id: "startoptions", title: "Startoptionen", size: CGSize(width: 560, height: 200), resizable: false) {
+        WindowPresenter.tool(id: "startoptions", title: "Starting Options", size: CGSize(width: 560, height: 200), resizable: false) {
             StartOptionsView()
         }
     }
@@ -46,20 +46,20 @@ struct TextOptionsView: View {
     @CTState private var special = false
     @CTState private var digits = false
     @CTState private var umlauts = false
-    @CTState private var language: AppSettings.ReferenceLanguage = .german
+    @CTState private var language: AppSettings.ReferenceLanguage = .english
     @CTState private var customPath = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            GroupBox("Formatierungsoptionen für Klar- und Geheimtext") {
-                Toggle("Nicht im Alphabet enthaltene Zeichen unverändert beibehalten", isOn: $draft.keepNonAlphabet)
+            GroupBox("Formatting options for cleartext and ciphertext") {
+                Toggle("Keep characters not present in the alphabet unchanged", isOn: $draft.keepNonAlphabet)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Groß-/Kleinschreibung in Klar- und Geheimtext") {
+            GroupBox("Upper/lower case in cleartext and ciphertext") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Toggle("Wenn möglich bei der Ver-/Entschlüsselung Informationen zur Groß-/Kleinschreibung beibehalten", isOn: $draft.keepCase)
+                    Toggle("If possible, retain case information for encryption/decryption", isOn: $draft.keepCase)
                         .disabled(draft.distinguishCase)
-                    Toggle("Groß-/Kleinschreibung beachten", isOn: Binding(get: { draft.distinguishCase }, set: { on in
+                    Toggle("Distinguish between uppercase and lowercase", isOn: Binding(get: { draft.distinguishCase }, set: { on in
                         draft.distinguishCase = on
                         if on {
                             draft.keepCase = false
@@ -73,14 +73,14 @@ struct TextOptionsView: View {
                     }))
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Alphabet für Texte definieren") {
+            GroupBox("Define the alphabet used in text ciphers") {
                 VStack(alignment: .leading, spacing: 6) {
                     Grid(alignment: .leading, horizontalSpacing: 30, verticalSpacing: 4) {
-                        GridRow { Toggle("Großbuchstaben", isOn: group(\.upper)); Toggle("Kleinbuchstaben", isOn: group(\.lower)) }
-                        GridRow { Toggle("Leerzeichen", isOn: group(\.space)); Toggle("Sonderzeichen", isOn: group(\.special)) }
-                        GridRow { Toggle("Ziffern", isOn: group(\.digits)); Toggle("Umlaute", isOn: group(\.umlauts)) }
+                        GridRow { Toggle("Uppercase letters", isOn: group(\.upper)); Toggle("Lowercase letters", isOn: group(\.lower)) }
+                        GridRow { Toggle("Space", isOn: group(\.space)); Toggle("Special characters", isOn: group(\.special)) }
+                        GridRow { Toggle("Numerals", isOn: group(\.digits)); Toggle("Umlauts", isOn: group(\.umlauts)) }
                     }
-                    Text("Zu verwendendes Alphabet: (\(draft.alphabetSize) Zeichen)").font(.callout)
+                    Text("Alphabet to use (\(draft.alphabetSize) characters):").font(.callout)
                     TextField("", text: Binding(get: { draft.alphabet }, set: { new in
                         // CT1 only allows its known character set
                         draft.alphabet = String(new.filter { TextOptions.allowedCharacters.contains($0) })
@@ -88,7 +88,7 @@ struct TextOptionsView: View {
                     })).font(.system(.body, design: .monospaced))
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Referenzdatei für statistische Anwendungen") {
+            GroupBox("Reference file for statistical applications") {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
                         Text(customPath.isEmpty ? "\(language.fileName).txt" : (customPath as NSString).lastPathComponent)
@@ -97,7 +97,7 @@ struct TextOptionsView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color(nsColor: .textBackgroundColor))
                             .overlay(RoundedRectangle(cornerRadius: 3).stroke(Color(nsColor: .separatorColor)))
-                        Button("Suchen …", action: chooseFile)
+                        Button("Find...", action: chooseFile)
                     }
                     Picker("", selection: $language) {
                         ForEach(AppSettings.ReferenceLanguage.allCases) { Text("\($0.displayName) (\($0.fileName).txt)").tag($0) }
@@ -108,13 +108,13 @@ struct TextOptionsView: View {
             }
             Spacer(minLength: 0)
             HStack {
-                Button("Übernehmen", action: apply).keyboardShortcut(.defaultAction)
-                Button("Standard wiederherstellen") {
+                Button("Apply", action: apply).keyboardShortcut(.defaultAction)
+                Button("Restore default") {
                     draft = .default
                     loadToggles()
                 }
                 Spacer()
-                Button("Abbrechen", action: closeKeyWindow).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: closeKeyWindow).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -206,68 +206,68 @@ struct AnalysisOptionsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            GroupBox("Umfang der Ausgabe bei der automatischen Analyse") {
+            GroupBox("Output options for automatic analysis") {
                 HStack(alignment: .top, spacing: 16) {
                     GroupBox("Caesar") {
                         VStack(alignment: .leading) {
-                            Toggle("Ermittelter Schlüssel", isOn: $caesarKey)
-                            Toggle("Korrelation", isOn: $caesarCorrelation)
-                            Toggle("Histogramme", isOn: $caesarHistograms)
+                            Toggle("Derived key", isOn: $caesarKey)
+                            Toggle("Correlation", isOn: $caesarCorrelation)
+                            Toggle("Histograms", isOn: $caesarHistograms)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                     }
                     GroupBox("Vigenère, XOR, Addition") {
                         VStack(alignment: .leading) {
-                            Toggle("Ermittelter Schlüssel", isOn: $vigKey)
-                            Toggle("Ermittelte Schlüssellänge", isOn: $vigKeyLength)
-                            Toggle("Autokorrelation", isOn: $vigAuto)
-                            Toggle("Weitere Analyse-Werte ausgeben", isOn: $vigMore)
+                            Toggle("Derived key", isOn: $vigKey)
+                            Toggle("Derived key length", isOn: $vigKeyLength)
+                            Toggle("Autocorrelation", isOn: $vigAuto)
+                            Toggle("Show further analysis results", isOn: $vigMore)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }.padding(4)
             }
-            GroupBox("Optionen für die Vigenère-Analyse nach Schrödel") {
+            GroupBox("Options for the Vigenère analysis according to Schroedel") {
                 VStack(alignment: .leading, spacing: 4) {
-                    Toggle("Ausführliche Protokollierung", isOn: $schroedelVerbose)
-                    LabeledContent("Wörterbuch:", value: "VigenereAnalysisSchroedelDictionary.txt")
-                    LabeledContent("Digramm-Datei:", value: "VigenereAnalysisSchroedelDigrams.txt")
-                    LabeledContent("Trigramm-Datei:", value: "VigenereAnalysisSchroedelTrigrams.txt")
+                    Toggle("Extensive logging", isOn: $schroedelVerbose)
+                    LabeledContent("Dictionary:", value: "VigenereAnalysisSchroedelDictionary.txt")
+                    LabeledContent("Digram file:", value: "VigenereAnalysisSchroedelDigrams.txt")
+                    LabeledContent("Trigram file:", value: "VigenereAnalysisSchroedelTrigrams.txt")
                 }.font(.callout).frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Optionen für Brute-Force-Angriffe gegen moderne symmetrische Algorithmen") {
+            GroupBox("Options for brute-force attacks against modern symmetric algorithms") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Siehe Menü: Analyse \\ Symmetrische Verschlüsselung (modern)").font(.caption).foregroundStyle(.secondary)
+                    Text("See menu: Analysis \\ Symmetric Encryption (modern)").font(.caption).foregroundStyle(.secondary)
                     HStack {
-                        Text("Anzahl der Bytes aus dem Geheimtextdokument für den Entropietest:")
+                        Text("Number of bytes of the ciphertext document used for the entropy test:")
                         TextField("", value: $bruteBytes, format: .number).frame(width: 60)
                     }
-                    Text("Zeichensatz für den zu erwartenden Klartext")
+                    Text("Alphabet for the expected cleartext:")
                     Picker("", selection: $bruteCharset) {
-                        Text("Alle 256 Zeichen").tag(0)
-                        Text("Druckbare Zeichen (ASCII 32 - 256)").tag(1)
-                        Text("Zeichensatz, wie in Menü: Optionen \\ Textoptionen definiert").tag(2)
+                        Text("All 256 characters").tag(0)
+                        Text("Printable characters (ascii 32 - 256)").tag(1)
+                        Text("Characters as defined in menu: Options \\ Text Options").tag(2)
                     }.pickerStyle(.radioGroup).labelsHidden()
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Weitere Optionen (macOS-Version)") {
+            GroupBox("Further options (macOS version)") {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        Text("Erwartetes häufigstes Zeichen bei XOR/Addition (Hex):")
+                        Text("Expected most common character for XOR/Addition (hex):")
                         TextField("", text: $expectedHex).frame(width: 40)
                     }
-                    Stepper("Maximale Vigenère-Schlüssellänge: \(settings.vigenereMaxKeyLength)", value: $settings.vigenereMaxKeyLength, in: 2...100)
-                    Stepper("Neustarts der automatischen Substitutions-Analyse: \(settings.substitutionRestarts)", value: $settings.substitutionRestarts, in: 1...200)
+                    Stepper("Maximum Vigenère key length: \(settings.vigenereMaxKeyLength)", value: $settings.vigenereMaxKeyLength, in: 2...100)
+                    Stepper("Restarts of the automatic substitution analysis: \(settings.substitutionRestarts)", value: $settings.substitutionRestarts, in: 1...200)
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             Spacer(minLength: 0)
             HStack {
-                Button("Übernehmen") { applyHex(); closeKeyWindow() }.keyboardShortcut(.defaultAction)
-                Button("Standard wiederherstellen") {
+                Button("Apply") { applyHex(); closeKeyWindow() }.keyboardShortcut(.defaultAction)
+                Button("Restore default") {
                     caesarKey = true; caesarCorrelation = true; caesarHistograms = false
                     vigKey = true; vigKeyLength = true; vigAuto = true; vigMore = false
                     schroedelVerbose = false; bruteBytes = 128; bruteCharset = 0; expectedHex = "00"
                 }
                 Spacer()
-                Button("Abbrechen", action: closeKeyWindow).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: closeKeyWindow).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -290,19 +290,19 @@ struct PlotOptionsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Stepper("Balkenstärke (1, …, 10): \(bar)", value: $bar, in: 1...10)
-            Stepper("Kurvenstärke (1, …, 10): \(line)", value: $line, in: 1...10)
-            Toggle("Nulllinie anzeigen", isOn: $zero)
-            Toggle("Relative Anzeige bei Autokorrelation", isOn: $relative)
+            Stepper("Bar width (1-10): \(bar)", value: $bar, in: 1...10)
+            Stepper("Curve width (1-10): \(line)", value: $line, in: 1...10)
+            Toggle("Show zero", isOn: $zero)
+            Toggle("Autocorrelation in relative", isOn: $relative)
             Spacer(minLength: 0)
             HStack {
-                Button("Übernehmen") {
+                Button("Apply") {
                     settings.plotBarWidth = bar; settings.plotLineWidth = line
                     settings.plotShowZeroLine = zero; settings.plotRelativeAutocorrelation = relative
                     closeKeyWindow()
                 }.keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Abbrechen", action: closeKeyWindow).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: closeKeyWindow).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -322,8 +322,8 @@ struct StartOptionsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Toggle("Den \"Wie Sie starten\"-Dialog beim Programmstart von CrypTool anzeigen.", isOn: $dialog)
-            Toggle("Die Beispieldatei wird nach dem Start von CrypTool automatisch geöffnet.", isOn: $example)
+            Toggle("Show dialog \"How to start\" when starting CrypTool.", isOn: $dialog)
+            Toggle("Open the sample text file automatically when starting CrypTool.", isOn: $example)
             Spacer(minLength: 0)
             HStack {
                 Button("OK") {
@@ -332,7 +332,7 @@ struct StartOptionsView: View {
                     closeKeyWindow()
                 }.keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Abbrechen", action: closeKeyWindow).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: closeKeyWindow).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)

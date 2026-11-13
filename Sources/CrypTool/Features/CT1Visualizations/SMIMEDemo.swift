@@ -14,7 +14,7 @@ import CTModern
 
 extension CT1Visualizations {
     static func openSMIME() {
-        WindowPresenter.tool(id: "ct1-smime", title: "S/MIME Visualisierungs-Control-Center", size: CGSize(width: 560, height: 760)) {
+        WindowPresenter.tool(id: "ct1-smime", title: "S/MIME Visualization Control Center", size: CGSize(width: 560, height: 760)) {
             SMIMEControlCenterView()
         }
     }
@@ -161,7 +161,7 @@ struct SMIMEComputation {
         var moved = 0
         let st = CCCrypt(CCOperation(encrypt ? kCCEncrypt : kCCDecrypt), alg, CCOptions(kCCOptionPKCS7Padding),
                          key, key.count, iv, data, data.count, &out, out.count, &moved)
-        guard st == kCCSuccess else { throw CTError("Verschlüsselung konnte nicht ausgeführt werden") }
+        guard st == kCCSuccess else { throw CTError("Encryption execution failed") }
         return Array(out.prefix(moved))
     }
 
@@ -290,53 +290,53 @@ enum SMIMEAnimationScript {
         }
 
         let signing = p.sign
-        let sub = signing ? (p.multipartSigned ? "S/MIME: Signieren von E-Mail (hier im multipart/signed-Format)"
-                                               : "S/MIME: Signieren von E-Mail (hier im signed-data Format)")
-                          : "S/MIME: Verschlüsseln von E-Mail"
-        let verb = signing ? "signiert" : "verschlüsselt"
+        let sub = signing ? (p.multipartSigned ? "S/MIME: Signing E-Mail (using the multipart/signed format)"
+                                               : "S/MIME: Signing E-Mail (using the signed-data format)")
+                          : "S/MIME: Encrypting E-Mail"
+        let verb = signing ? "digitally signed" : "encrypted"
 
         // Prolog
-        b.chapter("Prolog")
+        b.chapter("Prologue")
         b.text("sub", sub, x: 20, y: 10, size: 19, bold: true)
-        b.text("author", "entworfen von Michael Linden · Zeichentrickfiguren in Anlehnung an Parker/Stone", x: 20, y: 36, size: 11, color: .secondary)
-        say("Willkommen bei der visuellen Aufbereitung des S/MIME Protokolls. Zur Steuerung benutzen Sie bitte die Schaltflächen unterhalb",
-            "der Darstellung. Beginnen Sie mit 'Weiter'. Über das Kapitelmenü können Sie direkt zu den einzelnen Abschnitten springen.")
+        b.text("author", "designed by Michael Linden · original cartoon characters by Parker/Stone", x: 20, y: 36, size: 11, color: .secondary)
+        say("Welcome to the S/MIME visualization. Use the buttons below for navigation or use the chapter menu to access chapters directly.",
+            "Start by clicking on 'Continue'.")
         b.commit()
         b.text("alice", "👩", x: 24, y: 52, size: 38, z: 4)
         b.text("aliceL", "Alice", x: 72, y: 66, size: 15, bold: true)
-        say("Das ist Alice. Alice möchte ihrem Freund Bob eine E-Mail senden. Dazu verwendet sie einen S/MIME-fähigen E-Mail-Client.")
+        say("This is Alice. Alice is going to write an e-mail to her friend Bob. She uses an e-mail client with S/MIME capability.")
         b.commit()
 
         // E-Mail schreiben
-        b.chapter("E-Mail schreiben")
+        b.chapter("Compose E-Mail")
         b.box("scr", x: screenX, y: screenY, w: 560, h: 432, fill: .white, stroke: .gray, z: 0)
         b.box("scrBar", x: screenX, y: screenY, w: 560, h: 22, fill: .cellAlt, stroke: .gray, z: 0)
         b.text("scrT", "", x: screenX + 10, y: screenY + 3, size: 12, bold: true, z: 2)
-        screen(["Von:      \(p.from)", "An:       \(p.to)", "Betreff:  \(p.subject)", ""] + p.text.components(separatedBy: "\n"),
-               title: "E-Mail-Client von Alice – Neue Nachricht")
+        screen(["From:     \(p.from)", "To:       \(p.to)", "Subject:  \(p.subject)", ""] + p.text.components(separatedBy: "\n"),
+               title: "Alice's e-mail client – New message")
         if signing {
-            say("Alice schreibt Bob die E-Mail, die Ihre digitale Signatur tragen soll. Die Signatur soll sicherstellen, dass die E-Mail tatsächlich von Alice stammt.",
-                "Um zu sehen wie diese Signatur tatsächlich aussieht, werfen wir einen Blick hinter die Kulissen.")
+            say("To ensure authenticity she makes use of the e-mail client's S/MIME features. One of these features enables her to attach a digital signature.",
+                "Alice normally doesn’t see her signature when she has composed the message, so let's take a look behind the scenes.")
         } else {
-            say("Alice schreibt Bob die E-Mail, die verschlüsselt werden soll. Sie will sicherstellen, dass den Inhalt der E-Mail niemand anders außer Bob lesen kann.",
-                "Um zu sehen, wie die verschlüsselte Nachricht tatsächlich aussieht, werfen wir einen Blick hinter die Kulissen.")
+            say("To ensure privacy she makes use of the e-mail client's S/MIME features. One of these features enables her to encrypt messages.",
+                "Alice normally doesn’t see her encrypted text on screen when she has composed the message, so let's take a look behind the scenes.")
         }
         b.commit()
-        screen(c.plainLines, title: "Quelltext der E-Mail")
-        say("Hinter jeder E-Mail verbirgt sich der so genannte Quelltext. Dieser bleibt Alice in ihrem E-Mail-Client gewöhnlich verborgen.",
-            "Auf dem Bildschirm sehen Sie den Quelltext der E-Mail, die Sie zuvor im S/MIME Visualisierungs-Control-Center eingegeben haben.")
+        screen(c.plainLines, title: "Source code of the e-mail")
+        say("There's a lot more information packed in an e-mail than just the message itself. In order to reduce complexity, this information usually remains",
+            "hidden to the user's eye. Now what you can see on Alice's display above is the source code of the e-mail that you entered in the Control Center.")
         b.commit()
         let headerSteps: [(String, [String])] = [
-            ("Date:", ["Die erste Zeile des Quelltextes gibt das Datum an, welches durch das Schlüsselwort 'Date:' definiert wird. Es setzt sich zusammen aus Wochentag,",
-                       "Monat, Jahr und Uhrzeit, an der die E-Mail versendet wird. Am Ende wird die Differenz zu einer speziellen Zeitreferenz angegeben."]),
-            ("From:", ["Die zweite Zeile gibt den Absender bzw. die Absenderin der E-Mail an. Das Schlüsselwort 'From:' definiert die E-Mail Adresse. Optional steht hier auch",
-                       "eine Freundesbezeichnung ('friendly name') zur leichteren Identifizierung. In diesem Fall muss die E-Mail-Adresse in spitzen Klammern (< >) stehen."]),
-            ("To:", ["In der dritten Zeile wird der Empfänger durch das Schlüsselwort 'To:' festgelegt."]),
-            ("Subject:", ["Die vierte Zeile gibt den Betreff der E-Mail an und wird durch das Schlüsselwort 'Subject:' definiert."]),
-            ("MIME-Version:", ["Um den Inhalt der E-Mail (Attachments, etc.) besser beschreiben zu können, werden erweiterte Schlüsselwörter herangezogen.",
-                               "Das hier angezeigte Feld definiert die Versionsnummer, nach welcher die E-Mail aufgebaut ist."]),
-            ("Content-Type:", ["In dieser Zeile wird der angefügte Inhaltstyp (MIME-Datentyp) genau beschrieben. Anhand dieser Information kann der Mail-Client des Empfängers das",
-                               "entsprechende Anzeigemodul zur Weiterverarbeitung starten. Mögliche Inhalte sind z.B. Text, Audio und Dokumente."]),
+            ("Date:", ["The first line of the source code is the date, referenced by the keyword 'Date:'. It consists of the day, month, year and time the e-mail was written.",
+                       "At the end of the line there's the offset in hours/minutes from a special time reference."]),
+            ("From:", ["The second line denotes the originator of the e-mail. The user's e-mail address is followed by the keyword 'From:'. It is also possible to additionally use",
+                       "a so called 'friendly name', giving the originator's real name. If that is the case, the e-mail address has to be enclosed in angle brackets (< >)."]),
+            ("To:", ["The keyword 'To:' defines the recipient of the e-mail. Valid input to this field is either one or more e-mail addresses. Here it is Bob only."]),
+            ("Subject:", ["The fourth line gives the subject of the e-mail, as defined by the keyword 'Subject:'."]),
+            ("MIME-Version:", ["For detailed information about attachments, a more complex set of keywords is being used. 'MIME-Version:' references the version of the specifications",
+                               "the e-mail body is built upon."]),
+            ("Content-Type:", ["This line describes the property of the attached content (MIME-type) in detail. The information allows for correct processing and interpretation of",
+                               "content on the receiving end. The underlying data format (text, audio, documents, etc.) is arbitrary."]),
         ]
         for (prefix, t) in headerSteps {
             highlight(prefix)
@@ -344,61 +344,60 @@ enum SMIMEAnimationScript {
             b.commit()
         }
         highlight("Date:", count: 6, color: .cellAlt)
-        say("Die genannten Felder werden unter der Bezeichnung 'Header' zusammengefasst. Ihre Reihenfolge bestimmt dabei der E-Mail-Client und ist beliebig.",
-            "In den MIME-Spezifikationen existieren noch eine Menge an weiteren Schlüsselwörtern, auf deren Darstellung an dieser Stelle jedoch verzichtet wird.")
+        say("The sum of the above information is called the 'header' of the e-mail. In fact there are many more keywords possible in MIME, but the entire scope",
+            "is not subject to this visualization.")
         b.commit()
         let bodyStart = c.plainLines.count - p.text.components(separatedBy: "\n").count
         highlight(c.plainLines[bodyStart].isEmpty ? nil : c.plainLines[bodyStart], count: p.text.components(separatedBy: "\n").count)
-        say("Nach dem Header folgt der so genannte 'Body', in dem die Inhaltstypen abgelegt werden können. Hier finden neben dem Nachrichtentext selbst",
-            "alle möglichen Dateianhänge ihren Platz. An dieser Stelle gibt es nur Text als Inhaltstyp, denn Alice hat auf weitere Dateianhänge verzichtet.")
+        say("Followed by the header is the 'body', holding information about the specified content-type(s). All sorts of attachments can be stored in this section.",
+            "At this point there's only written text, because Alice did not attach any files to her message.")
         b.commit()
         if let i = c.plainLines.firstIndex(of: "") {
             let y = screenY + 27 + CGFloat(i) * lineH
             b.move("hl", x: screenX + 6, y: y); b.setSize("hl", w: 548, h: lineH + 1); b.setFill("hl", .highlight)
         }
-        say("Header und Body werden durch eine Leerzeile voneinander getrennt.")
+        say("Header and Body are separated by one blank line.")
         b.commit()
 
         // Kanonisierung
-        b.chapter("Kanonisierung")
+        b.chapter("Canonicalize")
         b.remove("hl")
-        screen(c.canonicalLines, title: "Quelltext der E-Mail – kanonisiert")
-        say("Als nächstes wird die E-Mail automatisch umgeformt (kanonisiert), damit die in ihr enthaltenen Zeichen auf anderen Computersystemen einheitlich",
-            "interpretiert werden können.")
+        screen(c.canonicalLines, title: "Source code of the e-mail – canonicalized")
+        say("The next step is the canonicalization of the e-mail, a process in which the e-mail client automatically converts characters for consistent representation",
+            "on other computer platforms or operating systems.")
         b.commit()
         highlight("Content-Type:")
-        say("Dabei hängt das genaue Vorgehen vom MIME-Datentyp ab. Beim Typ 'text/plain' muss zusätzlich der verwendete Zeichensatz (hier charset=\(c.charset))",
-            "mit angegeben werden. ASCII (American Standard Code for Information Interchange) ist der im Internet verbreitetste Standard.")
+        say("The procedure is dependent on the content-type: In this example the content type 'text/plain' comes in a character set called '\(c.charset)'.",
+            "The ASCII (American Standard Code for Information Interchange) character-encoding scheme is the most commonly used character set on the internet.")
         b.commit()
 
         // Transfercodierung
-        b.chapter("Transfercodierung")
+        b.chapter("Transfer Encoding")
         b.remove("hl")
-        say("An dieser Stelle wird die E-Mail für den Versand vorbereitet. Die Transfercodierung schützt die E-Mail vor (ungewollten) Modifikationen durch",
-            "Mailgateways bzw. -server die nicht mehr als 7-bit lange Zeichensätze verarbeiten können.")
+        say("The following step is referred to as 'transfer encoding' - a method which guarantees consistent data delivery over the internet. Due to the fact that",
+            "there are 8-bit character sets, but some mail gateways on the internet support only 7-bit, conversion is mandatory for lossless transfer.")
         b.commit()
-        screen(c.encodedLines, title: "Quelltext der E-Mail – transfercodiert")
+        screen(c.encodedLines, title: "Source code of the e-mail – transfer encoded")
         highlight("Content-Transfer-Encoding:")
         let cte = p.base64 ? "base64" : "quoted-printable"
-        say("Es gibt verschiedene Arten von Transfercodierungen. Die hier gewählte ist '\(cte)'. Sie wird durch das Schlüsselwort",
-            "'Content-Transfer-Encoding' im Header festgelegt. Im Vergleich zu 'quoted-printable' ist 'base64' vom menschlichen Auge nicht mehr lesbar.")
+        say("There are different Transfer Encoding types. These are specified by one additional keyword in the Header called 'Content-Transfer-Encoding'. The",
+            "encoding used in the source code of Alice's e-mail is called '\(cte)'. In comparison to 'quoted-printable', 'base64' is not readable by the human eye.")
         b.commit()
         let encStart = c.encodedLines.count - (c.encodedLines.count - (c.encodedLines.firstIndex(of: "") ?? 0) - 1)
         if encStart < c.encodedLines.count {
             highlight(c.encodedLines[encStart], count: c.encodedLines.count - encStart)
         }
         if p.base64 {
-            say("In 'base64' werden 8-bit Binärdaten in eine Zeichenfolge codiert, die aus selektierten, codepage-unabhängigen ASCII Zeichen besteht.",
-                "Zur Codierung werden die Zeichen A–Z, a–z, 0–9, + und / herangezogen. Das Zeichen = definiert das Ende der Zeichenfolge.")
+            say("The encoding 'base64' translates 8-bit binary data into a string based on selected ASCII-characters. These characters are codepage independent",
+                "and include: A–Z, a–z, 0–9, + and /. The character = defines the end of the string.")
         } else {
-            say("In 'quoted printable' werden Zeichen, die nicht dem ASCII-Zeichensatz entsprechen (z.B. Umlaute), durch eine Folge von drei ASCII-Zeichen ersetzt.",
-                "Dies betrifft den gesamten Body der E-Mail.")
+            say("The encoding 'quoted printable' translates non-ASCII-characters into a string of 3 ASCII characters, affecting the body of the e-mail.")
             b.commit()
-            say("Umlaute werden konvertiert und die zusätzliche Notation für den Zeilenumbruch (<CR> <LF>) wird eingefügt.",
-                "7-bit beschränkte Mail-Gateways können nun den Inhalt der E-Mail ohne Verluste weiter reichen.")
+            say("If entered, you can see converted umlauts in the example above, plus additional encoding for carriage return (<CR>) and line feed (<LF>). As the",
+                "encoding is now all 7-bit ASCII, the possibility of a gateway messing up content (and therefore the signature) of Alice's e-mail is eliminated.")
             b.commit()
-            say("Das Verfahren hat den Vorteil, dass die meisten in ASCII enthaltenen Zeichen unverändert codiert werden und somit auch angezeigt werden",
-                "können, falls die quoted-printable Codierung von Bob's E-Mail-Client nicht unterstützt wird. So ist der Text allgemein noch relativ gut lesbar.")
+            say("The advantage of 'quoted-printable' is its readability. Even if Bob's e-mail client doesn't support the encoding, he is still able to read Alice's message",
+                "without much inconvenience.")
         }
         b.commit()
 
@@ -406,7 +405,7 @@ enum SMIMEAnimationScript {
         b.chapter("S/MIME-Gateway")
         b.remove("hl")
         b.box("intranet", x: 598, y: 40, w: 394, h: 270, fill: .clear, stroke: .gray, z: -1)
-        b.text("intranetL", "Firmennetz (Intranet)", x: 606, y: 290, size: 11, color: .secondary)
+        b.text("intranetL", "Corporate network (intranet)", x: 606, y: 290, size: 11, color: .secondary)
         for (i, n) in nodes.enumerated() {
             b.box("nodeB\(i)", x: n.1, y: n.2 - 4, w: 148, h: 30, fill: .cell, stroke: .gray, z: 1)
             b.text("node\(i)", n.0, x: n.1 + 8, y: n.2 + 2, size: 13, z: 2)
@@ -420,149 +419,148 @@ enum SMIMEAnimationScript {
         }
         envelope(at: 0)
         hl(node: 0)
-        say("Bei Site-to-Site-Implementierungen zwischen Firmen wird die E-Mail nicht auf dem Client-Rechner selbst \(verb), sondern über das Intranet an ein",
-            "dediziertes S/MIME-Gateway weitergeleitet. Der \(signing ? "Signiervorgang" : "Verschlüsselungsvorgang") an sich ist lokal und serverseitig gleich.")
+        say("Alice's corporate network features a site-to-site S/MIME solution. Thus her e-mail is not \(signing ? "digitally signed" : "encrpyted") on her own computer directly, but forwarded",
+            "to a dedicated S/MIME gateway through the company’s intranet. This gateway \(signing ? "signs all e-mails coming from employees" : "encrypts all e-mails for the employees").")
         b.commit()
         envelope(at: 1); hl(node: 1)
-        say("Durch das firmeninterne Netzwerk wird die E-Mail an den Mail-Server des Unternehmens weitergeleitet.")
+        say("The routing of the network ensures that the e-mail is delivered to the Mail-Gateway.")
         b.commit()
         envelope(at: 2); hl(node: 2)
-        say("Von dort aus wird die E-Mail nicht wie gewohnt direkt über ein Mail-Gateway ins Internet geschickt, sondern an den S/MIME-Gateway weitergeleitet.")
+        say("From this node the e-mail is being delivered to the S/MIME-Gateway for further processing.")
         b.commit()
         let party = signing ? c.alice : c.bob
         let nBytes = party.key.publicKey.byteLength
-        info(["Zertifikat aus der PSE:",
-              "  Inhaber:      CN=\(party.name), E=\(party.email)",
-              "  Aussteller:   CN=CrypTool Demo-CA",
-              String(format: "  Seriennummer: %04X", party.serial),
-              "  Schlüssel:    RSA \(party.key.bitLength) Bit, e = \(party.key.e)",
+        info(["Certificate from the PSE:",
+              "  Owner:        CN=\(party.name), E=\(party.email)",
+              "  Issuer:       CN=CrypTool Demo-CA",
+              String(format: "  Serial no.:   %04X", party.serial),
+              "  Key:          RSA \(party.key.bitLength) bits, e = \(party.key.e)",
               "  n = " + String(party.key.n.toString(radix: 16).lowercased().prefix(40)) + "…"])
         if signing {
-            say("Auf dem S/MIME-Gateway findet das Signieren der E-Mail statt. Auf diesem Server sind alle Zertifikate in einer PSE (Personal Security Environment)",
-                "abgelegt. Zunächst sucht der Server das Zertifikat des Absenders in seiner Datenbank.")
+            say("To apply Alice's signature, a special algorithm and a Personal Security Environment (PSE) are used. The PSE on this server contains all employee’s",
+                "private keys and all certificates. In a first step the server looks for Alice's certificate in its database.")
         } else {
-            say("Auf dem S/MIME-Gateway findet das Verschlüsseln der E-Mail statt. Auf diesem Server sind alle Zertifikate in einer PSE (Personal Security",
-                "Environment) abgelegt. Zertifikate enthalten spezielle Schlüssel. Zunächst sucht der Server Bobs Zertifikat in seiner Datenbank.")
+            say("For encryption a special algorithm and a Personal Security Environment (PSE) are used. A PSE is a set of certificates providing special",
+                "keys. All correspondence's certificates are stored in the PSE. In a first step the server looks for Bob's certificate in its database.")
         }
         b.commit()
-        say("Das Zertifikat enthält eine Reihe von speziellen Attributen und eine eindeutige Seriennummer, die den Eigentümer bestätigen.")
+        say("The certificate has a set of special attributes and a unique ID for identification of its owner.")
         b.commit()
 
         // Signieren / Verschlüsseln
-        b.chapter(signing ? "Signieren" : "Verschlüsseln")
+        b.chapter(signing ? "Signing" : "Encrypting")
         let hx = { (v: [UInt8], n: Int) -> String in v.prefix(n).map { String(format: "%02x", $0) }.joined() + (v.count > n ? "…" : "") }
         if signing {
-            info(["\(p.hash.displayName)(MIME-Teil) =", "  " + hx(c.digest, 24),
-                  "Signatur = RSA(privater Schlüssel Alice, DigestInfo)", "  " + hx(c.signature, 20) + " (\(c.signature.count) Byte)"])
-            say("Danach beginnt der Signaturprozess. Der in der PSE enthaltene private Schlüssel wird eingesetzt, um mittels eines speziellen Signaturverfahrens Alice",
-                "E-Mail digital zu signieren.")
+            info(["\(p.hash.displayName)(MIME part) =", "  " + hx(c.digest, 24),
+                  "Signature = RSA(Alice's private key, DigestInfo)", "  " + hx(c.signature, 20) + " (\(c.signature.count) bytes)"])
+            say("In the next step the S/MIME Gateway calculates the digital signature with Alice's private key.")
         } else {
-            info(["Sitzungsschlüssel (\(p.aes ? "AES-128" : "Triple-DES"), zufällig) =", "  " + hx(c.sessionKey, 24),
+            info(["Session key (\(p.aes ? "AES-128" : "Triple-DES"), random) =", "  " + hx(c.sessionKey, 24),
                   "IV = " + hx(c.iv, 16),
-                  "Body: \(p.aes ? "AES" : "3DES")-CBC → \(c.encryptedContent.count) Byte Chiffretext",
-                  "Sitzungsschlüssel mit Bobs öffentl. Schlüssel (RSA):", "  " + hx(c.encryptedKey, 20) + " (\(nBytes) Byte)"])
-            say("Danach verschlüsselt das S/MIME-Gateway Alice E-Mail. Bob's öffentlicher Schlüssel aus seinem Zertifikat wird eingesetzt, um den Body mittels",
-                "eines speziellen Verfahrens in Chiffretext umzuwandeln. (Genauer: Der Body wird mit einem zufälligen Sitzungsschlüssel symmetrisch verschlüsselt,",
-                "nur dieser Sitzungsschlüssel wird mit Bobs öffentlichem RSA-Schlüssel verschlüsselt – hybride Verschlüsselung.)")
+                  "Body: \(p.aes ? "AES" : "3DES")-CBC → \(c.encryptedContent.count) bytes of ciphertext",
+                  "Session key with Bob's public key (RSA):", "  " + hx(c.encryptedKey, 20) + " (\(nBytes) bytes)"])
+            say("In the next step the S/MIME gateway encrypts Alice’s mail: This means it calculates the ciphertext from the mail body using Bob’s public key from",
+                "his certificate. (More precisely: The body is encrypted symmetrically with a random session key,",
+                "only this session key is encrypted with Bob's public RSA key – hybrid encryption.)")
         }
         b.commit()
-        screen(c.finalLines, title: "Quelltext der E-Mail – \(verb)")
-        say("Das Ergebnis des Verfahrens ist im obigen Fenster zu sehen. Wie zuvor handelt es sich hierbei um den Quelltext der E-Mail, der durch das",
-            "S/MIME-Gateway weiterverarbeitet wurde.")
+        screen(c.finalLines, title: "Source code of the e-mail – \(verb)")
+        say("As before here you see the source code of the e-mail which was processed by the S/MIME gateway.")
         b.commit()
         highlight("Content-Type:", count: 2)
         if signing && p.multipartSigned {
-            say("Folgende Informationen kommen hinzu bzw. werden ersetzt: Der angefügte Inhaltstyp (MIME-Datentyp) beschreibt nun die Form der Signatur,",
-                "die an die E-Mail angehängt wurde. Er ist nicht länger vom Typ 'text/plain' sondern vom Typ 'multipart/signed'.")
+            say("Following information is added or replaced: The MIME-content-type now describes the structure of the signature being attached. It is no longer simply",
+                "'text/plain'; the content has become 'multipart/signed'.")
             b.commit()
-            say("Der Typ 'multipart/signed' setzt die E-Mail aus mehreren Teilen, dem",
-                "Nachrichtentext und der Signatur des Absenders zusammen. Die Trennmarke wird durch das Schlüsselwort 'boundary' definiert.")
+            say("'multipart/signed' means that the message body is split into several parts. The e-mail now consists of the original message plus Alice's digital signature.",
+                "Both parts are separated by the string defined with the keyword ‘boundary’.")
             b.commit()
             if let s = c.finalLines.firstIndex(of: "--\(c.boundary)") {
                 let e = c.finalLines[(s + 1)...].firstIndex(of: "--\(c.boundary)") ?? s + 1
                 highlight(c.finalLines[s], count: min(e - s, maxLines - s))
-                say("Dies ist der Nachrichtenteil.")
+                say("This is the message.")
                 b.commit()
                 highlight("Content-Type: application/pkcs7-signature", count: max(1, min(maxLines, c.finalLines.count) - e - 1))
-                say("Dies ist der Nachrichtenteil.... gefolgt von der Signatur.")
+                say("This is the message.... followed by the signature.")
                 b.commit()
             }
             highlight("\tmicalg")
-            say("Zur Erstellung der Signatur wurde ein Hashwert der Mail gebildet. Damit Bobs Rechner die Gültigkeit der von Alice erstellten Signatur überprüfen kann,",
-                "muss er wissen, welches Hashverfahren verwendet wurde.")
+            say("A hash value was calculated to build Alice’s signature. In order to allow Bob’s computer to verify the signature, he has to know which hash method",
+                "was used.")
             b.commit()
-            say("Das Schlüsselwort zur Identifikation heißt 'micalg' und das Hashverfahren, welches hier zum Einsatz kommt, heißt \(p.hash.displayName).",
-                "Der Hashwert selbst wird in der Signatur hinterlegt.")
+            say("The hash algorithm used in this example is called \(p.hash.displayName), having 'micalg' as its identifier. The hash value itself is stored in the signature part of the",
+                "e-mail.")
             b.commit()
             highlight("Content-Transfer-Encoding: base64")
-            say("Wie der Nachrichtentext muss auch die Signatur in einem 7-bit kompatiblen Format (Transfercodierung) vorliegen, bevor sie über das Internet",
-                "verschickt werden kann. Dazu wird standardmäßig das base64-Format benutzt.")
+            say("Just like the message text, the signature must be converted into a 7-bit format, before it is passed through the internet. Specifications suggest",
+                "'base64' as the default choice for Transfer Encoding.")
             b.commit()
             highlight("Content-Disposition:")
-            say("Das Schlüsselwort 'Content-Disposition' gibt an, dass die Signatur in einem Dateianhang mit der Erweiterung '.p7s' abgelegt ist. Diese Endung",
-                "wird für Dateien mit kryptographischem Inhalt verwendet. Deren Struktur ist in den 'Cryptographic Message Syntax Standard' (PKCS#7) definiert.")
+            say("The keyword 'Content-Disposition' specifies that the signature is a file attachment with the extension '.p7s'. That extension is commonly used",
+                "for files holding cryptographic content. The underlying structure is defined in the Cryptographic Message Syntax Standard (aka PKCS#7).")
             b.commit()
         } else if signing {
-            say("Folgende Informationen kommen hinzu bzw. werden ersetzt: Der Inhaltstyp (MIME-Datentyp) weist nun auf kryptographischen Inhalt hin, der an die",
-                "E-Mail angehängt wurde. Anstelle von 'text/plain' rückt 'application/pkcs7-mime' mit dem Typ 'signed-data'.")
+            say("Following information is added or replaced: The MIME-content-type now describes a new object. It is no longer simply 'text/plain' but",
+                "'application/pkcs7-mime' with the type 'signed-data', meaning the body holds cryptographic information.")
             b.commit()
             if let i = c.finalLines.firstIndex(of: "") {
                 highlight(c.finalLines[min(i + 1, c.finalLines.count - 1)], count: min(maxLines, c.finalLines.count) - i - 1)
             }
-            say("Im signed-data-Format stehen Nachricht und Signatur gemeinsam in einem PKCS#7-Objekt, das base64-codiert wird.",
-                "Der Hashwert selbst wird in der Signatur hinterlegt.")
+            say("'signed-data' means that both the original message and the signature are stored in a single PKCS#7 object, which is base64 encoded.",
+                "The hash value itself is stored in the signature part of the e-mail.")
             b.commit()
         } else {
-            say("Folgende Informationen kommen hinzu bzw. werden ersetzt: Der Inhaltstyp (MIME-Datentyp) weist nun auf kryptographischen Inhalt hin, der an die",
-                "E-Mail angehängt wurde. Anstelle von 'text/plain' rückt 'application/pkcs7-mime'.")
+            say("Following information is added or replaced: The MIME-content-type now describes a new object. It is no longer simply 'text/plain' but",
+                "'application/pkcs7-mime', meaning the body holds cryptographic information.")
             b.commit()
-            say("Genauer gesagt haben wir es hier mit dem Typ 'enveloped-data' zu tun, der auf ein verschlüsseltes Objekt im Anhang hinweist.")
+            say("Specifically it's 'enveloped-data', meaning that the attached content is encrypted.")
             b.commit()
             if let i = c.finalLines.firstIndex(of: "") {
                 highlight(c.finalLines[min(i + 1, c.finalLines.count - 1)], count: min(maxLines, c.finalLines.count) - i - 1)
             }
-            say("Dies ist die verschlüsselte Nachricht.")
+            say("This is the encrypted message.")
             b.commit()
-            say("Zudem ist das verschlüsselte Objekt in eine Kodierungsform gebracht worden, die die Integrität der Nachricht bei Versand über verschiedene",
-                "Mail-Gateways im Internet schützt. Eine mögliche Form der Kodierung ist 'base64'. Sie erfahren mehr darüber in der Visualisierung für das Signieren.")
+            say("The encrypted content has also been converted into a special transfer encoding. This is necessary to ensure the integrity of the message while it is",
+                "being transferred through different Mail-Gateways of the internet. For further reference take a look at the visualization of signing S/MIME e-mails.")
             b.commit()
         }
         if signing {
-            say("Der PKCS#7-Standard beschreibt den syntaktischen Aufbau von Nachrichten für das Signieren, Verschlüsseln, oder Authentifizieren. Der Inhalt dieser",
-                "Spezifikationen ist sehr umfangreich und wird an dieser Stelle nicht näher ausgeführt.")
+            say("The PKCS#7 syntax is used to digitally sign, digest, authenticate, or encrypt arbitrary message content. The scope of this specification is huge, so it is not",
+                "discussed any further at this point.")
             b.commit()
-            info(["PKCS#7/CMS SignedData (\(c.cms.count) Byte):", "  contentType  signedData", "  digestAlg    \(p.hash.displayName)",
-                  "  signerInfo   CN=CrypTool Demo-CA, Nr. \(String(format: "%04X", c.alice.serial))", "  signature    \(c.signature.count) Byte RSA"])
-            say("Das PKCS#7-Objekt gibt hier die Signatur mit allen Informationen, die zur Verifikation der Signatur erforderlich sind, an.")
+            info(["PKCS#7/CMS SignedData (\(c.cms.count) bytes):", "  contentType  signedData", "  digestAlg    \(p.hash.displayName)",
+                  "  signerInfo   CN=CrypTool Demo-CA, no. \(String(format: "%04X", c.alice.serial))", "  signature    \(c.signature.count) bytes RSA"])
+            say("This PKCS#7 object contains the signature with all necessary data required for its verification.")
             b.commit()
         }
 
         // Versand
-        b.chapter("Versand")
+        b.chapter("Transport")
         b.remove("hl")
         info([])
         envelope(at: 3); hl(node: 3)
-        say("Nachdem die E-Mail \(verb) wurde, leitet das S/MIME-Gateway die E-Mail weiter an das firmeninterne Mail-Gateway.")
+        say("After the e-mail has been \(verb), the S/MIME-Gateway passes the message to the company's Mail-Gateway.")
         b.commit()
         envelope(at: 4); hl(node: 4)
-        say("Nun verlässt die E-Mail das firmeninterne Netz. Aufgrund der \(signing ? "Signierung" : "Verschlüsselung") mit Hilfe des S/MIME-Formats ist die Mail auf ihrem ganzen Weg",
-            signing ? "durch das Internet vor unbemerkten Veränderungen geschützt." : "durch das Internet sicher.")
+        say("The e-mail then leaves the secure boundaries of the corporate network and is sent through the internet to Bob. Due to the \(signing ? "signing" : "encryption")",
+            signing ? "by means of the S/MIME format the mail is protected against unnoticed modifications on its entire way through the internet." : "by means of the S/MIME format the mail is secure on its entire way through the internet.")
         b.commit()
 
         // Empfang
-        b.chapter("Empfang")
+        b.chapter("Reception")
         envelope(at: 5); hl(node: 5)
         if signing {
-            info(["Bobs E-Mail-Client prüft die Signatur:", "  \(p.hash.displayName) des empfangenen MIME-Teils berechnen,",
-                  "  Signatur mit Alices öffentl. Schlüssel prüfen:", c.verified ? "  ✓ Signatur gültig" : "  ✗ Signatur ungültig"])
-            say("Bob empfängt die E-Mail und kann dank der gültigen Signatur sicher sein, dass sie tatsächlich von Alice kommt.")
+            info(["Bob's e-mail client verifies the signature:", "  calculate \(p.hash.displayName) of the received MIME part,",
+                  "  verify signature with Alice's public key:", c.verified ? "  ✓ Signature valid" : "  ✗ Signature invalid"])
+            say("Bob fetches his e-mail which is instantly checked for authenticity. The certificate is valid, and he is confident that Alice is the true originator.")
         } else {
-            info(["Bobs E-Mail-Client entschlüsselt:", "  Sitzungsschlüssel mit Bobs privatem Schlüssel,", "  danach den Body (\(p.aes ? "AES" : "3DES")-CBC):",
+            info(["Bob's e-mail client decrypts:", "  the session key with Bob's private key,", "  then the body (\(p.aes ? "AES" : "3DES")-CBC):",
                   "  " + String(p.text.prefix(44))])
-            say("Bob empfängt die E-Mail. Sein E-Mail-Client entschlüsselt die Nachricht mit seinem privaten Schlüssel. Er liest Alice Nachricht in Klartext.")
+            say("Bob fetches his e-mail which is instantly decrypted by his e-mail client by using his private key. He is now able to read Alice's original message",
+                "in plain text.")
         }
         b.commit()
-        say("Ende der Visualisierung. Schließen Sie das Fenster oder nutzen Sie die Navigationsleiste, um zu den jeweiligen Kapiteln zu springen.")
+        say("End of visualization. Close the window or use the navigation buttons to jump back.")
         b.commit()
         return AnimScript(b, size: stage)
     }
@@ -599,70 +597,70 @@ struct SMIMEControlCenterView: View {
     var body: some View {
         Form {
             Section {
-                Text("S/MIME Visualisierungs-Control-Center").font(.title3.bold())
-                DisclosureGroup("Beschreibung") {
-                    Text("Hier sehen Sie, wie die dynamisch ausgewählten Daten zu einer sicheren E-Mail verarbeitet werden.\n\nDie Visualisierung dieser Abläufe beim Versenden einer E-Mail erfolgt in zwei Schritten (Control-Center & Animation):\n- In diesem Steuerfenster entscheiden Sie, ob Sie eine E-Mail verschlüsseln oder signieren wollen, und hier legen Sie die entsprechenden Steuer-Parameter fest.\n- Nach dem Drücken des Startknopfes werden diese Vorgänge in einer Animation visualisiert.\n\nSie können mit dem Steuerfenster auch mehrere parallel laufende Animationen erzeugen. Diese laufen unabhängig vom Steuerfenster.")
+                Text("S/MIME Visualization Control Center").font(.title3.bold())
+                DisclosureGroup("Description") {
+                    Text("In this window you can dynamically configure parameters for secure email messaging.\n\nThe visualization is then done in two steps (control center and animation):\n- In the contol center you can choose whether to encrypt or sign an email and then select the appropriate parameters.\n- After clicking the start button the chosen procedure will be visualized with an animation.\n\nYou can open more than one animation simultaneously with different parameters from the control center.")
                         .font(.callout).fixedSize(horizontal: false, vertical: true)
                 }
             }
-            Section("Signieren oder Verschlüsseln") {
+            Section("Sign or encrypt") {
                 Picker("", selection: $prm.sign) {
-                    Text("Signieren").tag(true)
-                    Text("Verschlüsseln").tag(false)
+                    Text("Signing").tag(true)
+                    Text("Encrypting").tag(false)
                 }
                 .pickerStyle(.segmented).labelsHidden()
             }
-            Section("Text der Nachricht") {
-                TextField("Absender:", text: $prm.from)
-                TextField("Empfänger:", text: $prm.to)
-                TextField("Betreff:", text: $prm.subject)
+            Section("Text of the message") {
+                TextField("Sender:", text: $prm.from)
+                TextField("Receiver:", text: $prm.to)
+                TextField("Subject:", text: $prm.subject)
                 TextField("Text", text: Binding(get: { prm.text }, set: { prm.text = String($0.prefix(50)) }),
-                          prompt: Text("Hier den Text der E-Mail eingeben..."), axis: .vertical)
+                          prompt: Text("Enter the email text here..."), axis: .vertical)
                     .lineLimit(2...3)
                 HStack {
-                    Text("Hinweis: In dieser Demo kann das Nachrichtenfeld maximal 50 Zeichen aufnehmen.")
+                    Text("Note: In this demonstration, the text field can only handle 50 characters.")
                         .font(.caption).foregroundStyle(.secondary)
                     Spacer()
-                    Button("Nachrichtentext aus Datei laden …", action: loadText)
+                    Button("Load message text from file …", action: loadText)
                 }
             }
-            Section("Steuerungsparameter") {
+            Section("Control parameters") {
                 if prm.sign {
-                    Picker("Hash-Funktion:", selection: $prm.hash) {
+                    Picker("Hash function:", selection: $prm.hash) {
                         Text("SHA-1").tag(DigestAlgorithmID.sha1)
                         Text("MD5").tag(DigestAlgorithmID.md5)
                     }
-                    LabeledContent("Signatur-Algorithmus:") {
-                        Text("RSA").help("DSA (in CT1 zusätzlich wählbar) wird hier nicht angeboten.")
+                    LabeledContent("Signature algorithm:") {
+                        Text("RSA").help("DSA (additionally selectable in CT1) is not offered here.")
                     }
-                    Picker("MIME-Typ:", selection: $prm.multipartSigned) {
+                    Picker("MIME type:", selection: $prm.multipartSigned) {
                         Text("multipart/signed").tag(true)
                         Text("PKCS#7/signed-data").tag(false)
                     }
                 } else {
-                    Picker("Verschlüsselungsverfahren:", selection: $prm.aes) {
+                    Picker("Encryption algorithm :", selection: $prm.aes) {
                         Text("AES").tag(true)
                         Text("Triple-DES").tag(false)
                     }
                 }
-                Picker("Transferkodierung:", selection: $prm.base64) {
+                Picker("transfer encoding:", selection: $prm.base64) {
                     Text("Base64").tag(true)
                     Text("quoted-printable").tag(false)
                 }
             }
-            Section(prm.sign ? "PSE des Senders auswählen" : "Zertifikat des Empfängers auswählen") {
-                Text(prm.sign ? "Interne PSE (Alice, RSA 1024 Bit)" : "Internes Zertifikat (Bob, RSA 1024 Bit)")
+            Section(prm.sign ? "Choose sender's PSE" : "Choose receiver's certificate") {
+                Text(prm.sign ? "Internal PSE (Alice, RSA 1024 bits)" : "Internal certificate (Bob, RSA 1024 bits)")
                     .foregroundStyle(.secondary)
             }
             Section {
                 HStack {
                     if keys.alice == nil {
                         ProgressView().controlSize(.small)
-                        Text("Schlüssel werden erzeugt …").foregroundStyle(.secondary)
+                        Text("Generating keys …").foregroundStyle(.secondary)
                     }
                     if let error { Text(error).foregroundStyle(.red) }
                     Spacer()
-                    Button(prm.sign ? "Signieren starten" : "Verschlüsselung starten", action: start)
+                    Button(prm.sign ? "Start signing" : "Start encrypting", action: start)
                         .keyboardShortcut(.defaultAction)
                         .disabled(keys.alice == nil || prm.text.isEmpty)
                 }
@@ -687,7 +685,7 @@ struct SMIMEControlCenterView: View {
             let c = try SMIMEComputation(parameters: prm, alice: a, bob: b)
             error = nil
             let script = SMIMEAnimationScript.build(c)
-            let title = prm.sign ? "S/MIME: Signieren von E-Mail" : "S/MIME: Verschlüsseln von E-Mail"
+            let title = prm.sign ? "S/MIME: Signing E-Mail" : "S/MIME: Encrypting E-Mail"
             WindowPresenter.tool(id: nil, title: title, size: CGSize(width: 1120, height: 800)) {
                 SMIMEAnimationView(script: script)
             }

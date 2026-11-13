@@ -60,10 +60,10 @@ struct CT1ToolsWindowAccessor: NSViewRepresentable {
 
 /// CT1 message texts shared by the parameter dialogs.
 enum CT1ToolsMessages {
-    static let inputFalse = "In diesem Feld wird eine Zahl oder ein Ausdruck erwartet,\naus dem sich ein Zahlenwert berechnen lässt.\nBitte geben Sie einen gültigen Ausdruck ein!\n\nBeispiele: 123, 2^15+1, (2^17-5)^2."
-    static let bigNumber = "CrypTool unterstützt hier nur positive ganze Zahlen der Bitlänge kleiner 8192. Das sind Zahlen mit höchstens 2467 Dezimalstellen."
-    static let greaterEqual2 = "Bitte geben Sie eine ganze Zahl >= 2 ein!"
-    static let modulNotPrime = "Der eingegebene Modul P ist keine Primzahl."
+    static let inputFalse = "Please enter into this field an integer or an expression, that\nevaluates to an integer!\nExamples: 123, 2^15+1, (2^17-5)^2."
+    static let bigNumber = "CrypTool only supports positive integers of bit length smaller than 8192. These are decimal numbers with at most 2467 digits."
+    static let greaterEqual2 = "Please enter a whole number >= 2!"
+    static let modulNotPrime = "Your input for the modulus P is not a prime number."
 
     /// Parses a CT1 number field (expressions allowed); shows CT1's error message and returns nil.
     @MainActor
@@ -104,10 +104,10 @@ struct CT1ToolsRandomParameters: Equatable {
 
     func summary(_ g: RandomGenerators.CT1Generator) -> String {
         switch g {
-        case .secude: return "Keine weiteren Parameter."
-        case .x2modN: return "Modul N = \(x2N)"
-        case .lcg: return "a = \(lcgA), b = \(lcgB), Modul N = \(lcgN)"
-        case .icg: return "a = \(icgA), c = \(icgC), Primzahl P = \(icgP)"
+        case .secude: return "No additional parameters."
+        case .x2modN: return "Modulus N = \(x2N)"
+        case .lcg: return "a = \(lcgA), b = \(lcgB), Modulus N = \(lcgN)"
+        case .icg: return "a = \(icgA), c = \(icgC), prime P = \(icgP)"
         }
     }
 }
@@ -139,12 +139,12 @@ struct RandomGeneratorView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            GroupBox("Beschreibung") {
-                Text("Zufallsdaten werden mit Hilfe der sogenannten \"Pseudozufallsgeneratoren\" erzeugt. Dies ist eine Auswahl sowohl von \"kryptographisch starken\" als auch unsicheren Pseudozufallsgeneratoren.")
+            GroupBox("Description") {
+                Text("Random data is generated with the aid of so-called \"pseudorandom number generators\". This is a selection of both \"cryptographically strong\" and also insecure pseudorandom number generators.")
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Auswahl des Algorithmus") {
+            GroupBox("Algorithm selection") {
                 Picker("", selection: $generator) {
                     ForEach(Gen.allCases, id: \.self) { Text($0.radioLabel).tag($0) }
                 }
@@ -152,27 +152,27 @@ struct RandomGeneratorView: View {
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
                 .onChange(of: generator) { _, g in if !g.hasInternalStates { showStates = false } }
             }
-            GroupBox("Parameter") {
+            GroupBox("Parameters") {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Saat:")
+                        Text("Seed:")
                         TextField("", text: $seed).font(.system(.body, design: .monospaced))
                     }
                     HStack(alignment: .firstTextBaseline) {
-                        Button("Generatorspezifische Parameter wählen ...") { showParameters = true }
+                        Button("Choose generator-specific parameters ...") { showParameters = true }
                         Text(params.summary(generator)).font(.caption).foregroundStyle(.secondary)
                             .lineLimit(2).truncationMode(.middle)
                     }
                 }
                 .padding(4)
             }
-            GroupBox("Ausgabeoptionen") {
+            GroupBox("Output options") {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Länge der Ausgabe in Bytes:")
+                        Text("Length of output in bytes:")
                         TextField("", text: $length).frame(width: 90).multilineTextAlignment(.trailing)
                     }
-                    Toggle("Interne Zufalls-Generator-Zustände ausgeben (nur für X^2 mod N, LCG und ICG).", isOn: $showStates)
+                    Toggle("Print out internal random number states (only for X^2 mod N, ICG and LCG).", isOn: $showStates)
                         .toggleStyle(.checkbox)
                         .disabled(!generator.hasInternalStates)
                 }
@@ -187,9 +187,9 @@ struct RandomGeneratorView: View {
             }
             Spacer(minLength: 0)
             HStack {
-                Button("Ausgabe erzeugen", action: generate).keyboardShortcut(.defaultAction).disabled(running)
+                Button("Generate output", action: generate).keyboardShortcut(.defaultAction).disabled(running)
                 Spacer()
-                Button("Abbrechen") {
+                Button("Cancel") {
                     if running { token.cancel() } else { windowRef.close() }
                 }
                 .keyboardShortcut(.cancelAction)
@@ -206,7 +206,7 @@ struct RandomGeneratorView: View {
     private func generate() {
         let trimmed = length.trimmingCharacters(in: .whitespaces)
         guard let n = Int(trimmed), RandomGenerators.ct1ByteRange.contains(n) else {
-            Alerts.error("Geben Sie eine ganze Zahl zwischen \(RandomGenerators.ct1ByteRange.lowerBound) und \(RandomGenerators.ct1ByteRange.upperBound) ein.")
+            Alerts.error("Please enter an integer between \(RandomGenerators.ct1ByteRange.lowerBound) and \(RandomGenerators.ct1ByteRange.upperBound).")
             return
         }
         let g = generator
@@ -280,10 +280,10 @@ struct CT1ToolsRandomParameterSheet: View {
 
     private var title: String {
         switch generator {
-        case .secude: return "Secude Zufallsgenerator"
-        case .x2modN: return "X^2 (mod N) Zufallsgenerator"
-        case .lcg: return "Linearer Kongruenzgenerator (LCG)"
-        case .icg: return "Inverser Kongruenzgenerator (ICG)"
+        case .secude: return "Secude Random Number Generator"
+        case .x2modN: return "x^2 (mod N) Random Number Generator"
+        case .lcg: return "Linear Congruence Generator (LCG)"
+        case .icg: return "Inverse Congruence Generator (ICG)"
         }
     }
 
@@ -292,38 +292,38 @@ struct CT1ToolsRandomParameterSheet: View {
             Text(title).font(.headline)
             switch generator {
             case .secude:
-                Text("Für den Pseudo-Zufallsgenerator der Firma Secude benötigen Sie keine weiteren Parameter.\nWeitere Informationen erhalten Sie in der Online-Hilfe (Taste \"F1\").\n\nHinweis: CrypTool für macOS verwendet an Stelle der Secude-Bibliothek den kryptographischen Zufallsgenerator des Systems (SecRandomCopyBytes).")
+                Text("For the Secude pseudorandom number generator you do not need any additional parameters. Further information can be obtained from the online help (\"F1\" key).\n\nNote: CrypTool for macOS uses the cryptographic random number generator of the system (SecRandomCopyBytes) instead of the Secude library.")
                     .fixedSize(horizontal: false, vertical: true)
             case .x2modN:
-                Text("Ein X^2 (mod N) Zufallsgenerator benötigt als Eingabeparameter den Modul N.\nWeitere Informationen erhalten Sie mit der Hilfe-Taste F1.")
+                Text("A X^2 (mod N) random number generator requires modulus N as input parameter.\nAdditional information can be obtained from the online help (\"F1\" key).")
                     .fixedSize(horizontal: false, vertical: true)
-                field("Modul N =", $draft.x2N)
+                field("Modulus N =", $draft.x2N)
             case .lcg:
-                Text("Der lineare Kongruenzgenerator hat drei Parameter: a und b von der Geraden ax + b, und den Modul N.\nWeitere Informationen erhalten Sie mit der Taste \"F1\".")
+                Text("The linear congruence generator uses a and b from line ax + b and modulus N as parameters.\nAdditional information can be obtained from the online help (\"F1\" key).")
                     .fixedSize(horizontal: false, vertical: true)
                 Grid(alignment: .leading, horizontalSpacing: 6, verticalSpacing: 6) {
                     GridRow {
-                        Text("Geraden-Parameter:")
+                        Text("Straight line parameters:")
                         Text("a =").gridColumnAlignment(.trailing)
                         numberField($draft.lcgA)
                     }
                     GridRow { Color.clear.frame(width: 1, height: 1); Text("b ="); numberField($draft.lcgB) }
-                    GridRow { Color.clear.frame(width: 1, height: 1); Text("Modul N ="); numberField($draft.lcgN) }
+                    GridRow { Color.clear.frame(width: 1, height: 1); Text("Modulus  N ="); numberField($draft.lcgN) }
                 }
             case .icg:
-                Text("Der inverse Kongruenzgenerator hat als Parameter die Zahlen a, c und die Primzahl P. Daraus berechnet er die Folge der Zufallszahlen (X_n) nach der Formel: \nX_n = inverse ( a * ( X_0 + n ) + c ) mod P.\nWeitere Informationen erhalten Sie mit der Taste \"F1\".")
+                Text("The inverse congruence generator uses a and b from the line ax + c and the prime number P as parameters. The generator produces the sequence of random numbers (X_n) from the formula :    X_n = inverse ( a * ( X_0 + n ) + c ) mod P.\nAdditional information can be obtained from the online help (\"F1\" key).")
                     .fixedSize(horizontal: false, vertical: true)
-                GroupBox("Parameter Eintrag:") {
+                GroupBox("Parameter options") {
                     HStack(alignment: .top, spacing: 14) {
                         Grid(alignment: .leading, horizontalSpacing: 6, verticalSpacing: 6) {
                             GridRow { Text("a =").gridColumnAlignment(.trailing); numberField($draft.icgA) }
                             GridRow { Text("c ="); numberField($draft.icgC) }
-                            GridRow { Text("Primzahl P ="); numberField($draft.icgP) }
+                            GridRow { Text("prime P ="); numberField($draft.icgP) }
                         }
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Bitlänge der Primzahl P:")
+                            Text("Bit length of the prime P:")
                             TextField("", text: $primeBits).frame(width: 60).multilineTextAlignment(.trailing)
-                            Button("Primzahl erzeugen", action: generatePrime)
+                            Button("generate prime", action: generatePrime)
                         }
                     }
                     .padding(4)
@@ -332,7 +332,7 @@ struct CT1ToolsRandomParameterSheet: View {
             HStack {
                 Button("OK", action: ok).keyboardShortcut(.defaultAction)
                 Spacer()
-                if generator != .secude { Button("Abbrechen") { dismiss() }.keyboardShortcut(.cancelAction) }
+                if generator != .secude { Button("Cancel") { dismiss() }.keyboardShortcut(.cancelAction) }
             }
         }
         .padding(18)
@@ -350,7 +350,7 @@ struct CT1ToolsRandomParameterSheet: View {
     private func generatePrime() {
         guard let bits = Int(primeBits.trimmingCharacters(in: .whitespaces)),
               RandomGenerators.ct1ICGPrimeBitRange.contains(bits) else {
-            Alerts.error("Geben Sie eine ganze Zahl zwischen 0 und 256 ein.")
+            Alerts.error("Please enter an integer between 0 and 256.")
             return
         }
         let l = RandomGenerators.ct1EffectiveICGPrimeBits(bits)

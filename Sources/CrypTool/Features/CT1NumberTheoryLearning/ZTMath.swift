@@ -13,7 +13,7 @@ enum ZTM {
 
     static func ints(_ v: [String], labels: [String]) throws -> [Int] {
         try zip(v, labels).map { s, l in
-            guard let x = int(s) else { throw ZTError("Bitte für „\(l)“ eine ganze Zahl eingeben.") }
+            guard let x = int(s) else { throw ZTError("Please enter an integer for \"\(l)\".") }
             return x
         }
     }
@@ -21,20 +21,20 @@ enum ZTM {
     static func list(_ s: String) throws -> [Int] {
         let parts = s.split(whereSeparator: { ",;".contains($0) || $0 == " " }).map(String.init).filter { !$0.isEmpty }
         let r = parts.compactMap(int)
-        guard r.count == parts.count, !r.isEmpty else { throw ZTError("Bitte durch Komma getrennte ganze Zahlen eingeben.") }
+        guard r.count == parts.count, !r.isEmpty else { throw ZTError("Please enter comma-separated integers.") }
         return r
     }
 
     /// Parses a natural number; "·", "*" and "^" are allowed (as in ZT's p–1 demo).
     static func big(_ s: String) throws -> BigUInt {
         let t = s.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "·", with: "*")
-        guard !t.isEmpty else { throw ZTError("Bitte eine natürliche Zahl eingeben.") }
+        guard !t.isEmpty else { throw ZTError("Please enter a natural number.") }
         var result = BigUInt(1)
         for factor in t.split(separator: "*") {
             let pw = factor.split(separator: "^")
-            guard let b = BigUInt(String(pw[0])) else { throw ZTError("„\(factor)“ ist keine natürliche Zahl.") }
+            guard let b = BigUInt(String(pw[0])) else { throw ZTError("\"\(factor)\" is not a natural number.") }
             var e = 1
-            if pw.count == 2, let x = Int(pw[1]), x >= 0, x <= 4096 { e = x } else if pw.count != 1 { throw ZTError("Ungültiger Exponent.") }
+            if pw.count == 2, let x = Int(pw[1]), x >= 0, x <= 4096 { e = x } else if pw.count != 1 { throw ZTError("Invalid exponent.") }
             result = result * b.power(e)
         }
         return result

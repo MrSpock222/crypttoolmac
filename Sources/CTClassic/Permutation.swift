@@ -5,7 +5,7 @@ public struct PermutationOptions: Codable, Equatable, Hashable, Sendable {
     /// Row-wise ("zeilenweise") or column-wise ("spaltenweise").
     public enum Direction: String, Codable, CaseIterable, Sendable {
         case rowWise, columnWise
-        public var displayName: String { self == .rowWise ? "zeilenweise" : "spaltenweise" }
+        public var displayName: String { self == .rowWise ? "Line by line" : "Col by col" }
     }
 
     /// Settings of one permutation stage. CT1 default: read in row-wise, permute columns,
@@ -63,25 +63,25 @@ public struct PermutationCipher: Sendable {
 
     /// Throws if a key is not a permutation of 1…n (n ≤ 100).
     public init(firstKey: [Int], secondKey: [Int]? = nil, options: PermutationOptions = .init()) throws {
-        try PermutationCipher.validate(firstKey, name: "erste")
-        if let k = secondKey, !k.isEmpty { try PermutationCipher.validate(k, name: "zweite") }
+        try PermutationCipher.validate(firstKey, name: "first")
+        if let k = secondKey, !k.isEmpty { try PermutationCipher.validate(k, name: "second") }
         self.firstKey = firstKey
         self.secondKey = (secondKey?.isEmpty ?? true) ? nil : secondKey
         self.options = options
     }
 
     static func validate(_ key: [Int], name: String) throws {
-        guard !key.isEmpty else { throw CTError("Die \(name) Permutation ist leer.") }
+        guard !key.isEmpty else { throw CTError("The \(name) permutation is empty.") }
         guard key.count <= maxKeyLength else {
-            throw CTError("Die \(name) Permutation ist zu lang (höchstens \(maxKeyLength) Elemente).")
+            throw CTError("The \(name) permutation is too long (at most \(maxKeyLength) elements).")
         }
         var seen = [Bool](repeating: false, count: key.count)
         for v in key {
             guard v >= 1 && v <= key.count else {
-                if v == 0 { throw CTError("Die \(name) Permutation enthält eine 0. Die Zählung beginnt bei 1.") }
-                throw CTError("Der Wert \(v) der \(name)n Permutation ist zu groß (erlaubt: 1…\(key.count)).")
+                if v == 0 { throw CTError("The \(name) permutation contains a 0. Counting starts at 1.") }
+                throw CTError("The value \(v) of the \(name) permutation is too large (allowed: 1…\(key.count)).")
             }
-            guard !seen[v - 1] else { throw CTError("Der Wert \(v) kommt in der \(name)n Permutation mehrfach vor.") }
+            guard !seen[v - 1] else { throw CTError("The value \(v) occurs more than once in the \(name) permutation.") }
             seen[v - 1] = true
         }
     }

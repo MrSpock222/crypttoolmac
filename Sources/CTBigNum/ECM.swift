@@ -33,7 +33,7 @@ extension Factorization {
         let level0 = min(startLevel, ecmLevels.count - 1)
         for li in level0..<ecmLevels.count {
             let lv = ecmLevels[li]
-            log?("ECM: B1 = \(lv.b1), bis zu \(lv.curves) Kurven (Faktoren bis ca. \(lv.digits) Stellen)")
+            log?("ECM: B1 = \(lv.b1), up to \(lv.curves) curves (factors up to approx. \(lv.digits) digits)")
             let counter = ParallelSearchState()
             DispatchQueue.concurrentPerform(iterations: workerCount) { _ in
                 while !state.isDone && !deadline.expired {

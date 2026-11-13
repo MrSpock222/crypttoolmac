@@ -24,44 +24,44 @@ struct SignatureDemoView: View {
     @CTState private var started = false
     @StateObject private var windowBox = PKIWindowBox()
 
-    private let f1 = "\n\nMit F1 erhalten Sie Informationen darüber, in welcher Reihenfolge\nSie die Aktivitäten im Datenflussplan steuern können."
+    private let f1 = "\n\nUse F1 to get information about the sequence you\nshould follow to activate this button."
 
     var body: some View {
         VStack(spacing: 6) {
             Grid(horizontalSpacing: 14, verticalSpacing: 4) {
                 GridRow {
-                    PKIFlowButton(title: "Dokument öffnen", shape: .hexagon, state: docBytes.isEmpty ? .todo : .done, width: 150, action: openDocument)
-                    PKIFlowButton(title: "Hashverfahren wählen", shape: .hexagon, state: hash == nil ? .todo : .done, width: 150, action: chooseHash)
-                    PKIFlowButton(title: "Schlüssel generieren", shape: .hexagon, state: rsa == nil ? .todo : .done, width: 150, action: generateKey)
-                    PKIFlowButton(title: "Zertifikat bereitstellen", shape: .hexagon,
+                    PKIFlowButton(title: "Open document", shape: .hexagon, state: docBytes.isEmpty ? .todo : .done, width: 150, action: openDocument)
+                    PKIFlowButton(title: "Select hash function", shape: .hexagon, state: hash == nil ? .todo : .done, width: 150, action: chooseHash)
+                    PKIFlowButton(title: "Generate key", shape: .hexagon, state: rsa == nil ? .todo : .done, width: 150, action: generateKey)
+                    PKIFlowButton(title: "Provide certificate", shape: .hexagon,
                                   state: rsa == nil ? .inactive : (cert == nil ? .todo : .done), width: 150, action: provideCertificate)
                 }
                 GridRow { PKIFlowArrow(); PKIFlowArrow(); PKIFlowArrow(); PKIFlowArrow() }
                 GridRow {
-                    PKIFlowButton(title: "Dokument", shape: .diamond, state: docBytes.isEmpty ? .inactive : .info, width: 150, action: infoDocument)
-                    PKIFlowButton(title: "Hashverfahren", shape: .diamond, state: hash == nil ? .inactive : .info, width: 150, action: infoHashAlg)
-                    PKIFlowButton(title: "Schlüssel", shape: .diamond, state: rsa == nil ? .inactive : .info, width: 150, action: infoKey)
-                    PKIFlowButton(title: "Zertifikat", shape: .diamond, state: cert == nil ? .inactive : .info, width: 150, action: infoCert)
+                    PKIFlowButton(title: "Document", shape: .diamond, state: docBytes.isEmpty ? .inactive : .info, width: 150, action: infoDocument)
+                    PKIFlowButton(title: "Hash function", shape: .diamond, state: hash == nil ? .inactive : .info, width: 150, action: infoHashAlg)
+                    PKIFlowButton(title: "RSA key", shape: .diamond, state: rsa == nil ? .inactive : .info, width: 150, action: infoKey)
+                    PKIFlowButton(title: "Certificate", shape: .diamond, state: cert == nil ? .inactive : .info, width: 150, action: infoCert)
                 }
                 GridRow { PKIFlowArrow(); Color.clear.frame(width: 1, height: 1); PKIFlowArrow(); PKIFlowArrow() }
                 GridRow {
-                    PKIFlowButton(title: "Hashwert berechnen", shape: .rectangle,
+                    PKIFlowButton(title: "Compute hash value", shape: .rectangle,
                                   state: (docBytes.isEmpty || hash == nil) ? .inactive : (hashValue == nil ? .todo : .done), width: 150, action: computeHash)
                     Color.clear.frame(width: 1, height: 1)
-                    PKIFlowButton(title: "Hashwert verschlüsseln", shape: .rectangle,
+                    PKIFlowButton(title: "Encrypt hash value", shape: .rectangle,
                                   state: (hashValue == nil || rsa == nil) ? .inactive : (encHash == nil ? .todo : .done), width: 150, action: encryptHash)
-                    PKIFlowButton(title: "Signatur mit Zertifikat verknüpfen", shape: .rectangle,
+                    PKIFlowButton(title: "Generate signature", shape: .rectangle,
                                   state: (encHash == nil || cert == nil) ? .inactive : (signed == nil ? .todo : .done), width: 150, action: combine)
                 }
                 GridRow { PKIFlowArrow(); Color.clear.frame(width: 1, height: 1); PKIFlowArrow(); PKIFlowArrow() }
                 GridRow {
-                    PKIFlowButton(title: "Hashwert", shape: .diamond, state: hashValue == nil ? .inactive : .info, width: 150, action: infoHash)
+                    PKIFlowButton(title: "Hash value", shape: .diamond, state: hashValue == nil ? .inactive : .info, width: 150, action: infoHash)
                     Color.clear.frame(width: 1, height: 1)
-                    PKIFlowButton(title: "Verschlüsselter Hashwert", shape: .diamond, state: encHash == nil ? .inactive : .info, width: 150, action: infoEncHash)
-                    PKIFlowButton(title: "Signatur", shape: .diamond, state: signed == nil ? .inactive : .info, width: 150, action: infoSign)
+                    PKIFlowButton(title: "Encrypted hash value", shape: .diamond, state: encHash == nil ? .inactive : .info, width: 150, action: infoEncHash)
+                    PKIFlowButton(title: "Signature", shape: .diamond, state: signed == nil ? .inactive : .info, width: 150, action: infoSign)
                 }
                 GridRow {
-                    PKIFlowButton(title: "Abbrechen", shape: .oval, state: .done, width: 130, height: 38) { windowBox.window?.close() }
+                    PKIFlowButton(title: "Cancel", shape: .oval, state: .done, width: 130, height: 38) { windowBox.window?.close() }
                     PKIHelpButton(action: .signatureDemo)
                     Color.clear.frame(width: 1, height: 1)
                     PKIFlowButton(title: "OK", shape: .oval, state: signed == nil ? .inactive : .done, width: 130, height: 38, action: output)
@@ -72,7 +72,7 @@ struct SignatureDemoView: View {
         }
         .padding(14)
         .frame(minWidth: 720)
-        .background(PKIWindowReader { windowBox.window = $0; $0?.title = "Schrittweise Signaturerzeugung" })
+        .background(PKIWindowReader { windowBox.window = $0; $0?.title = "Step by Step Signature Generation" })
         .onAppear {
             guard !started else { return }
             started = true
@@ -84,17 +84,17 @@ struct SignatureDemoView: View {
         }
     }
 
-    private func inactive(_ m: String = "") { PKIModal.warning("Dieser Button ist im Moment inaktiv!" + (m.isEmpty ? "" : "\n" + m) + f1) }
+    private func inactive(_ m: String = "") { PKIModal.warning("This button is currently inactive!" + (m.isEmpty ? "" : "\n" + m) + f1) }
 
     // MARK: Actions
 
     private func openDocument() {
         let p = NSOpenPanel()
-        p.title = "Dokument öffnen"
+        p.title = "Open document"
         p.canChooseDirectories = false
         guard p.runModal() == .OK, let u = p.url else { return }
         let d = (try? Data(contentsOf: u)).map { [UInt8]($0) } ?? []
-        guard !d.isEmpty else { return PKIModal.warning("Datei ist leer!\nBitte wählen Sie eine nicht leere Datei aus.") }
+        guard !d.isEmpty else { return PKIModal.warning("File is empty!\nPlease select a non empty file.") }
         docBytes = d
         docName = u.lastPathComponent
         hashValue = nil; encHash = nil; signed = nil
@@ -104,7 +104,7 @@ struct SignatureDemoView: View {
     private func chooseHash() {
         var chosen = hash ?? .sha1
         var ok = false
-        PKIModal.run(title: "Hashfunktion wählen") { close in
+        PKIModal.run(title: "Select a Hash Function") { close in
             PKIHashChooser(selection: chosen) { h in chosen = h; ok = true; close() } cancel: { close() }
         }
         guard ok else { return }
@@ -115,7 +115,7 @@ struct SignatureDemoView: View {
 
     private func generateKey() {
         var result: RSAKeyPair?
-        PKIModal.run(title: "RSA-Schlüssel generieren") { close in
+        PKIModal.run(title: "Generate RSA Key") { close in
             PKIDemoRSAKeyView(initial: rsa) { k in result = k; close() } cancel: { close() }
         }
         guard let k = result else { return }
@@ -125,9 +125,9 @@ struct SignatureDemoView: View {
     }
 
     private func provideCertificate() {
-        guard let k = rsa else { return inactive("Sie müssen vorher einen Schlüssel generieren.") }
+        guard let k = rsa else { return inactive("Please generate a key first.") }
         var result: (StoredKey, RSAKeyPair, Bool)?
-        PKIModal.run(title: "Zertifikat und PSE erzeugen") { close in
+        PKIModal.run(title: "Create Certificate and PSE") { close in
             PKICertificateGenerationView(key: k) { stored, pair, imported in result = (stored, pair, imported); close() } cancel: { close() }
         }
         guard let (stored, pair, imported) = result else { return }
@@ -165,12 +165,12 @@ struct SignatureDemoView: View {
 
     private func output() {
         guard let s = signed, let h = hash, let c = cert else { return inactive() }
-        DocumentFactory.openResult(s, title: "RSA-Signatur mit \(h.rawValue) von <\(docName)>", parent: document, viewMode: .hex)
-        var msg = "Herzlichen Glückwunsch!\n\nSie haben erfolgreich eine RSA-Signatur des Dokumentes <\(docName)> erzeugt.\n\n"
+        DocumentFactory.openResult(s, title: "RSA (\(h.rawValue)) signature of <\(docName)>", parent: document, viewMode: .hex)
+        var msg = "Congratulations! \n\nYou have successfully created an RSA signature of the document \(docName). \n\n"
         msg += certImported
-            ? "Den dazu verwendeten RSA-Schlüssel haben Sie aus der PSE-Datei <\(c.ct1Identifier).pse> zusammen mit einem Zertifikat importiert.\n\n"
-            : "Den dazu von Ihnen erzeugten RSA-Schlüssel haben Sie in der PSE-Datei <\(c.ct1Identifier).pse> zusammen mit einem Zertifikat gespeichert.\n\n"
-        msg += "Als Hashverfahren wählten Sie <\(h.rawValue)>."
+            ? "For this purpose you have imported the RSA key together with a certificate from the PSE file: \(c.ct1Identifier). \n\n"
+            : "For this purpose you have generated a new RSA key and stored it together with a certificate in the PSE file \(c.ct1Identifier). \n\n"
+        msg += "As the hash function you have selected \(h.rawValue). "
         windowBox.window?.close()
         PKIModal.info(msg)
     }
@@ -178,32 +178,32 @@ struct SignatureDemoView: View {
     // MARK: Info symbols
 
     private func infoDocument() {
-        guard !docBytes.isEmpty else { return inactive("Sie müssen vorher eine Datei auswählen.") }
-        infoTitle = "Dokument: \(docName)"
+        guard !docBytes.isEmpty else { return inactive("Please select a file.") }
+        infoTitle = "Document: \(docName)"
         infoText = HexDump.format(Array(docBytes.prefix(64 * 1024)))
     }
 
     private func infoHashAlg() {
         guard let h = hash else { return inactive() }
-        infoTitle = "Hashverfahren"
-        infoText = "Name:                   \(h.rawValue) \nLänge in Bit:           \(h.bits)\nAlgorithmus-ID:         \(PKIText.hex(h.digestInfoPrefix))\n"
+        infoTitle = "Hash function"
+        infoText = "Name:                   \(h.rawValue) \nLength in bits:         \(h.bits)\nAlgorithm ID:           \(PKIText.hex(h.digestInfoPrefix))\n"
     }
 
     private func infoKey() {
         guard let k = rsa else { return inactive() }
-        infoTitle = "RSA-Schlüssel des Signierers"
-        infoText = "Modullänge in Bit:      \(k.n.bitLength)\nRSA-Modul N:            \(k.n)\nphi(N) = (p-1)(q-1):    \(k.phi)\nÖffentlicher Schlüssel: \(k.e)\nPrivater Schlüssel:     \(k.d)\n"
+        infoTitle = "RSA key of signer"
+        infoText = "Bit length of N:         \(k.n.bitLength)\nRSA modulus N:          \(k.n)\nphi(N) = (p-1)(q-1):    \(k.phi)\nPublic key:             \(k.e)\nPrivate key:            \(k.d)\n"
     }
 
     private func infoCert() {
         guard let c = cert else { return inactive() }
-        infoTitle = "Zertifikat des Signierers (wird der Signatur zur Prüfung beigefügt)"
+        infoTitle = "Certificate of signer (added to signature for examination)"
         infoText = PKICertificate.text(c)
     }
 
     private func infoHash() {
-        guard let hv = hashValue, let h = hash else { return inactive("Sie müssen vorher die Datei mit dem symmetrischen Schlüssel verschlüsseln.") }
-        infoTitle = "\(h.rawValue)-Hashwert von <\(docName)>"
+        guard let hv = hashValue, let h = hash else { return inactive("Please encrypt the document with your session key.") }
+        infoTitle = "\(h.rawValue) hash of <\(docName)>"
         infoText = PKIText.hex(hv)
     }
 
@@ -212,20 +212,20 @@ struct SignatureDemoView: View {
         let kLen = (k.n.bitLength + 7) / 8
         let block = (try? PKIRSASignature.encode(hv, hash: h, k: kLen)) ?? []
         let padLen = max(0, kLen - h.digestInfoPrefix.count - hv.count)
-        infoTitle = "Mit dem privaten Schlüssel des Signierers verschlüsselter Hashwert"
-        var t = "Padding-String:         \(PKIText.hex(Array(block.prefix(padLen))))\n"
-        t += "Algorithmus-ID:         \(PKIText.hex(h.digestInfoPrefix))\n"
-        t += "Hashwert:               \(PKIText.hex(hv))\n"
-        t += "ASN-1 Hashwert:         \(PKIText.hex(block))\n"
-        t += "Länge in Bit:           \(block.count * 8)\n"
-        t += "Verschl. Hashwert:      \(PKIText.hex(e))\n"
-        t += "Länge in Bit:           \(e.count * 8)\n"
+        infoTitle = "Hash value encrypted with the private key of the signer"
+        var t = "Padding string:         \(PKIText.hex(Array(block.prefix(padLen))))\n"
+        t += "Algorithm ID:           \(PKIText.hex(h.digestInfoPrefix))\n"
+        t += "Hash value:             \(PKIText.hex(hv))\n"
+        t += "ASN-1 hash value:       \(PKIText.hex(block))\n"
+        t += "Length in bits:         \(block.count * 8)\n"
+        t += "Encrypted hash value:   \(PKIText.hex(e))\n"
+        t += "Length in bits:         \(e.count * 8)\n"
         infoText = t
     }
 
     private func infoSign() {
         guard let s = signed, let h = hash else { return inactive() }
-        infoTitle = "RSA (\(h.shortName))-Signatur von <\(docName)>"
+        infoTitle = "RSA (\(h.shortName)) signature of <\(docName)>"
         infoText = HexDump.format(s)
     }
 }
@@ -244,14 +244,14 @@ struct PKIHashChooser: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            PKIGroup("Hashfunktion") {
+            PKIGroup("Hash function") {
                 Picker("", selection: $selection) {
                     ForEach(PKISignHash.demoCases) { Text($0.rawValue).tag($0) }
                 }.pickerStyle(.radioGroup).labelsHidden()
             }
             HStack {
                 Button("OK") { ok(selection) }.keyboardShortcut(.defaultAction)
-                Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: cancel).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -285,37 +285,37 @@ struct PKIDemoRSAKeyView: View {
         let n = (pv ?? 0) * (qv ?? 0)
         let phi = primesOK ? (pv! - 1) * (qv! - 1) : BigUInt(0)
         VStack(alignment: .leading, spacing: 8) {
-            Text("Wählen Sie zwei Primzahlen p und q. Die Zahl N=pq ist der öffentliche RSA-Modul, und phi(N)=(p-1)(q-1) ist die Eulersche Phi-Funktion. Der öffentliche Schlüssel e muss teilerfremd zu phi(N) sein; der geheime Schlüssel d wird daraus berechnet.")
+            Text("Choose two prime numbers p and q. The number N = pq is the public RSA modulus and phi(N) = (p-1)(q-1) is the Euler phi function. Public key e is coprime to phi(N). The private key  d = e^(-1)  (mod phi(N))  is calculated from this.")
                 .font(.callout).fixedSize(horizontal: false, vertical: true)
-            PKIGroup("Primzahleneingabe") {
+            PKIGroup("Prime number entry") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
                     GridRow {
-                        Text("Primzahl p"); TextField("", text: $p).font(.system(.body, design: .monospaced))
-                        Button("Primzahlen generieren...") { generatePrimes() }
+                        Text("Prime number p"); TextField("", text: $p).font(.system(.body, design: .monospaced))
+                        Button("Generate prime numbers...") { generatePrimes() }
                     }
                     GridRow {
-                        Text("Primzahl q"); TextField("", text: $q).font(.system(.body, design: .monospaced))
-                        Text(p.isEmpty && q.isEmpty ? "" : (primesOK ? "p und q sind prim" : "p oder q ist keine Primzahl"))
+                        Text("Prime number q"); TextField("", text: $q).font(.system(.body, design: .monospaced))
+                        Text(p.isEmpty && q.isEmpty ? "" : (primesOK ? "p and q are prime numbers." : "p or q is NOT a prime number !"))
                             .font(.caption).foregroundStyle(primesOK ? Color.secondary : Color.red)
                     }
                 }
             }
-            PKIGroup("RSA-Schlüssel-Parameter für Empfänger") {
+            PKIGroup("RSA  parameter") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
-                    GridRow { Text("Bitlänge"); Text(primesOK ? "\(n.bitLength)" : "").textSelection(.enabled); Text("") }
-                    GridRow { Text("RSA-Modul N"); Text(verbatim: primesOK ? n.description : "").textSelection(.enabled).lineLimit(3); Text("(öffentlich)") }
-                    GridRow { Text("phi(N) = (p-1)(q-1)"); Text(verbatim: primesOK ? phi.description : "").textSelection(.enabled).lineLimit(3); Text("(geheim)") }
+                    GridRow { Text("Length"); Text(primesOK ? "\(n.bitLength)" : "").textSelection(.enabled); Text("") }
+                    GridRow { Text("RSA modulus N"); Text(verbatim: primesOK ? n.description : "").textSelection(.enabled).lineLimit(3); Text("(public)") }
+                    GridRow { Text("phi(N) = (p-1)(q-1)"); Text(verbatim: primesOK ? phi.description : "").textSelection(.enabled).lineLimit(3); Text("(secret)") }
                     GridRow {
-                        Text("Öffentlicher Schlüssel e"); TextField("", text: $e).font(.system(.body, design: .monospaced))
-                        Text(primesOK && key == nil ? "e ist nicht teilerfremd zu phi(N)" : "").font(.caption).foregroundStyle(.red)
+                        Text("Public key e"); TextField("", text: $e).font(.system(.body, design: .monospaced))
+                        Text(primesOK && key == nil ? "e is not coprime to phi(N)" : "").font(.caption).foregroundStyle(.red)
                     }
-                    GridRow { Text("Geheimer Schlüssel d"); Text(verbatim: key.map { $0.d.description } ?? "").textSelection(.enabled).lineLimit(3); Text("") }
+                    GridRow { Text("Private key d"); Text(verbatim: key.map { $0.d.description } ?? "").textSelection(.enabled).lineLimit(3); Text("") }
                 }
             }
             HStack {
-                Button("Schlüssel übernehmen") { if let k = key { ok(k) } }.keyboardShortcut(.defaultAction).disabled(key == nil)
+                Button("Store key") { if let k = key { ok(k) } }.keyboardShortcut(.defaultAction).disabled(key == nil)
                 Spacer()
-                Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: cancel).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -329,13 +329,13 @@ struct PKIDemoRSAKeyView: View {
 
     private func generatePrimes() {
         let a = NSAlert()
-        a.messageText = "Primzahlen generieren"
-        a.informativeText = "Bitlänge der Primzahlen p und q:"
+        a.messageText = "Prime Number Generation"
+        a.informativeText = "Bit length of the prime numbers p and q:"
         let f = NSTextField(frame: NSRect(x: 0, y: 0, width: 120, height: 24))
         f.stringValue = "512"
         a.accessoryView = f
         a.addButton(withTitle: "OK")
-        a.addButton(withTitle: "Abbrechen")
+        a.addButton(withTitle: "Cancel")
         guard a.runModal() == .alertFirstButtonReturn, let bits = Int(f.stringValue), bits >= 8, bits <= 2048 else { return }
         let x = Primality.randomPrime(bits: bits)
         var y = Primality.randomPrime(bits: bits)
@@ -362,33 +362,33 @@ struct PKICertificateGenerationView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            PKIGroup("Öffentliche RSA-Parameter") {
+            PKIGroup("Public RSA parameter") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 4) {
-                    GridRow { Text("Bitlänge:"); Text("\(key.n.bitLength)") }
-                    GridRow { Text("RSA-Modul N:"); Text(verbatim: key.n.description).lineLimit(2).textSelection(.enabled) }
-                    GridRow { Text("Öffentlicher Schlüssel e:"); Text(verbatim: key.e.description) }
+                    GridRow { Text("Bit length:"); Text("\(key.n.bitLength)") }
+                    GridRow { Text("RSA modulus N:"); Text(verbatim: key.n.description).lineLimit(2).textSelection(.enabled) }
+                    GridRow { Text("Public key e:"); Text(verbatim: key.e.description) }
                 }
             }
-            PKIGroup("Persönliche Daten für das Zertifikat") {
+            PKIGroup("Personal data for the certificate") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
                     GridRow { Text("Name:"); TextField("", text: $name) }
-                    GridRow { Text("Vorname:"); TextField("", text: $firstName) }
-                    GridRow { Text("Schlüsselbezeichner:\n(optional)"); TextField("", text: $label) }
-                    GridRow { Text("PIN-Code:"); SecureField("", text: $pin) }
-                    GridRow { Text("PIN-Verifikation:"); SecureField("", text: $pin2) }
+                    GridRow { Text("First name:"); TextField("", text: $firstName) }
+                    GridRow { Text("Key identifier:\n(optional)"); TextField("", text: $label) }
+                    GridRow { Text("PIN:"); SecureField("", text: $pin) }
+                    GridRow { Text("PIN verification:"); SecureField("", text: $pin2) }
                 }
             }
-            PKIGroup("Generierte Namen für PSE und Zertifikat") {
+            PKIGroup("Generated names for PSE and certificate") {
                 Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 4) {
                     GridRow { Text("User Key ID:"); Text(preview).textSelection(.enabled) }
                     GridRow { Text("Distinguished Name:"); Text("CN=\(firstName) \(name) [\(Int(created.timeIntervalSince1970))], DC=cryptool, DC=org").textSelection(.enabled) }
                 }
             }
             HStack {
-                Button("Zertifkat und PSE erzeugen") { create() }.keyboardShortcut(.defaultAction)
-                Button("Zertifikat / Schlüssel importieren") { importKey() }
+                Button("Create Certificate and PSE") { create() }.keyboardShortcut(.defaultAction)
+                Button("Import certificate and key") { importKey() }
                 Spacer()
-                Button("Abbrechen", action: cancel).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: cancel).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -396,10 +396,10 @@ struct PKICertificateGenerationView: View {
     }
 
     private func create() {
-        if name.trimmingCharacters(in: .whitespaces).isEmpty { return PKIModal.warning("Bitte geben Sie einen Nachnamen ein.") }
-        if firstName.trimmingCharacters(in: .whitespaces).isEmpty { return PKIModal.warning("Bitte geben Sie einen Vornamen ein.") }
-        if pin.isEmpty { return PKIModal.warning("Bitte geben Sie einen PIN-Code ein.") }
-        if pin != pin2 { pin = ""; pin2 = ""; return PKIModal.warning("PIN und PIN-Verifikation stimmen nicht überein.\nBitte nochmal eingeben.") }
+        if name.trimmingCharacters(in: .whitespaces).isEmpty { return PKIModal.warning("Please enter a last name.") }
+        if firstName.trimmingCharacters(in: .whitespaces).isEmpty { return PKIModal.warning("Please enter a first name.") }
+        if pin.isEmpty { return PKIModal.warning("Please enter a PIN code.") }
+        if pin != pin2 { pin = ""; pin2 = ""; return PKIModal.warning("PIN and PIN confirmation do not agree.\\Please enter again.") }
         do {
             let k = try KeyStore.shared.add(lastName: name.trimmingCharacters(in: .whitespaces), firstName: firstName.trimmingCharacters(in: .whitespaces),
                                             label: label.trimmingCharacters(in: .whitespaces), material: .rsa(key), pin: pin, created: created)
@@ -410,9 +410,9 @@ struct PKICertificateGenerationView: View {
     /// Uses an RSA key pair of the key store instead (its key replaces the demo key).
     private func importKey() {
         var chosen: (UUID, String)?
-        PKIModal.run(title: "Zertifikat / Schlüssel importieren") { close in
-            PKIKeyChooser(headline: "Wählen Sie Ihren geheimen Schlüssel aus der Liste der PSEs aus:",
-                          note: "Bemerkung: Es werden nur Namen mit einem RSA Schlüssel angezeigt.",
+        PKIModal.run(title: "Import certificate and key") { close in
+            PKIKeyChooser(headline: "Select your secret key from the PSE list.",
+                          note: "Note: Only PSEs containing an RSA key are shown.",
                           filter: .rsaOnly, initial: nil, withPIN: true) { id, pin in chosen = (id, pin); close() } cancel: { close() }
         }
         guard let (id, pin) = chosen, let k = KeyStore.shared.key(id: id),

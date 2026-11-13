@@ -7,58 +7,58 @@ import CTBigNum
 
 /// CT1 string table entries (IDS_DH_*).
 enum DHText {
-    static let windowTitle = "Diffie-Hellman-Demo - Visualisierung des Schlüsselaustauschverfahrens nach Diffie-Hellman"
-    static let noSafePrime = "Keine sichere Primzahl!"
-    static let generatorInvalid = "Dem Generator konnte kein gültiger Wert zugewiesen werden, bitte überprüfen Sie Ihre Eingaben (1 < g < p)."
-    static let primeInvalid = "Der Primzahl konnte kein gültiger Wert zugewiesen werden, bitte wählen Sie ggf. einen kleineren Wert!"
-    static let ppNoInput = "Bitte lassen Sie die Eingabefelder nicht leer!"
-    static let ppNonDecimal = "Bitte geben Sie nur natürliche Zahlen in dezimaler Form ein (keine Buchstaben und/oder sonstige Sonderzeichen)."
-    static let ppPrimeInvalid = "Die von Ihnen eingegebene Zahl ist keine Primzahl!\nBitte beachten Sie, dass das Verfahren mit dem gewählten Primzahlmodul unter Umständen nicht sicher ist!"
-    static let ppGeneratorInvalid = "Sie wählten einen Generator (g), der entweder gleich Null, ein Vielfaches des Primzahlmoduls (p) oder anderweitig kritisch ist.\nBeachten Sie, dass das Verfahren mit dem gewählten Generator unter Umständen nicht sicher ist!"
-    static let secretDangerous = "Das von Ihnen eingegebene Geheimnis S ist entweder gleich Null oder gleich einem weiteren, kritischen Wert.\nBeachten Sie, dass das Verfahren mit dieser Wahl nicht sicher ist!"
-    static let secretPredictable = "Das von Ihnen eingegebene Geheimnis S ist 1. Das gewählte Geheimnis sollte größer als 1 sein.\nDas Verfahren ist mit diesem Geheimnis nicht sicher, da der ausgehandelte geheime und gemeinsame Schlüssel erratbar ist!\nVergleichen Sie bitte am Ende der Demo den geheimen und gemeinsamen Schlüssel mit dem öffentlichen Generator g bzw. den öffentlichen Teilschlüsseln."
-    static let secretExceedsPrime = "Das Geheimnis ist größer als der Primzahlmodul und wird deshalb verkürzt auf eine Zahl kleiner als diese Primzahl!"
-    static let secretSetAlice = "Alice hat ihr Geheimnis a gewählt. Da dies aber niemandem bekannt sein darf, werden im entsprechenden Textfeld nur Sternchen angezeigt."
-    static let secretSetBob = "Bob hat sein Geheimnis b gewählt. Da dies niemandem bekannt sein darf, werden im entsprechenden Textfeld nur Sternchen angezeigt."
-    static let publicAlice = "Alice hat ihren öffentlichen Teilschlüssel A = g^a mod p berechnet.\nDieser Teilschlüssel wird nun im entsprechenden Textfeld ausgegeben."
-    static let publicBob = "Bob hat seinen öffentlichen Teilschlüssel B = g^b mod p berechnet.\nDieser Teilschlüssel wird nun im entsprechenden Textfeld ausgegeben."
-    static let sessionAlice = "Alice hat anhand des öffentlichen Schlüssels von Bob (B) und ihres Geheimnisses (a) den gemeinsamen Schlüssel S = B^a = (g^b)^a berechnet.\nDieser Schlüssel wird nun im Textfeld unter dem Button angezeigt."
-    static let sessionBob = "Bob hat anhand des öffentlichen Schlüssels von Alice (A) und seines Geheimnisses (b) den gemeinsamen Schlüssel S = A^b = (g^a)^b berechnet.\nDieser Schlüssel wird nun im Textfeld unter dem Button angezeigt."
-    static let keyTooltip = "Anzeige des ausgehandelten geheimen Schlüssels und Abspeichern der Logdatei."
-    static let logCreated = "Der Protokollverlauf mit Ihren Zahlen wurde erfolgreich in ein Fenster im CrypTool-Hauptprogramm geschrieben."
-    static let verificationYes = "Verifikation erfolgreich! - Die Schlüssel von Alice und Bob sind identisch."
-    static let verificationNo = "Verifikation fehlgeschlagen! - Die Schlüssel von Alice und Bob sind nicht identisch!"
+    static let windowTitle = "Diffie-Hellman Demonstration - Visualization of the Diffie-Hellman Key Exchange Protocol"
+    static let noSafePrime = "No safe prime number!"
+    static let generatorInvalid = "Generator value incorrect! (1 < g < p)"
+    static let primeInvalid = "An invalid value was assigned to the prime. Please correct your input or let CrypTool generate an appropriate prime by clicking the 'Generate Prime' button."
+    static let ppNoInput = "Please fill all entry fields!"
+    static let ppNonDecimal = "Please use natural numbers in decimal format only (no special characters)!"
+    static let ppPrimeInvalid = "The number you chose is NOT a prime!\nThus, the proceeding might not be safe!"
+    static let ppGeneratorInvalid = "You chose a generator (g) which is either zero, a multiple of the prime module (p) or otherwise considered critical!\nThus, the following proceeding might not be safe!"
+    static let secretDangerous = "The secret number you chose is either zero or otherwise considered critical!\nThus, the proceeding might not be safe!"
+    static let secretPredictable = "The secret number you chose is one. The chosen secret number should be greater than one.\nThe proceeding with this secret might not be safe, because someone can guess the calculated common secret (session key)!\nAt the end of this demo, please compare the session key with the public generator g respectively with public shared keys."
+    static let secretExceedsPrime = "The secret exceeds the prime modulus and therefore it is shortened to a number smaller than this prime!"
+    static let secretSetAlice = "Alice has chosen her secret! - Only wildcards are displayed in the text field to underline that the secret is solely known to Alice."
+    static let secretSetBob = "Bob has chosen his secret! - Only wildcards are displayed in the text field to underline that the secret is solely known to Bob."
+    static let publicAlice = "Alice has computed her shared key. It will be displayed in the respective text field."
+    static let publicBob = "Bob has computed his shared key. It will be displayed in the respective text field."
+    static let sessionAlice = "Alice has computed the Session Key on her part. - It will be displayed in the text field below the 'Calculate' button."
+    static let sessionBob = "Bob has computed the Session Key on his part. - It will be displayed in the text field below the 'Calculate' button."
+    static let keyTooltip = "Show a dialog with the negotiated secret key and to store log file."
+    static let logCreated = "The log text of the procedure was successfully written into the main window of the CrypTool application."
+    static let verificationYes = "Verification successful! - The keys of Alice and Bob are identical!"
+    static let verificationNo = "Verification failed! The keys of Alice and Bob are NOT identical!"
 
     static let intro = """
-    Willkommen zur Visualisierung des Diffie-Hellman-Schlüsselaustauschverfahrens!
+    Welcome to the visualization of the Diffie-Hellman key exchange protocol.
 
-    Das Verfahren behandelt die folgende Problemstellung:
+    The protocol deals with the following problem:
 
-    Zwei Kommunikationspartner -- in diesem Fall Alice und Bob -- wollen einen geheimen Schlüssel über einen unsicheren Kanal aushandeln.
-    Dabei soll jedoch kein Angreifer die Möglichkeit haben, den ausgehandelten Schlüssel zu erlangen, auch wenn er den Kanal komplett abhören kann.
+    Two communication partners - Alice and Bob for instance - want to negotiate on a secret key over an insecure line.
+    However, nobody should be able to acquire the key although listening into the line constantly.
 
-    Dieses Problem wird mit dem Schlüsselaustauschverfahren nach Diffie-Hellman gelöst.
+    We will use the already mentioned key exchange protocol by Diffie-Hellman to solve this problem.
 
-    Die folgende interaktive Visualisierung des Verfahrens erfordert Benutzereingaben von Ihnen.
+    Since this demonstration is an interactive visualization, you will be prompted for certain inputs a couple of times.
 
-    Bei Fragen erhalten Sie mit der F1-Taste kontextbezogene Hilfe.
+    Please feel free to use the context-sensitive help by pressing F1 whenever any obscurities occur.
     """
 
     /// Info dialogs preceding the five steps (IDD_DIFFIEHELLMAN_SETPUBLIC … _GENERATEFINALKEY).
     static let steps: [(caption: String, text: String)] = [
-        ("Öffentliche Parameter setzen",
-         "Nach einem Klick auf OK werden Sie aufgefordert, die öffentlichen Parameter des Schlüsselaustauschs einzugeben, den Primzahlmodul (p) und den Generator (g)."),
-        ("Geheimnisse wählen",
-         "Sie können nun jeweils nacheinander die Geheimnisse für Alice (a) bzw. Bob (b) festlegen. Die entsprechenden Buttons werden nach einem Klick auf OK aktiviert."),
-        ("Öffentliche Teilschlüssel erzeugen",
-         "Nun können Sie die öffentlichen Schlüssel von Alice (A) und Bob (B) erzeugen, sofern Sie im vorigen Schritt schon deren Geheimnisse a und b festgelegt haben.\n\nDie beiden Teilschlüssel lassen sich wie folgt berechnen: A=g^a mod p bzw. B=g^b mod p."),
-        ("Öffentliche Teilschlüssel austauschen",
-         "Damit Alice und Bob letztendlich ihren gemeinsamen Schlüssel S berechnen können, müssen zunächst ihre öffentlichen Schlüssel A und B ausgetauscht werden."),
-        ("Geheimen Schlüssel generieren",
-         "Nachdem Sie auf die Schaltfläche 'OK' gedrückt haben, können Sie getrennt voneinander für Alice und Bob den geheimen und gemeinsamen Schlüssel S berechnen.\n\nDieser gemeinsame Session Key S wird auf Seiten von Alice berechnet als B^a mod p und auf Seiten von Bob als A^b mod p."),
+        ("Set Public Parameters",
+         "After clicking the 'OK' button you will be prompted for the public parameters of the Diffie-Hellman key exchange protocol, that is the prime module (p) and the generator (g)."),
+        ("Choose Secrets",
+         "Now you can separately choose the secret numbers for Alice (a) and Bob (b). The necessary buttons will be activated as soon as you click the 'OK' button."),
+        ("Create Shared Keys",
+         "If you already chose secret numbers for Alice (a) or Bob (b), you can create their according shared keys A and B now.\n\nThe shared keys are computed as follows:\nA=g^a mod p and B=g^b mod p."),
+        ("Exchange Shared Keys",
+         "Before Alice and Bob can compute their Session Key, their previously calculated shared keys need to be exchanged. Please exchange the keys by clicking the 'OK' button."),
+        ("Generate Common Session Key",
+         "All preconditions to generate a common and secret Session Key S for Alice and Bob are fulfilled. You can generate Alice's and Bob's Session Key after a click on 'OK'.\n\nThe common Session Key S is computed by Alice as B^a mod p, and by Bob as A^b mod p."),
     ]
 
-    static let finalInfo = "Mit dem Diffie-Hellman-Verfahren wurde erfolgreich ein gemeinsamer und geheimer Schlüssel erzeugt.\n\nDieser geheime Schlüssel kann nun als Sessionkey für eine folgende symmetrische Verschlüsselung verwendet werden.\n\nDurch Drücken des Schlüsselsymbols erhalten Sie Details zum Verfahren mit den von Ihnen gewählten Zahlen."
+    static let finalInfo = "Using Diffie-Hellman key exchange a common and secret key was established.\n\nThis secret key can now be used as a session key in order to do symmetric encryption.\n\nYou can get the details how this protocol worked with the numbers you chose by hitting the key symbol."
 }
 
 @MainActor
@@ -67,10 +67,10 @@ enum DHAlert {
     static func step(_ i: Int) -> Bool {
         let a = NSAlert()
         a.alertStyle = .informational
-        a.messageText = "Schritt \(i + 1): \(DHText.steps[i].caption)"
+        a.messageText = "Step \(i + 1): \(DHText.steps[i].caption)"
         a.informativeText = DHText.steps[i].text
         a.addButton(withTitle: "OK")
-        a.addButton(withTitle: "Abbrechen")
+        a.addButton(withTitle: "Cancel")
         return a.runModal() == .alertFirstButtonReturn
     }
 
@@ -142,7 +142,7 @@ final class DHModel: ObservableObject {
         introPresented = true
         guard CT1Prefs.bool("dh.showIntro", true) else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
-            window.sheet("Einleitung Diffie-Hellman-Demo") { close in
+            window.sheet("Introduction Diffie-Hellman Demonstration") { close in
                 CT1IntroDialog(text: DHText.intro, prefKey: "dh.showIntro") { [weak self] in
                     close()
                     self?.showIntro = CT1Prefs.bool("dh.showIntro", true)
@@ -156,7 +156,7 @@ final class DHModel: ObservableObject {
     func step1() {
         if showInfo && !DHAlert.step(0) { return }
         let p0 = hasParties ? prime : "", g0 = hasParties ? generator : ""
-        window.sheet("Öffentliche Parameter setzen") { close in
+        window.sheet("Set Public Parameters") { close in
             DHPublicParametersDialog(initialPrime: p0, initialGenerator: g0, close: close) { [weak self] p, g, safe in
                 self?.applyParameters(p, g, safe: safe)
             }
@@ -185,7 +185,7 @@ final class DHModel: ObservableObject {
     }
 
     func step(_ i: Int) {
-        guard hasParties else { DHAlert.warning("Ein interner Fehler ist aufgetreten!"); return }
+        guard hasParties else { DHAlert.warning("An internal error has occurred!"); return }
         if showInfo && !DHAlert.step(i) { return }
         perform(i)
     }
@@ -194,7 +194,7 @@ final class DHModel: ObservableObject {
         guard hasParties else { return }
         let name = alice ? "Alice" : "Bob"
         let prev = alice ? secretA : secretB
-        window.sheet("\(name)'s Geheimnis festlegen") { close in
+        window.sheet("Choose \(name)'s secret") { close in
             DHSecretInputDialog(party: name, prime: BigUInt(self.prime) ?? 0, initialSecret: prev, close: close) { [weak self] s, exceeds in
                 self?.applySecret(s, alice: alice, exceedsPrime: exceeds)
             }
@@ -238,7 +238,7 @@ final class DHModel: ObservableObject {
 
     func showKeyDetails() {
         let a = sessionA, b = sessionB, log = log
-        window.sheet("Schlüssel-Details - Geheimer und gemeinsamer Schlüssel von Alice und Bob") { close in
+        window.sheet("Key Details - Secret and Common Key of Alice and Bob") { close in
             DHKeyDetailsDialog(sessionAlice: a, sessionBob: b, log: log, close: close)
         }
         done[11] = true
@@ -256,7 +256,7 @@ final class DHModel: ObservableObject {
         if !isActive(11) { done[11] = false }
         clearFields(b)
         if done[9] && done[10] {
-            DHAlert.info(DHText.finalInfo, title: "Diffie-Hellman-Schlüsselaustausch erfolgreich")
+            DHAlert.info(DHText.finalInfo, title: "Diffie-Hellman Key Exchange Successful")
             log = DHLog.text(prime: prime, generator: generator, secretA: secretA, secretB: secretB,
                              sharedA: publicKey(alice: true).description, sharedB: publicKey(alice: false).description,
                              sessionA: sessionA, sessionB: sessionB)
@@ -291,23 +291,23 @@ enum DHLog {
         let p = BigUInt(prime) ?? 1
         let ra = p.isZero ? "0" : ((BigUInt(secretA) ?? 0) % p).description
         let rb = p.isZero ? "0" : ((BigUInt(secretB) ?? 0) % p).description
-        var t = "Zunächst einigten sich Alice und Bob auf die öffentlichen Parameter des Schlüsselaustauschs. Hierzu wählten sie eine Primzahl p und einen Generator g:" + br
+        var t = "At first, Alice and Bob agreed on the public parameters. So they chose a prime p and a generator g:" + br
         t += "p: " + prime + br
         t += "g: " + generator + br
-        t += "Nun wählten sowohl Alice als auch Bob jeweils für sich ihre Geheimzahlen. Alice und Bob legten ihre Geheimnisse a und b wie folgt fest:" + br
+        t += "Alice chose her secret number 'a' while Bob chose his secret number 'b':" + br
         t += "a: " + secretA + br
         t += "b: " + secretB + br
-        t += "Falls die gewählten Geheimnisse a und b größer oder gleich dem Primzahlmodul p sind, werden sie Modulo p reduziert. Nachfolgend sind die tatsächlich verwendeten Werte angegeben:" + br
-        t += "a (reduziert mod p):\n" + ra + br
-        t += "b (reduziert mod p):\n" + rb + br
-        t += "Anhand ihrer zuvor gewählten Geheimnisse erzeugte Alice ihren öffentlichen Teilschlüssel A. Bob erzeugte parallel dazu seinen öffentlichen Teilschlüssel B:" + br
+        t += "If the chosen secret values a and b are greater or equal the prime module p, then they need to be reduced modulo p. The actual values are given below:" + br
+        t += "a (reduced mod p):\n" + ra + br
+        t += "b (reduced mod p):\n" + rb + br
+        t += "On the basis of the previously chosen secret numbers, Alice and Bob created their respective shared keys. Alice computed her shared key A, while Bob computed his shared key B:" + br
         t += "A: " + sharedA + br
         t += "B: " + sharedB + br
-        t += "Als nächstes tauschten Alice und Bob ihre öffentlichen Teilschlüssel aus, d.h. Alice sendete ihren Schlüssel A an Bob und Bob sendete seinen Schlüssel B an Alice." + br
-        t += "Nun konnten Alice und Bob jeweils den geheimen und gemeinsamen Sessionkey erzeugen. Alice berechnete ihren Schlüssel SA, Bob berechnete den Schlüssel SB:" + br
+        t += "In order to calculate their secret and common Session Key, Alice and Bob exchanged their shared keys: Alice sent her shared key A to Bob and Bob sent his shared key B to Alice." + br
+        t += "Alice and Bob were able to calculate the secret and common Session Key now. Alice computed the Session Key SA, Bob computed the Session Key SB:" + br
         t += "SA: " + sessionA + br
         t += "SB: " + sessionB + br
-        t += "Theoretisch wäre es Alice und Bob nun möglich, mit Hilfe des jeweils berechneten Sessionkeys SA und SB untereinander auszutauschende Dokumente zum Schutz vor Dritten zu verschlüsseln bzw. zu entschlüsseln."
+        t += "Theoretically it is now possible for Alice and Bob to use their Session Keys to encrypt documents they would like to exchange covertly."
         return t
     }
 }
@@ -333,34 +333,34 @@ struct DHPublicParametersDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Beide Parameter -- sowohl der Generator (g) als auch der Primzahlmodul (p) -- dürfen öffentlich bekannt sein.")
+            Text("Both parameters, the generator (g) and the prime module (p) may be known publicly.")
                 .fixedSize(horizontal: false, vertical: true)
             GroupBox("Primzahlmodul") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Der Primzahlmodul (p) sollte eine Primzahl sein. Für die spätere Wahl des Generators g ist es notwendig, dass die Faktorisierung von Phi(p) bekannt ist.")
+                    Text("The prime module (p) needs to be a prime; if you don't know any large primes, just click the button 'Generate Prime'. A valid prime module will be created instantly.")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
-                        Text("Primzahlmodul:").frame(width: 100, alignment: .leading)
+                        Text("Prime module:").frame(width: 100, alignment: .leading)
                         TextField("", text: $prime).font(.system(.body, design: .monospaced))
-                        Button("Primzahl erzeugen...", action: generatePrime).frame(width: 150)
+                        Button("Generate Prime", action: generatePrime).frame(width: 150)
                     }
                 }.padding(4)
             }
             GroupBox("Generator") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Als Generator (g) bezeichnet man eine natürliche Zahl, die nach Möglichkeit nicht Null oder Eins und kein Vielfaches des Primzahlmoduls (p) sein sollte.")
+                    Text("The generator (g) is a natural number, preferably not zero or one and not a multiple of the prime module (p). Push the button 'Create Generator' to make CrypTool create a valid natural number.")
                         .fixedSize(horizontal: false, vertical: true)
                     HStack {
                         Text("Generator:").frame(width: 100, alignment: .leading)
                         TextField("", text: $generator).font(.system(.body, design: .monospaced))
-                        Button("Generator erzeugen", action: generateGenerator).frame(width: 150)
+                        Button("Create Generator", action: generateGenerator).frame(width: 150)
                     }
                 }.padding(4)
             }
             HStack {
-                Button("Parameter übernehmen", action: accept).keyboardShortcut(.defaultAction)
+                Button("Accept parameters", action: accept).keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -400,7 +400,7 @@ struct DHPublicParametersDialog: View {
     }
 
     private func generatePrime() {
-        ref.sheet("Sichere Primzahl erzeugen") { close in
+        ref.sheet("Generate a Safe Prime") { close in
             SafePrimeDialog(close: close) { p in
                 if p.isEmpty { prime = ""; generator = ""; return }
                 prime = p
@@ -446,22 +446,22 @@ struct DHSecretInputDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Bitte legen Sie nun das Geheimnis für \(party) fest.").font(.headline)
-            Text("Bitte achten Sie darauf, dass Sie sich für eine natürliche Zahl entscheiden, die möglichst größer als Eins und kleiner als der zuvor gewählte Primzahlmodul (p) ist.")
+            Text("Please choose the secret for \(party) now.").font(.headline)
+            Text("Please make sure to choose a natural number, preferably bigger than one but smaller than the previously defined prime module (p).")
                 .fixedSize(horizontal: false, vertical: true)
-            Text("Falls Sie selbst kein Geheimnis eingeben wollen, so klicken Sie bitte auf den Button 'Geheimnis erzeugen' und lassen somit eine Zufallszahl erzeugen, welche die obige Bedingung erfüllt.")
+            Text("In case you do not want to make up any large number, click the button 'Generate Secret' to let CrypTool generate an appropriate number within a valid range of values.")
                 .fixedSize(horizontal: false, vertical: true)
             HStack {
-                Text("Geheimnis").frame(width: 80, alignment: .leading)
+                Text("Secret:").frame(width: 80, alignment: .leading)
                 TextField("", text: $secret).font(.system(.body, design: .monospaced))
-                Button("Geheimnis erzeugen") {
+                Button("Generate Secret") {
                     secret = prime.isZero ? "0" : BigUInt.random(below: prime).description
                 }.frame(width: 150)
             }
             HStack {
-                Button("Geheimnis übernehmen", action: accept).keyboardShortcut(.defaultAction)
+                Button("Accept secret", action: accept).keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -503,17 +503,17 @@ struct DHKeyDetailsDialog: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Unabhängig voneinander haben Alice und Bob jeweils für sich den Session Key berechnet:")
-            keyRow("Alice's Session Key S:", sessionAlice)
-            keyRow("Bob's Session Key S:", sessionBob)
-            GroupBox("Verifikation") {
+            Text("Alice and Bob have computed their Session Key independently from each other:")
+            keyRow("Alice's Session Key:", sessionAlice)
+            keyRow("Bob's Session Key:", sessionBob)
+            GroupBox("Verification") {
                 Text(BigUInt(sessionAlice) == BigUInt(sessionBob) ? DHText.verificationYes : DHText.verificationNo)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Damit ist das Ziel erreicht") {
+            GroupBox("Thus, the target is reached") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Jede Partei (Alice und Bob) berechnete für sich aus den eigenen geheimen Informationen und aus den übertragenen Informationen das gemeinsame Geheimnis.")
-                    Text("Dieses Geheimnis bzw. den Session Key kann ein \"Lauscher\" nicht in Erfahrung bringen, wenn die gewählten Parameter groß genug sind. Der Session Key kann nun z.B. für eine symmetrische Verschlüsselung zwischen Alice und Bob verwendet werden.")
+                    Text("Using the secret information on the one hand and the public information on the other hand, each party (Alice and Bob) computed the common and secret Session Key on its own.")
+                    Text("An eavesdropper cannot gain knowledge of the secret if the used parameters are big enough. The Session Key can now be used for a symmetric encryption.")
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
@@ -521,13 +521,13 @@ struct DHKeyDetailsDialog: View {
             HStack {
                 Button("OK", action: close).keyboardShortcut(.defaultAction)
                 Spacer()
-                Button("Log-Text anzeigen") {
+                Button("Show log text") {
                     guard let log else { return }
                     DocumentFactory.openResult(text: log, title: "Diffie-Hellman-Log")
                     Alerts.info(DHText.logCreated)
                 }.disabled(log == nil)
                 Spacer()
-                Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
+                Button("Cancel", action: close).keyboardShortcut(.cancelAction)
             }
         }
         .padding(16)
@@ -542,7 +542,7 @@ struct DHKeyDetailsDialog: View {
             }
             HStack {
                 Spacer().frame(width: 150)
-                Text("Schlüssellänge [bit]:")
+                Text("Key length [bit]:")
                 DHReadOnly(text: "\(Self.bitLength(value))").frame(width: 70)
                 Spacer()
             }

@@ -10,7 +10,7 @@ final class AppSettings: ObservableObject {
     enum ReferenceLanguage: String, CaseIterable, Identifiable {
         case german = "de", english = "en"
         var id: String { rawValue }
-        var displayName: String { self == .german ? "Deutsch" : "Englisch" }
+        var displayName: String { self == .german ? "German" : "English" }
         var fileName: String { self == .german ? "deutsch" : "english" }
     }
 
@@ -55,7 +55,7 @@ final class AppSettings: ObservableObject {
         } else {
             textOptions = .default
         }
-        referenceLanguage = ReferenceLanguage(rawValue: defaults.string(forKey: "referenceLanguage") ?? "de") ?? .german
+        referenceLanguage = ReferenceLanguage(rawValue: defaults.string(forKey: "referenceLanguage") ?? "en") ?? .english
         showStartExample = defaults.object(forKey: "showStartExample") as? Bool ?? true
         fontSize = defaults.object(forKey: "fontSize") as? Double ?? 13
         monospacedFont = defaults.object(forKey: "monospacedFont") as? Bool ?? true

@@ -16,14 +16,14 @@ struct HelpSearchResult: Identifiable, Hashable {
     let hits: Int
 }
 
-/// Access to the converted CT1 help files (Resources/Help/de, UTF-8).
+/// Access to the converted CT1 help files (Resources/Help/en, UTF-8).
 enum HelpBook {
     static let startPage = "hidd_tipps_and_tricks.html"
     static let indexPage = "main_index.html"
     static let scenariosPage = "hid_hilfe_szenarien.html"
 
     /// Folder containing the help pages, or nil if the help is not bundled.
-    static var rootURL: URL? { Resources.url("Help/de") }
+    static var rootURL: URL? { Resources.url("Help/en") }
 
     static func url(for file: String) -> URL? {
         guard let root = rootURL, !file.isEmpty else { return nil }

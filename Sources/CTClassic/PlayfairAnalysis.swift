@@ -39,20 +39,20 @@ public struct PlayfairAnalysisGraphError: Error, Equatable, Sendable {
     public let position: Int
     public let letter: Character
 
-    /// German message from CT1's string table (IDS_STRING_PLAYFAIR_ERRMSG…).
+    /// Message from CT1's string table (IDS_STRING_PLAYFAIR_ERRMSG…).
     public var message: String {
         let p = position + 1
         switch code {
         case 1:
-            return "Bei Playfair sind Klarbuchstabe und Chiffrezeichen immer verschieden.\nPosition=\(p), Buchstabe=\(letter)"
+            return "Please notice: the Playfair cipher letter and plaintext letter are always different.\nPosition=\(p), letter=\(letter)"
         case 101...107:
-            return "Fehler bei der Klartextanalyse !\nEine der Tabellen ist übergelaufen: Position=\(p), Buchstabe=\(letter).\nBitte korrigieren Sie die Eingabe."
+            return "Error on the plaintext analysis !\nAt least one of the lists is overflown: Position=\(p), letter=\(letter).\nPlease correct your input."
         case 113, 114:
-            return "Fehler bei der Klartextanalyse !\nZuordnungsfehler bei den Nachbarn: Position=\(p), Buchstabe=\(letter).\nBitte korrigieren Sie die Eingabe."
+            return "Error on the plaintext analysis !\nNeighbor matching error: Position=\(p), letter=\(letter).\nPlease correct your input."
         case 201...204:
-            return "Fehler bei der Klartextanalyse !\nEiner der Nachbarn war schon sicher: Position=\(p), Buchstabe=\(letter).\nBitte korrigieren Sie die Eingabe."
+            return "Error on the plaintext analysis !\nAt least one of the neighbors was assumed as correct: Position=\(p), letter=\(letter).\nPlease correct your input."
         default:
-            return "Bei der Playfair-Analyse kam es zu einem Fehler in der Erstellung des Graphen.\n Position=\(p), Buchstabe=\(letter)"
+            return "During the Playfair analysis an error occurred while the graph construction.\nPosition=\(p), letter=\(letter)"
         }
     }
 }
@@ -74,17 +74,17 @@ public final class PlayfairAnalysisSession {
         public var message: String {
             switch self {
             case .possibly6x6:
-                return "Da 'J' oder Ziffern im Chiffrat auftreten, könnte es sich um eine 6x6 Verschlüsselungsmatrix handeln."
+                return "Due to the occurrence of the letter 'J' within the ciphertext, it could be assumed, that the ciphertext was encrypted by a 6 x 6 Playfair key matrix."
             case .invalidCharacters:
-                return "Das Chiffrat enthält auch Zeichen, die nicht zum Playfair-Alphabet gehören (alle Zeichen des Felds \"Analyseergebnis\"). Sie werden durch einen Punkt ausmaskiert."
+                return "The ciphertext does contain characters which do not belong to the Playfair alphabet. These characters are replaced by the wildcard \" . \"."
             }
         }
     }
 
     /// CT1 IDS_STRING_PLAYFAIR_WARNMSG003.
-    public static let invalidGuessLetterMessage = "Der Buchstabe 'J' und die Ziffern '0'-'9' dürfen bei einer 5x5 Matrix nicht verwendet werden. Verwenden Sie ggf. eine 6x6 Matrix."
+    public static let invalidGuessLetterMessage = "The letter 'J' and the digits '0', .., '9' does not belong t a 5 x 5 Playfair matrix alphabet.\nYou may continue the analysis on a 6 x 6 Playfair matrix."
     /// CT1 IDS_STRING_PLAYFAIR_NOMATRIX.
-    public static let noMatrixMessage = "Keine passende Matrix gefunden."
+    public static let noMatrixMessage = "No matching matrix was found."
 
     /// The ciphertext as Unicode scalars (CT1: bytes of the file).
     public let ciphertext: [Character]

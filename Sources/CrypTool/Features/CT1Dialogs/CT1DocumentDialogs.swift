@@ -14,19 +14,19 @@ enum CT1DocumentDialogs {
         let method = doc.origin?.method ?? name
         let window = CT1.window(of: doc)
         if method == "hill", let parsed = HillKey.parse(key) {
-            WindowPresenter.sheet(on: window, title: "Anzeige Hill-Schlüsselmatrix") { close in
+            WindowPresenter.sheet(on: window, title: "Display Hill Key Matrix") { close in
                 HillKeyDisplay(key: key, parsed: parsed, close: close)
             }
             return
         }
-        WindowPresenter.sheet(on: window, title: "\(name)-Schlüssel") { close in
-            ShowKeyView(caption: "\(name)-Schlüssel", key: key, method: method, close: close)
+        WindowPresenter.sheet(on: window, title: "\(name) key") { close in
+            ShowKeyView(caption: "\(name) key", key: key, method: method, close: close)
         }
     }
 
     /// Document properties as in CT1 (temporary-file lines are omitted on macOS).
     static func showProperties(_ doc: CTDocument) {
-        WindowPresenter.sheet(on: CT1.window(of: doc), title: "Dokument-Eigenschaften") { close in
+        WindowPresenter.sheet(on: CT1.window(of: doc), title: "Document Properties") { close in
             DocumentPropertiesView(document: doc, close: close)
         }
     }
@@ -34,7 +34,7 @@ enum CT1DocumentDialogs {
     /// Method part of a CT1 window title ("Vigenère-Verschlüsselung von <…>" → "Vigenère").
     static func methodName(fromTitle title: String) -> String {
         var cut = title.endIndex
-        for marker in ["-Verschlüsselung", "-Entschlüsselung", "-Analyse", " von <"] {
+        for marker in [" encryption", " decryption", " Analysis", " of <"] {
             if let r = title.range(of: marker), r.lowerBound < cut { cut = r.lowerBound }
         }
         return String(title[..<cut])
@@ -51,16 +51,16 @@ struct ShowKeyView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(caption).font(.title3.weight(.semibold))
-            Text("Schlüssel:")
+            Text("Key:")
             ResultBox(text: key, minHeight: 50).frame(maxHeight: 140)
             HStack {
-                Button("Schlüssel kopieren") {
+                Button("Copy key") {
                     CT1KeyStore.shared.copy(key, method: method)
                     copied = true
                 }
-                if copied { Text("In den Schlüsselspeicher kopiert.").font(.caption).foregroundStyle(.secondary) }
+                if copied { Text("Copied to the key storage.").font(.caption).foregroundStyle(.secondary) }
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(18)
@@ -74,24 +74,24 @@ struct DocumentPropertiesView: View {
 
     private var size: String {
         let n = document.bytes.count
-        return "\(n.formatted(.number.locale(Locale(identifier: "de_DE")))) Bytes"
+        return "\(n.formatted(.number.locale(Locale(identifier: "en_US")))) bytes"
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Dokument-Eigenschaften").font(.title3.weight(.semibold))
-            CT1Group(title: "Informationen zum aktuell ausgewählten Dokument") {
+            Text("Document Properties").font(.title3.weight(.semibold))
+            CT1Group(title: "Information about the currently selected document") {
                 Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 6) {
-                    row("Fenster-Titel:", document.displayName ?? "")
-                    row("Name der Datei", document.fileURL?.lastPathComponent ?? "")
-                    row("Dokument-Typ:", document.isText ? "Text" : "Binärdaten (Hex)")
-                    row("Dokument-Größe:", size)
-                    if let p = document.origin?.parent { row("Erzeugt aus:", p.displayName ?? "") }
+                    row("Window title:", document.displayName ?? "")
+                    row("Name of the file:", document.fileURL?.lastPathComponent ?? "")
+                    row("Document type:", document.isText ? "Text" : "Binary data (Hex)")
+                    row("Document size:", size)
+                    if let p = document.origin?.parent { row("Created from:", p.displayName ?? "") }
                 }
             }
-            CT1Group(title: "Pfad") {
+            CT1Group(title: "Path") {
                 Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 6) {
-                    row("für Dokumente:", document.fileURL?.deletingLastPathComponent().path ?? "")
+                    row("for the document:", document.fileURL?.deletingLastPathComponent().path ?? "")
                 }
             }
             HStack {
@@ -102,10 +102,10 @@ struct DocumentPropertiesView: View {
                 } label: {
                     Label("KEY", systemImage: "key.fill")
                 }
-                .help("Schlüssel anzeigen")
+                .help("Show key")
                 .disabled(document.origin?.key?.isEmpty ?? true)
                 Spacer()
-                Button("Schließen", action: close).keyboardShortcut(.defaultAction)
+                Button("Close", action: close).keyboardShortcut(.defaultAction)
             }
         }
         .padding(18)

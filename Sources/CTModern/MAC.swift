@@ -14,14 +14,14 @@ public enum MACConstruction: String, CaseIterable, Codable, Sendable {
     /// HMAC nach RFC 2104: H((k ⊕ opad) ‖ H((k ⊕ ipad) ‖ m))
     case hmac
 
-    /// German display name (CT1 resource strings).
+    /// Display name (CT1 resource strings).
     public var displayName: String {
         switch self {
-        case .secretPrefix: return "H(k, m): Schlüssel vor der Nachricht"
-        case .secretSuffix: return "H(m, k): Schlüssel nach der Nachricht"
-        case .envelope: return "H(k, m, k): Schlüssel vor und hinter der Nachricht"
-        case .doubleKey: return "H(k, m, k'): Zwei verschiedene Schlüssel"
-        case .hmac: return "H(k, H(k, m)): doppeltes Hashing (RFC 2104)"
+        case .secretPrefix: return "H(k, m): key in front of message"
+        case .secretSuffix: return "H(m, k): key at the back of message"
+        case .envelope: return "H(k, m, k): key in front and at the back"
+        case .doubleKey: return "H(k, m, k'): different keys"
+        case .hmac: return "H(k, H(k, m)): double hashing (RFC 2104)"
         }
     }
 
@@ -107,9 +107,9 @@ public enum PasswordKeyDerivation {
     /// SHA-1/256/512 use CommonCrypto.
     public static func pbkdf2(password: [UInt8], salt: [UInt8], iterations: Int, keyLength: Int,
                               hash: HashAlgorithm) throws -> [UInt8] {
-        guard iterations >= 1 else { throw CTError("Die Anzahl der Iterationen muss mindestens 1 sein.") }
+        guard iterations >= 1 else { throw CTError("The number of iterations must be at least 1.") }
         guard keyLength >= 1, keyLength <= 4096 else {
-            throw CTError("Die Schlüssellänge muss zwischen 1 und 4096 Byte liegen.")
+            throw CTError("The key length must be between 1 and 4096 bytes.")
         }
         let prf: CCPseudoRandomAlgorithm?
         switch hash {
@@ -157,9 +157,9 @@ public enum PasswordKeyDerivation {
     /// `iterations` ≤ 1 means a single hash (CT1 behaviour); `keyLength` ≤ digest length.
     public static func pbkdf1(password: [UInt8], salt: [UInt8], iterations: Int, keyLength: Int,
                               hash: HashAlgorithm) throws -> [UInt8] {
-        guard iterations >= 0 else { throw CTError("Die Anzahl der Iterationen darf nicht negativ sein.") }
+        guard iterations >= 0 else { throw CTError("The number of iterations must not be negative.") }
         guard keyLength >= 1, keyLength <= hash.digestLength else {
-            throw CTError("Die Schlüssellänge muss für \(hash.displayName) zwischen 1 und \(hash.digestLength) Byte liegen.")
+            throw CTError("The key length for \(hash.displayName) must be between 1 and \(hash.digestLength) bytes.")
         }
         var t = Hashing.hash(password + salt, algorithm: hash)
         if iterations > 1 {

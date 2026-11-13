@@ -29,15 +29,15 @@ public enum ZipArchive {
 
     /// Creates a .zip archive from the given entries (file names in UTF-8).
     public static func create(entries: [(name: String, data: [UInt8])]) throws -> [UInt8] {
-        guard entries.count < 0xFFFF else { throw CTError("ZIP: Zu viele Einträge (maximal 65534).") }
+        guard entries.count < 0xFFFF else { throw CTError("ZIP: Too many entries (at most 65534).") }
         var out: [UInt8] = []
         var central: [UInt8] = []
         let (dosTime, dosDate) = dosDateTime(Date())
         for entry in entries {
             let name = Array(entry.name.utf8)
-            guard !name.isEmpty, name.count <= 0xFFFF else { throw CTError("ZIP: Ungültiger Dateiname „\(entry.name)“.") }
+            guard !name.isEmpty, name.count <= 0xFFFF else { throw CTError("ZIP: Invalid file name \"\(entry.name)\".") }
             guard entry.data.count < 0xFFFF_FFFF, out.count < 0xFFFF_FFFF else {
-                throw CTError("ZIP: Datei zu groß (ZIP64 wird nicht unterstützt).")
+                throw CTError("ZIP: File too large (ZIP64 is not supported).")
             }
             let crc = CRC32.checksum(entry.data)
             var method: UInt16 = 0
@@ -64,7 +64,7 @@ public enum ZipArchive {
             put16(&central, 0); put16(&central, 0); put32(&central, 0o100644 << 16); put32(&central, localOffset)
             central += name
         }
-        guard out.count + central.count < 0xFFFF_FFFF else { throw CTError("ZIP: Archiv zu groß (ZIP64 wird nicht unterstützt).") }
+        guard out.count + central.count < 0xFFFF_FFFF else { throw CTError("ZIP: Archive too large (ZIP64 is not supported).") }
         let cdOffset = UInt32(out.count)
         out += central
         // end of central directory
@@ -86,7 +86,7 @@ public enum ZipArchive {
             return Int(a[p]) | Int(a[p + 1]) << 8 | Int(a[p + 2]) << 16 | Int(a[p + 3]) << 24
         }
         // locate end of central directory record
-        guard a.count >= 22 else { throw CTError("ZIP: Keine gültige ZIP-Datei (zu kurz).") }
+        guard a.count >= 22 else { throw CTError("ZIP: Not a valid ZIP file (too short).") }
         var eocd = -1
         var p = a.count - 22
         let lowest = max(0, a.count - 22 - 0xFFFF)
@@ -94,10 +94,10 @@ public enum ZipArchive {
             if a[p] == 0x50 && a[p + 1] == 0x4B && a[p + 2] == 0x05 && a[p + 3] == 0x06 { eocd = p; break }
             p -= 1
         }
-        guard eocd >= 0 else { throw CTError("ZIP: Keine gültige ZIP-Datei (Verzeichnisende nicht gefunden).") }
+        guard eocd >= 0 else { throw CTError("ZIP: Not a valid ZIP file (end of central directory not found).") }
         let count = try u16(eocd + 10)
         let cdOffset = try u32(eocd + 16)
-        if count == 0xFFFF || cdOffset == 0xFFFF_FFFF { throw CTError("ZIP64-Archive werden nicht unterstützt.") }
+        if count == 0xFFFF || cdOffset == 0xFFFF_FFFF { throw CTError("ZIP64 archives are not supported.") }
         var result: [(name: String, data: [UInt8])] = []
         var q = cdOffset
         for _ in 0..<count {
@@ -118,7 +118,7 @@ public enum ZipArchive {
                 : (String(bytes: nameBytes, encoding: .utf8) ?? String(bytes: nameBytes, encoding: .isoLatin1) ?? "?")
             q += 46 + nameLen + extraLen + commentLen
             if name.hasSuffix("/") && usize == 0 { continue }   // directory
-            if flags & 0x0001 != 0 { throw CTError("ZIP: „\(name)“ ist verschlüsselt – nicht unterstützt.") }
+            if flags & 0x0001 != 0 { throw CTError("ZIP: \"\(name)\" is encrypted - not supported.") }
             guard try u32(localOffset) == 0x04034B50 else { throw corrupt() }
             let dataStart = localOffset + 30 + (try u16(localOffset + 26)) + (try u16(localOffset + 28))
             guard dataStart + csize <= a.count else { throw corrupt() }
@@ -128,14 +128,14 @@ public enum ZipArchive {
             case 0: data = payload
             case 8:
                 guard let d = inflate(payload, size: usize) else {
-                    throw CTError("ZIP: „\(name)“ konnte nicht entpackt werden (Deflate-Fehler).")
+                    throw CTError("ZIP: \"\(name)\" could not be unpacked (deflate error).")
                 }
                 data = d
             default:
-                throw CTError("ZIP: Kompressionsmethode \(method) von „\(name)“ wird nicht unterstützt.")
+                throw CTError("ZIP: Compression method \(method) of \"\(name)\" is not supported.")
             }
             guard data.count == usize, CRC32.checksum(data) == crc else {
-                throw CTError("ZIP: CRC-Fehler in „\(name)“ – Datei beschädigt.")
+                throw CTError("ZIP: CRC error in \"\(name)\" - file corrupt.")
             }
             result.append((name, data))
         }
@@ -144,7 +144,7 @@ public enum ZipArchive {
 
     // MARK: - Helpers
 
-    private static func corrupt() -> CTError { CTError("ZIP: Die Datei ist beschädigt oder keine ZIP-Datei.") }
+    private static func corrupt() -> CTError { CTError("ZIP: The file is corrupt or not a ZIP file.") }
 
     private static func put16(_ a: inout [UInt8], _ v: UInt16) { a.append(UInt8(v & 0xFF)); a.append(UInt8(v >> 8)) }
     private static func put32(_ a: inout [UInt8], _ v: UInt32) {

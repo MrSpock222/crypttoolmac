@@ -39,15 +39,15 @@ struct PermutationDialog: View {
     }
 
     private var keyDialog: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Permutation / Transposition", minWidth: 560) {
-            stageGroup("1. Permutation (einfache Spaltentransposition)", key: $key1, stage: $options.first)
-            stageGroup("2. Permutation (doppelte Spaltentransposition)", key: $key2, stage: $options.second)
-            CT1Group(title: "Optionen") {
-                Toggle("Jeweils die inverse Permutation anwenden", isOn: $options.applyInverse)
-                Toggle("Zwischendialog mit der inversen Permutation anzeigen", isOn: $showInverseDialog)
+        DialogScaffold(title: "Key Entry: Permutation / Transposition", minWidth: 560) {
+            stageGroup("1st Permutation (simple column transposition)", key: $key1, stage: $options.first)
+            stageGroup("2nd Permutation (double column transposition)", key: $key2, stage: $options.second)
+            CT1Group(title: "Options") {
+                Toggle("Apply the respective inverse permutation", isOn: $options.applyInverse)
+                Toggle("Show intermediate dialog with the inverse permutation", isOn: $showInverseDialog)
                 HStack {
-                    Text("Betrachte Eingabedokument als")
-                    CT1Radio(title: "Binäre Daten", selected: !textMode) { textMode = false }
+                    Text("Consider input document as")
+                    CT1Radio(title: "Binary data", selected: !textMode) { textMode = false }
                     CT1Radio(title: "Text", selected: textMode) { textMode = true }
                     Spacer()
                     CT1PasteKeyButton(method: "permutation") { pasteKey($0) }
@@ -61,9 +61,9 @@ struct PermutationDialog: View {
 
     private func stageGroup(_ title: String, key: Binding<String>, stage: Binding<PermutationOptions.Stage>) -> some View {
         CT1Group(title: title) {
-            Text("Schlüssel (Buchstaben oder durch Kommas separierte Zahlen)")
+            Text("Key (via letters or via comma separated numbers)")
             TextField("", text: key).font(.system(.body, design: .monospaced))
-            Text("Permutation, wenn der Schlüssel als Buchstabenfolge eingegeben wurde")
+            Text("Presentation as permutation if key is given in letters")
             CT1ReadOnlyLine(text: letterPermutation(key.wrappedValue))
             PermutationStageGrid(stage: stage).padding(.top, 4)
         }
@@ -73,18 +73,18 @@ struct PermutationDialog: View {
     private func inverseInfo(_ encrypt: Bool) -> some View {
         let p1 = perm(key1) ?? [], p2 = perm(key2)
         return DialogScaffold(title: "Permutation / Transposition", minWidth: 520) {
-            CT1Group(title: "1. Permutation") {
-                infoRow("Eingegeben", PermutationCipher.display(p1))
+            CT1Group(title: "1st Permutation") {
+                infoRow("Entered", PermutationCipher.display(p1))
                 infoRow("Inverse", PermutationCipher.display(PermutationCipher.inverse(of: p1)))
             }
-            CT1Group(title: "2. Permutation") {
-                infoRow("Eingegeben", p2.map(PermutationCipher.display) ?? "")
+            CT1Group(title: "2nd Permutation") {
+                infoRow("Entered", p2.map(PermutationCipher.display) ?? "")
                 infoRow("Inverse", p2.map { PermutationCipher.display(PermutationCipher.inverse(of: $0)) } ?? "")
             }
         } buttons: {
-            Button("Zurück") { pendingEncrypt = nil }
-            Button("Abbrechen", action: close).keyboardShortcut(.cancelAction)
-            Button("Text ausgeben") { run(encrypt) }.keyboardShortcut(.defaultAction)
+            Button("Back") { pendingEncrypt = nil }
+            Button("Cancel", action: close).keyboardShortcut(.cancelAction)
+            Button("Display text") { run(encrypt) }.keyboardShortcut(.defaultAction)
         }
     }
 
@@ -131,7 +131,7 @@ struct PermutationDialog: View {
         var o = options
         o.lettersOnly = textMode
         let key = keyString
-        let title = CT1.title("Permutations-/Transpositions", encrypt: encrypt, of: document, key: key)
+        let title = CT1.title("Permutation/Transposition", encrypt: encrypt, of: document, key: key)
         let opened: CTDocument?
         if textMode {
             opened = CipherRun.open(text: document, method: "permutation", title: title, key: key) {
@@ -167,7 +167,7 @@ struct SolitaireDialog: View {
     @CTState private var manualStep: Int?
     @CTState private var generationStarted = false
 
-    private static let orders = ["Aufsteigend", "Absteigend", "Gemischt", "Passwort", "Nach Vorgabe", "Kartendeck laden..."]
+    private static let orders = ["ascending", "descending", "randomly shuffled", "passphrase", "as entered", "load saved card deck..."]
 
     /// Number of keystream characters (letters A–Z after CT1 preprocessing: Ä → AE, ß → SS …).
     private var needed: Int { Solitaire.letters(document.text).count }
@@ -177,40 +177,40 @@ struct SolitaireDialog: View {
     private func label(_ v: Int, of n: Int) -> String { v == n - 1 ? "A" : v == n ? "B" : String(v) }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe / Schlüsselerzeugung: Solitaire", minWidth: 860) {
-            CT1Group(title: "Beschreibung") {
-                Text("Mit diesem Dialog können Sie das Solitaire-Verfahren anwenden. Hierbei werden standardmäßig 54 Karten verwendet. Die verschiedenen Karten werden als Zahlen von 1 bis 52 und den Buchstaben A und B dargestellt.\nSchritt 1: Sie erzeugen den Schlüssel (das gemischte Kartendeck) entweder selbst oder Sie laden den Schlüssel. Das Ergebnis der Schlüsselerzeugung ist das gemischte Kartendeck (\"Initial-Deck\").\nSchritt 2: Sie erzeugen den Schlüsselstrom (dies ist der eigentliche Solitaire-Algorithmus). Dabei wird das Kartendeck verändert; dessen aktuelle Reihenfolge finden Sie unter \"End-Deck\".\nSchritt 3: Sie verschlüsseln den vorher schon gewählten Text. Wenn der gewählte Text schon einen mit Solitaire verschlüsselten Geheimtext darstellt, können Sie auch entschlüsseln.")
+        DialogScaffold(title: "Key Entry / Key Stream Generation: Solitaire", minWidth: 860) {
+            CT1Group(title: "Description") {
+                Text("With this dialog you can make use of the Solitaire cipher. Usually 54 cards are used. The different cards are represented as numbers from 1 to 52 and as letters A and B.\nStep 1: Either you create the key (the shuffled card deck) by yourself or you load a key. The result of generating the key is the shuffled card deck (\"Initial deck\").\nStep 2: You generate the keystream (This is the actual Solitaire algorithm). This process modifies the card deck; its actual card order can be found at \"Final deck\".\nStep 3: You encrypt the chosen text. In the case the chosen text is already encrypted with the Solitaire, you can also decrypt it.")
                     .font(.callout).fixedSize(horizontal: false, vertical: true)
             }
-            CT1Group(title: "1. Initial-Deck erstellen (= Mischen)  ==  Schlüssel erzeugen") {
+            CT1Group(title: "1. Generating the initial deck (= shuffling) == Generating the key") {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        CT1Group(title: "1 a: Kartenanzahl (Klassisch: 52+2)") {
-                            Picker("Gesamtzahl (incl. Joker):", selection: $cards) {
+                        CT1Group(title: "1 a: Number of cards (classic: 52+2)") {
+                            Picker("Total number of cards\n(incl. joker):", selection: $cards) {
                                 ForEach(3...54, id: \.self) { Text("\($0)").tag($0) }
                             }.frame(width: 240)
                         }
-                        CT1Group(title: "1 b: Kartenreihenfolge festlegen") {
+                        CT1Group(title: "1 b: Defining the card order") {
                             HStack {
                                 Picker("", selection: $order) {
                                     ForEach(0..<6, id: \.self) { Text(SolitaireDialog.orders[$0]).tag($0) }
                                 }.labelsHidden().frame(width: 160)
-                                Button("Andere Mischung") { initDeck() }.disabled(order != 2 || generationStarted)
+                                Button("Different shuffle") { initDeck() }.disabled(order != 2 || generationStarted)
                             }
                         }
                     }.frame(width: 280)
                     CT1Group(title: "Optional") {
-                        GroupBox("Passworteingabe") {
+                        GroupBox("Enter password") {
                             HStack {
                                 TextField("", text: $password).frame(width: 180)
                                     .ct1Filter($password) { s in
                                         let f = String(s.uppercased().filter { ("A"..."Z").contains($0) })
                                         return (f, false)
                                     }
-                                Button("Initial-Deck modifizieren") { modifyByPassword() }.disabled(password.isEmpty)
+                                Button("Modify the initial deck") { modifyByPassword() }.disabled(password.isEmpty)
                             }.disabled(order != 3 || generationStarted).padding(4)
                         }
-                        GroupBox("Nach Vorgabe") {
+                        GroupBox("Own choice") {
                             VStack(alignment: .leading, spacing: 2) {
                                 let values = Array(1...cards)
                                 ForEach(Array(stride(from: 0, to: values.count, by: 18)), id: \.self) { start in
@@ -228,45 +228,45 @@ struct SolitaireDialog: View {
                     }
                 }
             }
-            CT1Group(title: "2. Schlüsselstrom erzeugen (automatisch oder manuell)") {
+            CT1Group(title: "2. Generating the keystream (automatically or manually)") {
                 HStack {
-                    Button("Automatisch") { finish() }.disabled(generationStarted || !deckReady)
-                    Button("Manuell") { generationStarted = true; manualStep = 1 }.disabled(generationStarted || !deckReady)
-                    GroupBox("Manuelle Einzelschritte des Solitaire-Algorithmus") {
+                    Button("Automatic") { finish() }.disabled(generationStarted || !deckReady)
+                    Button("Manual") { generationStarted = true; manualStep = 1 }.disabled(generationStarted || !deckReady)
+                    GroupBox("Manual steps of the Solitaire algorithm") {
                         HStack {
                             ForEach(1...5, id: \.self) { s in
-                                Button("Schritt \(s)") { step(s) }.disabled(manualStep != s || complete)
+                                Button("Step \(s)") { step(s) }.disabled(manualStep != s || complete)
                             }
                             if manualStep != nil && manualStep != 0 {
-                                Text("Es fehlen noch \(needed - keystream.count) von \(needed) Schlüsselstromzeichen.").font(.callout)
+                                Text("You still need \(needed - keystream.count) of \(needed) keystream letters.").font(.callout)
                             }
-                            Button("Rest generieren") { finish() }.disabled(manualStep != 1 || complete)
+                            Button("Generate rest") { finish() }.disabled(manualStep != 1 || complete)
                         }.padding(2)
                     }
                 }
             }
-            CT1Group(title: "Ausgabe der verschiedenen Zustände des Kartendecks und des erzeugten Schlüsselstroms") {
-                Text("Initial-Deck (schon gemischtes Kartenspiel; repräsentiert den Zustand des Kartenspiels, bevor der Algorithmus zur Schlüsselstromerzeugung das erste Mal angewendet wird)").font(.caption)
+            CT1Group(title: "Output of the different states of the card deck and of the generated keystream") {
+                Text("Initial deck (already shuffled card deck; represents the state of the card deck before the algorithm to generate the keystream is used the first time)").font(.caption)
                 HStack {
                     CT1ReadOnlyLine(text: deckReady ? SolitaireAnalysis.deckFileString(initialDeck) : "")
-                    Button("Speichern") { CT1.save(SolitaireAnalysis.deckFileString(initialDeck), defaultName: "initial-deck.txt") }.disabled(!deckReady)
+                    Button("Save") { CT1.save(SolitaireAnalysis.deckFileString(initialDeck), defaultName: "initial-deck.txt") }.disabled(!deckReady)
                 }
-                Text("End-Deck (repräsentiert den Zustand des Kartenspiels direkt nach dem Erzeugen des letzten Schlüsselstromzeichens)").font(.caption)
+                Text("Final deck (represents the state of the card deck directly after generating the last keystream letter)").font(.caption)
                 HStack {
                     CT1ReadOnlyLine(text: endDeck.map(SolitaireAnalysis.deckFileString) ?? "")
-                    Button("Speichern") { if let e = endDeck { CT1.save(SolitaireAnalysis.deckFileString(e), defaultName: "end-deck.txt") } }
+                    Button("Save") { if let e = endDeck { CT1.save(SolitaireAnalysis.deckFileString(e), defaultName: "end-deck.txt") } }
                         .disabled(endDeck == nil)
                 }
-                Text("Schlüsselstrom").font(.caption)
+                Text("Keystream").font(.caption)
                 HStack(alignment: .top) {
                     ResultBox(text: keystream.map(String.init).joined(separator: ","), minHeight: 44).frame(maxHeight: 60)
-                    Button("Speichern") { CT1.save(keystream.map(String.init).joined(separator: ","), defaultName: "key-stream.txt") }
+                    Button("Save") { CT1.save(keystream.map(String.init).joined(separator: ","), defaultName: "key-stream.txt") }
                         .disabled(!complete)
                 }
             }
         } buttons: {
             CT1PasteKeyButton(method: "solitaire") { pasteKey($0) }
-            Button("Initialzustand herstellen") { reInit() }
+            Button("Generate initial state") { reInit() }
             CipherButtons(cancel: close, decrypt: { run(false) }, encrypt: { run(true) }, disabled: !complete, help: .solitaire)
         }
         .onChange(of: cards) { _, _ in changeConfiguration() }
@@ -299,7 +299,7 @@ struct SolitaireDialog: View {
         switch order {
         case 3:
             if cards <= 25 {
-                Alerts.error("Das Solitaire-Deck konnte nicht geladen werden.", title: "Solitaire")
+                Alerts.error("Could not load the Solitaire deck.", title: "Solitaire")
                 cards = 26
                 return
             }
@@ -347,7 +347,7 @@ struct SolitaireDialog: View {
 
     private func pasteKey(_ s: String) {
         guard let d = try? SolitaireAnalysis.parseDeck(s) else {
-            Alerts.error("Das Solitaire-Deck konnte nicht geladen werden.", title: "Solitaire")
+            Alerts.error("Could not load the Solitaire deck.", title: "Solitaire")
             return
         }
         order = 4
@@ -380,7 +380,7 @@ struct SolitaireDialog: View {
         manualStep = s == 5 ? 1 : s + 1
         if s == 5 && keystream.count >= needed {
             manualStep = 0
-            Alerts.info("Alle Schlüsselzeichen erzeugt.", title: "Solitaire")
+            Alerts.info("All keystream letters produced", title: "Solitaire")
         }
     }
 

@@ -105,21 +105,21 @@ struct HelpSidebarView: View {
             VStack(spacing: 8) {
                 if model.searching {
                     ProgressView().controlSize(.small)
-                    Text("Suche …").foregroundStyle(.secondary)
+                    Text("Searching...").foregroundStyle(.secondary)
                 } else {
                     Image(systemName: "magnifyingglass").font(.title2).foregroundStyle(.secondary)
-                    Text("Keine Treffer für „\(model.query)“").foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    Text("No results for \"\(model.query)\"").foregroundStyle(.secondary).multilineTextAlignment(.center)
                 }
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
             List(selection: Binding(get: { model.currentFile }, set: { model.openResult($0) })) {
-                Section(header: Text(model.results.count == 1 ? "1 Seite gefunden" : "\(model.results.count) Seiten gefunden")) {
+                Section(header: Text(model.results.count == 1 ? "1 page found" : "\(model.results.count) pages found")) {
                     ForEach(model.results) { r in
                         VStack(alignment: .leading, spacing: 2) {
                             Text(r.title).lineLimit(2)
-                            Text(r.hits == 1 ? "1 Treffer" : "\(r.hits) Treffer")
+                            Text(r.hits == 1 ? "1 hit" : "\(r.hits) hits")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -164,7 +164,7 @@ final class HelpWindowController: NSWindowController, NSWindowDelegate, NSToolba
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1060, height: 740),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable],
                               backing: .buffered, defer: false)
-        window.title = "CrypTool-Hilfe"
+        window.title = "CrypTool Help"
         window.isReleasedWhenClosed = false
         window.isRestorable = false
         window.tabbingMode = .disallowed
@@ -217,7 +217,7 @@ final class HelpWindowController: NSWindowController, NSWindowDelegate, NSToolba
         guard let root = HelpBook.rootURL else {
             webView.loadHTMLString("""
                 <html><body style="font-family:-apple-system;padding:2em">
-                <h2>Hilfe nicht gefunden</h2><p>Die Hilfedateien (Resources/Help/de) fehlen in dieser Installation.</p>
+                <h2>Help not found</h2><p>The help files (Resources/Help/en) are missing in this installation.</p>
                 </body></html>
                 """, baseURL: nil)
             return
@@ -247,7 +247,7 @@ final class HelpWindowController: NSWindowController, NSWindowDelegate, NSToolba
         let op = webView.printOperation(with: info)
         op.showsPrintPanel = true
         op.showsProgressPanel = true
-        op.jobTitle = webView.title ?? "CrypTool-Hilfe"
+        op.jobTitle = webView.title ?? "CrypTool Help"
         // WKWebView's print view has a zero frame unless set explicitly (prints blank pages otherwise).
         op.view?.frame = webView.bounds
         op.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
@@ -286,17 +286,17 @@ final class HelpWindowController: NSWindowController, NSWindowDelegate, NSToolba
     func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier id: NSToolbarItem.Identifier,
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
         switch id {
-        case Item.back: return button(id, "Zurück", "chevron.left", #selector(goBack(_:)), navigational: true)
-        case Item.forward: return button(id, "Vorwärts", "chevron.right", #selector(goForward(_:)), navigational: true)
-        case Item.home: return button(id, "Startseite", "house", #selector(goHome(_:)))
+        case Item.back: return button(id, "Back", "chevron.left", #selector(goBack(_:)), navigational: true)
+        case Item.forward: return button(id, "Forward", "chevron.right", #selector(goForward(_:)), navigational: true)
+        case Item.home: return button(id, "Starting Page", "house", #selector(goHome(_:)))
         case Item.index: return button(id, "Index", "list.bullet.rectangle", #selector(goIndex(_:)))
-        case Item.print: return button(id, "Drucken", "printer", #selector(printPage(_:)))
+        case Item.print: return button(id, "Print", "printer", #selector(printPage(_:)))
         case Item.search:
             let item = NSSearchToolbarItem(itemIdentifier: id)
-            item.label = "Suchen"
-            item.toolTip = "Volltextsuche in der Hilfe"
+            item.label = "Find"
+            item.toolTip = "Full-text search in the help"
             item.preferredWidthForSearchField = 240
-            item.searchField.placeholderString = "Hilfe durchsuchen"
+            item.searchField.placeholderString = "Search help"
             item.searchField.sendsSearchStringImmediately = false
             item.searchField.target = self
             item.searchField.action = #selector(searchChanged(_:))
@@ -388,9 +388,9 @@ final class HelpWindowController: NSWindowController, NSWindowDelegate, NSToolba
             if model.currentFile != file { model.currentFile = file }
         }
         if let t = webView.title, !t.isEmpty {
-            window?.title = "CrypTool-Hilfe – \(t)"
+            window?.title = "CrypTool Help – \(t)"
         } else {
-            window?.title = "CrypTool-Hilfe"
+            window?.title = "CrypTool Help"
         }
         window?.toolbar?.validateVisibleItems()
     }

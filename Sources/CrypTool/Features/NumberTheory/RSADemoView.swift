@@ -48,62 +48,62 @@ struct RSADemoView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            GroupBox("RSA mit privatem und öffentlichem Schlüssel -- oder nur mit öffentlichem Schlüssel") {
+            GroupBox("RSA using the private and public key -- or using only the public key") {
                 VStack(alignment: .leading, spacing: 6) {
-                    NTRadio(title: "Wählen Sie zwei Primzahlen p und q. Die Zahl N = pq ist der öffentliche RSA-Modul, und phi(N) = (p-1)(q-1) ist die Eulersche Phi-Funktion. Der öffentliche Schlüssel e ist teilerfremd zu phi(N). Daraus wird der geheime Schlüssel d = e^(-1) (mod phi(N)) berechnet.",
+                    NTRadio(title: "Choose two prime numbers p and q. The composite number N = pq is the public RSA modulus, and phi(N) = (p-1)(q-1) is the Euler totient. The public key e is freely chosen but must be coprime to the totient. The private key d is then calculated such that d = e^(-1) (mod phi(N)).",
                             selected: !publicOnly) { setMode(publicOnly: false) }
-                    NTRadio(title: "Zur Verschlüsselung von Daten oder zur Verifikation einer Signatur genügt es, dass Sie die öffentlichen RSA-Parameter angeben: den RSA-Modul N und den öffentlichen Schlüssel e. ",
+                    NTRadio(title: "For data encryption or certificate verification, you will only need the public RSA parameters: the modulus N and the public key e.",
                             selected: publicOnly) { setMode(publicOnly: true) }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox(publicOnly ? "Faktorisierungsangriff" : "Primzahleneingabe") {
+            GroupBox(publicOnly ? "Factorization attack" : "Prime number entry") {
                 HStack(alignment: .top) {
                     if publicOnly {
-                        Text("Sie können versuchen, den RSA-Modul N in seine Primfaktoren p und q zu zerlegen.")
+                        Text("You may try to resolve the RSA modulus N into its prime factors p and q.")
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         Grid(alignment: .leading, verticalSpacing: 4) {
-                            GridRow { Text("Primzahl p").frame(width: 150, alignment: .leading); field($pText) }
-                            GridRow { Text("Primzahl q"); field($qText) }
+                            GridRow { Text("Prime number p").frame(width: 150, alignment: .leading); field($pText) }
+                            GridRow { Text("Prime number q"); field($qText) }
                         }
                     }
-                    Button(publicOnly ? "RSA-Modul faktorisieren..." : "Primzahlen generieren...", action: generateOrFactor)
+                    Button(publicOnly ? "Factorize RSA modulus..." : "Generate prime numbers...", action: generateOrFactor)
                         .frame(width: 190)
                 }.padding(4)
             }
-            GroupBox("RSA-Parameter") {
+            GroupBox("RSA parameters") {
                 Grid(alignment: .leading, verticalSpacing: 4) {
                     GridRow {
-                        Text("RSA-Modul N").frame(width: 150, alignment: .leading)
+                        Text("RSA modulus N").frame(width: 150, alignment: .leading)
                         if publicOnly { field($nText) } else { NTReadOnlyText(text: nText) }
-                        Text("(öffentlich)").foregroundStyle(.secondary)
+                        Text("(public)").foregroundStyle(.secondary)
                     }
                     GridRow {
                         Text("phi(N) = (p-1)(q-1)")
                         NTReadOnlyText(text: phiText)
-                        Text("(geheim)").foregroundStyle(.secondary)
+                        Text("(secret)").foregroundStyle(.secondary)
                     }
                     GridRow {
-                        Text("Öffentlicher Schlüssel e")
+                        Text("Public key e")
                         field($eText)
                         Text("")
                     }
                     GridRow {
-                        Text("Geheimer Schlüssel d")
+                        Text("Private key d")
                         NTReadOnlyText(text: dText)
-                        Button("Parameter aktualisieren", action: updateParameters)
+                        Button("Update parameters", action: updateParameters)
                     }
                 }.padding(4)
             }
-            GroupBox("RSA-Verschlüsselung mit e / Entschlüsselung mit d  [Alphabetsgröße: \(options.alphabetSize)]") {
+            GroupBox("RSA encryption using e / decryption using d  [alphabet size: \(options.alphabetSize)]") {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("Eingabe als")
-                        NTRadio(title: "Text", selected: !asNumbers) { setInputMode(numbers: false) }
-                        NTRadio(title: "Zahlen", selected: asNumbers) { setInputMode(numbers: true) }
+                        Text("Input as")
+                        NTRadio(title: "text", selected: !asNumbers) { setInputMode(numbers: false) }
+                        NTRadio(title: "numbers", selected: asNumbers) { setInputMode(numbers: true) }
                         Spacer()
-                        Button("Optionen für Alphabet und Zahlensystem...", action: showOptions)
+                        Button("Alphabet and number system options...", action: showOptions)
                             .disabled(publicOnly || !(pValid && qValid))
                     }
                     Text(hInput).font(.callout).foregroundStyle(.secondary)
@@ -118,16 +118,16 @@ struct RSADemoView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack {
-                Button("Verschlüsseln", action: encrypt).disabled(!canEncrypt)
-                Button("Entschlüsseln", action: decrypt).disabled(!canDecrypt)
+                Button("Encrypt", action: encrypt).disabled(!canEncrypt)
+                Button("Decrypt", action: decrypt).disabled(!canDecrypt)
                 Spacer()
                 CT1HelpButton(action: .rsaDemo)
-                Button("Schließen") { ref.window?.close() }.keyboardShortcut(.cancelAction)
+                Button("Close") { ref.window?.close() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
         .frame(width: 720)
-        .ct1Window(title: "RSA-Demo", ref: ref)
+        .ct1Window(title: "RSA Demonstration", ref: ref)
         .onAppear(perform: initialize)
         .onDisappear(perform: saveState)
         .onChange(of: pText) { _, v in filterThenCheck($pText, v) }
@@ -191,20 +191,20 @@ struct RSADemoView: View {
             if q.value == nil { Alerts.info(q.error ?? NTMessages.bigNumber); return }
             let pp = p.value!, qq = q.value!
             let pPrime = pp >= 2 && Primality.isProbablePrime(pp), qPrime = qq >= 2 && Primality.isProbablePrime(qq)
-            if !pPrime && !qPrime { Alerts.info("p und q sind NICHT prim !"); checkParameters(); return }
-            if !pPrime { Alerts.info("Die Eingabe für p ist keine Primzahl !"); checkParameters(); return }
-            if !qPrime { Alerts.info("Die Eingabe für q ist keine Primzahl !"); checkParameters(); return }
-            if pp == qq { Alerts.info("Die Primzahlen p und q müssen verschieden sein!"); checkParameters(); return }
+            if !pPrime && !qPrime { Alerts.info("p and q are NO prime numbers !"); checkParameters(); return }
+            if !pPrime { Alerts.info("The input for p is not a prime number !"); checkParameters(); return }
+            if !qPrime { Alerts.info("The input for q is not a prime number !"); checkParameters(); return }
+            if pp == qq { Alerts.info("The prime numbers p and q must be different!"); checkParameters(); return }
             if pp.bitLength + qq.bitLength - 1 > CT1BigNumber.maxBits {
-                Alerts.error("Die Demonstration unterstützt nur positive ganze Zahlen der Bitlänge kleiner 8192.\nDie Bitlänge des von Ihnen erzeugten RSA-Moduls ist größer als 8192. \nBitte wählen Sie die Primzahlen p und q so, dass der RSA-Modul N=p*q kleiner ist als 2^8192.")
+                Alerts.error("The demonstration supports only positive integers of bit length smaller than 8192.\nThe bit length of the actually generated RSA modul exceeds 8192.\nPlease select primes p and q, whereby the RSA modul N = p*q is smaller than 2^8192.")
                 return
             }
             checkParameters()
             if privD == nil {
                 let a = NSAlert()
                 a.messageText = "CrypTool"
-                a.informativeText = "Der Parameter e (\(eText)) ist nicht teilerfremd zu phi(N) (\(phiText)). Entweder wird ein fixer öffentliche Schlüssel benutzt (hier: 2^16+1), oder es wird ein Schlüssel generiert. Wollen Sie einen neuen öffentlichen Schlüssel generieren?"
-                a.addButton(withTitle: "Ja"); a.addButton(withTitle: "Nein")
+                a.informativeText = "The parameter e (\(eText)) is not coprime to phi(N) (\(phiText)). Either a fixed public key is used (here: 2^16+1), or a new key is generated. Do you want to generate a new public key?"
+                a.addButton(withTitle: "Yes"); a.addButton(withTitle: "No")
                 if a.runModal() == .alertFirstButtonReturn {
                     // CT1 calculateSmallestE: smallest e > 1 coprime to phi(N)
                     let phi = (pp - 1) * (qq - 1)
@@ -233,9 +233,9 @@ struct RSADemoView: View {
     private func modulusTooSmallMessage() {
         let a = options.alphabetSize, n = nText
         if !asNumbers {
-            Alerts.error("Die Anzahl der Zeichen im Alphabet (hier \(a) Buchstaben) muss kleiner oder gleich der Größe des RSA-Moduls (hier N = \(n)) sein.\nBitte ändern Sie im Dialog \"Textoptionen\" das Alphabet oder wählen Sie größere Primzahlen.")
+            Alerts.error("The number of characters in the alphabet (here \(a) letters) must be smaller or equal to the size of the RSA modul (here N = \(n)).\nPlease modify the alphabet in the \"Text Options\" dialog or choose larger prime numbers.")
         } else {
-            Alerts.error("Die RSA-Entschlüsselung von Zahlen in Text kann nicht korrekt sein, da die Anzahl der Zeichen im Alphabet (hier \(a) Buchstaben) größer als der RSA-Modul (hier N = \(n)) ist. Bitte ändern Sie im Dialog \"Optionen für Alphabet und Zahlensystem...\" das Alphabet oder wählen Sie größere Primzahlen.")
+            Alerts.error("The RSA encryption of numbers into text is incorrect, since the number of characters in the alphabet (here \(a)) is larger than the size of the RSA modul (here N=\(n)). Please modify the alphabet in \"options for alphabet and number-system...\" or chooses larger prime numbers.")
         }
     }
 
@@ -262,19 +262,19 @@ struct RSADemoView: View {
         s1 = ""; s2 = ""; s3 = ""
         h1 = ""; h2 = ""; h3 = ""
         hInput = asNumbers
-            ? "Eingabe der Nachricht als Zahlen im Format: Zahl(1) # Zahl(2) # ... # Zahl(n) (Zahlen zur Basis \(options.base))."
-            : "Eingabe der zu ver- oder entschlüsselnden Nachricht als Text oder als HexDump."
+            ? "Input of the message in the following format:  number(1) # number(2) # ... # number(n) (number in base \(options.base))."
+            : "Enter the message for encryption or decryption either as text or as hex dump."
     }
 
     // MARK: Prime generation / factorisation attack
 
     private func generateOrFactor() {
         if !publicOnly {
-            ref.sheet("Primzahlen generieren") { close in
+            ref.sheet("Prime Number Generation") { close in
                 PrimeGenerationView(onUse: { p, q in
                     pText = p.description; qText = q.description
                     if p.bitLength + q.bitLength - 1 > CT1BigNumber.maxBits {
-                        Alerts.error("Die Demonstration unterstützt nur positive ganze Zahlen der Bitlänge kleiner 8192.\nDie Bitlänge des von Ihnen erzeugten RSA-Moduls ist größer als 8192. \nBitte wählen Sie die Primzahlen p und q so, dass der RSA-Modul N=p*q kleiner ist als 2^8192.")
+                        Alerts.error("The demonstration supports only positive integers of bit length smaller than 8192.\nThe bit length of the actually generated RSA modul exceeds 8192.\nPlease select primes p and q, whereby the RSA modul N = p*q is smaller than 2^8192.")
                         pText = ""; qText = ""
                     }
                     checkParameters()
@@ -283,11 +283,11 @@ struct RSADemoView: View {
             return
         }
         guard !nText.isEmpty, ntEvaluate(nText).value != nil else {
-            Alerts.info("Bitte geben Sie einen gültigen RSA-Modul an.")
+            Alerts.info("Please provide a valid RSA modulus.")
             return
         }
         let n = nText
-        ref.sheet("Faktorisieren einer Zahl") { close in
+        ref.sheet("Factorization of a Number") { close in
             FactorizationView(initialNumber: n, readOnly: true) { factors in
                 close()
                 evaluateFactorisation(factors)
@@ -297,22 +297,22 @@ struct RSADemoView: View {
 
     private func evaluateFactorisation(_ factors: [FactorizationCT1Model.Factor]) {
         if factors.isEmpty || factors.contains(where: { !$0.isPrime }) {
-            Alerts.info("Die Zahl N wurde nicht faktorisiert!")
+            Alerts.info("The integer N is not factorized until yet.")
         } else if factors.count == 2 && factors.allSatisfy({ $0.exponent == 1 }) {
-            Alerts.info("Der RSA-Modul N wurde erfolgreich in die Primzahlen p und q faktorisiert!\nSie können jetzt die RSA-Operation auch mit dem geheimen Schlüssel d\ndurchführen: Benutzen Sie hierfür den Knopf Entschlüsseln.")
+            Alerts.info("The RSA modulus N has been successfully factorized into the primes p and q!\nYou can now perform the RSA operation with the secret key d:\nPlease click the Decrypt button to continue.")
             publicOnly = false
             pText = factors[0].value.description
             qText = factors[1].value.description
             checkParameters()
             requestForInput(clear: false)
         } else {
-            Alerts.info("Die Zahl N ist kein RSA-Modul:\n- entweder hat N mehr als zwei Faktoren\n- oder N = p^2 ist eine Quadratzahl.\n\nBitte korrigieren Sie die Eingabe für N.")
+            Alerts.info("The integer N is not an RSA modulus:\n- either N has been factorized into more than two numbers\n- or N = p^2 is a quadratic number.\n\nPlease correct the input of N.")
         }
     }
 
     private func showOptions() {
         let current = options, n = modulus
-        ref.sheet("Optionen für die RSA-Demo") { close in
+        ref.sheet("RSA Demonstration Options") { close in
             RSADemoOptionsView(options: current, modulus: n, onOK: { o in
                 options = o
                 requestForInput(clear: false)
@@ -331,8 +331,8 @@ struct RSADemoView: View {
               input.contains(where: { !$0.isWhitespace }) else { return }
         let a = NSAlert()
         a.messageText = "CrypTool"
-        a.informativeText = "Die Eingabe wurde als Folge von Zahlen erkannt!\n\nWollen Sie die Eingabe als Folge von Zahlen betrachten [ja/nein]?"
-        a.addButton(withTitle: "Ja"); a.addButton(withTitle: "Nein")
+        a.informativeText = "The input looks like a sequence of numbers!\n\nDo you wish to consider it as a sequence of numbers [yes/no]?"
+        a.addButton(withTitle: "Yes"); a.addButton(withTitle: "No")
         if a.runModal() == .alertFirstButtonReturn { asNumbers = true }
     }
 
@@ -341,11 +341,11 @@ struct RSADemoView: View {
         let set = Set(options.alphabet)
         let clean = String(input.filter { set.contains($0) })
         if clean.isEmpty {
-            Alerts.info("Der von Ihnen eingegebene Klartext enthält kein einziges Zeichen aus dem von Ihnen gewählten Alphabet.\nBitte korrigieren Sie Ihre Eingabe!", title: "RSA-Demo")
+            Alerts.info("The plaintext you entered does not contain a single character of the given alphabet.\nPlease correct your plaintext.", title: "RSA Demonstration")
             return false
         }
         if clean.count != input.count {
-            if !Alerts.confirm("Die Eingabe enthält Zeichen, die nicht im eingestellten Alphabet enthalten sind!\nWenn Sie OK wählen, werden nur die im Alphabet enthaltenen Zeichen verschlüsselt (alle anderen Zeichen werden aus der Eingabe gelöscht).", title: "RSA-Demo") {
+            if !Alerts.confirm("The input does contain characters which are not in the alphabet set!\nIf you click OK, only characters of the alphabet will be encrypted (the other characters will be erased from the input).", title: "RSA Demonstration") {
                 return false
             }
         }
@@ -354,23 +354,23 @@ struct RSADemoView: View {
     }
 
     private func headingsText(encrypt: Bool) {
-        hInput = "Eingabetext"
-        h1 = "Der Eingabetext wird in Blöcke der Länge \(blockSize) aufgeteilt (das Symbol '#' dient als Trennzeichen)."
-        h2 = "Zahlendarstellung der Eingabe zur Basis \(base)."
-        h3 = encrypt ? "Verschlüsselung in den Geheimtext c[i] = m[i]^e (mod N)." : "Entschlüsselung in den Klartext m[i] = c[i]^d (mod N)"
+        hInput = "Input text"
+        h1 = "The Input text will be separated into segments of Size \(blockSize) (the symbol '#' is used as separator)."
+        h2 = "Numbers input in base \(base) format."
+        h3 = encrypt ? "Encryption into ciphertext c[i] = m[i]^e (mod N)" : "Decryption into plaintext m[i] = c[i]^d (mod N)"
     }
 
     private func headingsNumbers(encrypt: Bool) {
         if encrypt {
-            hInput = "Zahlendarstellung des Klartextes zur Basis \(base) ."
-            h1 = "Verschlüsselung in den Geheimtext c[i] = m[i]^e (mod N)."
-            h2 = "Ausgabetext aus der Verschlüsselung (in Blöcken der Länge \(blockSize); das Symbol '#' dient nur als Trennzeichen)."
-            h3 = "Geheimtext"
+            hInput = "Plaintext coded in numbers of base \(base)."
+            h1 = "Encryption into ciphertext c[i] = m[i]^e (mod N)"
+            h2 = "Output text from the encryption (into segments of size \(blockSize); the symbol '#' is used as separator)."
+            h3 = "Ciphertext"
         } else {
-            hInput = "Geheimtext in Zahlendarstellung zur Basis \(base) . "
-            h1 = "Entschlüsselung in den Klartext m[i] = c[i]^d (mod N)"
-            h2 = "Ausgabetext aus der Entschlüsselung (in Blöcken der Länge \(blockSize); das Symbol '#' dient nur als Trennzeichen)."
-            h3 = "Klartext"
+            hInput = "Ciphertext coded in numbers of base \(base)"
+            h1 = "Decryption into plaintext m[i] = c[i]^d (mod N)"
+            h2 = "Output text from the decryption (into segments of size \(blockSize); the symbol '#' is used as separator)."
+            h3 = "Plaintext"
         }
     }
 
@@ -462,8 +462,8 @@ struct RSADemoView: View {
             }
         }
         if !ok {
-            s2 = encrypt ? "Die verschlüsselte Nachricht kann nicht in eine Textnachricht decodiert werden !"
-                         : "Die entschlüsselte Nachricht kann nicht in eine Textnachricht decodiert werden ! "
+            s2 = encrypt ? "The encrypted message could not be decoded into a text message!"
+                         : "The decrypted message could not be decoded into a text message!"
             s3 = ""; h2 = ""; h3 = ""
             return
         }
@@ -491,19 +491,19 @@ struct RSADemoView: View {
             headingsText(encrypt: encrypt)
             let numbers = segmentation().compactMap { BigUInt($0, radix: base) }
             guard let out = rsa(numbers, encrypt: encrypt) else {
-                Alerts.error("Mindestens eine Zahl der Eingabe ist größer oder gleich als die Größe des RSA-Moduls N\n(die RSA-Exponentiation ist für Zahlen größer oder gleich N nicht eindeutig)!\n\nBitte überprüfen Sie die Eingabe.")
+                Alerts.error("At least one number of the input is greater or equal the size of the RSA modulus N\n(the RSA exponentiation is for a number greater or equal than N not invertible)!\n\nPlease correct your input.")
                 return
             }
             s3 = out
         } else {
             guard var numbers = RSADemoCodec.numberTokens(input, base: base) else {
-                Alerts.error("Die Eingabe ist keine Folge von Zahlen zur Basis \(base). \nBitte korrigieren Sie die Eingabe oder verschlüsseln Sie die Eingabe als Text.")
+                Alerts.error("Your input is not a sequence of numbers in base \(base). \nPlease correct your input or encrypt the input as text.")
                 return
             }
             if options.variant == 1, let n = modulus { numbers = numbers.map { $0 % n } }
             guard let out = rsa(numbers, encrypt: encrypt) else {
                 s1 = ""
-                Alerts.error("Mindestens eine Zahl der Eingabe ist größer oder gleich als die Größe des RSA-Moduls N\n(die RSA-Exponentiation ist für Zahlen größer oder gleich N nicht eindeutig)!\n\nBitte überprüfen Sie die Eingabe.")
+                Alerts.error("At least one number of the input is greater or equal the size of the RSA modulus N\n(the RSA exponentiation is for a number greater or equal than N not invertible)!\n\nPlease correct your input.")
                 return
             }
             s1 = out

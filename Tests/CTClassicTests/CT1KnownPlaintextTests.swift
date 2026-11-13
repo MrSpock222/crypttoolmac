@@ -49,7 +49,7 @@ func runCT1KnownPlaintextTests() {
             expect(false, "Dimension 3 dürfte nicht gefunden werden"); return
         }
         expectEqual(f, [3: .conflict])
-        expectEqual(CT1HillKnownPlaintext.notFoundMessage(f), "Der Schlüssel konnte nicht gefunden werden (Widerspruch) !")
+        expectEqual(CT1HillKnownPlaintext.notFoundMessage(f), "The key could not be found due to a conflict!")
 
         // mixed reasons: dim 1 contradiction, dim 2 too short
         guard case .notFound(let g) = CT1HillKnownPlaintext.search(plaintext: "BC", ciphertext: "XY", dimensions: 1...10,
@@ -58,11 +58,11 @@ func runCT1KnownPlaintextTests() {
         }
         expectEqual(g, [1: .conflict, 2: .textTooShort])
         expectEqual(CT1HillKnownPlaintext.notFoundMessage(g),
-                    "Ein Schlüssel der Dimension 1 konnte wegen eines Widerspruches nicht gefunden werden.\nEin Schlüssel der Dimension 2 konnte wegen des zu kurzen Textes nicht gefunden werden.")
+                    "A key of dimension 1 could not be found due to a conflict.\nA key of dimension 2 could not be found because the text was too short.")
         // no alphabet letters / nothing tested → "Text zu kurz"
         if case .notFound(let h) = CT1HillKnownPlaintext.search(plaintext: "123", ciphertext: "456", dimensions: 1...10,
                                                                 multiplication: .matrixTimesVector, options: o) {
-            expectEqual(CT1HillKnownPlaintext.notFoundMessage(h), "Der Schlüssel konnte nicht gefunden werden (Text zu kurz) !")
+            expectEqual(CT1HillKnownPlaintext.notFoundMessage(h), "The key could not be found as the text was too short!")
         } else { expect(false, "123/456") }
 
         expectEqual(CT1HillKnownPlaintext.keyString(matrix: key, alphabet: o.alphabetCharacters, firstLetterIsOne: false,

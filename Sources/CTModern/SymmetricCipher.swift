@@ -50,7 +50,7 @@ public enum SymmetricCipher {
     public static func encryptRaw(_ alg: SymmetricAlgorithm, key: [UInt8], data: [UInt8]) throws -> [UInt8] {
         try checkKey(alg, key)
         if alg.blockSize > 0 && data.count % alg.blockSize != 0 {
-            throw CTError("Die Datenlänge (\(data.count) Byte) ist kein Vielfaches der Blocklänge (\(alg.blockSize) Byte).")
+            throw CTError("The data length (\(data.count) bytes) is not a multiple of the block length (\(alg.blockSize) bytes).")
         }
         return try crypt(alg, decrypt: false, key: key, data: data)
     }
@@ -81,7 +81,7 @@ public enum SymmetricCipher {
     /// Removes the padding used for `alg`; throws on invalid padding.
     public static func unpad(_ alg: SymmetricAlgorithm, _ data: [UInt8]) throws -> [UInt8] {
         if alg == .rc4 { return data }
-        let bad = CTError("Ungültiges Padding nach der Entschlüsselung – falscher Schlüssel oder beschädigter Geheimtext?")
+        let bad = CTError("Invalid padding after decryption - wrong key or corrupt ciphertext?")
         if alg.usesCT1Padding {
             // CT1: strip trailing zeros, then the 0x01 marker (at most 15 zeros).
             var i = data.count - 1
@@ -106,7 +106,7 @@ public enum SymmetricCipher {
 
     static func checkKey(_ alg: SymmetricAlgorithm, _ key: [UInt8]) throws {
         guard alg.isValidKeyLength(key.count) else {
-            throw CTError("Ungültige Schlüssellänge für \(alg.displayName): \(key.count * 8) Bit (erlaubt: \(alg.keySizesText)).")
+            throw CTError("Invalid key length for \(alg.displayName): \(key.count * 8) bits (allowed: \(alg.keySizesText)).")
         }
     }
 
@@ -114,7 +114,7 @@ public enum SymmetricCipher {
         if alg == .rc4 { return }
         let unit = alg.paddingUnit
         if count == 0 || count % unit != 0 {
-            throw CTError("Die Länge des Geheimtexts (\(count) Byte) ist kein Vielfaches von \(unit) Byte – keine gültige \(alg.displayName)-Verschlüsselung.")
+            throw CTError("The length of the ciphertext (\(count) bytes) is not a multiple of \(unit) bytes - not a valid \(alg.displayName) encryption.")
         }
     }
 
@@ -129,7 +129,7 @@ public enum SymmetricCipher {
             }
         }
         if !status {
-            throw CTError("\(alg.displayName): Fehler bei der \(decrypt ? "Ent" : "Ver")schlüsselung.")
+            throw CTError("\(alg.displayName): \(decrypt ? "De" : "En")cryption error.")
         }
         return out
     }

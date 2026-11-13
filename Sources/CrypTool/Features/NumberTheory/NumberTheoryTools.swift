@@ -14,7 +14,7 @@ func parseBigNumber(_ s: String) -> BigUInt? {
 
 /// CT1 messages used by several number-theory dialogs.
 enum NTMessages {
-    static let inputFalse = "In diesem Feld wird eine Zahl oder ein Ausdruck erwartet,\naus dem sich ein Zahlenwert berechnen lässt.\nBitte geben Sie einen gültigen Ausdruck ein!\n\nBeispiele: 123, 2^15+1, (2^17-5)^2."
+    static let inputFalse = "Please enter into this field an integer or an expression, that\nevaluates to an integer!\nExamples: 123, 2^15+1, (2^17-5)^2."
     static let bigNumber = CT1BigNumber.message
 }
 
@@ -61,38 +61,38 @@ struct PrimeTestView: View {
         VStack(alignment: .leading, spacing: 10) {
             GroupBox {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Es gibt viele Verfahren, um zu testen, ob eine Zahl eine Primzahl ist.")
-                    Text("Am häufigsten werden die probabilistischen Verfahren verwendet: Sie sind sehr schnell, geben aber nur mit einer bestimmten (einstellbar kleinen) Wahrscheinlichkeit an, ob die Zahl prim ist.")
-                    Text("Daneben gibt es noch deterministische Verfahren: Wenn diese ein Ergebnis liefern, ist es mit 100% Wahrscheinlichkeit korrekt (aus mathematischer Sicht).")
+                    Text("There are many methods to check if a number is prime.")
+                    Text("Most of these are probabilistic, meaning that they can only determine primality to a given adjustable degree of certainty.")
+                    Text("However, these methods are much faster than their counterpart, deterministic methods. Such methods return a 100% mathematically certain result.")
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Algorithmen zum Primzahltest") {
+            GroupBox("Algorithms for prime number test") {
                 Picker("", selection: $algo) {
-                    Text("Miller-Rabin-Test").tag(0)
-                    Text("Fermat-Test").tag(1)
-                    Text("Solovay-Strassen-Test").tag(2)
-                    Text("AKS-Test (deterministisches Verfahren)").tag(3)
+                    Text("Miller-Rabin test").tag(0)
+                    Text("Fermat test").tag(1)
+                    Text("Solovay-Strassen test").tag(2)
+                    Text("AKS test (deterministic procedure)").tag(3)
                 }
                 .pickerStyle(.radioGroup).labelsHidden()
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Primzahltest") {
+            GroupBox("Prime number test") {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Spacer()
-                        Button("Zahl aus Datei laden") {
+                        Button("Load number from file") {
                             if let s = CT1BigNumber.loadFromFile() { input = s }
                         }.disabled(busy)
                     }
                     HStack {
-                        Text("Zu testende Zahl oder Formel:").frame(width: 190, alignment: .leading)
+                        Text("Number or formula to test:").frame(width: 190, alignment: .leading)
                         TextField("", text: $input).font(.system(.body, design: .monospaced))
                             .onSubmit(test)
                     }
                     HStack {
-                        Text("Ergebnis:").frame(width: 190, alignment: .leading)
+                        Text("Result:").frame(width: 190, alignment: .leading)
                         Image(systemName: isPrime == true ? "checkmark.circle.fill" : "xmark.circle.fill")
                             .foregroundStyle(isPrime == true ? .green : .red)
                             .opacity(isPrime == nil ? 0 : 1)
@@ -101,12 +101,12 @@ struct PrimeTestView: View {
                 }.padding(4)
             }
             HStack {
-                Button("Zahl testen", action: test).keyboardShortcut(.defaultAction).disabled(busy)
-                Button("Zahl faktorisieren", action: jumpToFactorization).disabled(!canFactor || busy)
+                Button("Test number", action: test).keyboardShortcut(.defaultAction).disabled(busy)
+                Button("Factorize number", action: jumpToFactorization).disabled(!canFactor || busy)
                 if busy { ProgressView().controlSize(.small) }
                 Spacer()
                 CT1HelpButton(action: .primeTest)
-                Button("Abbrechen") {
+                Button("Cancel") {
                     token.cancel()
                     ref.window?.close()
                 }
@@ -114,7 +114,7 @@ struct PrimeTestView: View {
         }
         .padding(14)
         .frame(minWidth: 560, idealWidth: 600)
-        .ct1Window(title: "Primzahltest", ref: ref)
+        .ct1Window(title: "Prime Number Test", ref: ref)
         .onAppear {
             if !didInit { didInit = true; if !initialNumber.isEmpty { input = initialNumber } }
         }
@@ -133,7 +133,7 @@ struct PrimeTestView: View {
     private func test() {
         clearResult()
         if input.trimmingCharacters(in: .whitespaces).isEmpty {
-            Alerts.error("Geben Sie eine zu testende Zahl ein!")
+            Alerts.error("Please enter a number!")
             return
         }
         let (value, err) = ntEvaluate(input)
@@ -165,9 +165,9 @@ struct PrimeTestView: View {
     private func show(prime: Bool, probable: Bool, _ numberText: String) {
         isPrime = prime
         if prime {
-            result = (probable ? "Die Zahl ist wahrscheinlich eine Primzahl: " : "Die Zahl ist eine Primzahl: ") + numberText
+            result = (probable ? "The number is probable prime: " : "The number is prime: ") + numberText
         } else {
-            result = "Die Zahl ist keine Primzahl: " + numberText
+            result = "The number is not prime: " + numberText
             canFactor = true
         }
     }
@@ -175,7 +175,7 @@ struct PrimeTestView: View {
     private func runAKS(_ n: BigUInt, numberText: String, token: CancellationToken) {
         let progress = NTProgressModel()
         let bits = n.bitLength
-        progress.format = { p, rest in "\(bits) Bit AKS-Test zu \(p)% erledigt.\nRestzeit: \(rest)" }
+        progress.format = { p, rest in "\(bits)-bit AKS test \(p)% completed.\nRemaining time: \(rest)" }
         var shown = false
         // show the progress dialog only for runs that are not instantaneous
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -202,10 +202,10 @@ struct PrimeTestView: View {
                 case .prime: show(prime: true, probable: false, numberText)
                 case .composite: show(prime: false, probable: false, numberText)
                 case .cancelled:
-                    if !token.isCancelled { result = "Test abgebrochen!"; isPrime = nil }
+                    if !token.isCancelled { result = "Test canceled"; isPrime = nil }
                 case .tooLarge(let bytes):
-                    result = "Fehler bei der Verarbeitung!"; isPrime = nil
-                    Alerts.error(String(format: "Der AKS-Test ist für diese Zahl nicht durchführbar: Die Polynomrechnung würde ca. %.0f MB Arbeitsspeicher benötigen.", bytes / 1_048_576))
+                    result = "Error in processing"; isPrime = nil
+                    Alerts.error(String(format: "The AKS test is not feasible for this number: the polynomial arithmetic would require approx. %.0f MB of memory.", bytes / 1_048_576))
                 }
             }
         }
@@ -221,7 +221,7 @@ struct PrimeTestView: View {
     private func jumpToFactorization() {
         guard let n = ntEvaluate(input).value else { return }
         let s = n.description
-        WindowPresenter.tool(title: "Faktorisieren einer Zahl", size: CGSize(width: 660, height: 640)) {
+        WindowPresenter.tool(title: "Factorization of a Number", size: CGSize(width: 660, height: 640)) {
             FactorizationView(initialNumber: s)
         }
     }
@@ -258,20 +258,20 @@ struct PrimeGenerationView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             GroupBox {
-                Text("Primzahlen spielen in der modernen Kryptographie eine wichtige Rolle. Hier können Sie sich Primzahlen aus einem vorzugebenden Wertebereich [Untergrenze, Obergrenze] erzeugen.")
+                Text("Prime numbers play an important role in modern cryptography. Here you can generate primes within a given value range [lower limit, upper limit].")
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
-            GroupBox("Anzahl der zu generierenden Primzahlen") {
+            GroupBox("Amount of prime numbers to be generated") {
                 VStack(alignment: .leading, spacing: 6) {
                     Picker("", selection: $countMode) {
-                        Text("Zwei Primzahlen zufällig aus dem Wertebereich (den Wertebereichen) generieren").tag(0)
-                        Text("Alle Primzahlen in dem (für p vorgegebenen) Wertebereich generieren").tag(1)
+                        Text("Generate two primes randomly from within the value range(s)").tag(0)
+                        Text("Generate all primes within the value range set for p").tag(1)
                     }
                     .pickerStyle(.radioGroup).labelsHidden()
                     .disabled(!allowAll)
                     HStack {
-                        Text("Trennzeichen für die Ausgabe der Primzahlen:")
+                        Text("Separator for the display of the primes:")
                         TextField("", text: $separator).frame(width: 40).multilineTextAlignment(.center)
                             .disabled(countMode == 0)
                     }.padding(.leading, 18)
@@ -279,19 +279,19 @@ struct PrimeGenerationView: View {
                 .frame(maxWidth: .infinity, alignment: .leading).padding(4)
             }
             HStack(alignment: .top, spacing: 12) {
-                GroupBox("Algorithmen zur Generierung") {
+                GroupBox("Algorithms for prime number generation") {
                     Picker("", selection: $algo) {
-                        Text("Miller-Rabin-Test").tag(0)
-                        Text("Solovay-Strassen-Test").tag(1)
-                        Text("Fermat-Test").tag(2)
+                        Text("Miller-Rabin Test").tag(0)
+                        Text("Solovay-Strassen Test").tag(1)
+                        Text("Fermat Test").tag(2)
                     }
                     .pickerStyle(.radioGroup).labelsHidden()
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
                 }
-                GroupBox("Wertebereich der Primzahlen p und q") {
+                GroupBox("Value range of the prime numbers p and q") {
                     Picker("", selection: $sameRange) {
-                        Text("Unabhängig voneinander einzugeben").tag(0)
-                        Text("Beide gleich (nur einen eingeben)").tag(1)
+                        Text("To be entered independently of each other").tag(0)
+                        Text("Both are equal (just enter one)").tag(1)
                     }
                     .pickerStyle(.radioGroup).labelsHidden()
                     .disabled(countMode == 1)
@@ -299,29 +299,29 @@ struct PrimeGenerationView: View {
                 }
             }
             HStack(alignment: .top, spacing: 12) {
-                GroupBox("Primzahl p") {
+                GroupBox("Prime number p") {
                     rangeFields(lower: $lowerP, upper: $upperP, result: resultP, disabled: false, resultDisabled: countMode == 1)
                 }
-                GroupBox("Primzahl q") {
+                GroupBox("Prime number q") {
                     rangeFields(lower: $lowerQ, upper: $upperQ, result: resultQ,
                                 disabled: countMode == 1 || sameRange == 1, resultDisabled: countMode == 1)
                 }
             }
             HStack {
-                Button("Primzahlen generieren", action: generate).keyboardShortcut(.defaultAction).disabled(busy)
+                Button("Generate prime numbers", action: generate).keyboardShortcut(.defaultAction).disabled(busy)
                 if onUse != nil {
-                    Button("Primzahlen übernehmen") {
+                    Button("Apply primes") {
                         if let p = BigUInt(resultP), let q = BigUInt(resultQ) { onUse?(p, q); dismiss() }
                     }.disabled(!canAccept || busy)
                 }
                 Spacer()
                 CT1HelpButton(action: .primeGeneration)
-                Button("Abbrechen") { dismiss() }.keyboardShortcut(.cancelAction)
+                Button("Cancel") { dismiss() }.keyboardShortcut(.cancelAction)
             }
         }
         .padding(14)
         .frame(width: 620)
-        .ct1Window(title: "Primzahlen generieren", ref: ref)
+        .ct1Window(title: "Prime Number Generation", ref: ref)
         .onChange(of: lowerP) { _, _ in fieldsChanged() }
         .onChange(of: upperP) { _, _ in fieldsChanged() }
         .onChange(of: lowerQ) { _, _ in fieldsChanged() }
@@ -332,15 +332,15 @@ struct PrimeGenerationView: View {
     private func rangeFields(lower: Binding<String>, upper: Binding<String>, result: String, disabled: Bool, resultDisabled: Bool) -> some View {
         Grid(alignment: .leading, verticalSpacing: 6) {
             GridRow {
-                Text("Untergrenze")
+                Text("Lower limit")
                 TextField("", text: lower).font(.system(.body, design: .monospaced)).disabled(disabled)
             }
             GridRow {
-                Text("Obergrenze")
+                Text("Upper limit")
                 TextField("", text: upper).font(.system(.body, design: .monospaced)).disabled(disabled)
             }
             GridRow {
-                Text("Ergebnis")
+                Text("Result")
                 NTReadOnlyText(text: result).opacity(resultDisabled ? 0.4 : 1)
             }
         }.padding(4)
@@ -362,7 +362,7 @@ struct PrimeGenerationView: View {
 
     private func generate() {
         if [lowerP, upperP, lowerQ, upperQ].contains(where: { $0.trimmingCharacters(in: .whitespaces).isEmpty }) {
-            Alerts.info("Geben Sie Ober- und Untergrenze ein!")
+            Alerts.info("Enter an upper limit and a lower limit.")
             return
         }
         for s in [lowerP, upperP, lowerQ, upperQ] {
@@ -373,14 +373,14 @@ struct PrimeGenerationView: View {
         let pl = ntEvaluate(lowerP), pu = ntEvaluate(upperP), ql = ntEvaluate(qLo), qu = ntEvaluate(qHi)
         for r in [pl, pu, ql, qu] where r.value == nil { Alerts.info(r.error ?? NTMessages.bigNumber); return }
         let (a, b, c, d) = (pl.value!, pu.value!, ql.value!, qu.value!)
-        if a > b || c > d { Alerts.error("Die Untergrenze darf nicht größer als die Obergrenze sein!"); return }
+        if a > b || c > d { Alerts.error("The lower limit must not be greater than the upper limit!"); return }
         let algorithm = algo
         let progress = NTProgressModel()
-        let rangeText = sameRange == 1 ? "Generiere Primzahlen im folgenden Bereich:\n[\(lowerP), \(upperP)]"
-                                       : "Generiere Primzahlen in folgenden Bereichen:\n[\(lowerP), \(upperP)], [\(lowerQ), \(upperQ)]"
+        let rangeText = sameRange == 1 ? "Generating prime numbers in the following value range:\n[\(lowerP), \(upperP)]"
+                                       : "Generating prime numbers in the following value ranges:\n[\(lowerP), \(upperP)], [\(lowerQ), \(upperQ)]"
         progress.format = { p, _ in rangeText + "\n\(p)%" }
         busy = true
-        scheduleProgress(progress, title: "Generierung von Primzahlen")
+        scheduleProgress(progress, title: "Generating prime numbers")
         let token = progress.token
         Task.detached(priority: .userInitiated) {
             let iterations = 20000
@@ -408,8 +408,8 @@ struct PrimeGenerationView: View {
                     accepted = true
                 } else {
                     resultP = "0"; resultQ = "0"
-                    if fp == nil { Alerts.error("Schlechte Wahl der Grenzen im linken Fenster, es wurde keine Primzahl gefunden !") }
-                    if fq == nil { Alerts.error("Schlechte Wahl der Grenzen im rechten Fenster, es wurde keine Primzahl gefunden !") }
+                    if fp == nil { Alerts.error("Bad choice of limits in the left-hand window. No prime numbers were found!") }
+                    if fq == nil { Alerts.error("Bad choice of limits in the right-hand window. No prime numbers were found!") }
                 }
             }
         }
@@ -426,15 +426,15 @@ struct PrimeGenerationView: View {
         let pl = ntEvaluate(lowerP), pu = ntEvaluate(upperP)
         for r in [pl, pu] where r.value == nil { Alerts.info(r.error ?? NTMessages.bigNumber); return }
         let (a, b) = (pl.value!, pu.value!)
-        if a > b { Alerts.error("Die Untergrenze darf nicht größer als die Obergrenze sein!"); return }
+        if a > b { Alerts.error("The lower limit must not be greater than the upper limit!"); return }
         let sep = separator.isEmpty ? " " : separator
         CT1Prefs.set("PrimeNumberGeneration.Separator", sep)
         let (loText, hiText) = (lowerP, upperP)
         let algorithm = algo
         let progress = NTProgressModel()
-        progress.format = { p, _ in "Generiere Primzahlen im folgenden Bereich:\n[\(loText), \(hiText)]\n\(p)%" }
+        progress.format = { p, _ in "Generating prime numbers in the following value range:\n[\(loText), \(hiText)]\n\(p)%" }
         busy = true
-        scheduleProgress(progress, title: "Generation einer Menge von Primzahlen")
+        scheduleProgress(progress, title: "Generating a set of prime numbers")
         let token = progress.token
         Task.detached(priority: .userInitiated) {
             var primes: [BigUInt] = []
@@ -457,11 +457,11 @@ struct PrimeGenerationView: View {
                 busy = false
                 progress.dismiss()
                 let text = list.map { $0.description + sep }.joined()
-                DocumentFactory.openResult(text: text, title: "Primzahlen im Bereich [\(loText), \(hiText)]")
+                DocumentFactory.openResult(text: text, title: "Prime numbers in the range [\(loText), \(hiText)]")
                 if cancelled {
-                    Alerts.info("Der Vorgang wurde abgebrochen. Im ausgewählten Wertebereich [\(loText), \(hiText)] wurden bisher \(list.count) Primzahlen gefunden.")
+                    Alerts.info("The process was cancelled. In the given value range [\(loText), \(hiText)], \(list.count) prime numbers were found yet.")
                 } else {
-                    Alerts.info("Im ausgewählten Wertebereich [\(loText), \(hiText)] wurden \(list.count) Primzahlen gefunden.")
+                    Alerts.info("In the given value range [\(loText), \(hiText)], \(list.count) prime numbers were found.")
                 }
             }
         }

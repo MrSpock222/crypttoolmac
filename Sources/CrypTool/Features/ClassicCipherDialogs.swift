@@ -63,26 +63,26 @@ struct CaesarDialog: View {
     }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Caesar / ROT-13", minWidth: 600) {
-            CT1Group(title: "Beschreibung") {
-                Text("Hier können Sie für das Caesar-Verfahren den Schlüssel eingeben. Caesar ist eine monoalphabetische Substitution, bei der die Zeichen des Klartext-Alphabets durch Shiften um einen bestimmten Wert auf das Geheimtext-Alphabet abgebildet werden. Dieser Verschiebewert ist der Schlüssel. Sie können den Schlüssel sowohl als Zahl als auch als einzelnes Alphabet-Zeichen eingeben.\nRot-13 ist ein Spezialfall, bei dem der Schlüssel fest auf den Wert der halben Länge des Klartext-Alphabets gesetzt wird. Diese Variante ist nur wählbar, wenn die Länge des Alphabets eine gerade Zahl ist.")
+        DialogScaffold(title: "Key Entry: Caesar / ROT-13", minWidth: 600) {
+            CT1Group(title: "Description") {
+                Text("Here you can enter the key for the Caesar cipher. Caesar is a mono-alphabetic substitution, where the characters of the cleartext alphabet are mapped to the ciphertext alphabet by shifting. This shifting value is the key. You can enter the key as a number or as a single character of the alphabet.\nRot-13 is a special variant, where the key has the fixed value of half the length of the cleartext alphabet. This variant is only selectable if the length of the alphabet is an even number.")
                     .font(.callout).fixedSize(horizontal: false, vertical: true)
             }
             HStack(alignment: .top) {
-                CT1Group(title: "Variante auswählen") {
+                CT1Group(title: "Select variant") {
                     CT1Radio(title: "Caesar", selected: !useROT13) { rot13 = false }
                     CT1Radio(title: "Rot-13", selected: useROT13) { rot13 = true }.disabled(!rot13Available)
                 }.frame(width: 170)
-                CT1Group(title: "Interpretation des ersten Alphabetzeichens") {
-                    CT1Radio(title: "Wert des ersten Alphabetzeichens = 0 (z.B. \"A\"=0)", selected: !offsetOne) { offsetOne = false }
-                    CT1Radio(title: "Wert des ersten Alphabetzeichens = 1 (z.B. \"A\"=1)", selected: offsetOne) { offsetOne = true }
+                CT1Group(title: "Options to interpret the alphabet characters") {
+                    CT1Radio(title: "Value of the first alphabet character = 0 (e.g. \"A\"=0)", selected: !offsetOne) { offsetOne = false }
+                    CT1Radio(title: "Value of the first alphabet character = 1 (e.g. \"A\"=1)", selected: offsetOne) { offsetOne = true }
                 }
             }
-            CT1Group(title: "Schlüsseleingabe") {
+            CT1Group(title: "Key entry as") {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
-                            CT1Radio(title: "Alphabetzeichen", selected: alphabeticInput) { alphabeticInput = true }
+                            CT1Radio(title: "Alphabet character", selected: alphabeticInput) { alphabeticInput = true }
                                 .frame(width: 140, alignment: .leading)
                             TextField("", text: $letterText).frame(width: 34).multilineTextAlignment(.center)
                                 .font(.system(.body, design: .monospaced))
@@ -91,7 +91,7 @@ struct CaesarDialog: View {
                             CT1PasteKeyButton(method: "caesar") { pasteKey($0) }
                         }
                         HStack {
-                            CT1Radio(title: "Zahlenwerte", selected: !alphabeticInput) { alphabeticInput = false }
+                            CT1Radio(title: "Number value", selected: !alphabeticInput) { alphabeticInput = false }
                                 .frame(width: 140, alignment: .leading)
                             TextField("", text: $numberText).frame(width: 40).multilineTextAlignment(.center)
                                 .disabled(alphabeticInput || useROT13)
@@ -104,17 +104,17 @@ struct CaesarDialog: View {
                     .disabled(useROT13)
                     Spacer()
                     if !rot13Available {
-                        Text("Die Rot-13-Verschlüsselung wurde deaktiviert, weil das Alphabet keine gerade Anzahl von Zeichen hat!")
+                        Text("Rot-13 encryption is deactivated because the alphabet does not consist of an even number of letters!")
                             .font(.callout).frame(width: 220, alignment: .leading).fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
-            CT1Group(title: "Informationen zur Verschlüsselung") {
-                Text("Verschiebung um \(key.map { String($0.shift) } ?? (alphabeticInput || useROT13 ? "" : numberText))")
-                Text("Das Alphabet (\(n) Zeichen) wird bei der Verschlüsselung abgebildet")
-                HStack { Text("von:").frame(width: 34, alignment: .leading); CT1ReadOnlyLine(text: String(alphabet)) }
+            CT1Group(title: "Properties of the chosen encryption") {
+                Text("Shift of \(key.map { String($0.shift) } ?? (alphabeticInput || useROT13 ? "" : numberText))")
+                Text("Mapping of the alphabet (\(n) characters)")
+                HStack { Text("from:").frame(width: 34, alignment: .leading); CT1ReadOnlyLine(text: String(alphabet)) }
                 HStack {
-                    Text("auf:").frame(width: 34, alignment: .leading)
+                    Text("to:").frame(width: 34, alignment: .leading)
                     CT1ReadOnlyLine(text: key.map { Caesar.targetAlphabet(shift: $0.shift, options: settings.textOptions) } ?? "")
                 }
             }
@@ -140,7 +140,7 @@ struct CaesarDialog: View {
 
     private func pasteKey(_ s: String) {
         guard let c = s.first, alphabet.contains(c) else {
-            Alerts.error("Der in die Zwischenablage kopierte Schlüssel ist nicht im\naktuell eingestellten Alphabet enthalten und kann daher\nnicht verwendet werden!")
+            Alerts.error("The key stored in the clipboard is not part of the actual alphabet\nthus the key is currently not usable!")
             return
         }
         rot13 = false
@@ -168,8 +168,8 @@ struct VigenereDialog: View {
     @CTState private var key = ""
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Vigenère", minWidth: 480) {
-            Text("Geben Sie den Schlüssel ein.\nSchlüssellänge maximal 1024 Zeichen!")
+        DialogScaffold(title: "Key Entry: Vigenère", minWidth: 480) {
+            Text("Enter the key.\nThe maximum key length is 1024 characters!")
             HStack {
                 TextField("", text: $key).font(.system(.body, design: .monospaced))
                     .ct1Filter($key) { CT1KeyInput.filter($0, alphabet: settings.textOptions.alphabetCharacters, maxLength: 1024) }
@@ -210,15 +210,15 @@ struct SubstitutionDialog: View {
     }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Monoalphabetische Substitution / Atbash", minWidth: 600) {
-            CT1Group(title: "Variante auswählen") {
-                CT1Radio(title: "Schlüsseleingabe: Restliche Zeichen aufsteigend füllen", selected: variant == 0) { variant = 0 }
-                CT1Radio(title: "Schlüsseleingabe: Restliche Zeichen absteigend füllen", selected: variant == 1) { variant = 1 }
-                CT1Radio(title: "Atbash (die Verschlüsselung nutzt einen fixen Schlüssel)", selected: variant == 2) { variant = 2 }
+        DialogScaffold(title: "Key Entry: Monoalphabetic Substitution / Atbash", minWidth: 600) {
+            CT1Group(title: "Choose variant of the monoalphabetic substitution") {
+                CT1Radio(title: "Key entry: Remaining characters are filled in ascending order", selected: variant == 0) { variant = 0 }
+                CT1Radio(title: "Key entry: Remaining characters are filled in descending order", selected: variant == 1) { variant = 1 }
+                CT1Radio(title: "Atbash (the encryption is using a fixed key)", selected: variant == 2) { variant = 2 }
             }
-            CT1Group(title: "Schlüsseleingabe") {
+            CT1Group(title: "Key Input") {
                 HStack {
-                    Text("Schlüssel:").frame(width: 70, alignment: .leading)
+                    Text("Key:").frame(width: 70, alignment: .leading)
                     if variant == 2 {
                         CT1ReadOnlyLine(text: String(alphabet.reversed()))
                     } else {
@@ -237,10 +237,10 @@ struct SubstitutionDialog: View {
                         }
                 }
             }
-            CT1Group(title: "Informationen zur Verschlüsselung") {
-                Text("Das Alphabet (\(alphabet.count) Zeichen) wird abgebildet")
-                HStack { Text("von:").frame(width: 34, alignment: .leading); CT1ReadOnlyLine(text: String(alphabet)) }
-                HStack { Text("auf:").frame(width: 34, alignment: .leading); CT1ReadOnlyLine(text: String(mapping)) }
+            CT1Group(title: "Information on the substitution encryption") {
+                Text("The alphabet (\(alphabet.count) characters) will be mapped")
+                HStack { Text("from:").frame(width: 34, alignment: .leading); CT1ReadOnlyLine(text: String(alphabet)) }
+                HStack { Text("to:").frame(width: 34, alignment: .leading); CT1ReadOnlyLine(text: String(mapping)) }
             }
         } buttons: {
             CipherButtons(cancel: close, decrypt: { run(false) }, encrypt: { run(true) }, disabled: alphabet.isEmpty,
@@ -253,7 +253,7 @@ struct SubstitutionDialog: View {
         let (f, _) = CT1KeyInput.filter(s, alphabet: alphabet)
         key = f
         if f != s {
-            Alerts.info("Beachten Sie bitte, dass beim Einfügen aus der Zwischenablage Zeichen entfernt wurden, die nicht Teil des aktuell eingestellten Alphabets sind.")
+            Alerts.info("Please note that characters not part of the currently configured alphabet were removed while pasting from the clipboard.")
         }
     }
 
@@ -282,9 +282,9 @@ struct ByteCipherDialog: View {
     private var keyBytes: [UInt8]? { CT1KeyInput.hexBytes(key) }
 
     var body: some View {
-        DialogScaffold(title: kind == .addition ? "Schlüsseleingabe: Byteweise Addition (ADD)" : "Schlüsseleingabe: Byteweises XOR",
+        DialogScaffold(title: kind == .addition ? "Key Entry: byte by byte addition (ADD)" : "Key Entry: byte by byte XOR",
                        minWidth: 500) {
-            Text("Geben Sie den Schlüssel mit Hexadezimalzeichen (0..9, A..F) ein.\nSchlüssellänge maximal 2048 Hexadezimalzeichen (= 1024 Bytes).")
+            Text("Enter the key using hex characters (0..9, A..F).\nKey length at maximum  2048 hex characters (= 1024 bytes).")
             HStack {
                 TextField("", text: $key).font(.system(.body, design: .monospaced))
                     .ct1Filter($key) { CT1KeyInput.hex($0, maxDigits: 2048) }
@@ -332,7 +332,7 @@ enum VernamFlow {
         var shown = doc.shortName
         if shown.count > 32 { shown = String(shown.prefix(29)) + "..." }
         let panel = NSOpenPanel()
-        panel.title = "Auswahl der Vernam-Schlüsseldatei für <\(shown)>"
+        panel.title = "Selection of the Vernam key file for <\(shown)>"
         panel.message = panel.title
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
@@ -341,17 +341,17 @@ enum VernamFlow {
         do { pad = [UInt8](try Data(contentsOf: url)) } catch { Alerts.error(error.localizedDescription); return }
         var result = doc.bytes
         if pad.isEmpty {
-            Alerts.info("Der gewählte Vernam-Schlüssel hat die Länge 0.\nBitte überprüfen Sie die Schlüsseldatei.")
+            Alerts.info("The chosen Vernam key is of length 0.\nPlease check the key file.")
         } else {
             if pad.count < doc.bytes.count {
-                Alerts.info("Der Vernam-Schlüssel ist kürzer als der zu verschlüsselnde Text.")
+                Alerts.info("The Vernam key is shorter than the text that is to be encrypted.")
             }
             result = ByteCiphers.xor(doc.bytes, key: pad)
         }
         // CT1: title always "Vernam-Verschlüsselung von <doc> und <keyfile>", key "Datei <path>"
         let key = "Datei \(url.path)"
         KeyMemory.remember(key, for: "vernam")
-        DocumentFactory.openResult(result, title: "Vernam-Verschlüsselung von <\(doc.shortName)> und <\(url.lastPathComponent)>",
+        DocumentFactory.openResult(result, title: "Vernam encryption of <\(doc.shortName)> and <\(url.lastPathComponent)>",
                                    parent: doc, method: "vernam", key: key,
                                    viewMode: TextCoding.looksLikeText(result) ? .text : .hex)
     }
@@ -373,20 +373,20 @@ struct ScytaleDialog: View {
     private var railFence: Bool { type == 1 }
 
     var body: some View {
-        DialogScaffold(title: "Schlüsseleingabe: Skytale / Gartenzaun", minWidth: 480) {
-            CT1Group(title: "Beschreibung") {
-                Text("Transpositionen vertauschen die Reihenfolge der Buchstaben im Klartext. Zwei bekannte, klassische Varianten sind die Skytale und die Gartenzaunverschlüsselung.")
+        DialogScaffold(title: "Key Entry: Scytale / Rail Fence", minWidth: 480) {
+            CT1Group(title: "Description") {
+                Text("Transpositions scramble the order of the letters in the cleartext. Two well-known classical variants are known as Scytale and Rail Fence.")
                     .font(.callout).fixedSize(horizontal: false, vertical: true)
             }
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
-                    CT1Group(title: "Auswahl der Transpositionsvariante") {
-                        CT1Radio(title: "Skytale", selected: !railFence) { type = 0 }
-                        CT1Radio(title: "Gartenzaun", selected: railFence) { type = 1 }
+                    CT1Group(title: "Choose the transposition variant") {
+                        CT1Radio(title: "Scytale", selected: !railFence) { type = 0 }
+                        CT1Radio(title: "Rail Fence", selected: railFence) { type = 1 }
                     }
-                    CT1Group(title: "Auswahl des Schlüssels") {
+                    CT1Group(title: "Choose the key") {
                         HStack {
-                            Text(railFence ? "Anzahl der Zeilen:" : "Anzahl der Kanten:").frame(width: 130, alignment: .leading)
+                            Text(railFence ? "Number of rows:" : "Number of edges:").frame(width: 130, alignment: .leading)
                             TextField("", text: $keyText).frame(width: 44).multilineTextAlignment(.center)
                                 .ct1Filter($keyText, digitsOnly)
                             CT1PasteKeyButton(method: "simpletransposition") { pasteKey($0) }
@@ -429,7 +429,7 @@ struct ScytaleDialog: View {
         let o = settings.textOptions
         let length = o.indices(of: document.text).count
         guard key > 1, key < length else {
-            Alerts.error("Der Schlüssel ist ungültig. Er muss größer als 1 und kleiner als die Länge des Eingabetexts sein.\n\nVor der Ver-/Entschlüsselung werden alle Zeichen aus dem Eingabetext entfernt, die nicht zum eingestellten CrypTool-Alphabet gehören. Wenn Sie den Eingabetext nicht verändern möchten, passen Sie bitte über den Button \"Textoptionen\" das CrypTool-Alphabet an, um fortzufahren.")
+            Alerts.error("The key is invalid. It must be greater than 1 and smaller than the length of the input text.\n\nCharacters that are not part of the CrypTool alphabet are deleted before encryption/decryption. If you don't want to change the input text, please use the button \"Text options\" to alter the CrypTool alphabet in order to proceed.")
             return
         }
         storedKey = key
@@ -437,8 +437,8 @@ struct ScytaleDialog: View {
         // CT1 writes the normalised offset into the key string
         let shownOffset = railFence ? offset % (2 * key - 2) : min(offset, length)
         let keyString = "TYPE: \(type), KEY: \(key), KEY OFFSET: \(shownOffset)"
-        let name = railFence ? "Gartenzaun" : "Skytale"
-        let title = "\(name)-\(encrypt ? "Verschlüsselung" : "Entschlüsselung") (Einfache Transposition) von <\(document.shortName)>, Schlüssel <\(keyString)>"
+        let name = railFence ? "Rail Fence" : "Scytale"
+        let title = "\(name) \(encrypt ? "encryption" : "decryption") (Simple Transposition) of <\(document.shortName)>, key <\(keyString)>"
         let result = CipherRun.open(text: document, method: "simpletransposition", title: title, key: keyString) {
             if railFence {
                 return encrypt ? RailFence.encrypt(document.text, rails: key, offset: offset, options: o)

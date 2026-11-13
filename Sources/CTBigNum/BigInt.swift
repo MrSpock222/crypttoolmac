@@ -192,7 +192,7 @@ extension BigInt: Codable {
         let c = try decoder.singleValueContainer()
         let s = try c.decode(String.self)
         guard let v = BigInt(s, radix: 16) else {
-            throw DecodingError.dataCorruptedError(in: c, debugDescription: "Ungültige Hex-Zahl: \(s)")
+            throw DecodingError.dataCorruptedError(in: c, debugDescription: "Invalid hex number: \(s)")
         }
         self = v
     }
