@@ -15,7 +15,7 @@ struct PermutationStageGrid: View {
 
     private func row(_ title: String, _ d: PermutationOptions.Direction) -> some View {
         GridRow {
-            Text(title).frame(width: 90, alignment: .trailing)
+            Text(title).fixedSize().gridColumnAlignment(.trailing)
             CT1Radio(title: "Input", selected: stage.readIn == d) { stage.readIn = d }
             CT1Radio(title: "Permute", selected: stage.permute == d) { stage.permute = d }
             CT1Radio(title: "Output", selected: stage.readOut == d) { stage.readOut = d }

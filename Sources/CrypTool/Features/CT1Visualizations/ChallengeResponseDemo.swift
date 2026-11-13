@@ -541,7 +541,7 @@ struct ChallengeResponseView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
             scenarioButtons
-                .frame(width: 210)
+                .frame(width: 250)
                 .padding(10)
             Divider()
             VStack(spacing: 0) {

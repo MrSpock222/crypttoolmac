@@ -109,6 +109,7 @@ enum DocumentFactory {
 @MainActor
 enum Alerts {
     static func error(_ message: String, title: String = "CrypTool") {
+        if LayoutAudit.isEnabled { LayoutAudit.note("error alert: \(title): \(message)"); return }
         let a = NSAlert()
         a.alertStyle = .warning
         a.messageText = title
@@ -117,6 +118,7 @@ enum Alerts {
     }
 
     static func info(_ message: String, title: String = "CrypTool") {
+        if LayoutAudit.isEnabled { LayoutAudit.note("info alert: \(title): \(message)"); return }
         let a = NSAlert()
         a.alertStyle = .informational
         a.messageText = title
@@ -126,6 +128,7 @@ enum Alerts {
 
     /// Info alert with an additional "Kopieren" button.
     static func infoWithCopy(_ message: String, title: String, copyValue: String) {
+        if LayoutAudit.isEnabled { LayoutAudit.note("info alert: \(title): \(message)"); return }
         let a = NSAlert()
         a.messageText = title
         a.informativeText = message
@@ -138,6 +141,7 @@ enum Alerts {
     }
 
     static func confirm(_ message: String, title: String, ok: String = "OK") -> Bool {
+        if LayoutAudit.isEnabled { LayoutAudit.note("confirm alert: \(title): \(message)"); return false }
         let a = NSAlert()
         a.messageText = title
         a.informativeText = message

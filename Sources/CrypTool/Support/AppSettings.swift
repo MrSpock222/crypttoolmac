@@ -55,6 +55,14 @@ final class AppSettings: ObservableObject {
         } else {
             textOptions = .default
         }
+        // One-time switch to the default of the English CT1 (english.txt). The German versions
+        // (up to 1.4.0) stored their default "de" with every settings change, so it would
+        // otherwise survive the update. A reference file chosen by the user is kept.
+        let stored = UserDefaults.standard
+        if !stored.bool(forKey: "englishDefaultsApplied") {
+            stored.set(true, forKey: "englishDefaultsApplied")
+            if (stored.string(forKey: "customReferencePath") ?? "").isEmpty { stored.set("en", forKey: "referenceLanguage") }
+        }
         referenceLanguage = ReferenceLanguage(rawValue: defaults.string(forKey: "referenceLanguage") ?? "en") ?? .english
         showStartExample = defaults.object(forKey: "showStartExample") as? Bool ?? true
         fontSize = defaults.object(forKey: "fontSize") as? Double ?? 13

@@ -104,7 +104,7 @@ struct DiffieHellmanView: View {
                 Spacer(minLength: 0)
                 if m.done[i] { Image(systemName: "checkmark.circle.fill").foregroundStyle(.green) }
             }
-            .frame(width: 210, height: 40, alignment: .leading)
+            .frame(width: 250, height: 40, alignment: .leading)
         }
         .disabled(!m.isActive(i))
         .frame(height: i == 0 ? nil : rowHeight)

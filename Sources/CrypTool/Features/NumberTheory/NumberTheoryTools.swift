@@ -288,6 +288,8 @@ struct PrimeGenerationView: View {
                     .pickerStyle(.radioGroup).labelsHidden()
                     .frame(maxWidth: .infinity, alignment: .leading).padding(4)
                 }
+                // only as wide as its content, so the longer options on the right are not cut off
+                .fixedSize(horizontal: true, vertical: false)
                 GroupBox("Value range of the prime numbers p and q") {
                     Picker("", selection: $sameRange) {
                         Text("To be entered independently of each other").tag(0)

@@ -18,7 +18,7 @@ enum CT1Games {
         if let w = sharkWindow, w.isVisible { w.makeKeyAndOrderFront(nil); return }
         let model = SharkGameModel()
         let w = WindowPresenter.tool(id: "ct1games.numbershark", title: SharkText.numberShark + SharkText.titleVersion,
-                                     size: CGSize(width: 730, height: 640), resizable: false) {
+                                     size: CGSize(width: 758, height: 640), resizable: false) {
             CT1SharkView(model: model)
         }
         sharkWindow = w

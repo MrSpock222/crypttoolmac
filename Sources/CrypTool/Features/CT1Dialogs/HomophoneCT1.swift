@@ -73,10 +73,10 @@ struct HomophoneDialog: View {
                     CT1Radio(title: "Decimal", selected: !hexDisplay) { hexDisplay = false }
                 }
             }
-            Text("Character:")
+            Text("Show the list of homophones for an individual character (select according line above via double click):")
                 .font(.callout)
             HStack(alignment: .top) {
-                VStack(alignment: .leading) { Text("Show the list of homophones for an individual character (select according line above via double click):").font(.caption); CT1ReadOnlyLine(text: selected.map(display) ?? "") }.frame(width: 60)
+                VStack(alignment: .leading) { Text("Character:").font(.caption); CT1ReadOnlyLine(text: selected.map(display) ?? "") }.frame(width: 60)
                 VStack(alignment: .leading) { Text("Number:").font(.caption); CT1ReadOnlyLine(text: selected.map { String(key?.table[$0]?.count ?? 0) } ?? "") }.frame(width: 60)
                 VStack(alignment: .leading) { Text("List of homophones:").font(.caption); CT1ReadOnlyLine(text: selected.map { codesText($0) } ?? "") }
             }

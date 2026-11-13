@@ -87,7 +87,7 @@ enum FeatureRouter {
             tool("primetest", "Prime Number Test", 560, 480) { PrimeTestView() }
             return
         case .primeGeneration:
-            tool("primegen", "Prime Number Generation", 640, 480) { PrimeGenerationView() }
+            tool("primegen", "Prime Number Generation", 720, 480) { PrimeGenerationView() }
             return
         case .factorization:
             tool("factor", "Factorization of a Number", 640, 700) { FactorizationView() }

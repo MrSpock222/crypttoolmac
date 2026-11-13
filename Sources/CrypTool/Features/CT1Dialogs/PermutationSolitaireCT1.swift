@@ -195,7 +195,7 @@ struct SolitaireDialog: View {
                                 Picker("", selection: $order) {
                                     ForEach(0..<6, id: \.self) { Text(SolitaireDialog.orders[$0]).tag($0) }
                                 }.labelsHidden().frame(width: 160)
-                                Button("Different shuffle") { initDeck() }.disabled(order != 2 || generationStarted)
+                                Button("Different shuffle") { initDeck() }.fixedSize().disabled(order != 2 || generationStarted)
                             }
                         }
                     }.frame(width: 280)

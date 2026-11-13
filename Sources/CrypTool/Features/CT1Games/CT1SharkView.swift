@@ -58,7 +58,7 @@ struct CT1SharkView: View {
                 shellArea.frame(width: Self.leftWidth)
                 bottomArea.frame(width: Self.leftWidth, height: 92)
             }
-            rightColumn.frame(width: 112)
+            rightColumn.frame(width: 140)
         }
         .padding(10)
         .sheet(item: $model.sheet) { s in

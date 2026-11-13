@@ -86,12 +86,12 @@ struct KeyGenerationView: View {
                     }.padding(.leading, 20)
                     methodRadio("DSA", .dsa)
                     HStack {
-                        Text("Bit length of DSA prime number:").frame(width: 170, alignment: .leading)
+                        Text("Bit length of DSA prime number:").frame(width: 170, alignment: .leading).fixedSize(horizontal: false, vertical: true)
                         PKIComboBox(text: $dsaBits, items: ["512", "768", "1024", "2048"], enabled: method == .dsa).frame(width: 90)
                     }.padding(.leading, 20)
                     methodRadio("Elliptic curves", .ec)
                     HStack {
-                        Text("Identifier (bit length and curve parameter):").frame(width: 170, alignment: .leading)
+                        Text("Identifier (bit length and curve parameter):").frame(width: 170, alignment: .leading).fixedSize(horizontal: false, vertical: true)
                         Picker("", selection: $curveName) {
                             ForEach(EllipticCurve.ct1Curves, id: \.name) { Text($0.name).tag($0.name) }
                         }.labelsHidden().frame(width: 120).disabled(method != .ec)
@@ -104,7 +104,7 @@ struct KeyGenerationView: View {
                     Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 6) {
                         GridRow { Text("Last name:"); TextField("", text: $lastName) }
                         GridRow { Text("First name:"); TextField("", text: $firstName) }
-                        GridRow { Text("Key identifier\n(optional):"); TextField("", text: $label) }
+                        GridRow { Text("Key identifier\n(optional):").fixedSize(); TextField("", text: $label) }
                         GridRow { Text("PIN:"); SecureField("", text: $pin) }
                         GridRow { Text("PIN verification:"); SecureField("", text: $pin2) }
                     }

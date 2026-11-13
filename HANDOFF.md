@@ -1,8 +1,8 @@
 # HANDOFF
 
 ## Stand
-- Branch: `main`, synchron mit `origin/main`. Letzter Code-Commit: „CrypTool 2.0.0: englische Fassung …“
-  (App = **v2.0.0**, englisch mit den Texten der englischen CT1-Fassung; v1.4.0 = letzte deutsche Fassung).
+- Branch: `main`, synchron mit `origin/main`. Letzte Code-Commits: `0c07858` (englische Fassung, v2.0.0) und
+  „Dialoggrößen begrenzt …“ (App = **v2.0.1**; v1.4.0 = letzte deutsche Fassung).
 - Tests: **alle grün** (für den Release-Stand gelaufen, 2026-11-13).
 
 ## Tests (einmal gelaufen)
@@ -37,8 +37,12 @@
 - `9ea4410` v1.4.0 – `BloemerMay.swift` (Boneh/Durfee), `Lattice.reduce` mit δ-Parameter.
 
 ## Offene Probleme (mit bisherigen Versuchen)
-- **Englische Dialoge nicht einzeln am Bildschirm geprüft.** Mögliche abgeschnittene Texte bei festen Breiten
-  (PKI-Flussdiagramm-Schaltflächen, Tabellenspalten Signaturangriff, lange Animationszeilen).
+- **Dialoggrößen (in v2.0.1 behoben):** Dialoge wurden breiter als der Bildschirm (lange
+  Beschreibungstexte, bestand schon in der deutschen Fassung). Zentral behoben über `IdealWidthCap`; dazu
+  abgeschnittene/vertauschte Texte in 8 Dialogen korrigiert (Homophone, Permutation, Solitaire, Schlüsselerzeugung,
+  Primzahlerzeugung, Diffie-Hellman, Challenge-Response, Number Shark) und einmalige Umstellung der gespeicherten
+  Referenzdatei auf `english.txt`. Geprüft mit `scripts/audit-layout.sh` (134 Dialoge) und gerenderten Bildern.
+  Offen: Zustände nach Bedienung, NT-Seiten, Animationsschritte sind nicht angesehen.
 - Dialoge der Gitterangriffe/Seitenkanal sind vereinfacht gegenüber CT1 (fehlende Felder/Statuszeilen) –
   nur Texte angeglichen, Struktur unverändert. Histogramm-Fenstertitel ohne Zeichenzahl („Histogram of <…>“).
 - Blömer/May bleibt für δ≈0,29 / große N langsam (512-Bit-N, m=4: ~28 s). Fließkomma-LLL nicht umgesetzt.
@@ -46,12 +50,12 @@
   alle Bereiche wurden gegengeprüft, Restfehler bei selten genutzten Dialogen sind möglich.
 
 ## Nächste Schritte (in Reihenfolge)
-1. Dialoge am Bildschirm durchklicken (v. a. PKI-Demos, Signaturangriff, Animationen, Zahlenhai, NT-Lernprogramm)
-   und abgeschnittene Texte korrigieren.
+1. Dialoge in Benutzung durchklicken (Ergebnis-/Folgedialoge, NT-Lernprogramm, Animationen) und abgeschnittene
+   Texte korrigieren; `scripts/audit-layout.sh` nach Textänderungen erneut laufen lassen.
 2. Optional: Dialogstruktur der Gitterangriffe an CT1 angleichen; `PROJECT_STATE.md` kürzen, falls > ~400 Zeilen.
 
 ## Deployment
-- GitHub-Releases **v1.0.0–v1.4.0** (deutsch) und **v2.0.0** (englisch, Latest) veröffentlicht
+- GitHub-Releases **v1.0.0–v1.4.0** (deutsch) und **v2.0.0, v2.0.1** (englisch, v2.0.1 = Latest) veröffentlicht
   (je `CrypTool.dmg` + `CrypTool-macOS-arm64.zip`).
 - `main` ist gepusht. Kein Server/Backend. Lokal unversioniert: `build/` (Bundle/DMG) und `graphify-out/` – bewusst
   in `.gitignore`, nicht einchecken.

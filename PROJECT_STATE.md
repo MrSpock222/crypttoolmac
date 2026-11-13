@@ -36,14 +36,16 @@ Module unter `Sources/`:
     `DocumentWindowController.swift` (Kontextmenüs, `CT1ContextMenu`), `CTDocument(Controller).swift`,
     `HexEditorView.swift`.
   - `Support/` – `SwiftUICompat.swift` (`@CTState`), `WindowPresenter.swift` (`tool`/`sheet`,
-    `DialogScaffold`), `AboutDialog.swift`, `OptionsWindows.swift`.
+    `DialogScaffold`, `IdealWidthCap` = Breitenbegrenzung aller Dialoge), `AboutDialog.swift`,
+    `OptionsWindows.swift`, `LayoutAudit.swift` (unsichtbarer Prüflauf aller Dialoge, nur mit
+    Umgebungsvariable `CT_LAYOUT_AUDIT` aktiv).
   - `Help/` – `HelpCenter`, `HelpWindow`, `HelpBook`, `HelpTopics.swift` (Aktion→HTML-Seite, erschöpfend).
   - `Features/CT1Attacks/LatticeAttackViews.swift` – Dialoge der RSA-Angriffe.
 - `Resources/` – `Help/en` (englische CT1-Hilfe, per `scripts/import-ct1-help.py` erzeugt), `Examples`
   (gemeinsame CT1-Beispiele + englische `original.txt`/`fake.txt`), `Words` (cracklib), `Docs`
   (`CT-Book-en.pdf`, `CrypTool1-Presentation-en.pdf`, authors.txt), `Images` (`CrypToolStartLogo-en.png`),
   `Reference` (`english.txt` = Standard, `deutsch.txt`), `Info.plist` (Entwicklungssprache `en`).
-- `scripts/` – `build-app.sh`, `check-help.py`, `import-ct1-help.py`, `make-icon.swift`.
+- `scripts/` – `build-app.sh`, `check-help.py`, `import-ct1-help.py`, `make-icon.swift`, `audit-layout.sh`.
 - `Tests/` – ausführbare Testläufer (siehe unten).
 
 ## 3. Setup, Build, Tests
@@ -55,6 +57,8 @@ Voraussetzung: macOS, **Xcode Command Line Tools genügen** (kein Xcode). Keine 
   mit Target ∈ {CTBigNumTests, CTLatticeTests, CTClassicTests, CTModernTests, CTAnalysisTests}.
 - Hilfe-Prüfskript: `python3 -I scripts/check-help.py Resources/Help/en Sources/CrypTool/Help/HelpTopics.swift`
   (2 Warnungen zu fehlenden Ankern im Original-Readme sind bekannt, 0 Fehler erwartet).
+- Dialoggrößen prüfen (ohne Fenster): `scripts/build-app.sh && scripts/audit-layout.sh bericht.txt` – je Menüpunkt
+  Wunschgröße (`ideal=`) und Startgröße (`size=`); mit `CT_LAYOUT_SHOTS=<Ordner>` zusätzlich ein PNG je Dialog.
 - Hilfe neu erzeugen: `python3 -I scripts/import-ct1-help.py <cryptool1-Checkout> Resources/Help/en`
   (Sprache = Name des Zielordners, `en` oder `de`).
 - Release: `gh release create vX.Y.Z build/CrypTool.dmg build/CrypTool-macOS-arm64.zip …` (zip via
@@ -71,9 +75,11 @@ Voraussetzung: macOS, **Xcode Command Line Tools genügen** (kein Xcode). Keine 
 - Über-Dialog, Kontextmenüs, Hilfe (CT-Buch/Präsentation-PDF), „Zuletzt geöffnete Dateien“.
 
 ⚠️ **implementiert, aber ungetestet / mit Vorbehalt**
-- **Englische Dialoge sind nicht einzeln am Bildschirm geprüft** (nur Kompilat, Tests, Menüleiste, ein Dialog).
-  Längere englische Texte können in festen Breiten abgeschnitten sein (Flussdiagramm-Schaltflächen PKI,
-  Tabellenspalten Signaturangriff, Animationszeilen).
+- **Dialoge:** alle 134 per Prüflauf vermessen, rund 60 verschiedene als gerendertes Bild angesehen und
+  korrigiert (Startzustand). Nicht angesehen: Zustände nach Bedienung (Ergebnisse, Folgedialoge, Meldungen),
+  die Seiten des NT-Lernprogramms und die Einzelschritte der Animationen; dort können Texte noch
+  abgeschnitten sein. Drei Menüpunkte öffnen zuerst eine Dateiauswahl und sind nicht messbar
+  (Verify Signature, Extract Signature, Analyse Caesar).
 - Blömer/May für δ nahe 0,29 oder sehr große N: korrekt, aber auch mit der beschleunigten exakten LLL langsam
   (Dialog warnt, `m` einstellbar). Ergebnis stets identisch zu CT1.
 - Dritter RSA-Dialog („kleine geheime Schlüssel“) wurde live nur teilweise geprüft (Bildschirm-Ruhezustand
@@ -98,6 +104,10 @@ Voraussetzung: macOS, **Xcode Command Line Tools genügen** (kein Xcode). Keine 
   Nicht „optimieren“, wenn dadurch Ergebnisse/Verfahren abweichen. Die vorhandene Beschleunigung (parallele
   Zeilen-Updates, gemeinsamer Kehrwert) ändert nur die Rechenzeit; `CTLatticeTests` vergleicht die Basis
   bitgenau mit einer schlichten Referenz-LLL – dieser Test muss grün bleiben.
+- **Dialogbreite:** Dialoge werden auf die Wunschgröße ihres Inhalts gesetzt; ein langer Text ohne Umbruch zählt
+  dabei als eine Zeile. `IdealWidthCap` (in `WindowPresenter.sheet`/`tool`) begrenzt deshalb die Wunschbreite
+  (Sheets 700 pt, Werkzeugfenster ihre deklarierte Breite), sonst werden Dialoge breiter als der Bildschirm.
+  Texte, die umbrechen sollen, brauchen in festen Spalten `.fixedSize(horizontal: false, vertical: true)`.
 - **CLT-Umgebung:** `@State`-Macro fehlt → `@CTState` nutzen; kein XCTest → Testläufer als Executables.
 - **CT1-Quellen** sind CP1252/CRLF; Shell-`grep` ist ein kaputter Wrapper → `/usr/bin/grep -a`.
 - `NICHT-ENTHALTEN.md` ist stabiler Link (von README referenziert, in Releases verlinkt) – Dateiname nicht ändern.
