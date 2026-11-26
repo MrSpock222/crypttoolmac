@@ -141,6 +141,9 @@ CT1 zeigt alle Dokumente innerhalb eines Hauptfensters. Auf dem Mac ist jedes Do
 Window ▸ Cascade, Tile und Close All funktionieren wie in CT1.
 „Arrange Icons“ holt alle Fenster nach vorne. Minimierte Fenster liegen im Dock.
 
+Der Dialog „Substitution Analysis: Manual Post-Processing“ bleibt nach „Show current status“ offen (CT1
+schließt ihn), damit man nach dem Blick auf das Ergebnis weiterarbeiten kann. „Cancel“ schließt ihn.
+
 ### Hilfe
 
 Statt des Windows-Hilfeprogramms (CHM) gibt es ein eigenes Hilfefenster mit denselben englischen Seiten,

@@ -693,6 +693,8 @@ struct ManualSubstitutionCT1View: View {
     }
 
     /// CT1: new document "Substitutionsanalyse von <…>, Schlüssel: <…>".
+    /// Unlike CT1 (modal, closes on OK) the dialog stays open and in front, so the analysis can be
+    /// continued after looking at the result (user request).
     private func output() {
         let mapping = model.mapping
         let key = CT1SubstText.titleKey(mapping)
@@ -700,7 +702,7 @@ struct ManualSubstitutionCT1View: View {
         KeyMemory.remember(key, for: SubstitutionCT1Support.analysisKeyMethod)
         DocumentFactory.openResult(text: text, title: "Substitution analysis of <\(document.shortName)>, key <\(key)>",
                                    parent: document, method: SubstitutionCT1Support.analysisKeyMethod, key: key)
-        handle.close()
+        DispatchQueue.main.async { handle.window?.makeKeyAndOrderFront(nil) }
     }
 
     /// CT1 "Schlüssel kopieren": unassigned letters are filled with the unused letters; the key is
