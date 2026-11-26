@@ -1,8 +1,9 @@
 # HANDOFF
 
 ## Stand
-- Branch: `main`, synchron mit `origin/main`. Letzte Code-Commits: `0c07858` (englische Fassung, v2.0.0) und
-  „Dialoggrößen begrenzt …“ (App = **v2.0.1**; v1.4.0 = letzte deutsche Fassung).
+- Branch: `main`, synchron mit `origin/main`. Letzte Code-Commits: `0c07858` (englische Fassung, v2.0.0),
+  „Dialoggrößen begrenzt …“ (v2.0.1) und `9ccad68` N-Gramm-Liste rechnet bei Auswahl sofort neu wie CT1
+  (App = **v2.0.2**; v1.4.0 = letzte deutsche Fassung).
 - Tests: **alle grün** (für den Release-Stand gelaufen, 2026-11-13).
 
 ## Tests (einmal gelaufen)
@@ -55,7 +56,7 @@
 2. Optional: Dialogstruktur der Gitterangriffe an CT1 angleichen; `PROJECT_STATE.md` kürzen, falls > ~400 Zeilen.
 
 ## Deployment
-- GitHub-Releases **v1.0.0–v1.4.0** (deutsch) und **v2.0.0, v2.0.1** (englisch, v2.0.1 = Latest) veröffentlicht
+- GitHub-Releases **v1.0.0–v1.4.0** (deutsch) und **v2.0.0–v2.0.2** (englisch, v2.0.2 = Latest) veröffentlicht
   (je `CrypTool.dmg` + `CrypTool-macOS-arm64.zip`).
 - `main` ist gepusht. Kein Server/Backend. Lokal unversioniert: `build/` (Bundle/DMG) und `graphify-out/` – bewusst
   in `.gitignore`, nicht einchecken.
