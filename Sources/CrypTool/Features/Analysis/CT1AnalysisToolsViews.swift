@@ -263,9 +263,10 @@ struct CT1NGramListView: View {
         }
     }
 
+    /// CT1 wires every radio button to OnEvalNGram: selecting one recomputes the list at once.
     private func radio<L: View>(_ i: Int, @ViewBuilder _ label: () -> L) -> some View {
         HStack(spacing: 6) {
-            Button { choice = i } label: {
+            Button { choice = i; evaluate() } label: {
                 Image(systemName: choice == i ? "largecircle.fill.circle" : "circle")
             }
             .buttonStyle(.plain)
@@ -283,27 +284,31 @@ struct CT1NGramListView: View {
     }
 
     /// "Liste berechnen" (CT1 OnEvalNGram).
+    /// An invalid N is reported (MFC DDV), but like CT1 the histogram/digram/trigram list is still
+    /// computed; only the free N-gram needs a valid N.
     private func evaluate() {
-        guard let n = nValue() else {
-            Alerts.error("Please enter an integer between 3 and 16.")
-            return
-        }
+        let n = nValue()
+        if n == nil { Alerts.error("Please enter an integer between 3 and 16.") }
         guard let cnt = Int(showCount.trimmingCharacters(in: .whitespaces)), cnt > 0, cnt <= 5000 else {
             Alerts.error("The number of Rows is bounded by 5,000!\nPlease enter a number between 1 and 5,000.")
             return
         }
-        let selected = choice == 3 ? n : choice + 1
+        guard choice != 3 || n != nil else { return }
+        let selected = choice == 3 ? n! : choice + 1
         let r = compute(selected)
         result = r
         shownN = selected
         if cnt > r.individuals { showCount = String(r.individuals) }
-        counts = [compute(1).individuals, compute(2).individuals, compute(3).individuals, compute(n).individuals]
+        counts = [compute(1).individuals, compute(2).individuals, compute(3).individuals,
+                  n.map { compute($0).individuals } ?? counts[3]]
     }
 
     /// "Liste speichern": opens the list as document ("Digramm-Analyse von <…>") and closes.
     private func save() {
-        guard let n = nValue() else { return }
-        let selected = choice == 3 ? n : choice + 1
+        let n = nValue()
+        if n == nil { Alerts.error("Please enter an integer between 3 and 16.") }
+        guard choice != 3 || n != nil else { return }
+        let selected = choice == 3 ? n! : choice + 1
         let r = selected == shownN && result != nil ? result! : compute(selected)
         let method = CT1NGram.method(n: selected, freeN: choice == 3)
         let rows = min(Int(showCount) ?? 26, r.individuals)
