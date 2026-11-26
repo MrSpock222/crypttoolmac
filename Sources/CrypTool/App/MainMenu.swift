@@ -100,6 +100,8 @@ enum MainMenu {
         let m = NSMenu(title: "CrypTool")
         m.addItem(withTitle: "About CrypTool", action: #selector(CTActionHandling.performCTAction(_:)), keyEquivalent: "")
             .representedObject = ActionBox(.about)
+        m.addItem(withTitle: "Check for Updates...", action: #selector(CTActionHandling.performCTAction(_:)), keyEquivalent: "")
+            .representedObject = ActionBox(.checkForUpdates)
         m.addItem(.separator())
         let settings = m.addItem(withTitle: "Settings...", action: #selector(CTActionHandling.performCTAction(_:)), keyEquivalent: ",")
         settings.representedObject = ActionBox(.textOptions)

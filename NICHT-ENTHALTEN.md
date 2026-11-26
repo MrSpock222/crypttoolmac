@@ -192,6 +192,8 @@ Auf dem Mac öffnen sie ein natives Fenster mit derselben Funktion. Java, Flash 
 
 Diese Einträge gibt es in CT1 nicht. Sie stören Anleitungen nicht.
 
+- CrypTool ▸ Check for Updates... (fragt die GitHub-Releases dieser Portierung ab; automatisch höchstens
+  einmal täglich beim Start, still ohne neue Version; abschaltbar per Häkchen im Hinweisfenster)
 - File ▸ Example Files (Untermenü mit den CT1-Beispieldateien; in CT1 über File ▸ Open...)
 - View ▸ Font ▸ Increase Font Size / Decrease Font Size
 - Indiv. Procedures ▸ Visualization of Algorithms ▸ Caesar Disk...

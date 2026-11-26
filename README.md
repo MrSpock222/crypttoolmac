@@ -11,6 +11,7 @@ Menüs, Dialoge und Online-Hilfe entsprechen der englischen Windows-Version, dam
 3. Beim ersten Start: Rechtsklick auf die App → *Öffnen* (die App ist nicht von Apple beglaubigt).
 
 Voraussetzung: Mac mit Apple Silicon, macOS 14 oder neuer.
+Neue Versionen meldet die App selbst (*CrypTool → Check for Updates...*).
 
 ## Selbst bauen
 

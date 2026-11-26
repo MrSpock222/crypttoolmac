@@ -51,6 +51,7 @@ enum ActionRouter {
         case .helpScenarios: HelpLink.scenarios()
         case .contextHelp: HelpLink.contextHelp()
         case .about: AboutDialog.show()
+        case .checkForUpdates: UpdateChecker.checkNow()
         case .helpWebsite: NSWorkspace.shared.open(URL(string: "https://www.cryptool.org/en/ct1/")!)
         case .helpReadme: HelpCenter.show(action: action)
         case .helpLicense: HelpActions.showLicense()

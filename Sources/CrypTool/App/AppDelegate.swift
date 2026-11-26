@@ -29,6 +29,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuItemValidation, 
         if AppSettings.shared.showStartDialog {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { StartDialog.show() }
         }
+        // GitHub release check (macOS-only addition), after the start windows are up
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { UpdateChecker.checkAtLaunch() }
     }
 
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { false }

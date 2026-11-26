@@ -223,6 +223,7 @@ extension HelpCenter {
         case .helpReadme: return "hid_load_readme.html"                     // ID_LOAD_README
         case .helpLicense: return "gplgnu.html"                             // "CrypTool-Lizenz"
         case .about: return "hidd_about.html"                               // ID_APP_ABOUT (CrypTool_Alias.h)
+        case .checkForUpdates: return nil                                   // macOS only, no CT1 page
         }
     }
 }

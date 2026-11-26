@@ -61,7 +61,7 @@ enum LayoutAudit {
              .viewWhitespace, .toggleLineWrap, .plotAsBars, .font, .fontLarger, .fontSmaller,
              .windowCascade, .windowTile, .windowArrangeIcons, .windowCloseAll,
              .helpStart, .helpIndex, .helpScenarios, .contextHelp, .helpWebsite, .helpReadme, .helpLicense,
-             .helpBook, .helpPresentation, .show3DBox:
+             .helpBook, .helpPresentation, .show3DBox, .checkForUpdates:
             return false
         default:
             return true

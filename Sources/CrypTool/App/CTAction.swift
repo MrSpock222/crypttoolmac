@@ -55,6 +55,7 @@ enum CTAction: Hashable {
     case openExample(String)
     case helpStart, helpIndex, helpScenarios, helpReadme, helpBook, helpPresentation, contextHelp
     case helpWebsite, helpLicense, about
+    case checkForUpdates
 
     /// Whether the command operates on the active document.
     var requiresDocument: Bool {
